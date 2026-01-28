@@ -13,65 +13,23 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            background: #1a1a2e;
+            background: #0a0a1a;
             color: #e0e0e0;
             line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-            font-size: 2em;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #a0a0a0;
-            margin-bottom: 40px;
-            font-size: 1.1em;
-        }
-
-        .screen-section {
-            margin-bottom: 60px;
-        }
-
-        .screen-title {
-            background: linear-gradient(135deg, #2d3561 0%, #1a1a2e 100%);
-            color: #4facfe;
-            padding: 15px 25px;
-            border-radius: 10px 10px 0 0;
-            font-size: 1.3em;
-            font-weight: 600;
-            border-bottom: 2px solid #4facfe;
-        }
-
-        .screen-description {
-            background: #16213e;
-            padding: 15px 25px;
-            border-left: 4px solid #4facfe;
-            margin-bottom: 20px;
-            color: #b0b0b0;
-        }
-
-        .screen-description strong {
-            color: #4facfe;
-        }
-
-        .mockup {
-            background: #0f3460;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
-            overflow: hidden;
         }
 
         .mobile-frame {
@@ -492,18 +450,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>📱 スマホアプリ - ホーム画面（インタラクティブ版）</h1>
-        <p class="subtitle">取扱説明書DXシステム</p>
-
-        <div class="screen-section">
-            <div class="screen-title">1. スマホアプリ - ホーム画面（インタラクティブ版）</div>
-            <div class="screen-description">
-                <strong>目的:</strong> ユーザーが最初に見る画面。検索機能とプロアクティブ案内を表示<br>
-                <strong>主要機能:</strong> 検索バー、プロアクティブ案内カード、よくある質問<br>
-                <strong>🎮 試してみよう:</strong> 下の質問ボタンをクリックするか、自由に質問を入力して検索ボタンを押してください
-            </div>
-            <div class="mockup">
-                <div class="mobile-frame">
+        <div class="mobile-frame">
                     <div class="mobile-header">
                         <h2>DIGITAL OM</h2>
                         <span>⚙️</span>
@@ -604,8 +551,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
     </div>
 
     <script>
