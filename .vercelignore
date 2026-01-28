@@ -1,0 +1,25 @@
+# デプロイに不要なファイル・ディレクトリ
+api/
+development/
+non_mobility/
+docs/
+frontend/
+*.md
+!README.md
+!VERCEL_DEPLOY.md
+.git/
+.gitignore
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+*.log
+.DS_Store
+Thumbs.db
+temp/
+tmp/

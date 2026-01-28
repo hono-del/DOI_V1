@@ -1,0 +1,52 @@
+{
+  "guide_id": "GUIDE-003",
+  "title": "事前準備物",
+  "type": "checklist",
+  "estimated_time": "2min",
+  "difficulty": "easy",
+  "content": {
+    "overview": "電池交換に必要な道具と部品を確認します。",
+    "checklist": [
+      {
+        "item": "マイナスドライバー",
+        "required": true,
+        "description": "スマートキーのカバーを開けるために使用",
+        "size": "中サイズ（先端幅 5-6mm程度）"
+      },
+      {
+        "item": "小さいマイナスドライバー",
+        "required": true,
+        "description": "電池を取り出すために使用",
+        "size": "小サイズ（先端幅 2-3mm程度）"
+      },
+      {
+        "item": "リチウム電池 CR2450",
+        "required": true,
+        "description": "交換用の新しい電池",
+        "specifications": "3V リチウムコイン電池",
+        "purchase_info": "トヨタ販売店・時計店・カメラ店・家電量販店などで購入可能"
+      },
+      {
+        "item": "布または柔らかいクロス",
+        "required": false,
+        "description": "カバーに傷をつけないための保護用",
+        "note": "推奨アイテム"
+      }
+    ],
+    "important_notes": [
+      "電池の型番を必ず確認してください（CR2450）",
+      "すべて揃ってから作業を開始してください",
+      "作業は明るく平らな場所で行いましょう"
+    ],
+    "tips": [
+      "電池は事前に購入しておくと作業がスムーズです",
+      "電池の向き（+/-）を確認してから取り付けてください"
+    ],
+    "related_guides": ["GUIDE-004", "GUIDE-005"]
+  },
+  "source": {
+    "xml_file": "M52P95tojpjavhch03.xml",
+    "section_id": "ch03se0204020502",
+    "manual_page": "推定 3-20ページ"
+  }
+}

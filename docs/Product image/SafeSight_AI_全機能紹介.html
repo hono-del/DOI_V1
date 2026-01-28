@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeSight AI - 全機能紹介</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', 'Meiryo', sans-serif;
+            background: #f5f5f5;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 56px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .header p {
+            font-size: 24px;
+            color: #64748b;
+        }
+
+        .feature-section {
+            background: white;
+            border-radius: 30px;
+            padding: 60px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #e5e7eb;
+        }
+
+        .feature-icon {
+            font-size: 64px;
+        }
+
+        .feature-header-text h2 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #0066ff;
+            margin-bottom: 10px;
+        }
+
+        .feature-header-text p {
+            font-size: 18px;
+            color: #64748b;
+        }
+
+        .use-case {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border-left: 5px solid #0066ff;
+        }
+
+        .use-case h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+        }
+
+        .interface-tag {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .tag-driving {
+            background: linear-gradient(135deg, #ff6b00, #ff8c00);
+            color: white;
+        }
+
+        .tag-parked {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .example-box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .example-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0066ff;
+            margin-bottom: 15px;
+        }
+
+        .example-text {
+            font-size: 15px;
+            color: #475569;
+            line-height: 1.8;
+        }
+
+        .benefit-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-left: 5px solid #10b981;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .benefit-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #166534;
+            margin-bottom: 10px;
+        }
+
+        .benefit-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .benefit-list li {
+            font-size: 15px;
+            color: #166534;
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .benefit-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            font-weight: 800;
+            color: #10b981;
+        }
+
+        .stage-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 5px solid #f59e0b;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 15px 0;
+        }
+
+        .stage-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+
+        .stage-content {
+            font-size: 15px;
+            color: #78350f;
+            line-height: 1.8;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .comparison-card {
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .before-card {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border-left: 5px solid #ef4444;
+        }
+
+        .after-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-left: 5px solid #10b981;
+        }
+
+        .comparison-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .before-card .comparison-title {
+            color: #dc2626;
+        }
+
+        .after-card .comparison-title {
+            color: #166534;
+        }
+
+        .comparison-text {
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .before-card .comparison-text {
+            color: #991b1b;
+        }
+
+        .after-card .comparison-text {
+            color: #166534;
+        }
+
+        .metric-highlight {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="header">
+            <h1>SafeSight AI 全機能紹介</h1>
+            <p>2027年、予測AI時代の安全・快適な車移動体験</p>
+        </div>
+
+        <!-- Feature 1: 予測的安全支援 -->
+        <div class="feature-section">
+            <div class="feature-header">
+                <div class="feature-icon">🔮</div>
+                <div class="feature-header-text">
+                    <h2>予測的安全支援</h2>
+                    <p>あなたの運転パターンから事故リスクを予測し、事前に警告</p>
+                </div>
+            </div>
+
+            <div class="use-case">
+                <span class="interface-tag tag-driving">🚗 運転中：車載ディスプレイ・HUD・音声</span>
+                <h3>疲労予測アラート</h3>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card before-card">
+                        <div class="comparison-title">❌ 従来（2024年）</div>
+                        <div class="comparison-text">
+                            • 疲労を検知してから警告<br>
+                            • すでに判断力が低下している状態<br>
+                            • 事故が起きてから対処
+                        </div>
+                    </div>
+                    <div class="comparison-card after-card">
+                        <div class="comparison-title">✅ SafeSight AI（2027年）</div>
+                        <div class="comparison-text">
+                            • 過去3ヶ月のデータから学習<br>
+                            • 疲労する前に先回り警告<br>
+                            • 事故を未然に防ぐ
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">🚗 車載ディスプレイ + 音声ガイダンス</div>
+                    <div class="example-text">
+                        <strong>AI：</strong>「あなたは高速道路を60分以上運転すると、車線維持の精度が15%低下する傾向があります」<br><br>
+                        <strong>AI：</strong>「あと10分で〇〇SAです。休憩をお勧めします」<br><br>
+                        <strong>音声：</strong>「そろそろ休憩しませんか？10分先にサービスエリアがあります」
+                    </div>
+                </div>
+
+                <div class="benefit-box">
+                    <div class="benefit-title">💡 効果</div>
+                    <ul class="benefit-list">
+                        <li>事故削減率：30%</li>
+                        <li>疲労起因の事故を大幅に削減</li>
+                        <li>最適なタイミングで休憩を促進</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 2: パーソナル学習コーチ + 機能推奨 -->
+        <div class="feature-section">
+            <div class="feature-header">
+                <div class="feature-icon">👨‍🏫</div>
+                <div class="feature-header-text">
+                    <h2>パーソナル学習コーチ + 機能推奨</h2>
+                    <p>あなたに合わせた学習支援と、状況に応じた機能推奨で安全・快適性を向上</p>
+                </div>
+            </div>
+
+            <!-- ユースケース1: 機能推奨 -->
+            <div class="use-case">
+                <span class="interface-tag tag-driving">🚗 運転中：車載ディスプレイ・音声</span>
+                <h3>状況に応じた機能推奨</h3>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card before-card">
+                        <div class="comparison-title">❌ 従来（2024年）</div>
+                        <div class="comparison-text">
+                            • 機能があることを知らない<br>
+                            • 使うべきタイミングがわからない<br>
+                            • 機能利用率：<span class="metric-highlight">10-30%</span>
+                        </div>
+                    </div>
+                    <div class="comparison-card after-card">
+                        <div class="comparison-title">✅ SafeSight AI（2027年）</div>
+                        <div class="comparison-text">
+                            • 状況を判断し、最適な機能を推奨<br>
+                            • 使い方をリアルタイムでサポート<br>
+                            • 機能利用率：<span class="metric-highlight">60-80%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">🚗 車載ディスプレイ + 音声ガイダンス</div>
+                    <div class="example-text">
+                        <strong>AI：</strong>「渋滞が始まりましたね。渋滞追従機能を使うと、ブレーキとアクセルの操作が自動化され、疲労が軽減されます」<br><br>
+                        <strong>AI：</strong>「あなたはまだこの機能を使ったことがありません。渋滞中は低速で安全に練習できます。試してみますか？」<br><br>
+                        <strong>ユーザー：</strong>「はい」<br><br>
+                        <strong>AI：</strong>「では、ステアリングの右側にあるボタンを押してください。もう一度押すと機能が有効になります」<br><br>
+                        <strong>AI：</strong>「完璧です！前の車に追従しています。車間距離は左のダイヤルで調整できます。停車も自動で行います」<br><br>
+                        <strong>AI：</strong>「渋滞を抜けたら、一度機能を解除して、通常運転に戻りましょう」
+                    </div>
+                </div>
+
+                <div class="benefit-box">
+                    <div class="benefit-title">💡 推奨タイミングの例（安全性を考慮）</div>
+                    <ul class="benefit-list">
+                        <li>渋滞 → 渋滞追従機能（低速で安全に練習可能）</li>
+                        <li>駐車場 → パーキングアシスト（低速で安全）</li>
+                        <li>空いている一般道 → レーンキープアシスト（練習に最適）</li>
+                        <li>高速道路（習熟後）→ ACC（アダプティブクルーズコントロール）</li>
+                        <li>夜間 → オートハイビームの活用（操作が簡単）</li>
+                        <li>雨天 → VSC（横滑り防止装置）の動作確認（既存機能の理解）</li>
+                        <li>長距離 → シートヒーター、マッサージ機能（快適性・操作が簡単）</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ユースケース2: 学習支援 -->
+            <div class="use-case">
+                <span class="interface-tag tag-parked">📱 運転外：スマホアプリ</span>
+                <h3>個人最適化された学習</h3>
+                
+                <div class="example-box">
+                    <div class="example-title">📱 スマホアプリ</div>
+                    <div class="example-text">
+                        <strong>AI：</strong>「あなたは視覚的な説明で理解が早いタイプです」<br><br>
+                        <strong>AI：</strong>「ACCの使い方を動画とAR表示で解説します」<br><br>
+                        【動画再生】<br>
+                        実際の車両画面を使った説明動画<br><br>
+                        【理解度チェック】<br>
+                        クイズ形式で理解度を測定<br><br>
+                        <strong>AI：</strong>「完璧です！次回の運転時に実践してみましょう」
+                    </div>
+                </div>
+
+                <div class="benefit-box">
+                    <div class="benefit-title">💡 学習の段階的サポート</div>
+                    <ul class="benefit-list">
+                        <li>Level 1：機能の基本理解（座学・動画）</li>
+                        <li>Level 2：安全な環境で練習（サポート付き）</li>
+                        <li>Level 3：実践使用（見守り）</li>
+                        <li>Level 4：自律使用（習熟）</li>
+                        <li>Level 5：応用・最適化（マスター）</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ユースケース3: 機能利用率向上による安全性向上 -->
+            <div class="use-case" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-left: 5px solid #10b981;">
+                <h3>機能利用率向上による安全性向上</h3>
+                
+                <div class="example-box">
+                    <div class="example-title">📊 期待される効果</div>
+                    <div class="example-text">
+                        <strong>課題：</strong><br>
+                        レクサスLSS+（先進安全機能）の利用率は推定10-30%<br>
+                        高度な安全機能があっても使われていない<br><br>
+                        
+                        <strong>SafeSight AIの効果：</strong><br>
+                        機能推奨 + 学習支援 + 使用サポート<br>
+                        → 利用率を<span class="metric-highlight">60-80%</span>に向上（目標）<br>
+                        → 事故削減効果を最大化<br>
+                        → 安全性と快適性が大幅に向上
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 3: トラブル時の段階的支援 -->
+        <div class="feature-section">
+            <div class="feature-header">
+                <div class="feature-icon">🆘</div>
+                <div class="feature-header-text">
+                    <h2>トラブル時の段階的支援</h2>
+                    <p>警告灯点灯やトラブル発生時に、3段階で支援。パニックにならず、適切な対応が可能</p>
+                </div>
+            </div>
+
+            <div class="use-case">
+                <span class="interface-tag tag-driving">🚗 運転中：車載ディスプレイ + 音声</span>
+                <h3>警告灯点灯時の3段階支援</h3>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card before-card">
+                        <div class="comparison-title">❌ 従来（2024年）</div>
+                        <div class="comparison-text">
+                            • 警告灯が点灯<br>
+                            • ドライバーはパニック<br>
+                            • 「何の警告？」「どうすればいい？」<br>
+                            • 取扱説明書を探すが見つからない<br>
+                            • 不安なまま運転継続 or 不要な緊急停車
+                        </div>
+                    </div>
+                    <div class="comparison-card after-card">
+                        <div class="comparison-title">✅ SafeSight AI（2027年）</div>
+                        <div class="comparison-text">
+                            • 即座に状態を説明<br>
+                            • 緊急度を明確に提示<br>
+                            • 状況に応じた行動を提案<br>
+                            • 具体的な操作を誘導<br>
+                            • 不安を軽減し、適切な対応を実現
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stage-box">
+                    <div class="stage-title">Stage 1：状態を理解させる</div>
+                    <div class="stage-content">
+                        <strong>🚗 車載ディスプレイ：</strong><br>
+                        ┌─────────────────────────────┐<br>
+                        │  🔶 エンジン警告灯              │<br>
+                        │                                 │<br>
+                        │  【現在の状態】                 │<br>
+                        │  エンジン制御システムに         │<br>
+                        │  異常が検出されました           │<br>
+                        │                                 │<br>
+                        │  【緊急度】中                   │<br>
+                        │  すぐに停車する必要はありません │<br>
+                        │                                 │<br>
+                        │  [次へ] → 何をすべきか確認      │<br>
+                        └─────────────────────────────┘<br><br>
+                        
+                        <strong>🔊 音声：</strong>「エンジン警告灯が点灯しました。緊急度は中です。すぐに停車する必要はありません」
+                    </div>
+                </div>
+
+                <div class="stage-box">
+                    <div class="stage-title">Stage 2：次に何をすべきか判断させる</div>
+                    <div class="stage-content">
+                        <strong>🚗 車載ディスプレイ：</strong><br>
+                        ┌─────────────────────────────┐<br>
+                        │  【あなたの状況】               │<br>
+                        │  • 高速道路を走行中             │<br>
+                        │  • 次のSAまで15km               │<br>
+                        │  • 車両は正常に走行中           │<br>
+                        │                                 │<br>
+                        │  【推奨される行動】             │<br>
+                        │  ✓ そのまま走行を継続           │<br>
+                        │  ✓ 次のSAで一時停車             │<br>
+                        │  ✓ ディーラーに連絡             │<br>
+                        │                                 │<br>
+                        │  [了解] [ディーラーに連絡]      │<br>
+                        └─────────────────────────────┘<br><br>
+                        
+                        <strong>🔊 音声：</strong>「次のSAまで15kmです。そこで一時停車し、ディーラーに連絡することをお勧めします」
+                    </div>
+                </div>
+
+                <div class="stage-box">
+                    <div class="stage-title">Stage 3：行動を誘導・支援する</div>
+                    <div class="stage-content">
+                        <strong>🚗 車載ディスプレイ：</strong><br>
+                        ┌─────────────────────────────┐<br>
+                        │  【ディーラーに連絡しました】   │<br>
+                        │                                 │<br>
+                        │  レクサス〇〇店                 │<br>
+                        │  担当：田中様                   │<br>
+                        │  「すぐに確認します」           │<br>
+                        │                                 │<br>
+                        │  【SAに到着したら】             │<br>
+                        │  1. エンジンを停止              │<br>
+                        │  2. ハザードランプを点灯        │<br>
+                        │  3. 診断結果を待つ              │<br>
+                        │                                 │<br>
+                        │  [SAまでのナビ表示]             │<br>
+                        └─────────────────────────────┘<br><br>
+                        
+                        <strong>🔊 音声：</strong>「ディーラーに連絡しました。SAに到着したら、エンジンを停止して待機してください」
+                    </div>
+                </div>
+
+                <div class="benefit-box">
+                    <div class="benefit-title">💡 効果</div>
+                    <ul class="benefit-list">
+                        <li>パニックを防止し、冷静な判断をサポート</li>
+                        <li>不要な緊急停車を回避（二次事故防止）</li>
+                        <li>適切なタイミングで専門家に連絡</li>
+                        <li>具体的な行動指示で迷わない</li>
+                        <li>不安を大幅に軽減</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- その他のトラブルシーン -->
+            <div class="use-case">
+                <h3>その他のトラブルシーン</h3>
+                
+                <div class="example-box">
+                    <div class="example-title">🚗 パンク時</div>
+                    <div class="example-text">
+                        <strong>Stage 1：</strong>「タイヤの空気圧が急激に低下しています。パンクの可能性があります」<br>
+                        <strong>Stage 2：</strong>「安全な場所に停車してください。路肩まで500mです」<br>
+                        <strong>Stage 3：</strong>「ロードサービスに連絡しました。到着まで約30分です。車内で待機してください」
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">🚗 バッテリー上がり予兆</div>
+                    <div class="example-text">
+                        <strong>Stage 1：</strong>「バッテリー電圧が低下しています。エンジン始動に影響が出る可能性があります」<br>
+                        <strong>Stage 2：</strong>「今日の目的地まで走行可能ですが、到着後はエンジンを停止しないでください」<br>
+                        <strong>Stage 3：</strong>「最寄りのディーラーまでナビゲートします。バッテリー交換をお勧めします」
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 4: 先回りメンテナンス -->
+        <div class="feature-section">
+            <div class="feature-header">
+                <div class="feature-icon">🔧</div>
+                <div class="feature-header-text">
+                    <h2>先回りメンテナンス支援</h2>
+                    <p>運転パターンから部品交換の最適タイミングを予測</p>
+                </div>
+            </div>
+
+            <div class="use-case">
+                <span class="interface-tag tag-parked">📱 運転外：スマホアプリ</span>
+                <h3>個人化されたメンテナンス予測</h3>
+                
+                <div class="example-box">
+                    <div class="example-title">📱 スマホアプリ</div>
+                    <div class="example-text">
+                        <strong>通知：</strong>「ブレーキパッド交換時期のお知らせ」<br><br>
+                        
+                        <strong>AI：</strong>「あなたは急ブレーキが少ない運転スタイルです」<br>
+                        <strong>AI：</strong>「現在のペースだと、あと2ヶ月で交換時期です」<br>
+                        <strong>AI：</strong>「来月の帰省前に交換すると、長距離も安心です」<br><br>
+                        
+                        【予約ボタン】<br>
+                        最寄りのディーラーを表示<br>
+                        希望日時を選択<br>
+                        ワンタップで予約完了
+                    </div>
+                </div>
+
+                <div class="benefit-box">
+                    <div class="benefit-title">💡 効果</div>
+                    <ul class="benefit-list">
+                        <li>突然の故障を防止</li>
+                        <li>最適なタイミングで交換（コスト削減）</li>
+                        <li>長距離ドライブ前に整備完了（安心）</li>
+                        <li>メンテナンス予約の手間を削減</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 5: 家族安全ダッシュボード -->
+        <div class="feature-section">
+            <div class="feature-header">
+                <div class="feature-icon">👨‍👩‍👧‍👦</div>
+                <div class="feature-header-text">
+                    <h2>家族安全ダッシュボード</h2>
+                    <p>家族の運転を見守り、それぞれに最適なサポート</p>
+                </div>
+            </div>
+
+            <div class="use-case">
+                <span class="interface-tag tag-parked">📱 運転外：スマホアプリ・Webダッシュボード</span>
+                <h3>高齢ドライバーの見守り</h3>
+                
+                <div class="example-box">
+                    <div class="example-title">📱 家族のスマホアプリ</div>
+                    <div class="example-text">
+                        <strong>通知：</strong>「お父様の運転状況についてお知らせ」<br><br>
+                        
+                        <strong>AI：</strong>「最近、夜間運転時の反応速度が低下しています」<br>
+                        <strong>AI：</strong>「自動ブレーキの感度を強化しました」<br>
+                        <strong>AI：</strong>「夜間運転を控えることをお勧めします」<br><br>
+                        
+                        【詳細を見る】<br>
+                        • 反応速度の推移グラフ<br>
+                        • 時間帯別の運転精度<br>
+                        • ヒヤリハットの記録<br>
+                        • 推奨される対策
+                    </div>
+                </div>
+
+                <div class="benefit-box">
+                    <div class="benefit-title">💡 効果</div>
+                    <ul class="benefit-list">
+                        <li>高齢ドライバーの安全を確保</li>
+                        <li>家族が遠方でも見守り可能</li>
+                        <li>段階的なサポート強化で自立を維持</li>
+                        <li>適切なタイミングで免許返納の判断材料</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
+

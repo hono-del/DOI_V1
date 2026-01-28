@@ -1,0 +1,37 @@
+{
+  "guide_id": "GUIDE-001",
+  "title": "機械キーの取り出し方",
+  "type": "procedure",
+  "estimated_time": "1min",
+  "difficulty": "easy",
+  "content": {
+    "overview": "スマートキーに内蔵されている機械キーの取り出し方を説明します。",
+    "steps": [
+      {
+        "step": 1,
+        "description": "スマートキーのロック解除ボタンを押す",
+        "image_ref": "key_release_button.eps",
+        "note": "ボタンは側面にあります"
+      },
+      {
+        "step": 2,
+        "description": "機械キーを引き抜く",
+        "image_ref": "key_pull_out.eps"
+      }
+    ],
+    "warnings": [
+      "機械キーは無理に引き抜かないでください",
+      "使用後は必ず元の位置に戻してください"
+    ],
+    "tips": [
+      "機械キーはスマートキーに常時内蔵されています",
+      "電池切れの際の緊急用として使用できます"
+    ],
+    "related_guides": ["GUIDE-002", "GUIDE-008"]
+  },
+  "source": {
+    "xml_file": "M52P95tojpjavhch03.xml",
+    "section_id": "ch03se0204010302",
+    "manual_page": "推定 3-15ページ"
+  }
+}

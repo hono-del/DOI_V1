@@ -1,0 +1,79 @@
+{
+  "guide_id": "GUIDE-004",
+  "title": "電池購入方法",
+  "type": "link_collection",
+  "estimated_time": "5min",
+  "difficulty": "easy",
+  "content": {
+    "overview": "CR2450電池の購入方法をご案内します。",
+    "battery_specifications": {
+      "type": "CR2450",
+      "voltage": "3V",
+      "description": "リチウムコイン電池",
+      "note": "必ずCR2450をご購入ください"
+    },
+    "online_stores": [
+      {
+        "name": "Amazon",
+        "url": "https://amazon.co.jp/s?k=CR2450",
+        "price_range": "¥200-500",
+        "delivery": "最短翌日配送",
+        "note": "Prime会員は送料無料"
+      },
+      {
+        "name": "楽天市場",
+        "url": "https://search.rakuten.co.jp/search?k=CR2450",
+        "price_range": "¥200-500",
+        "delivery": "2-3日",
+        "note": "ポイント利用可能"
+      }
+    ],
+    "nearby_stores": {
+      "use_location": true,
+      "search_radius_km": 5,
+      "store_types": [
+        {
+          "type": "トヨタ販売店",
+          "availability": "高",
+          "note": "純正品が購入できます"
+        },
+        {
+          "type": "時計店",
+          "availability": "高",
+          "note": "電池の種類が豊富"
+        },
+        {
+          "type": "カメラ店",
+          "availability": "高",
+          "note": "各種電池を取り扱い"
+        },
+        {
+          "type": "家電量販店",
+          "availability": "中",
+          "note": "大型店舗がおすすめ"
+        },
+        {
+          "type": "コンビニエンスストア",
+          "availability": "低",
+          "note": "店舗により在庫が異なります"
+        }
+      ],
+      "api_endpoint": "/api/nearby-stores"
+    },
+    "tips": [
+      "オンライン購入の場合、到着まで機械キーをご使用ください",
+      "店舗購入の場合、在庫確認のため事前に電話連絡をおすすめします",
+      "複数個セット購入で予備を確保しておくと安心です",
+      "電池の使用期限（約5-7年）を確認して購入しましょう"
+    ],
+    "warnings": [
+      "型番を間違えないようご注意ください",
+      "安価すぎる製品は品質に注意が必要です"
+    ],
+    "related_guides": ["GUIDE-003", "GUIDE-005"]
+  },
+  "source": {
+    "type": "system_generated",
+    "based_on": "取扱説明書記載の購入先情報"
+  }
+}

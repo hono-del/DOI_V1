@@ -1,0 +1,16 @@
+{
+  "name": "digital-om-mockup",
+  "version": "1.0.0",
+  "description": "取扱説明書DXシステム - ホーム画面モックアップ",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "mockup",
+    "digital-om",
+    "car-manual"
+  ],
+  "author": "",
+  "license": "MIT"
+}

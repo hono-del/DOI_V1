@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeSight AI - ポスター形式</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', 'Meiryo', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        /* A4サイズポスター（縦） */
+        .poster {
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #0066ff 0%, #00d4ff 100%);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 背景装飾 */
+        .poster::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .poster::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -20%;
+            width: 600px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .poster-content {
+            position: relative;
+            z-index: 2;
+            padding: 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ヘッダー */
+        .poster-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .new-badge {
+            display: inline-block;
+            background: #ff3366;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .poster-title {
+            font-size: 64px;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            letter-spacing: 2px;
+        }
+
+        .poster-subtitle {
+            font-size: 32px;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .release-date {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+        }
+
+        /* メインキャッチ */
+        .main-catch {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .main-catch h2 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .main-catch p {
+            font-size: 20px;
+            color: #475569;
+            line-height: 1.8;
+        }
+
+        /* 3ステップ */
+        .steps-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .steps-title {
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+            color: #1e293b;
+            margin-bottom: 30px;
+        }
+
+        .steps-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .step-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-item::after {
+            content: '→';
+            position: absolute;
+            top: 50px;
+            right: -25px;
+            font-size: 36px;
+            color: #0066ff;
+            font-weight: 800;
+        }
+
+        .step-item:last-child::after {
+            display: none;
+        }
+
+        .step-circle {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            font-weight: 800;
+            box-shadow: 0 8px 20px rgba(0, 102, 255, 0.3);
+            position: relative;
+        }
+
+        .step-circle::before {
+            content: 'STEP';
+            position: absolute;
+            top: -20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #0066ff;
+            background: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            letter-spacing: 1px;
+        }
+
+        .step-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .step-label {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* 機能ハイライト */
+        .features-highlight {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .feature-mini {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .feature-mini-icon {
+            font-size: 36px;
+            flex-shrink: 0;
+        }
+
+        .feature-mini-content h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0066ff;
+            margin-bottom: 5px;
+        }
+
+        .feature-mini-content p {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* CTA */
+        .poster-cta {
+            background: rgba(30, 41, 59, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            margin-top: auto;
+        }
+
+        .poster-cta h3 {
+            font-size: 32px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .cta-button-large {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff3366, #ff6b9d);
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            padding: 18px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(255, 51, 102, 0.4);
+            margin-bottom: 15px;
+        }
+
+        .cta-note {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .poster {
+                box-shadow: none;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- ポスター1：メインビジュアル -->
+    <div class="poster">
+        <div class="poster-content">
+            <div class="poster-header">
+                <div class="new-badge">NEW SERVICE 2027</div>
+                <h1 class="poster-title">SafeSight AI</h1>
+                <div class="poster-subtitle">あなたの安全を、先回りして守る</div>
+                <div class="release-date">2027年 正式リリース予定</div>
+            </div>
+
+            <div class="main-catch">
+                <h2>3ステップで<br>かんたん最速導入</h2>
+                <p>
+                    あなた専用の安全AIが、今日から学習を開始。<br>
+                    事故が起きる前に予測し、最適なタイミングで警告します。
+                </p>
+            </div>
+
+            <div class="steps-container">
+                <div class="steps-title">たった3ステップで始められる</div>
+                <div class="steps-flex">
+                    <div class="step-item">
+                        <div class="step-circle">1</div>
+                        <div class="step-icon">📱</div>
+                        <div class="step-label">アプリDL</div>
+                        <div class="step-desc">無料ダウンロード<br>車両と連携</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-circle">2</div>
+                        <div class="step-icon">🚗</div>
+                        <div class="step-label">データ学習</div>
+                        <div class="step-desc">普段通り運転<br>AIが自動学習</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-circle">3</div>
+                        <div class="step-icon">🛡️</div>
+                        <div class="step-label">予測支援開始</div>
+                        <div class="step-desc">3ヶ月後から<br>予測機能開始</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-highlight">
+                <div style="background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%); padding: 20px; border-radius: 12px; margin-bottom: 20px; border-left: 5px solid #0066ff;">
+                    <div style="font-weight: 700; color: #0066ff; margin-bottom: 10px; font-size: 16px;">🚗 運転中：車載ディスプレイ・HUD・音声</div>
+                    <div style="font-size: 13px; color: #475569; line-height: 1.6;">
+                        • 予測的安全警告（疲労・危険地点）<br>
+                        • 視線移動なしで確認できるHUD表示<br>
+                        • 自然な音声ガイダンス
+                    </div>
+                </div>
+                <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); padding: 20px; border-radius: 12px; border-left: 5px solid #10b981;">
+                    <div style="font-weight: 700; color: #10b981; margin-bottom: 10px; font-size: 16px;">📱 運転外：スマホアプリ</div>
+                    <div style="font-size: 13px; color: #166534; line-height: 1.6;">
+                        • 運転分析・学習コーチ<br>
+                        • メンテナンス予測・予約<br>
+                        • 家族見守りダッシュボード
+                    </div>
+                </div>
+            </div>
+
+            <div class="poster-cta">
+                <h3>今すぐアクセス！</h3>
+                <a href="#" class="cta-button-large">無料トライアルを始める →</a>
+                <div class="cta-note">※ 2025年Q2よりβ版提供開始予定（レクサスオーナー限定）</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+

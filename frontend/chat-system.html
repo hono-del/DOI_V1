@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIガイドチャット - スマートキー対応</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .mobile-frame {
+            max-width: 375px;
+            margin: 20px auto;
+            border: 8px solid #2d3561;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(79, 172, 254, 0.2);
+            background: #0f3460;
+            height: 667px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-header {
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            color: #4facfe;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(79, 172, 254, 0.3);
+        }
+
+        .mobile-header h2 {
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85em;
+            color: #4ade80;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        #chatContainer {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            scroll-behavior: smooth;
+        }
+
+        .chat-message {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .chat-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .chat-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .chat-avatar.ai {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .chat-avatar.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .chat-bubble {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .chat-bubble.ai {
+            background: rgba(45, 53, 97, 0.8);
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            color: #e0e0e0;
+        }
+
+        .chat-bubble.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .chat-bubble strong {
+            color: #4facfe;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .chat-bubble .guide-link {
+            display: inline-block;
+            background: rgba(79, 172, 254, 0.2);
+            color: #4facfe;
+            padding: 6px 12px;
+            border-radius: 8px;
+            margin: 8px 4px 0 0;
+            cursor: pointer;
+            font-size: 0.9em;
+            border: 1px solid rgba(79, 172, 254, 0.4);
+            transition: all 0.3s;
+        }
+
+        .chat-bubble .guide-link:hover {
+            background: rgba(79, 172, 254, 0.3);
+            border-color: #4facfe;
+        }
+
+        .chat-bubble .action-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #0f3460;
+            padding: 8px 16px;
+            border-radius: 12px;
+            margin: 8px 4px 0 0;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .chat-bubble .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+        }
+
+        .quick-reply-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .quick-reply {
+            background: rgba(79, 172, 254, 0.1);
+            color: #4facfe;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            transition: all 0.3s;
+        }
+
+        .quick-reply:hover {
+            background: rgba(79, 172, 254, 0.2);
+            border-color: #4facfe;
+            transform: translateY(-2px);
+        }
+
+        .loading-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(45, 53, 97, 0.6);
+            border-radius: 18px;
+            width: fit-content;
+        }
+
+        .loading-indicator.active {
+            display: flex;
+        }
+
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            background: #4facfe;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        #chatInputContainer {
+            background: #0f3460;
+            padding: 15px;
+            border-top: 1px solid rgba(79, 172, 254, 0.3);
+        }
+
+        #chatInput {
+            flex: 1;
+            background: rgba(45, 53, 97, 0.6);
+            color: #e0e0e0;
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 0.95em;
+            resize: none;
+            min-height: 45px;
+            max-height: 100px;
+            font-family: inherit;
+            width: 100%;
+        }
+
+        #chatInput:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .send-button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #0f3460;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .input-hint {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 8px;
+        }
+
+        /* ガイド詳細モーダル */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #16213e;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid rgba(79, 172, 254, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(79, 172, 254, 0.3);
+        }
+
+        .modal-title {
+            font-size: 1.3em;
+            color: #4facfe;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #888;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #4facfe;
+        }
+
+        .guide-step {
+            background: rgba(45, 53, 97, 0.6);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 3px solid #4facfe;
+        }
+
+        .guide-step-number {
+            color: #4facfe;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .guide-warning {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid #ef4444;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: #fca5a5;
+        }
+
+        .guide-tip {
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 3px solid #22c55e;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: #86efac;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-frame">
+        <div class="mobile-header">
+            <h2>🤖 AIガイド</h2>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>オンライン</span>
+            </div>
+        </div>
+
+        <div id="chatContainer"></div>
+
+        <div id="chatInputContainer">
+            <div class="input-wrapper">
+                <textarea 
+                    id="chatInput" 
+                    placeholder="質問を入力してください..." 
+                    rows="1"
+                    onkeypress="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"></textarea>
+                <button class="send-button" onclick="sendMessage()">
+                    <span>送信</span>
+                    <span>📤</span>
+                </button>
+            </div>
+            <div class="input-hint">
+                💡 Shift+Enterで改行できます
+            </div>
+        </div>
+    </div>
+
+    <!-- ガイド詳細モーダル -->
+    <div id="guideModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle"></div>
+                <div class="modal-close" onclick="closeModal()">×</div>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // APIベースURL（開発環境）
+        const API_BASE_URL = 'http://localhost:5000/api';
+        
+        // チャット履歴
+        let chatHistory = [];
+        
+        // 現在のフロー状態
+        let currentFlow = {
+            theme: 'THEME-001',
+            currentNode: 'NODE-START',
+            context: {}
+        };
+
+        // 初期化
+        window.onload = function() {
+            initializeChat();
+        };
+
+        function initializeChat() {
+            showWelcomeMessage();
+        }
+
+        function showWelcomeMessage() {
+            addMessage('ai', `こんにちは!取扱説明書AIアシスタントです。🚗
+
+お困りのことがあれば、お気軽にご質問ください。
+
+<div class="quick-reply-container">
+    <div class="quick-reply" onclick="handleQuickReply('スマートキーでドアが開かない')">🔑 スマートキーでドアが開かない</div>
+    <div class="quick-reply" onclick="handleQuickReply('エアコンが冷えない')">❄️ エアコンが冷えない</div>
+    <div class="quick-reply" onclick="handleQuickReply('警告灯が点灯した')">⚠️ 警告灯が点灯した</div>
+</div>`);
+        }
+
+        function handleQuickReply(message) {
+            sendMessage(message);
+        }
+
+        async function sendMessage(predefinedMessage) {
+            const input = document.getElementById('chatInput');
+            const message = predefinedMessage || input.value.trim();
+            
+            if (!message) return;
+            
+            // ユーザーメッセージを表示
+            addMessage('user', message);
+            
+            if (!predefinedMessage) {
+                input.value = '';
+            }
+            
+            // ローディング表示
+            showLoading();
+            
+            // メッセージを処理
+            await processMessage(message);
+            
+            // ローディング非表示
+            hideLoading();
+        }
+
+        async function processMessage(message) {
+            // メッセージの内容に応じて処理を分岐
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('スマートキー') || lowerMessage.includes('ドア') || lowerMessage.includes('開かない')) {
+                await handleSmartKeyIssue();
+            } else if (lowerMessage.includes('エアコン')) {
+                handleAirConditionerIssue();
+            } else {
+                handleGenericQuery(message);
+            }
+        }
+
+        async function handleSmartKeyIssue() {
+            addMessage('ai', `<strong>スマートキーでドアが開かない状況ですね</strong>
+
+まず、いくつか確認させてください。
+
+スマートキーのインジケーターランプは点灯しますか?
+
+<div class="quick-reply-container">
+    <div class="quick-reply" onclick="handleIndicatorResponse('yes')">✅ はい、点灯します</div>
+    <div class="quick-reply" onclick="handleIndicatorResponse('no')">❌ いいえ、点灯しません</div>
+    <div class="quick-reply" onclick="handleIndicatorResponse('unknown')">❓ わかりません</div>
+</div>`);
+        }
+
+        function handleIndicatorResponse(response) {
+            if (response === 'yes') {
+                addMessage('user', 'はい、点灯します');
+                setTimeout(() => {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        handleElectricInterference();
+                    }, 1000);
+                }, 300);
+            } else if (response === 'no') {
+                addMessage('user', 'いいえ、点灯しません');
+                setTimeout(() => {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        handleBatteryIssue();
+                    }, 1000);
+                }, 300);
+            } else {
+                addMessage('user', 'わかりません');
+                setTimeout(() => {
+                    showLoading();
+                    setTimeout(() => {
+                        hideLoading();
+                        showIndicatorCheckGuide();
+                    }, 1000);
+                }, 300);
+            }
+        }
+
+        function handleBatteryIssue() {
+            addMessage('ai', `<strong>電池切れの可能性が高いです</strong>
+
+スマートキーの電池が切れている可能性があります。
+
+<strong>すぐにできる対応:</strong>
+<div class="guide-link" onclick="showGuide('GUIDE-001')">📖 機械キーの取り出し方</div>
+
+機械キーを使えば、今すぐドアを開けられます。
+
+<strong>電池交換について:</strong>
+<div class="action-button" onclick="handleBatteryReplacement()">🔋 電池交換の方法を見る</div>
+<div class="action-button" onclick="findNearbyStores()">🏪 近くの店舗を探す</div>
+<div class="action-button" onclick="findDealers()">🚗 販売店を探す</div>`);
+        }
+
+        function handleElectricInterference() {
+            addMessage('ai', `<strong>電波干渉の可能性があります</strong>
+
+インジケーターが点灯するのに車両が反応しない場合、以下を試してください:
+
+<strong>1. スマートキーを車体に近づける</strong>
+ドアハンドルに直接近づけて操作してみてください。
+
+<strong>2. 電波干渉源から離れる</strong>
+空港、放送局、携帯基地局の近くでは電波干渉が起こりやすいです。
+
+それでも改善しない場合:
+<div class="guide-link" onclick="showGuide('GUIDE-008')">📖 電波干渉時の詳しい対応方法</div>
+<div class="action-button" onclick="findDealers()">🚗 販売店で点検してもらう</div>`);
+        }
+
+        function handleBatteryReplacement() {
+            addMessage('ai', `<strong>電池交換の選択肢</strong>
+
+電池交換は以下の方法があります:
+
+<strong>1. 自分で交換する（推奨難易度: ★★☆☆☆）</strong>
+• 所要時間: 約5分
+• 必要なもの: マイナスドライバー2本、CR2450電池
+
+<div class="guide-link" onclick="showGuide('GUIDE-003')">📋 準備物リスト</div>
+<div class="guide-link" onclick="showGuide('GUIDE-005')">📖 交換手順（詳細）</div>
+<div class="action-button" onclick="findNearbyStores()">🏪 電池を買える店を探す</div>
+
+<strong>2. 販売店で交換してもらう（推奨）</strong>
+• 所要時間: 約10-15分
+• 費用: 店舗にお問い合わせください
+
+<div class="action-button" onclick="findDealers()">🚗 近くの販売店を探す</div>
+
+<div class="guide-warning">
+⚠️ 注意: 自分で交換する場合、部品が破損するおそれがあります
+</div>
+
+どちらの方法をお選びになりますか?`);
+        }
+
+        async function findNearbyStores() {
+            addMessage('user', '近くの店舗を探す');
+            showLoading();
+            
+            // 位置情報を取得
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    async (position) => {
+                        const { latitude, longitude } = position.coords;
+                        
+                        try {
+                            const response = await fetch(`${API_BASE_URL}/nearby-stores`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    location: { latitude, longitude },
+                                    item: 'CR2450',
+                                    radius_km: 5
+                                })
+                            });
+                            
+                            const data = await response.json();
+                            hideLoading();
+                            displayNearbyStores(data.stores);
+                        } catch (error) {
+                            console.error('API Error:', error);
+                            hideLoading();
+                            // デモ用のフォールバック
+                            displayNearbyStoresDemo();
+                        }
+                    },
+                    (error) => {
+                        console.error('Location Error:', error);
+                        hideLoading();
+                        // デモ用のフォールバック
+                        displayNearbyStoresDemo();
+                    }
+                );
+            } else {
+                hideLoading();
+                displayNearbyStoresDemo();
+            }
+        }
+
+        function displayNearbyStoresDemo() {
+            addMessage('ai', `<strong>近隣の店舗（デモデータ）</strong>
+
+CR2450電池を購入できる近くの店舗です:
+
+<strong>1. ヨドバシカメラ 新宿西口本店</strong>
+📍 距離: 1.2km
+🏪 在庫: 高確率であり
+📞 03-3346-1010
+⏰ 9:30-22:00
+
+<strong>2. ビックカメラ 渋谷東口店</strong>
+📍 距離: 2.5km
+🏪 在庫: 高確率であり
+📞 03-5466-1111
+⏰ 10:00-21:00
+
+<strong>3. セイコーウォッチサロン 銀座</strong>
+📍 距離: 3.1km
+🏪 在庫: 高確率であり
+📞 03-3563-1111
+⏰ 11:00-19:30
+
+<div class="guide-tip">
+💡 ヒント: 来店前に電話で在庫確認をおすすめします
+</div>
+
+<div class="action-button" onclick="showGuide('GUIDE-004')">🛒 オンラインで購入する</div>`);
+        }
+
+        async function findDealers() {
+            addMessage('user', '販売店を探す');
+            showLoading();
+            
+            // デモ用データを表示
+            setTimeout(() => {
+                hideLoading();
+                displayDealersDemo();
+            }, 1000);
+        }
+
+        function displayDealersDemo() {
+            addMessage('ai', `<strong>近くのトヨタ販売店（デモデータ）</strong>
+
+電池交換サービスを提供している販売店です:
+
+<strong>1. トヨタ東京カローラ 新宿店</strong>
+📍 距離: 2.3km
+⏰ サービス: 平日 9:00-18:00 / 土 9:00-17:00
+📞 03-3363-5111
+✅ サービス: 電池交換、キー修理、点検
+
+<div class="action-button" onclick="reserveDealer('DEALER-001')">📅 予約する</div>
+
+<strong>2. トヨタカローラ東京 渋谷店</strong>
+📍 距離: 3.5km
+⏰ サービス: 毎日 9:00-18:00
+📞 03-3463-5111
+✅ サービス: 電池交換、キー修理、点検
+
+<div class="action-button" onclick="reserveDealer('DEALER-002')">📅 予約する</div>
+
+<div class="guide-tip">
+💡 予約なしでも対応可能ですが、待ち時間短縮のため予約をおすすめします
+</div>`);
+        }
+
+        function reserveDealer(dealerId) {
+            addMessage('ai', `<strong>予約機能（デモ）</strong>
+
+実際のシステムでは、ここで予約フォームが表示されます:
+
+• 希望日時の選択
+• お客様情報の入力
+• 車両情報の入力
+• 予約確認
+
+<div class="guide-warning">
+⚠️ 本機能は現在開発中です
+</div>
+
+<div class="action-button" onclick="alert('予約APIに接続します: ${API_BASE_URL}/dealers/reserve')">📞 電話で予約する</div>`);
+        }
+
+        function displayNearbyStores(stores) {
+            if (!stores || stores.length === 0) {
+                displayNearbyStoresDemo();
+                return;
+            }
+            
+            let storesHtml = '<strong>近隣の店舗</strong><br><br>';
+            stores.slice(0, 3).forEach((store, index) => {
+                storesHtml += `<strong>${index + 1}. ${store.name}</strong><br>`;
+                storesHtml += `📍 距離: ${store.distance_km}km<br>`;
+                storesHtml += `🏪 在庫: ${store.battery_availability?.availability || '要確認'}<br>`;
+                if (store.contact?.phone) {
+                    storesHtml += `📞 ${store.contact.phone}<br>`;
+                }
+                storesHtml += `<br>`;
+            });
+            
+            addMessage('ai', storesHtml);
+        }
+
+        function showIndicatorCheckGuide() {
+            addMessage('ai', `<strong>インジケーターランプの確認方法</strong>
+
+スマートキーのボタンを押したとき、小さな赤いランプが光るかどうか確認してください。
+
+<strong>確認方法:</strong>
+1. スマートキーのロックボタンを押す
+2. キー本体を見て、ランプが光るか確認
+
+<div class="quick-reply-container">
+    <div class="quick-reply" onclick="handleIndicatorResponse('yes')">✅ 光りました</div>
+    <div class="quick-reply" onclick="handleIndicatorResponse('no')">❌ 光りません</div>
+</div>`);
+        }
+
+        function handleAirConditionerIssue() {
+            addMessage('ai', `<strong>エアコンが冷えない場合の診断</strong>
+
+以下の順番で確認してください:
+
+<strong>1. 温度設定を確認</strong>
+• 設定温度が低く設定されているか確認
+• 推奨: 18-22℃
+
+<strong>2. 風量を確認</strong>
+• 風量が「弱」になっていないか確認
+• 冷房時は「中」以上を推奨
+
+<strong>3. エアコンフィルターを確認</strong>
+• 最後の交換から1年以上経過している場合は交換を推奨
+
+<div class="action-button" onclick="findDealers()">🚗 販売店で点検してもらう</div>`);
+        }
+
+        function handleGenericQuery(message) {
+            addMessage('ai', `ご質問ありがとうございます。
+
+「${message}」について、もう少し詳しく教えていただけますか?
+
+または、以下の項目からお選びください:
+
+<div class="quick-reply-container">
+    <div class="quick-reply" onclick="handleQuickReply('スマートキーでドアが開かない')">🔑 スマートキー</div>
+    <div class="quick-reply" onclick="handleQuickReply('エアコンが冷えない')">❄️ エアコン</div>
+    <div class="quick-reply" onclick="handleQuickReply('警告灯が点灯した')">⚠️ 警告灯</div>
+</div>`);
+        }
+
+        function showGuide(guideId) {
+            const guides = {
+                'GUIDE-001': {
+                    title: '機械キーの取り出し方',
+                    content: `
+                        <div class="guide-step">
+                            <div class="guide-step-number">ステップ 1</div>
+                            スマートキーのロック解除ボタンを押す<br>
+                            <small>💡 ボタンは側面にあります</small>
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">ステップ 2</div>
+                            機械キーを引き抜く
+                        </div>
+                        <div class="guide-warning">
+                            ⚠️ 機械キーは無理に引き抜かないでください<br>
+                            ⚠️ 使用後は必ず元の位置に戻してください
+                        </div>
+                        <div class="guide-tip">
+                            ✅ 所要時間: 約1分<br>
+                            ✅ 難易度: かんたん
+                        </div>
+                    `
+                },
+                'GUIDE-003': {
+                    title: '電池交換の準備物',
+                    content: `
+                        <strong>必要なもの:</strong>
+                        <div class="guide-step">
+                            <div class="guide-step-number">1. マイナスドライバー</div>
+                            スマートキーのカバーを開けるために使用<br>
+                            サイズ: 中サイズ（先端幅 5-6mm程度）
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">2. 小さいマイナスドライバー</div>
+                            電池を取り出すために使用<br>
+                            サイズ: 小サイズ（先端幅 2-3mm程度）
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">3. リチウム電池 CR2450</div>
+                            交換用の新しい電池<br>
+                            3V リチウムコイン電池
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">4. 布または柔らかいクロス（推奨）</div>
+                            カバーに傷をつけないための保護用
+                        </div>
+                        <div class="guide-tip">
+                            💡 電池の型番を必ず確認してください（CR2450）<br>
+                            💡 すべて揃ってから作業を開始してください
+                        </div>
+                    `
+                },
+                'GUIDE-004': {
+                    title: '電池購入方法',
+                    content: `
+                        <strong>オンライン購入:</strong>
+                        <div class="guide-step">
+                            <div class="guide-step-number">Amazon</div>
+                            価格: ¥200-500<br>
+                            配送: 最短翌日<br>
+                            <small>Prime会員は送料無料</small>
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">楽天市場</div>
+                            価格: ¥200-500<br>
+                            配送: 2-3日<br>
+                            <small>ポイント利用可能</small>
+                        </div>
+                        <strong>実店舗:</strong>
+                        • トヨタ販売店（純正品）<br>
+                        • 時計店（種類豊富）<br>
+                        • カメラ店<br>
+                        • 家電量販店<br>
+                        • コンビニ（店舗により在庫異なる）
+                        <div class="guide-tip">
+                            💡 オンライン購入の場合、到着まで機械キーをご使用ください<br>
+                            💡 店舗購入の場合、在庫確認のため事前に電話連絡をおすすめします
+                        </div>
+                    `
+                },
+                'GUIDE-005': {
+                    title: '電池交換手順',
+                    content: `
+                        <div class="guide-warning">
+                            ⚠️ 電池はご自身で交換できますが、部品が破損するおそれがあるので、トヨタ販売店で交換することをおすすめします。
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">ステップ 1</div>
+                            機械キーを取り出す
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">ステップ 2</div>
+                            マイナスドライバーでカバーを開ける<br>
+                            <small>⚠️ カバーに傷をつけないよう、布などを当ててください</small>
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">ステップ 3</div>
+                            小さいマイナスドライバーで古い電池を取り出す<br>
+                            <small>⚠️ 電池の向きを確認してください</small>
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">ステップ 4</div>
+                            新しいCR2450電池を+(プラス)面を上にして取り付ける<br>
+                            <small>⚠️ 電池の向きを間違えないでください</small>
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">ステップ 5</div>
+                            カバーを閉じる<br>
+                            <small>💡 カチッと音がするまで確実に閉じてください</small>
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">ステップ 6</div>
+                            機械キーを元に戻す
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">ステップ 7</div>
+                            動作確認<br>
+                            スマートキーのボタンを押して、車両が反応することを確認
+                        </div>
+                        <div class="guide-tip">
+                            ✅ 所要時間: 約5分<br>
+                            ✅ 難易度: ふつう
+                        </div>
+                    `
+                },
+                'GUIDE-008': {
+                    title: '電波干渉時の対応',
+                    content: `
+                        <strong>電波干渉が起こりやすい場所:</strong>
+                        • 空港（航空管制レーダー）<br>
+                        • 放送局（送信アンテナ）<br>
+                        • 発電所・変電所（強力な電磁波）<br>
+                        • テレビ塔<br>
+                        • 携帯電話の基地局付近<br>
+                        
+                        <strong>対処法:</strong>
+                        <div class="guide-step">
+                            <div class="guide-step-number">方法 1: キーを車体に近づける</div>
+                            スマートキーを車両のドアハンドルに直接近づけて操作
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">方法 2: 機械キーを使用する</div>
+                            電波干渉が強い場合は、機械キーでドアを開閉
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">方法 3: 場所を移動する</div>
+                            可能であれば、電波の影響が少ない場所に車を移動
+                        </div>
+                        <div class="guide-tip">
+                            💡 この現象は一時的なもので、スマートキーや車両の故障ではありません
+                        </div>
+                    `
+                }
+            };
+            
+            const guide = guides[guideId];
+            if (guide) {
+                document.getElementById('modalTitle').innerHTML = guide.title;
+                document.getElementById('modalBody').innerHTML = guide.content;
+                document.getElementById('guideModal').classList.add('active');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('guideModal').classList.remove('active');
+        }
+
+        function addMessage(sender, content) {
+            const container = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = `chat-avatar ${sender}`;
+            avatar.textContent = sender === 'ai' ? '🤖' : '👤';
+            
+            const bubble = document.createElement('div');
+            bubble.className = `chat-bubble ${sender}`;
+            bubble.innerHTML = content;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(bubble);
+            container.appendChild(messageDiv);
+            
+            // スクロールを最下部に
+            container.scrollTop = container.scrollHeight;
+            
+            // チャット履歴に追加
+            chatHistory.push({ sender, content, timestamp: new Date() });
+        }
+
+        function showLoading() {
+            const container = document.getElementById('chatContainer');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = 'loadingIndicator';
+            loadingDiv.className = 'chat-message ai';
+            loadingDiv.innerHTML = `
+                <div class="chat-avatar ai">🤖</div>
+                <div class="loading-indicator active">
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                </div>
+            `;
+            container.appendChild(loadingDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function hideLoading() {
+            const loadingDiv = document.getElementById('loadingIndicator');
+            if (loadingDiv) {
+                loadingDiv.remove();
+            }
+        }
+
+        // モーダルの外側クリックで閉じる
+        document.getElementById('guideModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

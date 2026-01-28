@@ -1,0 +1,38 @@
+{
+  "guide_id": "GUIDE-002",
+  "title": "機械キーの場所・保管方法",
+  "type": "information",
+  "estimated_time": "1min",
+  "difficulty": "easy",
+  "content": {
+    "overview": "機械キーの保管場所と管理方法について説明します。",
+    "location": {
+      "primary": "スマートキー本体に内蔵",
+      "description": "スマートキーの側面から取り出せる構造になっています"
+    },
+    "storage_recommendations": [
+      {
+        "recommendation": "使用後は必ずスマートキーに戻す",
+        "reason": "紛失防止のため"
+      },
+      {
+        "recommendation": "予備キーは自宅の安全な場所に保管",
+        "reason": "緊急時に備えるため"
+      }
+    ],
+    "warnings": [
+      "機械キーを紛失すると、複製に時間と費用がかかります",
+      "スマートキーと機械キーは必ずセットで保管してください"
+    ],
+    "tips": [
+      "定期的に機械キーが正常に動作するか確認しましょう",
+      "予備のスマートキーにも機械キーが内蔵されています"
+    ],
+    "related_guides": ["GUIDE-001"]
+  },
+  "source": {
+    "xml_file": "M52P95tojpjavhch03.xml",
+    "section_id": "ch03se02040103",
+    "manual_page": "推定 3-16ページ"
+  }
+}

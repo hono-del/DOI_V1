@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeSight AI - プロダクト・サービスイメージ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', 'Meiryo', sans-serif;
+            background: #f5f5f5;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* メインビジュアル */
+        .hero-card {
+            background: linear-gradient(135deg, #0066ff 0%, #00d4ff 100%);
+            border-radius: 30px;
+            padding: 60px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 60px rgba(0, 102, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-left h1 {
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-left .tagline {
+            font-size: 28px;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .hero-left .highlight {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            font-size: 20px;
+            line-height: 1.8;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .phone-mockup {
+            background: white;
+            border-radius: 40px;
+            padding: 15px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .phone-screen {
+            background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 30px;
+            padding: 30px 20px;
+            min-height: 600px;
+            position: relative;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: white;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .app-header {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .app-logo {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .alert-card {
+            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+            border-left: 5px solid #f59e0b;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.2);
+        }
+
+        .alert-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .alert-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+
+        .alert-text {
+            font-size: 14px;
+            color: #78350f;
+            line-height: 1.6;
+        }
+
+        .prediction-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%);
+            border-left: 5px solid #0066ff;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0066ff;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        /* 3ステップセクション */
+        .steps-section {
+            background: white;
+            border-radius: 30px;
+            padding: 60px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .steps-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .steps-header h2 {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .steps-header .subtitle {
+            font-size: 20px;
+            color: #64748b;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .step-card {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-card::after {
+            content: '→';
+            position: absolute;
+            top: 60px;
+            right: -35px;
+            font-size: 40px;
+            color: #0066ff;
+            font-weight: 800;
+        }
+
+        .step-card:last-child::after {
+            display: none;
+        }
+
+        .step-number {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.3);
+            position: relative;
+        }
+
+        .step-number::before {
+            content: 'STEP';
+            position: absolute;
+            top: -25px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0066ff;
+            letter-spacing: 2px;
+        }
+
+        .step-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .step-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+
+        .step-description {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* CTA セクション */
+        .cta-section {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 30px;
+            padding: 60px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+        }
+
+        .cta-section h2 {
+            font-size: 42px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            padding: 20px 60px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 102, 255, 0.5);
+        }
+
+        /* 機能紹介セクション */
+        .features-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .features-section-wide {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card-compact {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card-compact:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 102, 255, 0.2);
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 102, 255, 0.2);
+        }
+
+        .feature-icon-large {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .feature-title-large {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0066ff;
+            margin-bottom: 15px;
+        }
+
+        .feature-description-large {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .feature-example {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #0066ff;
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        /* 数値実績セクション */
+        .metrics-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 30px;
+            padding: 60px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+        }
+
+        .metrics-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .metrics-header h2 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .metric-card-large {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .metric-value-large {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .metric-label-large {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step-card::after {
+                display: none;
+            }
+
+            .features-section {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- メインビジュアル -->
+        <div class="hero-card">
+            <div class="hero-content">
+                <div class="hero-left">
+                    <h1>SafeSight AI</h1>
+                    <div class="tagline">あなたの安全を、先回りして守る</div>
+                    <div class="highlight">
+                        <strong style="font-size: 24px; display: block; margin-bottom: 15px;">2027年、予測AI時代の到来</strong>
+                        事故が起きる前に、あなた個人の行動パターンから予測。<br>
+                        最適なタイミングで、最適な方法で、安全をサポートします。
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <!-- 車載ディスプレイ -->
+                    <div style="margin-bottom: 30px;">
+                        <div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 15px; border-radius: 15px; margin-bottom: 15px; border: 2px solid rgba(255,255,255,0.3);">
+                            <div style="color: white; font-size: 14px; font-weight: 600; margin-bottom: 8px;">🚗 運転中：車載ディスプレイ・HUD・音声</div>
+                        </div>
+                        <div style="background: #1a1a1a; border-radius: 20px; padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 8px solid #2a2a2a;">
+                            <div style="background: linear-gradient(135deg, #ff6b00 0%, #ff8c00 100%); padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(255,107,0,0.3);">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="font-size: 36px;">⚠️</div>
+                                    <div style="flex: 1;">
+                                        <div style="color: white; font-size: 18px; font-weight: 700; margin-bottom: 5px;">疲労予測アラート</div>
+                                        <div style="color: rgba(255,255,255,0.95); font-size: 15px; line-height: 1.5;">
+                                            あと10分で〇〇SAです<br>
+                                            <strong style="font-size: 16px;">休憩をお勧めします</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="background: rgba(0,102,255,0.15); padding: 15px; border-radius: 10px; border-left: 4px solid #0066ff;">
+                                <div style="color: #60a5fa; font-size: 13px; font-weight: 600; margin-bottom: 5px;">🔊 音声ガイダンス</div>
+                                <div style="color: #94a3b8; font-size: 12px; line-height: 1.5;">
+                                    "そろそろ休憩しませんか？<br>10分先にサービスエリアがあります"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- スマホアプリ -->
+                    <div>
+                        <div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 15px; border-radius: 15px; margin-bottom: 15px; border: 2px solid rgba(255,255,255,0.3);">
+                            <div style="color: white; font-size: 14px; font-weight: 600; margin-bottom: 8px;">📱 運転外：スマホアプリ</div>
+                        </div>
+                        <div class="phone-mockup" style="max-width: 320px;">
+                            <div class="phone-notch"></div>
+                            <div class="phone-screen" style="min-height: 500px;">
+                                <div class="app-header">
+                                    <div class="app-logo">SafeSight AI</div>
+                                    <div style="font-size: 11px; color: #64748b; margin-top: 5px;">学習・分析・メンテナンス</div>
+                                </div>
+
+                                <div style="background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%); padding: 18px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #0066ff;">
+                                    <div style="font-size: 20px; margin-bottom: 8px;">📊</div>
+                                    <div style="font-weight: 700; color: #0066ff; margin-bottom: 8px; font-size: 15px;">今日の運転分析</div>
+                                    <div style="font-size: 13px; color: #475569; line-height: 1.5;">
+                                        車線維持精度が15%低下<br>
+                                        長距離運転時は要注意
+                                    </div>
+                                </div>
+
+                                <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding: 18px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #f59e0b;">
+                                    <div style="font-size: 20px; margin-bottom: 8px;">🔧</div>
+                                    <div style="font-weight: 700; color: #d97706; margin-bottom: 8px; font-size: 15px;">メンテナンス予測</div>
+                                    <div style="font-size: 13px; color: #78350f; line-height: 1.5;">
+                                        ブレーキパッド交換<br>
+                                        あと2ヶ月が目安です
+                                    </div>
+                                </div>
+
+                                <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                    <div class="stat-box" style="padding: 12px;">
+                                        <div class="stat-value" style="font-size: 24px;">98%</div>
+                                        <div class="stat-label" style="font-size: 11px;">安全スコア</div>
+                                    </div>
+                                    <div class="stat-box" style="padding: 12px;">
+                                        <div class="stat-value" style="font-size: 24px;">12</div>
+                                        <div class="stat-label" style="font-size: 11px;">事故回避</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- インターフェース説明セクション -->
+        <div class="steps-section" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+            <div class="steps-header">
+                <h2>シーンに応じた最適なインターフェース</h2>
+                <div class="subtitle">運転中と運転外で、安全で使いやすい体験を提供</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; margin-top: 40px;">
+                <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <div style="font-size: 64px; margin-bottom: 15px;">🚗</div>
+                        <h3 style="font-size: 28px; font-weight: 700; color: #0066ff; margin-bottom: 10px;">運転中</h3>
+                        <div style="font-size: 16px; color: #64748b;">安全第一のハンズフリー体験</div>
+                    </div>
+                    <div style="background: #f8fafc; padding: 25px; border-radius: 15px; border-left: 5px solid #0066ff;">
+                        <div style="margin-bottom: 20px;">
+                            <div style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 10px;">📺 車載ディスプレイ</div>
+                            <div style="font-size: 14px; color: #64748b; line-height: 1.6;">
+                                • 大きな文字とアイコン<br>
+                                • 一目で理解できる情報<br>
+                                • 緊急度に応じた色分け
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <div style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 10px;">🔼 HUD（ヘッドアップディスプレイ）</div>
+                            <div style="font-size: 14px; color: #64748b; line-height: 1.6;">
+                                • フロントガラスに投影<br>
+                                • 視線移動なしで確認<br>
+                                • AR表示で直感的
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 10px;">🔊 音声ガイダンス</div>
+                            <div style="font-size: 14px; color: #64748b; line-height: 1.6;">
+                                • 自然な会話形式<br>
+                                • 運転の邪魔にならない<br>
+                                • 緊急時は明確に警告
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding: 15px; background: #fff7ed; border-radius: 10px; border-left: 4px solid #f59e0b;">
+                        <div style="font-size: 13px; color: #92400e; line-height: 1.6;">
+                            <strong>💡 提供する情報：</strong><br>
+                            • 予測的安全警告<br>
+                            • 疲労・危険地点アラート<br>
+                            • 緊急時の操作ガイド
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <div style="font-size: 64px; margin-bottom: 15px;">📱</div>
+                        <h3 style="font-size: 28px; font-weight: 700; color: #10b981; margin-bottom: 10px;">運転外</h3>
+                        <div style="font-size: 16px; color: #64748b;">じっくり学べる詳細情報</div>
+                    </div>
+                    <div style="background: #f8fafc; padding: 25px; border-radius: 15px; border-left: 5px solid #10b981;">
+                        <div style="margin-bottom: 20px;">
+                            <div style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 10px;">📱 スマホアプリ</div>
+                            <div style="font-size: 14px; color: #64748b; line-height: 1.6;">
+                                • 詳細な運転分析レポート<br>
+                                • インタラクティブな学習<br>
+                                • グラフ・チャートで可視化
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <div style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 10px;">⌚ スマートウォッチ</div>
+                            <div style="font-size: 14px; color: #64748b; line-height: 1.6;">
+                                • 簡易通知<br>
+                                • 健康データ連携<br>
+                                • クイック確認
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 10px;">💻 Webダッシュボード</div>
+                            <div style="font-size: 14px; color: #64748b; line-height: 1.6;">
+                                • 家族の運転状況確認<br>
+                                • 長期トレンド分析<br>
+                                • 設定・カスタマイズ
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding: 15px; background: #f0fdf4; border-radius: 10px; border-left: 4px solid #10b981;">
+                        <div style="font-size: 13px; color: #166534; line-height: 1.6;">
+                            <strong>💡 提供する情報：</strong><br>
+                            • 運転分析・学習進捗<br>
+                            • メンテナンス予測<br>
+                            • 家族見守り・設定変更
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3ステップセクション -->
+        <div class="steps-section">
+            <div class="steps-header">
+                <h2>たった3ステップで始められる</h2>
+                <div class="subtitle">あなた専用の安全AIが、今日から学習を開始します</div>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">📱</div>
+                    <div class="step-title">アプリダウンロード</div>
+                    <div class="step-description">
+                        App StoreまたはGoogle Playから無料ダウンロード。<br>
+                        車両と連携するだけで準備完了。
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">🚗</div>
+                    <div class="step-title">運転データ学習</div>
+                    <div class="step-description">
+                        普段通り運転するだけ。<br>
+                        AIがあなたの運転パターンを自動学習します。
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">🛡️</div>
+                    <div class="step-title">予測的安全支援</div>
+                    <div class="step-description">
+                        3ヶ月後から予測機能が開始。<br>
+                        あなた専用の安全支援が始まります。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主要機能セクション（詳細） -->
+        <div style="text-align: center; margin: 60px 0 40px 0;">
+            <h2 style="font-size: 42px; font-weight: 800; background: linear-gradient(135deg, #0066ff, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 15px;">5つの主要機能</h2>
+            <div style="font-size: 20px; color: #64748b;">安全性と利便性を最大化する統合システム</div>
+        </div>
+
+        <div class="features-section">
+            <div class="feature-card">
+                <div class="feature-icon-large">🔮</div>
+                <div class="feature-title-large">予測的安全支援</div>
+                <div class="feature-description-large">
+                    あなたの運転パターンから、事故リスクを事前に予測。最適なタイミングで警告します。
+                </div>
+                <div class="feature-example">
+                    <strong>🚗 運転中（車載ディスプレイ・HUD・音声）：</strong><br>
+                    「この交差点、あなたは右折時に歩行者の確認が遅れがちです。200m先で注意してください」
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-large">👨‍🏫</div>
+                <div class="feature-title-large">パーソナル学習コーチ + 機能推奨</div>
+                <div class="feature-description-large">
+                    あなたの学習スタイルに合わせた最適な説明。さらに、状況に応じて最適な機能を推奨し、正しい使い方をサポートします。
+                </div>
+                <div class="feature-example">
+                    <strong>🚗 運転中（車載ディスプレイ・音声）：</strong><br>
+                    「高速道路に入りました。ACCを使うと疲労が軽減されます。使い方を覚えていますか？」<br><br>
+                    <strong>📱 運転外（スマホアプリ）：</strong><br>
+                    「あなたは視覚的な説明で理解が早いタイプです。動画とAR表示で解説します」<br>
+                    ※機能利用率を向上させ、安全性と利便性を最大化
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-large">🔧</div>
+                <div class="feature-title-large">先回りメンテナンス</div>
+                <div class="feature-description-large">
+                    運転パターンから部品交換の最適タイミングを予測。無駄なコストを削減します。
+                </div>
+                <div class="feature-example">
+                    <strong>📱 運転外（スマホアプリ）：</strong><br>
+                    「現在のペースだと、あと2ヶ月で交換時期です。来月の帰省前に交換すると安心です」<br>
+                    ※通知を受け取り、予約も可能
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-large">🆘</div>
+                <div class="feature-title-large">トラブル対応支援</div>
+                <div class="feature-description-large">
+                    警告灯の点灯や異常音など、トラブル発生時に段階的にサポート。パニックを防ぎ、正しい判断と行動を促します。
+                </div>
+                <div class="feature-example">
+                    <strong>🚗 運転中（車載ディスプレイ・音声）：</strong><br>
+                    「エンジン警告灯が点灯しました。緊急度：中。すぐに停車する必要はありません。次のSAで点検をお勧めします」<br>
+                    ※状態理解 → 判断支援 → 行動誘導の3段階
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon-large">👨‍👩‍👧‍👦</div>
+                <div class="feature-title-large">家族安全ダッシュボード</div>
+                <div class="feature-description-large">
+                    家族の運転を見守り、それぞれに最適なサポート。高齢者や若年ドライバーも安心。
+                </div>
+                <div class="feature-example">
+                    <strong>📱 運転外（スマホアプリ）：</strong><br>
+                    「親の夜間運転時の反応速度が低下しています。自動ブレーキを強化しました」<br>
+                    ※家族の運転状況を確認
+                </div>
+            </div>
+        </div>
+
+        <!-- 数値実績セクション -->
+        <div class="metrics-section">
+            <div class="metrics-header">
+                <h2>2027年目標数値</h2>
+                <p style="font-size: 18px; opacity: 0.95;">予測AIがもたらす、確かな効果</p>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-card-large">
+                    <div class="metric-value-large">30%</div>
+                    <div class="metric-label-large">事故削減率</div>
+                </div>
+                <div class="metric-card-large">
+                    <div class="metric-value-large">45%</div>
+                    <div class="metric-label-large">ヒヤリハット削減</div>
+                </div>
+                <div class="metric-card-large">
+                    <div class="metric-value-large">50,000</div>
+                    <div class="metric-label-large">導入車両数</div>
+                </div>
+                <div class="metric-card-large">
+                    <div class="metric-value-large">+50</div>
+                    <div class="metric-label-large">NPS（顧客満足度）</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTAセクション -->
+        <div class="cta-section">
+            <h2>今すぐ始めよう</h2>
+            <p>2027年の安全な未来を、今日から一緒に作りましょう</p>
+            <a href="#" class="cta-button">無料トライアルを始める →</a>
+            <div style="margin-top: 30px; font-size: 14px; opacity: 0.8;">
+                ※ 2025年Q2よりβ版提供開始予定（レクサスオーナー限定）
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
+

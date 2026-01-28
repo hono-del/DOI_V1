@@ -1,0 +1,2508 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スマホアプリ - ホーム画面（インタラクティブ版）</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #a0a0a0;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .screen-section {
+            margin-bottom: 60px;
+        }
+
+        .screen-title {
+            background: linear-gradient(135deg, #2d3561 0%, #1a1a2e 100%);
+            color: #4facfe;
+            padding: 15px 25px;
+            border-radius: 10px 10px 0 0;
+            font-size: 1.3em;
+            font-weight: 600;
+            border-bottom: 2px solid #4facfe;
+        }
+
+        .screen-description {
+            background: #16213e;
+            padding: 15px 25px;
+            border-left: 4px solid #4facfe;
+            margin-bottom: 20px;
+            color: #b0b0b0;
+        }
+
+        .screen-description strong {
+            color: #4facfe;
+        }
+
+        .mockup {
+            background: #0f3460;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        .mobile-frame {
+            max-width: 375px;
+            margin: 0 auto;
+            border: 8px solid #2d3561;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(79, 172, 254, 0.2);
+            position: relative;
+        }
+
+        .mobile-header {
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            color: #4facfe;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(79, 172, 254, 0.3);
+        }
+
+        .mobile-header h2 {
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .mobile-content {
+            padding: 20px;
+            padding-bottom: 90px;
+            background: linear-gradient(180deg, #0f3460 0%, #16213e 100%);
+            height: 600px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .mobile-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .mobile-content::-webkit-scrollbar-track {
+            background: #1a1a2e;
+        }
+
+        .mobile-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 3px;
+        }
+
+        .mobile-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #00f2fe 0%, #4facfe 100%);
+        }
+
+        .search-box {
+            background: rgba(45, 53, 97, 0.6);
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            border-radius: 25px;
+            padding: 12px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 1px 2px rgba(79, 172, 254, 0.1);
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 1em;
+            margin-left: 10px;
+            background: transparent;
+            color: #e0e0e0;
+        }
+
+        .search-box input::placeholder {
+            color: #808080;
+        }
+
+        .card {
+            background: rgba(45, 53, 97, 0.4);
+            border: 1px solid rgba(79, 172, 254, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .card-title {
+            font-weight: 600;
+            color: #4facfe;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+
+        .card-content {
+            color: #b0b0b0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .alert-card {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.3) 0%, rgba(238, 90, 111, 0.3) 100%);
+            border: 1px solid rgba(255, 107, 107, 0.5);
+            border-left: 5px solid #ff6b6b;
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+        }
+
+        .alert-card .card-title {
+            color: #ff6b6b;
+            display: flex;
+            align-items: center;
+        }
+
+        .alert-card .card-content {
+            color: #e0e0e0;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #0f3460;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 8px rgba(79, 172, 254, 0.3);
+            transition: all 0.3s;
+        }
+
+        .button:hover {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(79, 172, 254, 0.5);
+        }
+
+        #feedbackSection button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        #feedbackSection button:active {
+            transform: translateY(0) scale(1);
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+        }
+
+        .chat-message.user {
+            text-align: right;
+        }
+
+        .chat-bubble {
+            display: inline-block;
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .chat-bubble.user {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #0f3460;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(79, 172, 254, 0.3);
+        }
+
+        .chat-bubble.ai {
+            background: rgba(45, 53, 97, 0.6);
+            color: #e0e0e0;
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        /* クイックリプライ（チャット用） */
+        .quick-reply-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .quick-reply {
+            background: rgba(79, 172, 254, 0.1);
+            color: #4facfe;
+            padding: 8px 14px;
+            border-radius: 18px;
+            font-size: 0.85em;
+            cursor: pointer;
+            border: 1px solid rgba(79, 172, 254, 0.4);
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .quick-reply:hover {
+            background: rgba(79, 172, 254, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(79, 172, 254, 0.4);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .badge-new {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            box-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
+        }
+
+        .badge-info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #0f3460;
+            box-shadow: 0 2px 4px rgba(79, 172, 254, 0.3);
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(79, 172, 254, 0.2);
+            color: #b0b0b0;
+            transition: all 0.3s;
+        }
+
+        .feature-list li:hover {
+            color: #4facfe;
+            padding-left: 5px;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            color: #4facfe;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .search-button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #0f3460;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-left: 10px;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(79, 172, 254, 0.3);
+            transition: all 0.3s;
+        }
+
+        .search-button:hover {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(79, 172, 254, 0.5);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        .quick-question {
+            display: inline-block;
+            background: rgba(45, 53, 97, 0.6);
+            border: 2px solid rgba(79, 172, 254, 0.5);
+            color: #4facfe;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .quick-question:hover {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #0f3460;
+            border-color: #4facfe;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(79, 172, 254, 0.4);
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .search-input-wrapper input {
+            flex: 1;
+        }
+
+        .mobile-tab-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, #16213e 0%, #0f3460 100%);
+            border-top: 2px solid rgba(79, 172, 254, 0.3);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 8px 0;
+            color: #888;
+            font-size: 0.85em;
+        }
+
+        .tab-item:hover {
+            color: #4facfe;
+            transform: translateY(-2px);
+        }
+
+        .tab-item.active {
+            color: #4facfe;
+        }
+
+        .tab-item .tab-icon {
+            font-size: 1.5em;
+            margin-bottom: 4px;
+        }
+
+        .tab-item.active .tab-icon {
+            animation: tabBounce 0.5s ease;
+        }
+
+        @keyframes tabBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .tab-item .notification-badge {
+            position: relative;
+        }
+
+        .tab-item .notification-badge::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            border: 2px solid #16213e;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 スマホアプリ - ホーム画面（インタラクティブ版）</h1>
+        <p class="subtitle">取扱説明書DXシステム</p>
+
+        <div class="screen-section">
+            <div class="screen-title">1. スマホアプリ - ホーム画面（インタラクティブ版）</div>
+            <div class="screen-description">
+                <strong>目的:</strong> ユーザーが最初に見る画面。検索機能とプロアクティブ案内を表示<br>
+                <strong>主要機能:</strong> 検索バー、プロアクティブ案内カード、よくある質問<br>
+                <strong>🎮 試してみよう:</strong> 下の質問ボタンをクリックするか、自由に質問を入力して検索ボタンを押してください
+            </div>
+            <div class="mockup">
+                <div class="mobile-frame">
+                    <div class="mobile-header">
+                        <h2>DIGITAL OM</h2>
+                        <span>⚙️</span>
+                    </div>
+                    <div class="mobile-content" id="homeContent">
+                        <!-- 検索結果エリア -->
+                        <div id="searchResult" class="hidden"></div>
+
+                        <!-- デフォルトコンテンツ -->
+                        <div id="defaultContent">
+                            <!-- 1. 今すぐ確認（最上部）- ランダム表示 -->
+                            <div class="card alert-card" id="alertCard">
+                                <div class="card-title">
+                                    <span>⚠️</span> 今すぐ確認
+                                </div>
+                                <div class="card-content" id="alertContent">
+                                    <!-- JavaScriptで動的に表示 -->
+                                </div>
+                            </div>
+
+                            <!-- 2. 車両画像 -->
+                            <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 20px;">
+                                <img src="グレーSUV車両.png" 
+                                     alt="車両画像" 
+                                     style="width: 100%; height: auto; display: block;"
+                                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 800 500%27%3E%3Crect fill=%27%23e0e0e0%27 width=%27800%27 height=%27500%27/%3E%3Ctext x=%27400%27 y=%27250%27 text-anchor=%27middle%27 font-size=%2724%27 fill=%27%23666%27 font-family=%27Arial%27%3E🚗 あなたの車両%3C/text%3E%3C/svg%3E'">
+                            </div>
+
+                            <!-- 3. 検索エリア -->
+                            <div class="search-input-wrapper">
+                                <div class="search-box" style="flex: 1; margin-bottom: 0;">
+                                    <span>🔍</span>
+                                    <input type="text" id="searchInput" placeholder="操作方法や機能を検索...">
+                                </div>
+                                <button class="search-button" onclick="performSearch()">検索</button>
+                            </div>
+
+                            <!-- クイック質問ボタン -->
+                            <div style="margin-bottom: 20px; text-align: center;">
+                                <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">よくある質問をタップ:</div>
+                                <span class="quick-question" onclick="setQuestion('ドアが開かない')">🚪 ドアが開かない</span>
+                                <span class="quick-question" onclick="setQuestion('Bluetooth接続はどうやってやるの？')">📱 Bluetooth接続</span>
+                                <span class="quick-question" onclick="setQuestion('警告灯が点灯した')">⚠️ 警告灯が点灯</span>
+                            </div>
+
+                            <!-- 4. おすすめ機能 -->
+                            <div class="card" id="recommendationCard">
+                                <div class="card-title">
+                                    <span class="badge badge-new">NEW</span> おすすめ機能
+                                </div>
+                                <div class="card-content" id="recommendationContent">
+                                    <div id="recommendationText">シートヒーター機能をまだ使っていませんね。冬に便利な機能です。</div>
+                                    <div style="display: flex; gap: 10px; margin-top: 12px; align-items: center; flex-wrap: wrap;">
+                                        <a href="https://www.youtube.com/shorts/-rbaCNJrUc0" target="_blank" class="button" style="text-decoration: none; display: inline-block; flex: 1; min-width: 140px;">
+                                            🎥 使い方を見る
+                                        </a>
+                                        <button onclick="showNextRecommendation()" class="button" style="background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px 18px; flex: 0;">
+                                            ✅
+                                        </button>
+                                        <button onclick="showRecommendationFeedback()" class="button" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px 18px; flex: 0;">
+                                            😒
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 5. よくある質問 -->
+                            <div class="card">
+                                <div class="card-title">よくある質問</div>
+                                <div class="card-content">
+                                    <ul class="feature-list">
+                                        <li>Bluetooth接続の設定方法</li>
+                                        <li>エアコンの使い方</li>
+                                        <li>ワイパーの操作方法</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 固定タブバー -->
+                    <div class="mobile-tab-bar">
+                        <div class="tab-item active" onclick="switchTab('home')">
+                            <div class="tab-icon">🏠</div>
+                            <div>ホーム</div>
+                        </div>
+                        <div class="tab-item" onclick="switchTab('chat')">
+                            <div class="tab-icon">💬</div>
+                            <div>チャット</div>
+                        </div>
+                        <div class="tab-item" onclick="switchTab('notification')">
+                            <div class="tab-icon notification-badge">🔔</div>
+                            <div>通知</div>
+                        </div>
+                        <div class="tab-item" onclick="switchTab('status')">
+                            <div class="tab-icon">📊</div>
+                            <div>ステータス</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 「今すぐ確認」のランダムメッセージ
+        const alertMessages = [
+            {
+                id: 'highbeam',
+                text: '夜間走行中です。オートハイビームをオンにすると安全です。',
+                button: '設定方法を見る',
+                detail: {
+                    title: 'オートハイビームの設定方法',
+                    content: `
+                        <strong>オートハイビームとは？</strong><br>
+                        前方の車両や街灯を検知して、自動でハイビームとロービームを切り替える機能です。<br><br>
+                        <strong>設定手順：</strong><br><br>
+                        <strong>ステップ 1: ライトスイッチを確認</strong><br>
+                        • ライトスイッチを「AUTO」の位置にします<br><br>
+                        <strong>ステップ 2: レバーを操作</strong><br>
+                        • ライトレバーを前方に押します<br>
+                        • メーター内に「AUTO」表示が点灯します<br><br>
+                        <strong>ステップ 3: 作動確認</strong><br>
+                        • 暗い場所で前方に車がいない時、自動でハイビームになります<br>
+                        • 対向車や先行車を検知すると、自動でロービームに切り替わります<br><br>
+                        <strong>💡 注意事項：</strong><br>
+                        • 市街地では手動でロービームにすることをお勧めします<br>
+                        • 悪天候時は正常に作動しない場合があります
+                    `
+                }
+            },
+            {
+                id: 'rest',
+                text: '長時間運転が続いています。<br>近くで休憩を取ることをおすすめします。',
+                button: '2km先のABC PAへ目的地を設定する',
+                detail: {
+                    title: '休憩スポットへのご案内',
+                    content: `
+                        <strong>📍 ABC パーキングエリア</strong><br>
+                        距離: 2km先（約3分）<br>
+                        営業時間: 24時間<br><br>
+                        <strong>施設情報：</strong><br>
+                        • レストラン・売店<br>
+                        • トイレ・喫煙所<br>
+                        • 自動販売機<br>
+                        • 無料Wi-Fi<br>
+                        • EV充電スタンド<br><br>
+                        <strong>💡 運転疲労のサイン：</strong><br>
+                        • 2時間以上の連続運転<br>
+                        • あくびが頻繁に出る<br>
+                        • 集中力の低下<br><br>
+                        <strong>推奨休憩時間：</strong><br>
+                        15-20分程度の休憩で、運転パフォーマンスが回復します。
+                    `
+                }
+            },
+            {
+                id: 'panoramic',
+                text: '狭い駐車場です。<br>パノラミックビューモニターを使うと安心です。',
+                button: '使用方法を見る',
+                detail: {
+                    title: 'パノラミックビューモニターの使用方法',
+                    content: `
+                        <strong>パノラミックビューモニターとは？</strong><br>
+                        車両の周囲を真上から見たような映像を表示し、駐車をサポートする機能です。<br><br>
+                        
+                        <div style="text-align: center; margin: 20px 0;">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 700 400'%3E%3C!-- 背景（ディスプレイ風） --%3E%3Crect fill='%23000000' width='700' height='400' rx='10'/%3E%3Crect fill='%231a1a2e' width='680' height='380' x='10' y='10' rx='5'/%3E%3C!-- 左側：トップビュー --%3E%3Crect fill='%232d4a6e' width='320' height='340' x='20' y='30' rx='8'/%3E%3Ctext x='180' y='55' text-anchor='middle' font-size='14' fill='%234facfe' font-weight='bold'%3E真上からの視点%3C/text%3E%3C!-- 道路 --%3E%3Crect fill='%23556b7a' width='280' height='300' x='40' y='70'/%3E%3C!-- 車両（真上から） --%3E%3Crect fill='%23ffffff' width='80' height='140' x='140' y='150' rx='8'/%3E%3Crect fill='%23e0e0e0' width='60' height='100' x='150' y='170' rx='4'/%3E%3C!-- タイヤ --%3E%3Crect fill='%23333' width='15' height='30' x='135' y='160'/%3E%3Crect fill='%23333' width='15' height='30' x='210' y='160'/%3E%3Crect fill='%23333' width='15' height='30' x='135' y='270'/%3E%3Crect fill='%23333' width='15' height='30' x='210' y='270'/%3E%3C!-- ガイドライン（黄色） --%3E%3Cpath d='M 140 150 L 90 100 M 220 150 L 270 100' stroke='%23ffeb3b' stroke-width='2' stroke-dasharray='5,5' fill='none'/%3E%3Cpath d='M 140 290 L 90 340 M 220 290 L 270 340' stroke='%23ffeb3b' stroke-width='2' stroke-dasharray='5,5' fill='none'/%3E%3C!-- ガイドライン（赤） --%3E%3Cpath d='M 140 290 L 90 350 M 220 290 L 270 350' stroke='%23ff5252' stroke-width='3' fill='none'/%3E%3C!-- 右側：リアビュー --%3E%3Crect fill='%232d4a6e' width='320' height='340' x='360' y='30' rx='8'/%3E%3Ctext x='520' y='55' text-anchor='middle' font-size='14' fill='%234facfe' font-weight='bold'%3E後方カメラ視点%3C/text%3E%3C!-- 駐車場の地面 --%3E%3Crect fill='%23556b7a' width='280' height='300' x='380' y='70'/%3E%3C!-- 駐車ライン --%3E%3Cline x1='380' y1='100' x2='660' y2='100' stroke='%23ffffff' stroke-width='2'/%3E%3Cline x1='380' y1='340' x2='660' y2='340' stroke='%23ffffff' stroke-width='2'/%3E%3C!-- ガイドライン（黄色・台形） --%3E%3Cpath d='M 450 370 L 400 280 L 640 280 L 590 370 Z' stroke='%23ffeb3b' stroke-width='2' fill='%23ffeb3b' opacity='0.2'/%3E%3Ctext x='520' y='315' text-anchor='middle' font-size='16' fill='%23ffeb3b' font-weight='bold'%3E車幅%3C/text%3E%3C!-- ガイドライン（赤） --%3E%3Cline x1='480' y1='370' x2='430' y2='300' stroke='%23ff5252' stroke-width='3'/%3E%3Cline x1='560' y1='370' x2='610' y2='300' stroke='%23ff5252' stroke-width='3'/%3E%3Ctext x='520' y='360' text-anchor='middle' font-size='14' fill='%23ff5252' font-weight='bold'%3E注意%3C/text%3E%3C!-- 下部：コントロールボタン --%3E%3Crect fill='%230f3460' width='660' height='50' x='20' y='340' rx='5'/%3E%3C!-- ボタン1：トップビュー --%3E%3Crect fill='%234facfe' width='80' height='35' x='40' y='350' rx='5'/%3E%3Ctext x='80' y='372' text-anchor='middle' font-size='12' fill='%23000' font-weight='bold'%3E真上%3C/text%3E%3C!-- ボタン2：フロント --%3E%3Crect fill='%232d3561' width='80' height='35' x='140' y='350' rx='5' stroke='%234facfe' stroke-width='1'/%3E%3Ctext x='180' y='372' text-anchor='middle' font-size='12' fill='%234facfe'%3E前方%3C/text%3E%3C!-- ボタン3：サイド --%3E%3Crect fill='%232d3561' width='80' height='35' x='240' y='350' rx='5' stroke='%234facfe' stroke-width='1'/%3E%3Ctext x='280' y='372' text-anchor='middle' font-size='12' fill='%234facfe'%3E側面%3C/text%3E%3C!-- 設定アイコン --%3E%3Ccircle cx='630' cy='367' r='15' fill='%232d3561' stroke='%234facfe' stroke-width='1'/%3E%3Ctext x='630' y='373' text-anchor='middle' font-size='16' fill='%234facfe'%3E⚙%3C/text%3E%3C/svg%3E" 
+                                alt="パノラミックビューモニター画面" 
+                                style="width: 100%; max-width: 500px; border-radius: 12px; margin: 10px 0;">
+                        </div>
+                        
+                        <strong>起動方法：</strong><br><br>
+                        <strong>ステップ 1: シフトをRに入れる</strong><br>
+                        • バックギアに入れると自動で起動します<br><br>
+                        <strong>ステップ 2: 表示切替</strong><br>
+                        • ディスプレイの「表示切替」ボタンをタップ<br>
+                        • <span style="color: #4facfe; font-weight: 600;">真上</span>、<span style="color: #4facfe;">前方</span>、<span style="color: #4facfe;">側面</span>ビューを選択可能<br><br>
+                        <strong>ステップ 3: ガイドラインを確認</strong><br>
+                        • <span style="color: #ffeb3b; font-weight: 600;">黄色のライン</span>: 車両の幅を示します<br>
+                        • <span style="color: #ff5252; font-weight: 600;">赤色のライン</span>: 障害物との危険な距離を示します<br><br>
+                        <strong>💡 活用シーン：</strong><br>
+                        • 狭い駐車場での駐車<br>
+                        • 縦列駐車<br>
+                        • 狭い道での切り返し<br>
+                        • バック時の障害物確認<br><br>
+                        <strong>⚠️ 注意：</strong><br>
+                        カメラの映像は補助機能です。必ず目視でも周囲を確認してください。
+                    `
+                }
+            },
+            {
+                id: 'ecomode',
+                text: '市街地走行が続いています。エコモードを使うと燃費が向上します。',
+                button: '設定方法を見る',
+                detail: {
+                    title: 'エコモードの設定方法',
+                    content: `
+                        <strong>エコモードとは？</strong><br>
+                        アクセル操作に対するエンジンとトランスミッションの応答を穏やかにし、燃費を向上させるモードです。<br><br>
+                        <strong>設定手順：</strong><br><br>
+                        <strong>ステップ 1: ドライブモードボタンを押す</strong><br>
+                        • センターコンソールの「MODE」ボタンを押します<br><br>
+                        <strong>ステップ 2: エコモードを選択</strong><br>
+                        • ディスプレイに表示される「ECO」を選択<br>
+                        • メーター内に「ECO」表示が点灯します<br><br>
+                        <strong>💡 エコモードの効果：</strong><br>
+                        • 燃費が約10-15%向上<br>
+                        • アクセル操作が穏やかに<br>
+                        • エアコンの効きが抑えられます<br><br>
+                        <strong>推奨使用シーン：</strong><br>
+                        • 市街地走行<br>
+                        • 渋滞時<br>
+                        • 長距離走行<br><br>
+                        <strong>⚠️ 注意：</strong><br>
+                        急な加速が必要な場面では、通常モードに切り替えてください。<br><br>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <button class="button" onclick="showFuelEfficiencyData()" 
+                                    style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 12px 24px; border-radius: 8px; color: white; font-weight: 600; border: none; cursor: pointer;">
+                                📊 あなたの燃費データを見る
+                            </button>
+                        </div>
+                    `
+                }
+            },
+            {
+                id: 'paddle',
+                text: 'ブレーキ操作が増えています。パドルシフトで減速時の操作をサポートできます。',
+                button: '使用方法を見る',
+                detail: {
+                    title: 'パドルシフトの使用方法',
+                    content: `
+                        <strong>パドルシフトとは？</strong><br>
+                        ハンドルの裏側にあるレバーで、手動でギアを変更できる機能です。<br><br>
+                        
+                        <div style="text-align: center; margin: 20px 0;">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 350'%3E%3C!-- 背景 --%3E%3Crect fill='%23ffffff' width='500' height='350' rx='15'/%3E%3Crect fill='none' stroke='%23333' stroke-width='3' width='480' height='330' x='10' y='10' rx='10'/%3E%3C!-- ハンドル（手書き風） --%3E%3Cpath d='M 150 175 Q 150 100 250 100 Q 350 100 350 175' fill='none' stroke='%23333' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M 150 175 Q 150 250 250 250 Q 350 250 350 175' fill='none' stroke='%23333' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='150' y1='175' x2='150' y2='175' stroke='%23333' stroke-width='4'/%3E%3Cline x1='350' y1='175' x2='350' y2='175' stroke='%23333' stroke-width='4'/%3E%3C!-- ハンドルの太さ --%3E%3Cpath d='M 160 175 Q 160 110 250 110 Q 340 110 340 175' fill='none' stroke='%23ddd' stroke-width='15' stroke-linecap='round'/%3E%3Cpath d='M 160 175 Q 160 240 250 240 Q 340 240 340 175' fill='none' stroke='%23ddd' stroke-width='15' stroke-linecap='round'/%3E%3C!-- 中心部 --%3E%3Ccircle cx='250' cy='175' r='35' fill='%23f0f0f0' stroke='%23333' stroke-width='3'/%3E%3C!-- 左側パドル（手書き風、ピンク） --%3E%3Cpath d='M 120 150 L 90 140 L 85 145 L 85 205 L 90 210 L 120 200 Z' fill='%23ffb3d9' stroke='%23333' stroke-width='2.5' stroke-linejoin='round'/%3E%3C!-- パドルの詳細線（左） --%3E%3Cline x1='95' y1='150' x2='95' y2='195' stroke='%23333' stroke-width='1.5'/%3E%3Cline x1='105' y1='155' x2='105' y2='195' stroke='%23333' stroke-width='1.5'/%3E%3C!-- 右側パドル（手書き風、ピンク） --%3E%3Cpath d='M 380 150 L 410 140 L 415 145 L 415 205 L 410 210 L 380 200 Z' fill='%23ffb3d9' stroke='%23333' stroke-width='2.5' stroke-linejoin='round'/%3E%3C!-- パドルの詳細線（右） --%3E%3Cline x1='405' y1='150' x2='405' y2='195' stroke='%23333' stroke-width='1.5'/%3E%3Cline x1='395' y1='155' x2='395' y2='195' stroke='%23333' stroke-width='1.5'/%3E%3C!-- 矢印（左側） --%3E%3Cpath d='M 100 115 L 95 95 L 90 115' fill='none' stroke='%23ff6b9d' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='95' y1='95' x2='95' y2='130' stroke='%23ff6b9d' stroke-width='2.5' stroke-linecap='round'/%3E%3C!-- 矢印（右側） --%3E%3Cpath d='M 400 115 L 405 95 L 410 115' fill='none' stroke='%23ff6b9d' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='405' y1='95' x2='405' y2='130' stroke='%23ff6b9d' stroke-width='2.5' stroke-linecap='round'/%3E%3C!-- ラベル（左） --%3E%3Ctext x='50' y='178' text-anchor='middle' font-size='20' fill='%23333' font-weight='bold'%3E-%3C/text%3E%3Ctext x='100' y='245' text-anchor='middle' font-size='14' fill='%23666'%3E左パドル%3C/text%3E%3Ctext x='100' y='265' text-anchor='middle' font-size='12' fill='%23999'%3E（シフトダウン）%3C/text%3E%3C!-- ラベル（右） --%3E%3Ctext x='450' y='178' text-anchor='middle' font-size='20' fill='%23333' font-weight='bold'%3E%2B%3C/text%3E%3Ctext x='400' y='245' text-anchor='middle' font-size='14' fill='%23666'%3E右パドル%3C/text%3E%3Ctext x='400' y='265' text-anchor='middle' font-size='12' fill='%23999'%3E（シフトアップ）%3C/text%3E%3C!-- 説明テキスト --%3E%3Ctext x='250' y='310' text-anchor='middle' font-size='13' fill='%23666'%3Eハンドルの裏側に配置されています%3C/text%3E%3Ctext x='250' y='330' text-anchor='middle' font-size='12' fill='%23999'%3E運転中に親指で簡単に操作できます%3C/text%3E%3C/svg%3E" 
+                                alt="パドルシフトの位置" 
+                                style="width: 100%; max-width: 400px; border-radius: 12px; margin: 10px 0; background: white; padding: 10px;">
+                        </div>
+                        
+                        <strong>使用方法：</strong><br><br>
+                        <strong>基本操作：</strong><br>
+                        • <span style="color: #00f2fe; font-weight: 600;">右側パドル（+）</span>: シフトアップ（高いギアへ）<br>
+                        • <span style="color: #ff6b6b; font-weight: 600;">左側パドル（-）</span>: シフトダウン（低いギアへ）<br><br>
+                        <strong>減速時の活用：</strong><br><br>
+                        <strong>ステップ 1: 下り坂で使用</strong><br>
+                        • 左側パドル（-）を引いてシフトダウン<br>
+                        • エンジンブレーキが効きます<br><br>
+                        <strong>ステップ 2: カーブ手前で使用</strong><br>
+                        • カーブ手前でシフトダウン<br>
+                        • 安定した減速が可能<br><br>
+                        <strong>💡 メリット：</strong><br>
+                        • ブレーキの負担を軽減<br>
+                        • 燃費の向上<br>
+                        • スムーズな減速<br><br>
+                        <strong>推奨使用シーン：</strong><br>
+                        • 長い下り坂<br>
+                        • 山道<br>
+                        • 連続するカーブ<br><br>
+                        <strong>⚠️ 注意：</strong><br>
+                        急なシフトダウンは車両に負担をかけます。段階的に操作してください。
+                    `
+                }
+            },
+            {
+                id: 'filter',
+                text: 'そろそろエアコンフィルターの清掃をしましょう。',
+                button: '清掃方法を見る',
+                detail: {
+                    title: 'エアコンフィルターの清掃方法',
+                    content: `
+                        <strong>エアコンフィルターとは？</strong><br>
+                        車内に入る空気をろ過し、花粉やホコリを除去するフィルターです。<br><br>
+                        <strong>清掃・交換時期：</strong><br>
+                        • 推奨: 1年に1回または走行距離10,000km<br>
+                        • エアコンの効きが悪い場合は早めに交換<br><br>
+                        <strong>清掃手順：</strong><br><br>
+                        <strong>ステップ 1: フィルターの取り外し</strong><br>
+                        • グローブボックスを開けます<br>
+                        • 奥にあるフィルターカバーを外します<br>
+                        • フィルターを引き出します<br><br>
+                        <strong>ステップ 2: 清掃</strong><br>
+                        • 掃除機でホコリを吸い取ります<br>
+                        • 水洗いは避けてください<br>
+                        • 汚れがひどい場合は新品に交換<br><br>
+                        <strong>ステップ 3: 取り付け</strong><br>
+                        • フィルターの向きを確認（矢印が下向き）<br>
+                        • カバーを元に戻します<br><br>
+                        <strong>💡 フィルター交換のサイン：</strong><br>
+                        • エアコンの風量が弱い<br>
+                        • 車内に異臭がする<br>
+                        • 窓が曇りやすい<br><br>
+                        <strong>📦 交換用フィルター：</strong><br>
+                        販売店またはオンラインストアで購入可能（品番: XXX-XXXX）<br><br>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <a href="https://item.rakuten.co.jp/sundaymechanic/to1-5-967011-014535-3110/?iasid=07rpp_10095___3a-mkuw2sr0-4b-6b57fe23-e97a-443a-938c-d7ba2cff3ff0" 
+                               target="_blank" 
+                               class="button" 
+                               style="display: inline-block; text-decoration: none; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px 24px; border-radius: 8px; color: white; font-weight: 600;">
+                                🛒 フィルターを購入
+                            </a>
+                        </div>
+                    `
+                }
+            }
+        ];
+
+        let currentAlertId = null;
+
+        // ランダムなアラートメッセージを表示
+        function displayRandomAlert() {
+            const randomIndex = Math.floor(Math.random() * alertMessages.length);
+            const message = alertMessages[randomIndex];
+            currentAlertId = message.id;
+            const alertContent = document.getElementById('alertContent');
+            
+            if (alertContent) {
+                alertContent.innerHTML = `
+                    ${message.text}
+                    <div class="button" onclick="showAlertDetail('${message.id}')">${message.button}</div>
+                `;
+            }
+        }
+
+        // アラートの詳細画面を表示
+        function showAlertDetail(alertId) {
+            const message = alertMessages.find(m => m.id === alertId);
+            if (!message) return;
+
+            const defaultContent = document.getElementById('defaultContent');
+            const searchResult = document.getElementById('searchResult');
+
+            defaultContent.classList.add('hidden');
+
+            searchResult.innerHTML = `
+                <div class="card" style="margin-bottom: 15px;">
+                    <div class="card-title" style="font-size: 1.1em;">
+                        ${message.detail.title}
+                    </div>
+                    <div class="card-content">
+                        ${message.detail.content}
+                    </div>
+                </div>
+                
+                <div id="feedbackSection" style="margin: 20px 0;">
+                    <div class="card" style="background: rgba(26, 26, 46, 0.6); border: 1px solid rgba(79, 172, 254, 0.2);">
+                        <div class="card-content" style="text-align: center;">
+                            <strong style="font-size: 1.05em; color: #fff;">この情報は役に立ちましたか？</strong>
+                            <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                                <button onclick="submitFeedback('very_helpful', '${message.detail.title}')" 
+                                        style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
+                                    😊 とても役立った
+                                </button>
+                                <button onclick="submitFeedback('helpful', '${message.detail.title}')" 
+                                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
+                                    🙂 役立った
+                                </button>
+                                <button onclick="submitFeedback('not_helpful', '${message.detail.title}')" 
+                                        style="background: linear-gradient(135deg, #888 0%, #666 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
+                                    😕 あまり役立たなかった
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="button" onclick="resetToHome()">ホームに戻る</button>
+                </div>
+            `;
+            searchResult.classList.remove('hidden');
+            document.getElementById('homeContent').scrollTop = 0;
+        }
+
+        // ホーム画面に戻る
+        function resetToHome() {
+            document.getElementById('searchResult').classList.add('hidden');
+            document.getElementById('defaultContent').classList.remove('hidden');
+            document.getElementById('homeContent').scrollTop = 0;
+        }
+
+        // 燃費データを表示
+        function showFuelEfficiencyData() {
+            const defaultContent = document.getElementById('defaultContent');
+            const searchResult = document.getElementById('searchResult');
+
+            defaultContent.classList.add('hidden');
+
+            searchResult.innerHTML = `
+                <div class="card" style="margin-bottom: 15px;">
+                    <div class="card-title" style="font-size: 1.1em;">
+                        📊 あなたの燃費データ
+                    </div>
+                    <div class="card-content">
+                        <div style="background: linear-gradient(135deg, rgba(79, 172, 254, 0.15) 0%, rgba(0, 242, 254, 0.1) 100%); padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #4facfe;">
+                            <strong style="color: #4facfe; font-size: 1.1em;">💡 エコモードの効果予測</strong><br><br>
+                            現在の燃費: <strong style="color: #ff6b6b;">8.9 km/L</strong><br>
+                            エコモード使用時: <strong style="color: #4facfe;">10.3 km/L</strong><br>
+                            <strong style="color: #00f2fe;">+15.7% の燃費改善が期待できます！</strong>
+                        </div>
+                        
+                        <strong>📈 燃費改善のヒント</strong><br><br>
+                        
+                        <div style="background: rgba(255, 107, 107, 0.1); padding: 12px; border-radius: 8px; margin: 10px 0;">
+                            <strong style="color: #ff6b6b;">⚠️ 燃費が悪化している要因：</strong><br>
+                            • 市街地走行が増加（ストップ&ゴーが多い）<br>
+                            • 冬季のため暖機運転が必要<br>
+                            • エアコン使用頻度の増加
+                        </div>
+                        
+                        <div style="background: rgba(79, 172, 254, 0.1); padding: 12px; border-radius: 8px; margin: 10px 0;">
+                            <strong style="color: #4facfe;">✅ おすすめの改善アクション：</strong><br><br>
+                            <strong>1. エコモードを活用</strong><br>
+                            • 市街地走行時にON → 燃費+15%向上<br><br>
+                            <strong>2. 急発進・急ブレーキを避ける</strong><br>
+                            • なめらかな加減速 → 燃費+10%向上<br><br>
+                            <strong>3. タイヤ空気圧をチェック</strong><br>
+                            • 適正空気圧の維持 → 燃費+3%向上<br><br>
+                            <strong>4. 不要な荷物を降ろす</strong><br>
+                            • 車重100kg削減 → 燃費+3%向上
+                        </div>
+                        
+                        <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.1) 100%); padding: 15px; border-radius: 10px; margin: 15px 0; text-align: center;">
+                            <strong style="font-size: 1.1em;">🎯 目標燃費</strong><br>
+                            <div style="font-size: 2em; font-weight: bold; color: #667eea; margin: 10px 0;">11.0 km/L</div>
+                            <div style="color: #aaa;">上記の改善で達成可能です！</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="feedbackSection" style="margin: 20px 0;">
+                    <div class="card" style="background: rgba(26, 26, 46, 0.6); border: 1px solid rgba(79, 172, 254, 0.2);">
+                        <div class="card-content" style="text-align: center;">
+                            <strong style="font-size: 1.05em; color: #fff;">この情報は役に立ちましたか？</strong>
+                            <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                                <button onclick="submitFeedback('very_helpful', '燃費データ')" 
+                                        style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
+                                    😊 とても役立った
+                                </button>
+                                <button onclick="submitFeedback('helpful', '燃費データ')" 
+                                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
+                                    🙂 役立った
+                                </button>
+                                <button onclick="submitFeedback('not_helpful', '燃費データ')" 
+                                        style="background: linear-gradient(135deg, #888 0%, #666 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
+                                    😕 あまり役立たなかった
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="button" onclick="resetToHome()">ホームに戻る</button>
+                </div>
+            `;
+            searchResult.classList.remove('hidden');
+            document.getElementById('homeContent').scrollTop = 0;
+        }
+
+        // フィードバックを送信
+        function submitFeedback(rating, pageTitle) {
+            const feedbackSection = document.getElementById('feedbackSection');
+            if (feedbackSection) {
+                feedbackSection.innerHTML = `
+                    <div style="background: linear-gradient(135deg, rgba(79, 172, 254, 0.2) 0%, rgba(0, 242, 254, 0.15) 100%); padding: 20px; border-radius: 12px; text-align: center; margin: 20px 0; border: 2px solid rgba(79, 172, 254, 0.3);">
+                        <div style="font-size: 2em; margin-bottom: 10px;">✅</div>
+                        <strong style="color: #4facfe; font-size: 1.1em;">フィードバックをありがとうございます！</strong><br>
+                        <div style="color: #aaa; margin-top: 10px; font-size: 0.9em;">
+                            お客様の声をもとに、より良いサービスを提供してまいります。
+                        </div>
+                    </div>
+                `;
+            }
+            console.log(`Feedback submitted: ${rating} for "${pageTitle}"`);
+        }
+
+        // 次のおすすめ機能を表示
+        function showNextRecommendation() {
+            const recommendationContent = document.getElementById('recommendationContent');
+            if (recommendationContent) {
+                recommendationContent.innerHTML = `
+                    <div id="recommendationText">おクルマには電動テールゲートが搭載されています。<br>日常の積み下ろしで便利な機能です。</div>
+                    <div style="display: flex; gap: 10px; margin-top: 12px; align-items: center; flex-wrap: wrap;">
+                        <a href="https://www.youtube.com/shorts/OsvZRTbj2Cg" target="_blank" class="button" style="text-decoration: none; display: inline-block; flex: 1; min-width: 140px;">
+                            🎥 使い方を見る
+                        </a>
+                        <button onclick="showThankYouMessage()" class="button" style="background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px 18px; flex: 0;">
+                            ✅
+                        </button>
+                        <button onclick="showRecommendationFeedback()" class="button" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px 18px; flex: 0;">
+                            😒
+                        </button>
+                    </div>
+                `;
+            }
+            console.log('Next recommendation shown: 電動テールゲート');
+        }
+
+        // サンキューメッセージを表示
+        function showThankYouMessage() {
+            const recommendationContent = document.getElementById('recommendationContent');
+            if (recommendationContent) {
+                recommendationContent.innerHTML = `
+                    <div style="background: linear-gradient(135deg, rgba(0, 208, 132, 0.2) 0%, rgba(0, 185, 109, 0.15) 100%); padding: 20px; border-radius: 12px; text-align: center; border: 2px solid rgba(0, 208, 132, 0.3);">
+                        <div style="font-size: 2em; margin-bottom: 10px;">✨</div>
+                        <strong style="color: #00d084; font-size: 1.1em;">ありがとうございます！</strong><br>
+                        <div style="color: #aaa; margin-top: 10px; font-size: 0.9em;">
+                            引き続きお役立ち情報をお届けします。
+                        </div>
+                    </div>
+                `;
+            }
+            console.log('Thank you message displayed');
+        }
+
+        // おすすめ機能のフィードバック画面を表示
+        function showRecommendationFeedback() {
+            const recommendationContent = document.getElementById('recommendationContent');
+            if (recommendationContent) {
+                recommendationContent.innerHTML = `
+                    <div style="text-align: center;">
+                        <strong style="font-size: 1.05em; color: #fff; display: block; margin-bottom: 15px;">この提案が役立たなかった理由を教えてください</strong>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <button onclick="submitRecommendationFeedback('不明')" 
+                                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.95em; transition: all 0.3s; width: 100%;">
+                                ❓ 使い方がわからない
+                            </button>
+                            <button onclick="submitRecommendationFeedback('使いにくい')" 
+                                    style="background: linear-gradient(135deg, #ff9a76 0%, #ff7c6c 100%); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.95em; transition: all 0.3s; width: 100%;">
+                                😓 使いにくい
+                            </button>
+                            <button onclick="submitRecommendationFeedback('嬉しくない')" 
+                                    style="background: linear-gradient(135deg, #888 0%, #666 100%); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.95em; transition: all 0.3s; width: 100%;">
+                                😐 嬉しくない
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            console.log('Recommendation feedback screen shown');
+        }
+
+        // おすすめ機能のフィードバックを送信
+        function submitRecommendationFeedback(reason) {
+            const recommendationContent = document.getElementById('recommendationContent');
+            if (recommendationContent) {
+                recommendationContent.innerHTML = `
+                    <div style="background: linear-gradient(135deg, rgba(79, 172, 254, 0.2) 0%, rgba(0, 242, 254, 0.15) 100%); padding: 20px; border-radius: 12px; text-align: center; border: 2px solid rgba(79, 172, 254, 0.3);">
+                        <div style="font-size: 2em; margin-bottom: 10px;">💬</div>
+                        <strong style="color: #4facfe; font-size: 1.1em;">フィードバックをありがとうございます</strong><br>
+                        <div style="color: #aaa; margin-top: 10px; font-size: 0.9em;">
+                            いただいたご意見を参考に、<br>より良い提案ができるよう改善してまいります。
+                        </div>
+                    </div>
+                `;
+            }
+            console.log(`Recommendation feedback submitted: ${reason}`);
+        }
+
+        // タブ切り替え
+        function switchTab(tabName) {
+            const allTabs = document.querySelectorAll('.tab-item');
+            allTabs.forEach(tab => tab.classList.remove('active'));
+            
+            event.currentTarget.classList.add('active');
+            
+            const resultDiv = document.getElementById('searchResult');
+            const defaultContent = document.getElementById('defaultContent');
+            
+            console.log(`${tabName} タブに切り替えました`);
+            
+            if (tabName === 'home') {
+                resetSearch();
+            } else if (tabName === 'chat') {
+                showChatScreen();
+            } else if (tabName === 'notification') {
+                showNotificationScreen();
+            } else if (tabName === 'status') {
+                showStatusScreen();
+            }
+        }
+
+        // 質問と回答のデータベース
+        const qaDatabase = {
+            'ドアが開かない': {
+                intent: '問題解決サポート',
+                urgency: 'medium',
+                answer: `
+                    <strong>ドアが開かない場合の診断</strong><br><br>
+                    以下の順番で確認してください：<br><br>
+                    <strong>1. キーの電池を確認</strong><br>
+                    • スマートキーの電池が切れている可能性があります<br>
+                    • 電池残量が少ない場合、ドアに近づけて操作してください<br><br>
+                    <strong>2. チャイルドロックを確認</strong><br>
+                    • 後部座席のドアの場合、チャイルドロックがかかっている可能性があります<br>
+                    • 内側のレバーで解除できます<br><br>
+                    <strong>3. ドアロックの凍結を確認（冬季）</strong><br>
+                    • 気温が低い場合、ドアロックが凍結している可能性があります<br>
+                    • 温水をかけるか、解氷スプレーを使用してください<br><br>
+                    <strong>4. それでも開かない場合</strong><br>
+                    • メカニカルキーを使用してください<br>
+                    • スマートキーからメカニカルキーを取り出し、ドアの鍵穴に差し込んでください
+                `,
+                actions: [
+                    { label: '詳細な手順を見る', type: 'primary' },
+                    { label: '販売店に相談', type: 'secondary' }
+                ]
+            },
+            'Bluetooth接続はどうやってやるの？': {
+                intent: '操作方法ガイド',
+                urgency: 'low',
+                answer: `
+                    <strong>Bluetooth接続の設定方法</strong><br><br>
+                    以下の手順で設定できます：<br><br>
+                    <strong>ステップ 1: 設定画面を開く</strong><br>
+                    • ディスプレイの「設定」アイコンをタップします<br><br>
+                    <strong>ステップ 2: Bluetoothを選択</strong><br>
+                    • 「Bluetooth」メニューを選択します<br>
+                    • Bluetoothがオフの場合はオンにします<br><br>
+                    <strong>ステップ 3: デバイスを検索</strong><br>
+                    • 「新しいデバイスを追加」をタップします<br>
+                    • スマートフォンのBluetooth設定を開き、検出可能にします<br><br>
+                    <strong>ステップ 4: ペアリング</strong><br>
+                    • 車のディスプレイに表示されたデバイス名をタップします<br>
+                    • スマートフォンに表示されるPINコードを確認し、「ペアリング」をタップします<br><br>
+                    <strong>💡 ヒント:</strong><br>
+                    • 初回接続後は、自動的に接続されます<br>
+                    • 接続できない場合は、一度Bluetoothをオフ→オンにしてください
+                `,
+                actions: [
+                    { label: 'ステップバイステップガイドを見る', type: 'primary' },
+                    { label: '動画で見る', type: 'secondary' }
+                ]
+            },
+            '警告灯が点灯した': {
+                intent: '問題解決サポート',
+                urgency: 'high',
+                answer: `
+                    <strong style="color: #ff6b6b;">⚠️ 警告灯が点灯した場合の対応</strong><br><br>
+                    警告灯の色によって対応が異なります：<br><br>
+                    <strong style="color: #ff0000;">🔴 赤色の警告灯の場合（緊急）</strong><br>
+                    <strong>すぐに以下の対応をしてください：</strong><br>
+                    1. 安全な場所に停車してください<br>
+                    2. エンジンを停止してください<br>
+                    3. すぐに販売店にご連絡ください<br><br>
+                    <strong>主な赤色警告灯：</strong><br>
+                    • ブレーキ警告灯<br>
+                    • エンジン油圧警告灯<br>
+                    • 充電警告灯<br>
+                    • 水温警告灯<br><br>
+                    <strong style="color: #ffa500;">🟡 黄色の警告灯の場合</strong><br>
+                    <strong>以下の対応をお願いします：</strong><br>
+                    1. 速やかに販売店で点検を受けてください<br>
+                    2. 走行は可能ですが、長距離運転は避けてください<br>
+                    3. 急加速や高速走行を控えてください<br><br>
+                    <strong>主な黄色警告灯：</strong><br>
+                    • エンジン警告灯（チェックエンジンランプ）<br>
+                    • ABS警告灯<br>
+                    • タイヤ空気圧警告灯<br><br>
+                    <strong>📞 緊急連絡先：</strong><br>
+                    最寄りの販売店: 0120-XXX-XXX（24時間対応）
+                `,
+                actions: [
+                    { label: '販売店を検索', type: 'primary' },
+                    { label: 'ロードサービスを呼ぶ', type: 'secondary' }
+                ]
+            }
+        };
+
+        function setQuestion(question) {
+            document.getElementById('searchInput').value = question;
+            performSearch();
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            const resultDiv = document.getElementById('searchResult');
+            const defaultContent = document.getElementById('defaultContent');
+
+            if (!query) {
+                alert('質問を入力してください');
+                return;
+            }
+
+            defaultContent.classList.add('hidden');
+            resultDiv.innerHTML = '<div class="loading">回答を生成中</div>';
+            resultDiv.classList.remove('hidden');
+
+            setTimeout(() => {
+                displayAnswer(query);
+            }, 1000);
+        }
+
+        function displayAnswer(query) {
+            const resultDiv = document.getElementById('searchResult');
+            
+            let response = qaDatabase[query];
+            
+            if (!response) {
+                for (let key in qaDatabase) {
+                    if (query.includes(key.substring(0, 3)) || key.includes(query.substring(0, 3))) {
+                        response = qaDatabase[key];
+                        break;
+                    }
+                }
+            }
+
+            if (!response) {
+                response = {
+                    intent: '操作方法ガイド',
+                    urgency: 'low',
+                    answer: `
+                        <strong>申し訳ございません</strong><br><br>
+                        「${query}」に関する情報が見つかりませんでした。<br><br>
+                        以下の方法をお試しください：<br>
+                        • 別の言葉で質問してみる<br>
+                        • よくある質問から選択する<br>
+                        • 販売店に直接お問い合わせください<br><br>
+                        <strong>試してみる質問例：</strong><br>
+                        • 「ドアが開かない」<br>
+                        • 「Bluetooth接続はどうやってやるの？」<br>
+                        • 「警告灯が点灯した」
+                    `,
+                    actions: [
+                        { label: '販売店に相談', type: 'primary' }
+                    ]
+                };
+            }
+
+            const cardClass = response.urgency === 'high' ? 'card alert-card' : 'card';
+            const intentBadge = response.urgency === 'high' ? 
+                '<span class="badge" style="background: #ff6b6b; color: white;">緊急</span>' : 
+                '<span class="badge badge-info">通常</span>';
+
+            let html = `
+                <div class="chat-message user">
+                    <div class="chat-bubble user">${query}</div>
+                </div>
+                <div class="chat-message ai">
+                    <div class="chat-bubble ai" style="max-width: 100%;">
+                        <div style="margin-bottom: 10px;">
+                            ${intentBadge}
+                            <span class="badge" style="background: #6c757d; color: white;">${response.intent}</span>
+                        </div>
+                        ${response.answer}
+            `;
+
+            if (response.actions && response.actions.length > 0) {
+                html += '<div style="margin-top: 15px;">';
+                response.actions.forEach(action => {
+                    const buttonStyle = action.type === 'primary' ? 
+                        'background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460;' : 
+                        'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;';
+                    
+                    let onclick = '';
+                    if (action.label === 'ステップバイステップガイドを見る') {
+                        onclick = 'onclick="showBluetoothStepGuide()"';
+                    }
+                    
+                    html += `<div class="button" style="${buttonStyle} margin-right: 10px; cursor: pointer;" ${onclick}>${action.label}</div>`;
+                });
+                html += '</div>';
+            }
+
+            html += `
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="button" onclick="resetSearch()" style="background: #6c757d;">ホームに戻る</button>
+                </div>
+            `;
+
+            resultDiv.innerHTML = html;
+        }
+
+        function resetSearch() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchResult').classList.add('hidden');
+            document.getElementById('defaultContent').classList.remove('hidden');
+        }
+
+        // Bluetoothステップバイステップガイドの現在のステップ
+        let currentBluetoothStep = 1;
+        const totalBluetoothSteps = 5;
+
+        // Bluetoothステップデータ
+        const bluetoothSteps = [
+            {
+                title: '設定画面を開く',
+                content: 'ディスプレイのホーム画面から「⚙️ 設定」アイコンをタップします。<br><br>または、ステアリングホイールの「MENU」ボタンを長押ししても設定画面が開きます。',
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect fill='%231a1a2e' width='300' height='200' rx='10'/%3E%3Ctext x='150' y='90' text-anchor='middle' font-size='50' fill='%234facfe'%3E⚙️%3C/text%3E%3Ctext x='150' y='130' text-anchor='middle' font-size='16' fill='%23aaa'%3E設定アイコン%3C/text%3E%3C/svg%3E"
+            },
+            {
+                title: 'Bluetoothメニューを選択',
+                content: '• 設定メニューから「📡 Bluetooth」を選択<br>• Bluetoothがオフの場合は「オンにする」をタップ<br>• 画面に「検索中...」と表示されます',
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect fill='%231a1a2e' width='300' height='200' rx='10'/%3E%3Crect fill='%232d3561' x='20' y='30' width='260' height='40' rx='8'/%3E%3Ctext x='40' y='58' font-size='16' fill='%234facfe'%3E📡 Bluetooth%3C/text%3E%3Crect fill='%23667eea' x='200' y='40' width='60' height='20' rx='10'/%3E%3Ctext x='230' y='55' text-anchor='middle' font-size='12' fill='%23fff'%3EON%3C/text%3E%3Ctext x='150' y='120' text-anchor='middle' font-size='14' fill='%23aaa'%3E検索中...%3C/text%3E%3C/svg%3E"
+            },
+            {
+                title: 'スマートフォンを検出可能にする',
+                content: '<strong>📱 iPhoneの場合：</strong><br>• 「設定」→「Bluetooth」を開く<br>• Bluetoothをオンにすると自動的に検出可能になります<br><br><strong>📱 Androidの場合：</strong><br>• 「設定」→「接続済みのデバイス」→「Bluetooth」を開く<br>• 「新しいデバイスとペア設定する」をタップ',
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect fill='%231a1a2e' width='300' height='200' rx='10'/%3E%3Crect fill='%232d3561' x='40' y='30' width='100' height='140' rx='10'/%3E%3Ccircle cx='90' cy='45' r='5' fill='%234facfe'/%3E%3Crect fill='%23667eea' x='50' y='60' width='80' height='30' rx='5'/%3E%3Ctext x='90' y='80' text-anchor='middle' font-size='12' fill='%23fff'%3EiPhone%3C/text%3E%3Crect fill='%232d3561' x='160' y='30' width='100' height='140' rx='10'/%3E%3Crect fill='%23667eea' x='170' y='60' width='80' height='30' rx='5'/%3E%3Ctext x='210' y='80' text-anchor='middle' font-size='12' fill='%23fff'%3EAndroid%3C/text%3E%3C/svg%3E"
+            },
+            {
+                title: 'デバイスを選択してペアリング',
+                content: '• 車のディスプレイに表示された「利用可能なデバイス」リストから、あなたのスマートフォン名を探してタップ<br><br>• 車とスマートフォンの両方に同じPINコード（例: 123456）が表示されます<br><br>• <strong style="color: #4facfe;">PINコードが一致していることを確認</strong>してください',
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect fill='%231a1a2e' width='300' height='200' rx='10'/%3E%3Crect fill='%232d3561' x='20' y='20' width='260' height='50' rx='8'/%3E%3Ctext x='40' y='50' font-size='14' fill='%23e0e0e0'%3E📱 iPhone 13%3C/text%3E%3Crect fill='%232d3561' x='20' y='80' width='260' height='50' rx='8'/%3E%3Ctext x='40' y='110' font-size='14' fill='%23e0e0e0'%3E📱 Galaxy S23%3C/text%3E%3Crect fill='%234facfe' x='80' y='150' width='140' height='30' rx='8'/%3E%3Ctext x='150' y='172' text-anchor='middle' font-size='16' fill='%230f3460' font-weight='bold'%3EPIN: 123456%3C/text%3E%3C/svg%3E"
+            },
+            {
+                title: 'ペアリングを承認',
+                content: '• 車のディスプレイで「ペアリング」または「接続」をタップ<br><br>• スマートフォンに表示される「ペアリング」確認ダイアログで「ペアリング」をタップ<br><br>• 「✅ 接続しました」というメッセージが表示されたら完了！',
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect fill='%231a1a2e' width='300' height='200' rx='10'/%3E%3Ccircle cx='150' cy='80' r='40' fill='%2300d084'/%3E%3Ctext x='150' y='95' text-anchor='middle' font-size='40' fill='%23fff'%3E✓%3C/text%3E%3Ctext x='150' y='145' text-anchor='middle' font-size='18' fill='%2300d084' font-weight='bold'%3E接続しました%3C/text%3E%3Ctext x='150' y='170' text-anchor='middle' font-size='12' fill='%23aaa'%3E次回から自動接続されます%3C/text%3E%3C/svg%3E"
+            }
+        ];
+
+        // Bluetoothステップバイステップガイドを表示
+        function showBluetoothStepGuide() {
+            currentBluetoothStep = 1;
+            renderBluetoothStep();
+        }
+
+        // Bluetoothステップを描画
+        function renderBluetoothStep() {
+            const resultDiv = document.getElementById('searchResult');
+            const defaultContent = document.getElementById('defaultContent');
+            const step = bluetoothSteps[currentBluetoothStep - 1];
+            
+            defaultContent.classList.add('hidden');
+            
+            let nextStepsHtml = '';
+            for (let i = currentBluetoothStep; i < totalBluetoothSteps; i++) {
+                nextStepsHtml += `
+                    <div class="card" style="opacity: 0.4; margin-bottom: 10px;">
+                        <div class="card-title">
+                            <span class="badge" style="background: #555; color: #999;">ステップ ${i + 1}/${totalBluetoothSteps}</span> ${bluetoothSteps[i].title}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            resultDiv.innerHTML = `
+                <div class="card" style="margin-bottom: 15px; border: 2px solid #4facfe;">
+                    <div class="card-title" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460; padding: 15px; margin: -1px -1px 0 -1px; border-radius: 10px 10px 0 0;">
+                        <span class="badge badge-info" style="background: rgba(15, 52, 96, 0.3); color: #0f3460; font-weight: bold;">ステップ ${currentBluetoothStep}/${totalBluetoothSteps}</span> ${step.title}
+                    </div>
+                    <div class="card-content">
+                        <img src="${step.image}" alt="ステップ${currentBluetoothStep}" style="width: 100%; margin: 15px 0; border-radius: 8px; background: #16213e; padding: 20px;">
+                        
+                        <div style="font-size: 1em; line-height: 1.8; margin: 15px 0;">
+                            ${step.content}
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 20px;">
+                            ${currentBluetoothStep > 1 ? `
+                                <button class="button" onclick="previousBluetoothStep()" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                    ← 前へ
+                                </button>
+                            ` : ''}
+                            ${currentBluetoothStep < totalBluetoothSteps ? `
+                                <button class="button" onclick="nextBluetoothStep()" style="flex: 2; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460; font-size: 1.05em; font-weight: bold;">
+                                    次へ →
+                                </button>
+                            ` : `
+                                <button class="button" onclick="completeBluetoothGuide()" style="flex: 2; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); font-size: 1.05em; font-weight: bold;">
+                                    ✓ 完了
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                </div>
+                
+                ${nextStepsHtml}
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="button" onclick="resetSearch()" style="background: linear-gradient(135deg, #888 0%, #666 100%);">検索画面に戻る</button>
+                </div>
+            `;
+            
+            resultDiv.classList.remove('hidden');
+            document.getElementById('homeContent').scrollTop = 0;
+        }
+
+        // 次のBluetoothステップへ
+        function nextBluetoothStep() {
+            if (currentBluetoothStep < totalBluetoothSteps) {
+                currentBluetoothStep++;
+                renderBluetoothStep();
+            }
+        }
+
+        // 前のBluetoothステップへ
+        function previousBluetoothStep() {
+            if (currentBluetoothStep > 1) {
+                currentBluetoothStep--;
+                renderBluetoothStep();
+            }
+        }
+
+        // Bluetoothガイド完了
+        function completeBluetoothGuide() {
+            const resultDiv = document.getElementById('searchResult');
+            
+            resultDiv.innerHTML = `
+                <div class="card" style="text-align: center; border: 2px solid #00d084;">
+                    <div class="card-content" style="padding: 40px 20px;">
+                        <div style="font-size: 4em; margin-bottom: 20px;">🎉</div>
+                        <div style="font-size: 1.5em; font-weight: bold; color: #00d084; margin-bottom: 15px;">
+                            Bluetooth接続完了！
+                        </div>
+                        <div style="color: #aaa; font-size: 1em; line-height: 1.8;">
+                            おめでとうございます！<br>
+                            次回からは、エンジンをかけると自動的に接続されます。<br><br>
+                            <strong style="color: #4facfe;">💡 ヒント</strong><br>
+                            音楽アプリを開けば、車のスピーカーから再生できます。
+                        </div>
+                        
+                        <div style="margin-top: 30px; display: flex; gap: 10px; flex-direction: column;">
+                            <button class="button" onclick="showBluetoothTroubleshooting()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                ❓ うまく接続できない場合
+                            </button>
+                            <button class="button" onclick="resetSearch()" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460;">
+                                ホームに戻る
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('homeContent').scrollTop = 0;
+        }
+
+        // Bluetoothトラブルシューティングを表示
+        function showBluetoothTroubleshooting() {
+            const resultDiv = document.getElementById('searchResult');
+            
+            resultDiv.innerHTML = `
+                <div class="card" style="margin-bottom: 15px;">
+                    <div class="card-title">
+                        ❓ うまく接続できない場合
+                    </div>
+                    <div class="card-content">
+                        <div style="background: rgba(255, 107, 107, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #ff6b6b;">
+                            <strong style="color: #ff6b6b;">よくあるトラブルと解決方法</strong>
+                        </div>
+
+                        <div style="background: rgba(45, 53, 97, 0.4); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                            <strong style="color: #4facfe; font-size: 1.05em;">1. Bluetoothをリセット</strong><br><br>
+                            • 車とスマートフォンの両方でBluetoothを一度オフにする<br>
+                            • 10秒待ってから再度オンにする<br>
+                            • 再度ペアリングを試す
+                        </div>
+
+                        <div style="background: rgba(45, 53, 97, 0.4); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                            <strong style="color: #4facfe; font-size: 1.05em;">2. 登録済みデバイスを削除</strong><br><br>
+                            • 車の設定から「登録済みデバイス」を確認<br>
+                            • 古い登録があれば削除<br>
+                            • スマートフォンのBluetooth設定からも車のデバイスを「削除」または「登録解除」
+                        </div>
+
+                        <div style="background: rgba(45, 53, 97, 0.4); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                            <strong style="color: #4facfe; font-size: 1.05em;">3. スマートフォンを再起動</strong><br><br>
+                            • 完全に電源を切る<br>
+                            • 10秒待ってから再起動<br>
+                            • 再度接続を試す
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.1) 100%); padding: 15px; border-radius: 10px; margin-top: 20px; border: 2px solid rgba(102, 126, 234, 0.3);">
+                            <strong style="color: #667eea;">💬 それでも解決しない場合</strong><br><br>
+                            販売店にご相談ください。<br>
+                            スマートフォンの機種によって対応状況が異なる場合があります。
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="button" onclick="showBluetoothStepGuide()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin-right: 10px;">
+                        ← ガイドに戻る
+                    </button>
+                    <button class="button" onclick="resetSearch()" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460;">
+                        ホームに戻る
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('homeContent').scrollTop = 0;
+        }
+
+        // チャット画面を表示
+        function showChatScreen() {
+            const resultDiv = document.getElementById('searchResult');
+            const defaultContent = document.getElementById('defaultContent');
+            
+            defaultContent.classList.add('hidden');
+            
+            resultDiv.innerHTML = `
+                <!-- チャットメッセージ領域 -->
+                <div id="chatMessages"></div>
+
+                <!-- チャット入力欄 -->
+                <div style="position: sticky; bottom: 0; background: #0f3460; padding: 15px 0; margin-top: 20px; border-top: 1px solid rgba(79, 172, 254, 0.3);">
+                    <div style="display: flex; gap: 10px; align-items: flex-end;">
+                        <textarea id="chatInput" 
+                                  placeholder="スマートキーやクルマについて質問できます..." 
+                                  style="flex: 1; 
+                                         background: rgba(45, 53, 97, 0.6); 
+                                         color: #e0e0e0; 
+                                         border: 1px solid rgba(79, 172, 254, 0.3); 
+                                         border-radius: 12px; 
+                                         padding: 12px; 
+                                         font-size: 0.95em; 
+                                         resize: none; 
+                                         min-height: 45px; 
+                                         max-height: 100px; 
+                                         font-family: inherit;"
+                                  rows="1"
+                                  onkeypress="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendChatMessage(); }"></textarea>
+                        <button onclick="sendChatMessage()" 
+                                class="button" 
+                                style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
+                                       color: #0f3460; 
+                                       padding: 12px 20px; 
+                                       border: none; 
+                                       cursor: pointer; 
+                                       font-weight: 600;
+                                       height: 45px;
+                                       display: flex;
+                                       align-items: center;
+                                       gap: 5px;">
+                            <span>送信</span>
+                            <span style="font-size: 1.1em;">📤</span>
+                        </button>
+                    </div>
+                    <div style="font-size: 0.8em; color: #888; margin-top: 8px;">
+                        💡 Shift+Enterで改行できます
+                    </div>
+                </div>
+            `;
+            
+            resultDiv.classList.remove('hidden');
+            document.getElementById('homeContent').scrollTop = 0;
+
+            // THEME-001 用チャット初期化
+            initTheme001Chat();
+        }
+
+        // THEME-001 用チャット: メッセージ追加ヘルパー
+        function addTheme001Message(sender, html) {
+            const chatMessages = document.getElementById('chatMessages');
+            if (!chatMessages) return;
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}`;
+
+            const bubble = document.createElement('div');
+            bubble.className = `chat-bubble ${sender}`;
+            bubble.innerHTML = html;
+
+            messageDiv.appendChild(bubble);
+            chatMessages.appendChild(messageDiv);
+
+            // スクロールを最下部に
+            const homeContent = document.getElementById('homeContent');
+            if (homeContent) {
+                homeContent.scrollTop = homeContent.scrollHeight;
+            }
+        }
+
+        // THEME-001 用チャット: 初期メッセージ
+        function initTheme001Chat() {
+            const chatMessages = document.getElementById('chatMessages');
+            if (!chatMessages) return;
+            chatMessages.innerHTML = '';
+
+            addTheme001Message('ai', `輝明さん、今知りたいことを入力してください。<br><br>
+キーワードの例：<br>
+・スマートキーでドアが開かない<br>
+・電池交換のやり方<br>
+・警告灯が点灯した など<br><br>
+すぐに試せるメニューもご用意しています：
+<div class="quick-reply-container">
+  <div class="quick-reply" onclick="startTheme001SmartKeyFlow()">
+    🔑 <span>スマートキーでドアが開かない</span>
+  </div>
+</div>`);
+        }
+
+        // THEME-001: スマートキーでドアが開かないフロー（簡易版）
+        function startTheme001SmartKeyFlow() {
+            addTheme001Message('user', 'スマートキーでドアが開かない');
+
+            addTheme001Message('ai', `<strong>スマートキーでドアが開かないときの確認ポイント</strong><br><br>
+まず、次の2つを確認しましょう。<br><br>
+<strong>1. スマートキーのインジケーターは光りますか？</strong><br>
+・ボタンを押したときに赤いランプが一瞬点灯するか確認してください。<br><br>
+<strong>2. 予備のスマートキーでも同じ症状ですか？</strong><br>
+・予備キーがあれば、同じように試してみてください。<br><br>
+おおよその状況に近いものを教えてください：
+<div class="quick-reply-container">
+  <div class="quick-reply" onclick="handleTheme001Situation('battery')">
+    🔋 <span>インジケーターが光らない / 反応が弱い</span>
+  </div>
+  <div class="quick-reply" onclick="handleTheme001Situation('interference')">
+    📡 <span>インジケーターは光るが、クルマが反応しない</span>
+  </div>
+  <div class="quick-reply" onclick="handleTheme001Situation('unknown')">
+    ❓ <span>よく分からない / 確認が難しい</span>
+  </div>
+</div>`);
+        }
+
+        // THEME-001: 状況別の簡易ガイド
+        function handleTheme001Situation(type) {
+            if (type === 'battery') {
+                addTheme001Message('user', 'インジケーターが光らない / 反応が弱い');
+                addTheme001Message('ai', `<strong>電池切れの可能性が高いです</strong><br><br>
+まずはドアを開けるために、スマートキーに内蔵されている「機械キー」を使うことができます。<br><br>
+<strong>今すぐできること：</strong><br>
+・スマートキー側面のボタンを押して、機械キーを取り出す<br>
+・運転席ドアの鍵穴に差し込んで回すと、ドアを開けられます<br><br>
+<strong>次に、どうしたいですか？</strong><br><br>
+<div class="quick-reply-container">
+  <div class="quick-reply" onclick="handleTheme001BatteryChoice('mechanical')">
+    🔑 <span>まずは機械キーで開ける</span>
+  </div>
+  <div class="quick-reply" onclick="handleTheme001BatteryChoice('replace')">
+    🔋 <span>電池交換したい</span>
+  </div>
+</div>`);
+            } else if (type === 'interference') {
+                addTheme001Message('user', 'インジケーターは光るが、クルマが反応しない');
+                addTheme001Message('ai', `<strong>電波干渉の可能性があります</strong><br><br>
+次のような場所では、周囲の強い電波の影響でスマートキーが反応しにくくなることがあります。<br>
+・空港や放送局、携帯電話基地局の近く<br>
+・大きな送電線・変電施設の近く など<br><br>
+<strong>対処のポイント：</strong><br>
+1. スマートキーをドアハンドルにできるだけ近づけて操作してみる<br>
+2. 可能であれば、数メートルだけ場所を移動して再度試す<br>
+3. それでもダメな場合は、機械キーでドアを開けて一時的に利用する<br><br>
+※ 詳しい電波干渉ガイド（GUIDE-008）は、別画面で参照できるようにする想定です。<br><br>
+試してみた結果に近いものを教えてください：
+<div class="quick-reply-container">
+  <div class="quick-reply" onclick="handleTheme001InterferenceResult('resolved')">
+    ✅ <span>試したら正常に開くようになった</span>
+  </div>
+  <div class="quick-reply" onclick="handleTheme001InterferenceResult('still_bad')">
+    ❌ <span>試しても改善しない / 不安が残る</span>
+  </div>
+</div>`);
+            } else {
+                addTheme001Message('user', 'よく分からない / 確認が難しい');
+                addTheme001Message('ai', `<strong>ありがとうございます。では、より安全側でご案内します。</strong><br><br>
+・まずは機械キーでドアを開けられるか確認しましょう。<br>
+・そのうえで、スマートキーの電池交換か、販売店での点検をおすすめします。<br><br>
+このチャットでは流れのイメージを確認し、実際の詳細手順や販売店検索は、<br>
+「取扱説明書DX」の本番画面でAPI連携して実現する想定です。`);
+            }
+        }
+
+        // THEME-001: 電池切れ時の選択（機械キー or 電池交換）
+        function handleTheme001BatteryChoice(choice) {
+            if (choice === 'mechanical') {
+                addTheme001Message('user', 'まずは機械キーで開ける');
+                addTheme001Message('ai', `<strong>機械キーで開錠を試してみましょう</strong><br><br>
+<strong>機械キーの取り出し方：</strong><br>
+1. スマートキー側面のボタンを押します<br>
+2. 機械キーが取り出せます<br><br>
+<strong>開錠方法：</strong><br>
+1. 運転席ドアの鍵穴に機械キーを差し込みます<br>
+2. 回すとドアを開けられます<br><br>
+機械キーで開錠できましたか？
+<div class="quick-reply-container">
+  <div class="quick-reply" onclick="handleTheme001MechanicalResult('opened')">
+    ✅ <span>開いた！</span>
+  </div>
+  <div class="quick-reply" onclick="handleTheme001MechanicalResult('not_opened')">
+    ❌ <span>開かなかった</span>
+  </div>
+</div>`);
+            } else if (choice === 'replace') {
+                addTheme001Message('user', '電池交換したい');
+                addTheme001Message('ai', `<strong>電池交換について</strong><br><br>
+電池はご自身で交換できますが、部品が破損するおそれがあるので、<br>
+トヨタ販売店で交換することをおすすめします。<br><br>
+どちらで対応したいですか？
+<div class="quick-reply-container">
+  <div class="quick-reply" onclick="handleTheme001ReplaceChoice('self')">
+    🔧 <span>自分で交換したい</span>
+  </div>
+  <div class="quick-reply" onclick="handleTheme001ReplaceChoice('dealer')">
+    🏢 <span>販売店で交換したい</span>
+  </div>
+</div>`);
+            }
+        }
+
+        // THEME-001: 機械キー開錠結果
+        function handleTheme001MechanicalResult(result) {
+            if (result === 'opened') {
+                addTheme001Message('user', '開いた！');
+                addTheme001Message('ai', `<strong>よかったです！ドアを開けることができました。</strong><br><br>
+次に、スマートキーの電池交換をしておくと、次回からはスマートキーで開けられるようになります。<br><br>
+電池交換は、ご自身で交換するか、販売店で交換するかを選べます。<br>
+どちらにしますか？
+<div class="quick-reply-container">
+  <div class="quick-reply" onclick="handleTheme001ReplaceChoice('self')">
+    🔧 <span>自分で交換したい</span>
+  </div>
+  <div class="quick-reply" onclick="handleTheme001ReplaceChoice('dealer')">
+    🏢 <span>販売店で交換したい</span>
+  </div>
+</div>`);
+            } else {
+                addTheme001Message('user', '開かなかった');
+                addTheme001Message('ai', `<strong>機械キーでも開かない場合は、ドアロックの故障の可能性があります。</strong><br><br>
+この場合は、ロードサービスまたは販売店にご連絡ください。<br><br>
+<strong>緊急連絡先：</strong><br>
+・ロードサービス: 0120-XXX-XXX（24時間対応）<br>
+・最寄りの販売店: 0120-XXX-XXX<br><br>
+※ 実際の画面では、位置情報に基づいた最寄りの販売店やロードサービスを表示します。`);
+            }
+        }
+
+        // THEME-001: 電池交換の選択（自分で or 販売店）
+        function handleTheme001ReplaceChoice(choice) {
+            if (choice === 'self') {
+                addTheme001Message('user', '自分で交換したい');
+                addTheme001Message('ai', `<strong>自分で電池交換をする場合</strong><br><br>
+<strong>事前に準備するもの：</strong><br>
+・マイナスドライバー<br>
+・小さいマイナスドライバー<br>
+・リチウム電池：CR2450<br><br>
+<strong>⚠️ 注意：</strong><br>
+部品が破損するおそれがあるので、慎重に作業してください。<br>
+不安な場合は、販売店で交換することをおすすめします。<br><br>
+準備物は揃っていますか？
+<div class="quick-reply-container">
+  <div class="quick-reply" onclick="handleTheme001PreparationCheck('ready')">
+    ✅ <span>揃っている</span>
+  </div>
+  <div class="quick-reply" onclick="handleTheme001PreparationCheck('not_ready')">
+    ❌ <span>揃っていない（特に電池）</span>
+  </div>
+</div>`);
+            } else if (choice === 'dealer') {
+                addTheme001Message('user', '販売店で交換したい');
+                addTheme001Message('ai', `<strong>販売店での電池交換</strong><br><br>
+トヨタ販売店で電池交換を依頼できます。<br><br>
+<strong>連絡方法：</strong><br>
+・電話で予約: 0120-XXX-XXX<br>
+・オンライン予約: 販売店検索ページから予約<br><br>
+<strong>予約時の準備：</strong><br>
+・車種・年式<br>
+・スマートキーの種類<br>
+・希望日時<br><br>
+※ 実際の画面では、位置情報に基づいた最寄りの販売店を表示し、<br>
+オンライン予約ができるようになります。<br><br>
+他にご質問はありますか？`);
+            }
+        }
+
+        // THEME-001: 準備物の確認
+        function handleTheme001PreparationCheck(status) {
+            if (status === 'ready') {
+                addTheme001Message('user', '揃っている');
+                addTheme001Message('ai', `<strong>それでは、電池交換を実施しましょう</strong><br><br>
+<strong>電池交換手順：</strong><br><br>
+<strong>ステップ 1: スマートキーのカバーを外す</strong><br>
+・小さいマイナスドライバーを使って、カバーを慎重に外します<br>
+・力を入れすぎると破損するおそれがあります<br><br>
+<strong>ステップ 2: 古い電池を取り出す</strong><br>
+・マイナスドライバーで電池を外します<br>
+・電池の向きを確認してください（+/-の向き）<br><br>
+<strong>ステップ 3: 新しい電池を取り付ける</strong><br>
+・CR2450電池を正しい向きで取り付けます<br>
+・カバーを元に戻します<br><br>
+<strong>ステップ 4: 動作確認</strong><br>
+・スマートキーのボタンを押して、インジケーターが光るか確認します<br><br>
+電池交換後、スマートキーが正常に動作するようになりましたか？
+<div class="quick-reply-container">
+  <div class="quick-reply" onclick="handleTheme001ReplaceResult('solved')">
+    ✅ <span>正常に動作するようになった</span>
+  </div>
+  <div class="quick-reply" onclick="handleTheme001ReplaceResult('not_solved')">
+    ❌ <span>まだ動作しない</span>
+  </div>
+</div>`);
+            } else if (status === 'not_ready') {
+                addTheme001Message('user', '揃っていない（特に電池）');
+                addTheme001Message('ai', `<strong>電池の購入方法をご案内します</strong><br><br>
+<strong>リチウム電池CR2450の入手先：</strong><br><br>
+<strong>1. オンライン購入</strong><br>
+・Amazon: <a href="https://amazon.co.jp/s?k=CR2450" target="_blank" style="color: #4facfe;">CR2450を検索</a><br>
+・楽天市場: <a href="https://search.rakuten.co.jp/search/mall/CR2450/" target="_blank" style="color: #4facfe;">CR2450を検索</a><br>
+・価格目安: ¥200-500<br><br>
+<strong>2. 店舗購入</strong><br>
+・トヨタ販売店<br>
+・時計店<br>
+・カメラ店<br>
+・家電量販店（電池コーナー）<br><br>
+<strong>3. 近くの店舗を探す</strong><br>
+※ 実際の画面では、位置情報に基づいて最寄りの店舗を検索できます。<br><br>
+電池を入手できましたか？
+<div class="quick-reply-container">
+  <div class="quick-reply" onclick="handleTheme001BatteryPurchase('purchased')">
+    ✅ <span>入手した</span>
+  </div>
+  <div class="quick-reply" onclick="handleTheme001BatteryPurchase('not_purchased')">
+    ❌ <span>入手できない / 販売店で交換したい</span>
+  </div>
+</div>`);
+            }
+        }
+
+        // THEME-001: 電池購入結果
+        function handleTheme001BatteryPurchase(result) {
+            if (result === 'purchased') {
+                addTheme001Message('user', '入手した');
+                addTheme001Message('ai', `<strong>それでは、電池交換を実施しましょう</strong><br><br>
+<strong>電池交換手順：</strong><br><br>
+<strong>ステップ 1: スマートキーのカバーを外す</strong><br>
+・小さいマイナスドライバーを使って、カバーを慎重に外します<br>
+・力を入れすぎると破損するおそれがあります<br><br>
+<strong>ステップ 2: 古い電池を取り出す</strong><br>
+・マイナスドライバーで電池を外します<br>
+・電池の向きを確認してください（+/-の向き）<br><br>
+<strong>ステップ 3: 新しい電池を取り付ける</strong><br>
+・CR2450電池を正しい向きで取り付けます<br>
+・カバーを元に戻します<br><br>
+<strong>ステップ 4: 動作確認</strong><br>
+・スマートキーのボタンを押して、インジケーターが光るか確認します<br><br>
+電池交換後、スマートキーが正常に動作するようになりましたか？
+<div class="quick-reply-container">
+  <div class="quick-reply" onclick="handleTheme001ReplaceResult('solved')">
+    ✅ <span>正常に動作するようになった</span>
+  </div>
+  <div class="quick-reply" onclick="handleTheme001ReplaceResult('not_solved')">
+    ❌ <span>まだ動作しない</span>
+  </div>
+</div>`);
+            } else if (result === 'not_purchased') {
+                addTheme001Message('user', '入手できない / 販売店で交換したい');
+                addTheme001Message('ai', `<strong>販売店での電池交換</strong><br><br>
+トヨタ販売店で電池交換を依頼できます。<br><br>
+<strong>連絡方法：</strong><br>
+・電話で予約: 0120-XXX-XXX<br>
+・オンライン予約: 販売店検索ページから予約<br><br>
+<strong>予約時の準備：</strong><br>
+・車種・年式<br>
+・スマートキーの種類<br>
+・希望日時<br><br>
+※ 実際の画面では、位置情報に基づいた最寄りの販売店を表示し、<br>
+オンライン予約ができるようになります。<br><br>
+他にご質問はありますか？`);
+            }
+        }
+
+        // THEME-001: 電池交換結果
+        function handleTheme001ReplaceResult(result) {
+            if (result === 'solved') {
+                addTheme001Message('user', '正常に動作するようになった');
+                addTheme001Message('ai', `<strong>🎉 問題が解決しました！</strong><br><br>
+スマートキーが正常に動作するようになりました。<br><br>
+<strong>今後の予防策：</strong><br>
+・電池の寿命は約1-2年です<br>
+・インジケーターが光らない場合は、早めに電池交換を検討してください<br>
+・予備の電池を常備しておくと安心です<br><br>
+他にご質問はありますか？`);
+            } else if (result === 'not_solved') {
+                addTheme001Message('user', 'まだ動作しない');
+                addTheme001Message('ai', `<strong>電池交換でも解決しない場合</strong><br><br>
+電池交換をしても動作しない場合は、以下の可能性があります：<br><br>
+<strong>1. 車両のバッテリー上がり</strong><br>
+・車の電装品（ライト、エアコンなど）は動作しますか？<br>
+・動作しない場合は、バッテリー上がりの可能性があります<br><br>
+<strong>2. スマートキー本体の故障</strong><br>
+・予備のスマートキーでも同じ症状ですか？<br>
+・予備キーで動作する場合は、元のキーの故障の可能性があります<br><br>
+<strong>3. 車両側の故障</strong><br>
+・販売店での点検をおすすめします<br><br>
+<strong>次のステップ：</strong><br>
+販売店にご連絡いただき、点検を依頼してください。<br>
+・電話: 0120-XXX-XXX<br>
+・オンライン予約: 販売店検索ページから予約<br><br>
+※ 実際の画面では、位置情報に基づいた最寄りの販売店を表示します。`);
+            }
+        }
+
+        // THEME-001: 電波干渉後の分岐
+        function handleTheme001InterferenceResult(result) {
+            if (result === 'resolved') {
+                addTheme001Message('user', '試したら正常に開くようになった');
+                addTheme001Message('ai', `<strong>よかったです！問題は解消したようです。</strong><br><br>
+今回のような場所では、一時的にスマートキーが反応しにくくなることがありますが、<br>
+車両やキーそのものの故障ではないケースがほとんどです。<br><br>
+念のため、今後同じような場所で同じ現象が繰り返される場合は、<br>
+販売店での点検もご検討ください。<br><br>
+他にも気になっていることがあれば、入力してみてください。`);
+            } else {
+                addTheme001Message('user', '試しても改善しない / 不安が残る');
+                addTheme001Message('ai', `<strong>改善しない場合は、スマートキー本体や車両側の不具合の可能性もあります。</strong><br><br>
+安全のため、販売店での点検をおすすめします。<br><br>
+次のような行動ができます：<br>
+・今は機械キーで開閉しつつ、近いうちに販売店で点検を依頼する<br>
+・すぐに相談したい場合は、お近くのトヨタ販売店に連絡する<br><br>
+※ 実際の画面では、「販売店を探す」「予約する」ボタンから、<br>
+お客様の位置情報に応じた店舗検索や予約ができるようにする想定です。`);
+            }
+        }
+
+        // チャットメッセージを送信
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const messageText = input.value.trim();
+            
+            if (!messageText) return;
+            
+            const chatMessages = document.getElementById('chatMessages');
+            
+            // ユーザーメッセージを追加
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chat-message user';
+            userMessage.innerHTML = `
+                <div class="chat-bubble user">
+                    ${messageText.replace(/\n/g, '<br>')}
+                </div>
+            `;
+            chatMessages.appendChild(userMessage);
+            
+            // 入力欄をクリア
+            input.value = '';
+            input.style.height = 'auto';
+            
+            // スクロールを最下部に
+            setTimeout(() => {
+                document.getElementById('homeContent').scrollTop = document.getElementById('homeContent').scrollHeight;
+            }, 100);
+            
+            // AI応答を生成（デモ用）
+            setTimeout(() => {
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'chat-message ai';
+                aiMessage.innerHTML = `
+                    <div class="chat-bubble ai">
+                        <strong>追加の情報をご案内します</strong><br><br>
+                        ${generateChatResponse(messageText)}
+                    </div>
+                `;
+                chatMessages.appendChild(aiMessage);
+                
+                // スクロールを最下部に
+                setTimeout(() => {
+                    document.getElementById('homeContent').scrollTop = document.getElementById('homeContent').scrollHeight;
+                }, 100);
+            }, 1000);
+        }
+
+        // チャット応答を生成（デモ用）
+        function generateChatResponse(question) {
+            const lowerQuestion = question.toLowerCase();
+            
+            if (lowerQuestion.includes('フィルター') || lowerQuestion.includes('交換')) {
+                return `
+                    エアコンフィルターの交換手順をご案内します：<br><br>
+                    <strong>必要なもの：</strong><br>
+                    • 新しいエアコンフィルター<br>
+                    • 清潔な布（あれば）<br><br>
+                    <strong>交換手順：</strong><br>
+                    1. グローブボックスを開けます<br>
+                    2. フィルターカバーを外します<br>
+                    3. 古いフィルターを取り出します<br>
+                    4. 新しいフィルターを取り付けます<br><br>
+                    詳しい手順は「エアコンフィルターの清掃方法」をご覧ください。
+                `;
+            } else if (lowerQuestion.includes('設定') || lowerQuestion.includes('温度')) {
+                return `
+                    エアコンの温度設定についてご案内します：<br><br>
+                    <strong>推奨設定：</strong><br>
+                    • 冷房時：18-22℃<br>
+                    • 暖房時：22-25℃<br><br>
+                    <strong>設定方法：</strong><br>
+                    1. エアコンパネルの「温度」ボタンを押す<br>
+                    2. +/- ボタンで温度を調整<br>
+                    3. 風量は「中」以上を推奨<br><br>
+                    適切な温度設定で快適にお過ごしください。
+                `;
+            } else if (lowerQuestion.includes('販売店') || lowerQuestion.includes('連絡')) {
+                return `
+                    最寄りの販売店をご案内します：<br><br>
+                    <strong>📍 トヨタ東京販売店 渋谷店</strong><br>
+                    • 住所：東京都渋谷区...<br>
+                    • 電話：03-XXXX-XXXX<br>
+                    • 営業時間：9:00-18:00<br><br>
+                    事前にお電話でご予約いただくとスムーズです。
+                `;
+            } else {
+                return `
+                    ご質問ありがとうございます。<br><br>
+                    「${question}」について確認しています。<br><br>
+                    より詳しい情報が必要な場合は、以下のオプションをお試しください：<br>
+                    • 検索バーで具体的なキーワードを入力<br>
+                    • 販売店にお問い合わせ<br>
+                    • 取扱説明書の該当ページを確認<br><br>
+                    他にお困りのことはありますか？
+                `;
+            }
+        }
+
+        // 通知画面を表示
+        function showNotificationScreen() {
+            const resultDiv = document.getElementById('searchResult');
+            const defaultContent = document.getElementById('defaultContent');
+            
+            defaultContent.classList.add('hidden');
+            
+            resultDiv.innerHTML = `
+                <div class="card" style="margin-bottom: 15px;">
+                    <div class="card-title" style="font-size: 1.1em;">
+                        🔔 通知履歴
+                    </div>
+                    <div class="card-content" style="color: #aaa; font-size: 0.9em;">
+                        以下の通知が役に立ちましたか？フィードバックをお願いします。
+                    </div>
+                </div>
+
+                <div id="notificationList">
+                    <div class="card" id="notification-1" style="margin-bottom: 15px; border: 1px solid rgba(79, 172, 254, 0.3);">
+                        <div class="card-content">
+                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">5分前</div>
+                            <div style="margin-bottom: 12px;">夜間走行中です。オートハイビームをオンにすると安全です。</div>
+                            <div style="display: flex; gap: 10px;">
+                                <button onclick="removeNotification('notification-1', 'helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px;">
+                                    ✅ 役立った
+                                </button>
+                                <button onclick="removeNotification('notification-1', 'not-helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px;">
+                                    😒 役立たなかった
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="notification-2" style="margin-bottom: 15px; border: 1px solid rgba(79, 172, 254, 0.3);">
+                        <div class="card-content">
+                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">1時間前</div>
+                            <div style="margin-bottom: 12px;">狭い駐車場です。パノラミックビューモニターを使うと安心です。</div>
+                            <div style="display: flex; gap: 10px;">
+                                <button onclick="removeNotification('notification-2', 'helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px;">
+                                    ✅ 役立った
+                                </button>
+                                <button onclick="removeNotification('notification-2', 'not-helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px;">
+                                    😒 役立たなかった
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="notification-3" style="margin-bottom: 15px; border: 1px solid rgba(79, 172, 254, 0.3);">
+                        <div class="card-content">
+                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">3時間前</div>
+                            <div style="margin-bottom: 12px;">市街地走行が続いています。エコモードを使うと燃費が向上します。</div>
+                            <div style="display: flex; gap: 10px;">
+                                <button onclick="removeNotification('notification-3', 'helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px;">
+                                    ✅ 役立った
+                                </button>
+                                <button onclick="removeNotification('notification-3', 'not-helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px;">
+                                    😒 役立たなかった
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="notification-4" style="margin-bottom: 15px; border: 1px solid rgba(79, 172, 254, 0.3);">
+                        <div class="card-content">
+                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">昨日</div>
+                            <div style="margin-bottom: 12px;">ブレーキ操作が増えています。パドルシフトで減速時の操作をサポートできます。</div>
+                            <div style="display: flex; gap: 10px;">
+                                <button onclick="removeNotification('notification-4', 'helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px;">
+                                    ✅ 役立った
+                                </button>
+                                <button onclick="removeNotification('notification-4', 'not-helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px;">
+                                    😒 役立たなかった
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="notification-5" style="margin-bottom: 15px; border: 1px solid rgba(79, 172, 254, 0.3);">
+                        <div class="card-content">
+                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">2日前</div>
+                            <div style="margin-bottom: 12px;">そろそろエアコンフィルターの清掃をしましょう。</div>
+                            <div style="display: flex; gap: 10px;">
+                                <button onclick="removeNotification('notification-5', 'helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px;">
+                                    ✅ 役立った
+                                </button>
+                                <button onclick="removeNotification('notification-5', 'not-helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px;">
+                                    😒 役立たなかった
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="notification-6" style="margin-bottom: 15px; border: 1px solid rgba(79, 172, 254, 0.3);">
+                        <div class="card-content">
+                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">3日前</div>
+                            <div style="margin-bottom: 12px;">長時間運転が続いています。近くで休憩を取ることをおすすめします。</div>
+                            <div style="display: flex; gap: 10px;">
+                                <button onclick="removeNotification('notification-6', 'helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px;">
+                                    ✅ 役立った
+                                </button>
+                                <button onclick="removeNotification('notification-6', 'not-helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px;">
+                                    😒 役立たなかった
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            resultDiv.classList.remove('hidden');
+            document.getElementById('homeContent').scrollTop = 0;
+        }
+
+        // ユーザーステータス（グローバル変数）
+        let userStatus = {
+            totalPoints: 850,
+            maxPoints: 2000,
+            level: 2,
+            usedFeatures: 8,
+            totalFeatures: 20,
+            levelHistory: {
+                1: { startDate: '2025/11/01', endDate: '2025/12/15' },
+                2: { startDate: '2025/12/15', endDate: null },
+                3: { startDate: null, endDate: null },
+                4: { startDate: null, endDate: null }
+            }
+        };
+
+        // 通知をリストから削除
+        function removeNotification(notificationId, feedback) {
+            const notification = document.getElementById(notificationId);
+            if (notification) {
+                if (feedback === 'helpful') {
+                    userStatus.totalPoints += 500;
+                    userStatus.usedFeatures += 1;
+                    checkLevelUp();
+                    showStatusUpNotification();
+                }
+                
+                notification.style.transition = 'all 0.3s ease';
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100px)';
+                
+                setTimeout(() => {
+                    notification.remove();
+                    
+                    const notificationList = document.getElementById('notificationList');
+                    if (notificationList && notificationList.children.length === 0) {
+                        notificationList.innerHTML = `
+                            <div class="card" style="text-align: center; padding: 40px 20px;">
+                                <div style="font-size: 3em; margin-bottom: 15px;">✅</div>
+                                <div style="color: #4facfe; font-size: 1.1em; font-weight: 600;">
+                                    すべての通知を確認しました
+                                </div>
+                                <div style="color: #aaa; margin-top: 10px; font-size: 0.9em;">
+                                    フィードバックありがとうございます！
+                                </div>
+                                <button class="button" onclick="switchTab('status')" style="margin-top: 20px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460;">
+                                    📊 ステータスを確認する
+                                </button>
+                            </div>
+                        `;
+                    }
+                }, 300);
+                
+                console.log(`Notification ${notificationId} marked as ${feedback}`);
+            }
+        }
+
+        // レベルアップチェック
+        function checkLevelUp() {
+            let leveledUp = false;
+            let newLevel = userStatus.level;
+            const currentDate = getCurrentDate();
+            
+            if (userStatus.level === 2 && userStatus.totalPoints >= 2000) {
+                userStatus.levelHistory[2].endDate = currentDate;
+                userStatus.levelHistory[3].startDate = currentDate;
+                userStatus.level = 3;
+                userStatus.totalPoints = userStatus.totalPoints - 2000;
+                userStatus.maxPoints = 3000;
+                leveledUp = true;
+                newLevel = 3;
+            } else if (userStatus.level === 3 && userStatus.totalPoints >= 3000) {
+                userStatus.levelHistory[3].endDate = currentDate;
+                userStatus.levelHistory[4].startDate = currentDate;
+                userStatus.level = 4;
+                userStatus.totalPoints = userStatus.totalPoints - 3000;
+                userStatus.maxPoints = 5000;
+                leveledUp = true;
+                newLevel = 4;
+            }
+            
+            if (leveledUp) {
+                showLevelUpNotification(newLevel);
+            }
+        }
+
+        // 現在の日付を取得（YYYY/MM/DD形式）
+        function getCurrentDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}/${month}/${day}`;
+        }
+
+        // レベル一覧を生成
+        function generateLevelList() {
+            const levels = [
+                { level: 1, name: 'はじめまして', desc: 'まだ愛車のことをよく知らない状態' },
+                { level: 2, name: '顔なじみ', desc: '機能を使い始め、愛車のことを少しずつ知ってきました' },
+                { level: 3, name: '頼れるパートナー', desc: '多くの機能を活用し、愛車を理解している' },
+                { level: 4, name: '相棒', desc: '愛車を完全に使いこなし、最高の関係を築いている' }
+            ];
+            
+            let html = '';
+            
+            for (let i = levels.length - 1; i >= 0; i--) {
+                const levelData = levels[i];
+                const levelNum = levelData.level;
+                const history = userStatus.levelHistory[levelNum];
+                const isCurrent = levelNum === userStatus.level;
+                const isAchieved = history.startDate !== null;
+                
+                let periodText = '';
+                if (isAchieved) {
+                    if (history.endDate) {
+                        periodText = `${history.startDate} 〜 ${history.endDate}`;
+                    } else {
+                        periodText = `${history.startDate} 〜 現在`;
+                    }
+                }
+                
+                let cardStyle = '';
+                let textColor = '';
+                let badge = '';
+                
+                if (isCurrent) {
+                    cardStyle = 'padding: 12px; background: rgba(79, 172, 254, 0.1); border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #4facfe;';
+                    textColor = '#4facfe';
+                    badge = '<span style="color: #00d084; margin-left: 5px;">● 現在</span>';
+                } else if (isAchieved) {
+                    cardStyle = 'padding: 12px; background: rgba(45, 53, 97, 0.4); border-radius: 8px; margin-bottom: 10px; opacity: 0.6;';
+                    textColor = '#888';
+                    badge = '<span style="color: #888; margin-left: 5px;">✓ 達成済み</span>';
+                } else {
+                    cardStyle = 'padding: 12px; background: rgba(45, 53, 97, 0.4); border-radius: 8px; margin-bottom: 10px;';
+                    textColor = '#888';
+                    badge = '<span style="margin-left: 5px;">🔒</span>';
+                }
+                
+                html += `
+                    <div style="${cardStyle}">
+                        <strong style="color: ${textColor};">Lv ${levelNum} | ${levelData.name}</strong> ${badge}<br>
+                        <span style="font-size: 0.85em; color: ${isAchieved || isCurrent ? '#aaa' : '#666'};">${levelData.desc}</span>
+                        ${periodText ? `<br><span style="font-size: 0.8em; color: #888; margin-top: 5px; display: inline-block;">📅 ${periodText}</span>` : ''}
+                    </div>
+                `;
+            }
+            
+            return html;
+        }
+
+        // レベルアップ通知を表示
+        function showLevelUpNotification(newLevel) {
+            const levelNames = {
+                2: '顔なじみ',
+                3: '頼れるパートナー',
+                4: '相棒'
+            };
+            
+            const existingToast = document.getElementById('levelUpToast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.id = 'levelUpToast';
+            toast.style.cssText = `
+                position: fixed;
+                top: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                color: white;
+                padding: 20px 30px;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(240, 147, 251, 0.6);
+                z-index: 10000;
+                font-weight: 600;
+                animation: slideDown 0.3s ease;
+                text-align: center;
+            `;
+            toast.innerHTML = `
+                <div style="font-size: 2em; margin-bottom: 5px;">🎉</div>
+                レベルアップ！<br>
+                <span style="font-size: 1.2em;">Lv ${newLevel} | ${levelNames[newLevel]}</span>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideUp 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ステータスアップの通知を表示
+        function showStatusUpNotification() {
+            const existingToast = document.getElementById('statusUpToast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.id = 'statusUpToast';
+            toast.style.cssText = `
+                position: fixed;
+                top: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, #00d084 0%, #00b96d 100%);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0, 208, 132, 0.5);
+                z-index: 10000;
+                font-weight: 600;
+                animation: slideDown 0.3s ease;
+                text-align: center;
+            `;
+            toast.innerHTML = `
+                ✨ +500pt 獲得！<br>
+                <span style="font-size: 0.85em; font-weight: 400;">機能を1つ習得しました</span>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideUp 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // ステータス画面を表示
+        function showStatusScreen() {
+            const resultDiv = document.getElementById('searchResult');
+            const defaultContent = document.getElementById('defaultContent');
+            
+            defaultContent.classList.add('hidden');
+            
+            const percentage = (userStatus.totalPoints / userStatus.maxPoints) * 100;
+            const levelName = userStatus.level === 1 ? 'はじめまして' : 
+                             userStatus.level === 2 ? '顔なじみ' : 
+                             userStatus.level === 3 ? '頼れるパートナー' : '相棒';
+            
+            resultDiv.innerHTML = `
+                <div class="card" style="margin-bottom: 15px; border: 2px solid #4facfe;">
+                    <div class="card-title" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460; padding: 15px; margin: -1px -1px 0 -1px; border-radius: 10px 10px 0 0; font-size: 1.1em;">
+                        🤝 あなたと愛車の関係値
+                    </div>
+                    <div class="card-content">
+                        <div style="text-align: center; margin: 20px 0;">
+                            <div style="font-size: 3em; margin-bottom: 10px;">🚗💙</div>
+                            <div style="font-size: 1.8em; font-weight: bold; color: #4facfe; margin-bottom: 5px;">Lv ${userStatus.level} | ${levelName}</div>
+                            <div style="color: #aaa; font-size: 0.9em;">次のレベルまで: ${userStatus.totalPoints} / ${userStatus.maxPoints} pt</div>
+                        </div>
+
+                        <div style="background: rgba(45, 53, 97, 0.6); height: 25px; border-radius: 12px; overflow: hidden; margin: 20px 0; position: relative;">
+                            <div id="statusProgressBar" style="background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%); width: ${percentage}%; height: 100%; border-radius: 12px; transition: width 0.5s ease;">
+                            </div>
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 0.85em; font-weight: 600;">${Math.round(percentage)}%</div>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, rgba(79, 172, 254, 0.15) 0%, rgba(0, 242, 254, 0.1) 100%); padding: 15px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #4facfe;">
+                            <strong style="color: #4facfe;">💡 次のレベルへのヒント</strong><br>
+                            <div style="margin-top: 10px; color: #e0e0e0; font-size: 0.9em;">
+                                • おすすめ機能を試してみましょう<br>
+                                • 定期メンテナンスを実施しましょう<br>
+                                • 運転データを改善しましょう
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 15px;">
+                    <div class="card-title">
+                        🚙 運転データ
+                    </div>
+                    <div class="card-content">
+                        <div style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span style="color: #aaa;">総走行距離</span>
+                                <span style="color: #4facfe; font-weight: 600;">12,450 km</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span style="color: #aaa;">月間走行距離</span>
+                                <span style="color: #4facfe; font-weight: 600;">450 km</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: #aaa;">平均燃費</span>
+                                <span style="color: #4facfe; font-weight: 600;">8.9 km/L</span>
+                            </div>
+                        </div>
+                        <div style="text-align: center; padding: 10px; background: rgba(0, 208, 132, 0.1); border-radius: 8px; border: 1px solid rgba(0, 208, 132, 0.3);">
+                            <span style="color: #00d084; font-weight: 600;">+50 pt</span>
+                            <span style="color: #aaa; font-size: 0.9em; margin-left: 5px;">月間目標達成！</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 15px;">
+                    <div class="card-title">
+                        ✨ 機能活用度
+                    </div>
+                    <div class="card-content">
+                        <div style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #aaa;">活用している機能</span>
+                                <span style="color: #4facfe; font-weight: 600;">${userStatus.usedFeatures} / ${userStatus.totalFeatures}</span>
+                            </div>
+                            <div style="background: rgba(45, 53, 97, 0.6); height: 10px; border-radius: 5px; overflow: hidden;">
+                                <div id="featureProgressBar" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); width: ${(userStatus.usedFeatures / userStatus.totalFeatures) * 100}%; height: 100%; border-radius: 5px; transition: width 0.5s ease;"></div>
+                            </div>
+                        </div>
+                        <div style="font-size: 0.9em; color: #aaa;">
+                            最近使った機能：<br>
+                            • シートヒーター<br>
+                            • パノラミックビューモニター<br>
+                            • エコモード
+                        </div>
+                        <div style="text-align: center; padding: 10px; background: rgba(102, 126, 234, 0.1); border-radius: 8px; border: 1px solid rgba(102, 126, 234, 0.3); margin-top: 10px;">
+                            <span style="color: #667eea; font-weight: 600;">+30 pt</span>
+                            <span style="color: #aaa; font-size: 0.9em; margin-left: 5px;">新機能を活用中</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 15px;">
+                    <div class="card-title">
+                        🔧 メンテナンス状況
+                    </div>
+                    <div class="card-content">
+                        <div style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span style="color: #aaa;">前回の点検</span>
+                                <span style="color: #4facfe; font-weight: 600;">2025/12/15</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span style="color: #aaa;">次回の点検</span>
+                                <span style="color: #4facfe; font-weight: 600;">2026/03/15</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: #aaa;">メンテナンス遵守率</span>
+                                <span style="color: #00d084; font-weight: 600;">95%</span>
+                            </div>
+                        </div>
+                        <div style="text-align: center; padding: 10px; background: rgba(79, 172, 254, 0.1); border-radius: 8px; border: 1px solid rgba(79, 172, 254, 0.3);">
+                            <span style="color: #4facfe; font-weight: 600;">+70 pt</span>
+                            <span style="color: #aaa; font-size: 0.9em; margin-left: 5px;">適切なメンテナンス実施中</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 15px;">
+                    <div class="card-title">
+                        🏆 関係値レベル一覧
+                    </div>
+                    <div class="card-content">
+                        ${generateLevelList()}
+                    </div>
+                </div>
+            `;
+            
+            resultDiv.classList.remove('hidden');
+            document.getElementById('homeContent').scrollTop = 0;
+        }
+
+        // Enterキーで検索
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+            }
+            displayRandomAlert();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レクサスSDV事業部 面談戦略 - 営業部長向け</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background: #1a1a2e;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            position: relative;
+        }
+
+        .slide:nth-child(odd) {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 1.2em;
+            opacity: 0.5;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #00d4ff;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #00d4ff;
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 60px;
+            opacity: 0.9;
+        }
+
+        .content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .big-number {
+            font-size: 8em;
+            font-weight: 700;
+            text-align: center;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .big-text {
+            font-size: 2em;
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 212, 255, 0.8);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .card-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #00d4ff;
+        }
+
+        .card-description {
+            font-size: 1.1em;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #00d4ff 0%, #0099ff 100%);
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 0 30px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: #00d4ff;
+            border-radius: 50%;
+            border: 5px solid #1a1a2e;
+            z-index: 1;
+        }
+
+        .timeline-phase {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        .timeline-desc {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .comparison-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .comparison-item.bad {
+            border-color: rgba(255, 107, 107, 0.3);
+        }
+
+        .comparison-item.good {
+            border-color: rgba(0, 212, 255, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .comparison-label {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .comparison-label.bad {
+            color: #ff6b6b;
+        }
+
+        .comparison-label.good {
+            color: #00d4ff;
+        }
+
+        ul.checkmarks {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.checkmarks li {
+            padding: 12px 0 12px 40px;
+            position: relative;
+            font-size: 1.2em;
+        }
+
+        ul.checkmarks li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #00d4ff;
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+
+        ul.crosses li::before {
+            content: '✗';
+            color: #ff6b6b;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 153, 255, 0.2) 100%);
+            border: 3px solid #00d4ff;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .highlight-box h3 {
+            margin-bottom: 20px;
+        }
+
+        .highlight-box p {
+            font-size: 1.3em;
+            line-height: 1.8;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 15px;
+            padding: 30px 20px;
+        }
+
+        .stat-value {
+            font-size: 3em;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .arrow-down {
+            text-align: center;
+            font-size: 3em;
+            color: #00d4ff;
+            margin: 30px 0;
+        }
+
+        .cta {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            color: #1a1a2e;
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 1.5em;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            margin: 30px 0;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .key-points {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 5px solid #00d4ff;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 10px;
+        }
+
+        .key-points h4 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .key-points p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5em; }
+            h2 { font-size: 2em; }
+            .big-number { font-size: 5em; }
+            .big-text { font-size: 1.5em; }
+            .comparison { grid-template-columns: 1fr; }
+            .timeline::before { display: none; }
+            .timeline-item { flex-direction: column !important; }
+            .timeline-content { margin: 0 0 20px 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- スライド1: タイトル -->
+    <div class="slide">
+        <div class="content">
+            <h1>🚗 レクサスSDV事業部<br>面談戦略</h1>
+            <div class="subtitle">Human Safety Experience OS<br>Arene統合プロジェクト</div>
+            <div style="text-align: center; margin-top: 60px;">
+                <div style="font-size: 1.3em; opacity: 0.8;">営業部長向け 事前共有資料</div>
+                <div style="font-size: 1.1em; opacity: 0.6; margin-top: 10px;">2025年1月</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド2: 何をやりたいか -->
+    <div class="slide">
+        <span class="slide-number">1/10</span>
+        <div class="content">
+            <h2>📌 やりたいこと（一言で）</h2>
+            <div class="highlight-box">
+                <h3>弊社の情報基盤システムを<br>トヨタの次世代車載OS「Arene」に統合し、<br>「交通事故ゼロ」に貢献する</h3>
+                <div class="arrow-down">⬇️</div>
+                <p style="font-size: 1.5em; font-weight: 700;">1年後、1車種で実現したい</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド3: なぜ今か -->
+    <div class="slide">
+        <span class="slide-number">2/10</span>
+        <div class="content">
+            <h2>⏰ なぜ今なのか？</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🚀</div>
+                    <div class="card-title">トヨタのSDV戦略</div>
+                    <div class="card-description">
+                        次世代車載OS「Arene」の開発が進行中。今が統合パートナーになる絶好のタイミング。
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🏆</div>
+                    <div class="card-title">業界初のチャンス</div>
+                    <div class="card-description">
+                        外部パートナーで「Arene統合第1号」になれば、圧倒的な競争優位性を獲得できる。
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💰</div>
+                    <div class="card-title">市場の拡大</div>
+                    <div class="card-description">
+                        トヨタでの実績が、他の自動車メーカーへの展開の足がかりになる。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド4: 解決する問題 -->
+    <div class="slide">
+        <span class="slide-number">3/10</span>
+        <div class="content">
+            <h2>🎯 何を解決するのか？</h2>
+            <div class="big-text">SDVで事故がなくならない「最後の壁」</div>
+            <div class="key-points" style="background: rgba(255, 107, 107, 0.1); border-left-color: #ff6b6b;">
+                <h4>⚠️ 面談で確認すべき実態</h4>
+                <p style="font-size: 1em;">以下は一般的な課題感です。<br><strong>レクサスの実際の数字を面談で確認してください。</strong></p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">?%</div>
+                    <div class="stat-label">❶ 認知の問題<br>警告灯の理解率</div>
+                    <div style="font-size: 0.85em; opacity: 0.7; margin-top: 8px;">※要確認</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">?秒</div>
+                    <div class="stat-label">❷ 判断の問題<br>緊急時の判断時間</div>
+                    <div style="font-size: 0.85em; opacity: 0.7; margin-top: 8px;">※要確認</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">?%</div>
+                    <div class="stat-label">❸ 行動の問題<br>誤操作の発生率</div>
+                    <div style="font-size: 0.85em; opacity: 0.7; margin-top: 8px;">※要確認</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">?%</div>
+                    <div class="stat-label">❹ 継続の問題<br>安全機能利用率</div>
+                    <div style="font-size: 0.85em; opacity: 0.7; margin-top: 8px;">※要確認</div>
+                </div>
+            </div>
+            <div class="key-points">
+                <h4>💡 問題の本質</h4>
+                <p>ハードとソフトがどれだけ進化しても、<br><strong>人間の「理解・判断・行動・継続」の問題</strong>は残る。<br><br>
+                <span style="color: #00d4ff;">面談でレクサスの実際の数字を確認し、<br>課題の大きさを定量的に把握することが重要。</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド5: ソリューション -->
+    <div class="slide">
+        <span class="slide-number">4/10</span>
+        <div class="content">
+            <h2>💡 どうやって解決するか？</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🧠</div>
+                    <div class="card-title">知識OS</div>
+                    <div class="card-description">
+                        取扱説明書を「人の判断単位」に再構造化。回答精度90-95%で即座に説明。
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-title">文脈型支援</div>
+                    <div class="card-description">
+                        車両×環境×ユーザーを統合判断。「今すべきこと」を明確に指示。
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title">学習ループ</div>
+                    <div class="card-description">
+                        使うほど賢くなる。データをトヨタにフィードバックして商品改善に貢献。
+                    </div>
+                </div>
+            </div>
+            <div class="highlight-box" style="margin-top: 40px;">
+                <p style="font-size: 1.5em; font-weight: 700;">
+                    "We translate SDV into human-safe experience."<br>
+                    <span style="font-size: 0.8em; opacity: 0.9;">SDVを人間にとって安全な体験に翻訳する</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド6: 戦略（ハイブリッドアプローチ） -->
+    <div class="slide">
+        <span class="slide-number">5/10</span>
+        <div class="content">
+            <h2>🎮 どう進めるか？（戦略）</h2>
+            <h3 style="text-align: center; margin-bottom: 40px;">ハイブリッド統合アプローチ</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-phase">Phase 1 (0-7ヶ月)</div>
+                        <div class="timeline-desc">
+                            <strong>スマホアプリ版リリース</strong><br>
+                            ・早期に価値提供<br>
+                            ・LexusLink連携<br>
+                            ・リスクヘッジ完璧
+                        </div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-phase">Phase 2 (8-12ヶ月)</div>
+                        <div class="timeline-desc">
+                            <strong>Arene統合実現</strong><br>
+                            ・車内ディスプレイ対応<br>
+                            ・シームレスな体験<br>
+                            ・競争優位性確立
+                        </div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+            <div class="key-points">
+                <h4>✅ この戦略の強み</h4>
+                <p>① 早期にサービス開始できる（Phase 1）<br>
+                ② Arene遅延のリスクに対応できる<br>
+                ③ 段階的に学習しながら進化できる<br>
+                ④ 最終的にArene統合で圧倒的優位性</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド7: なぜArene統合か -->
+    <div class="slide">
+        <span class="slide-number">6/10</span>
+        <div class="content">
+            <h2>🚀 なぜArene統合なのか？</h2>
+            <div class="comparison">
+                <div class="comparison-item bad">
+                    <div class="comparison-label bad">❌ 統合しない場合</div>
+                    <ul class="checkmarks crosses">
+                        <li>スマホアプリのまま</li>
+                        <li>競合との差別化が弱い</li>
+                        <li>ユーザー体験が限定的</li>
+                        <li>トヨタとの関係が浅い</li>
+                        <li>市場拡大が困難</li>
+                    </ul>
+                </div>
+                <div class="comparison-item good">
+                    <div class="comparison-label good">✅ 統合した場合</div>
+                    <ul class="checkmarks">
+                        <li>業界初の実績</li>
+                        <li>圧倒的な競争優位性</li>
+                        <li>最高のユーザー体験</li>
+                        <li>トヨタの公式パートナー</li>
+                        <li>他OEMへの展開可能</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <h3>🏆 統合の価値</h3>
+                <p>単なる「機能追加」ではなく、<br><strong>「事業の基盤を変える戦略的投資」</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド8: 実現可能性 -->
+    <div class="slide">
+        <span class="slide-number">7/10</span>
+        <div class="content">
+            <h2>✅ 本当にできるのか？</h2>
+            <div class="big-number">70-80%</div>
+            <div class="big-text">実現可能性（条件付きで可能）</div>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">📋</div>
+                    <div class="card-title">必要な条件</div>
+                    <div class="card-description">
+                        ① Arene SDK の提供（6ヶ月前）<br>
+                        ② トヨタの技術サポート<br>
+                        ③ 十分な開発予算<br>
+                        ④ 専門人材の確保
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⚠️</div>
+                    <div class="card-title">主なリスク</div>
+                    <div class="card-description">
+                        ① SDK提供遅延（40%）<br>
+                        ② 技術仕様不一致（30%）<br>
+                        ③ リソース不足（35%）<br>
+                        → すべて対策済み
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🛡️</div>
+                    <div class="card-title">リスクヘッジ</div>
+                    <div class="card-description">
+                        Phase 1で早期価値提供<br>
+                        Arene遅延でも問題なし<br>
+                        段階的な投資判断<br>
+                        代替案も準備済み
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド9: 投資と効果（仮） -->
+    <div class="slide">
+        <span class="slide-number">8/10</span>
+        <div class="content">
+            <h2>💰 投資と効果（仮）</h2>
+            <div class="key-points" style="background: rgba(255, 107, 107, 0.1); border-left-color: #ff6b6b; margin-bottom: 30px;">
+                <h4>⚠️ 注意：これは暫定試算です</h4>
+                <p>実際の投資額・効果は、<br><strong>レクサスのヒアリング結果に基づいて再計算します。</strong></p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">1-2億円</div>
+                    <div class="stat-label">総投資額（想定）<br>（1年間）</div>
+                    <div style="font-size: 0.85em; opacity: 0.7; margin-top: 8px;">※仕様により変動</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">Year 4-5</div>
+                    <div class="stat-label">投資回収（想定）<br>（目安）</div>
+                    <div style="font-size: 0.85em; opacity: 0.7; margin-top: 8px;">※効果により変動</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">?%</div>
+                    <div class="stat-label">事故率削減<br>（要確認）</div>
+                    <div style="font-size: 0.85em; opacity: 0.7; margin-top: 8px;">※現状データ次第</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">競争優位性<br>（プライスレス）</div>
+                    <div style="font-size: 0.85em; opacity: 0.7; margin-top: 8px;">※業界初の価値</div>
+                </div>
+            </div>
+            <div class="key-points">
+                <h4>💡 今回の面談後に精緻化</h4>
+                <p>
+                    <strong>ヒアリング結果を基に、具体的に試算します</strong><br><br>
+                    ① Q2（現状データ）から課題の規模を定量化<br>
+                    ② Q4（技術基盤）から開発スコープを確定<br>
+                    ③ Q6（期待）からKPI・ROIを設定<br>
+                    ④ 次回面談で具体的な提案と試算を提示<br><br>
+                    → <span style="color: #00d4ff; font-weight: 700;">今回はヒアリングに集中！</span>
+                </p>
+            </div>
+            <div class="key-points" style="margin-top: 20px;">
+                <h4>📊 試算に必要な情報（今回の面談で入手）</h4>
+                <p style="font-size: 0.95em;">
+                    ・コールセンターコスト（年間）<br>
+                    ・問い合わせ件数・内訳<br>
+                    ・対象車種の販売台数<br>
+                    ・LexusLink登録率・利用率<br>
+                    ・安全機能の利用率（現状）
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド10: 面談で確認すべきこと（前段） -->
+    <div class="slide">
+        <span class="slide-number">9/12</span>
+        <div class="content">
+            <h2>🎯 面談で確認すべきこと</h2>
+            <h3 style="text-align: center; color: #ff6b6b; margin-bottom: 40px;">【前段】まず価値を確認する</h3>
+            <div class="key-points" style="background: rgba(255, 107, 107, 0.1); border-left-color: #ff6b6b;">
+                <h4>⚠️ 重要な考え方</h4>
+                <p>実現可能性を議論する前に、<br><strong>「そもそも弊社のソリューションに価値があるか」</strong><br>を確認する必要がある。</p>
+            </div>
+            <h3 style="text-align: center; margin-bottom: 20px; color: #ff6b6b;">【最優先】必ず確認すべき質問</h3>
+            <div class="card-grid">
+                <div class="card" style="border-color: #ff6b6b; box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-title">Q1: 課題認識【最重要】</div>
+                    <div class="card-description">
+                        <strong>レクサスオーナーの困りごとは？</strong><br>
+                        ・コールセンターへの問い合わせTOP10<br>
+                        ・取扱説明書に関する課題<br>
+                        ・SDV複雑化への懸念<br>
+                        <span style="color: #ff6b6b; font-weight: 600;">→ 課題がなければ提案不要</span>
+                    </div>
+                </div>
+                <div class="card" style="border-color: #ff6b6b; box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title">Q2: 現状データ【最重要】</div>
+                    <div class="card-description">
+                        <strong>4つの層の実態を確認</strong><br>
+                        ① 警告灯の理解率は？<br>
+                        ② 緊急時の判断時間は？<br>
+                        ③ 誤操作の発生率は？<br>
+                        ④ 安全機能（LSS+等）の利用率は？<br>
+                        <span style="color: #ff6b6b; font-weight: 600;">→ 提案の根拠になる</span>
+                    </div>
+                </div>
+                <div class="card" style="border-color: #ff6b6b; box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);">
+                    <div class="card-icon">🏆</div>
+                    <div class="card-title">Q3: ブランド差別化【最重要】</div>
+                    <div class="card-description">
+                        <strong>レクサスらしさとは？</strong><br>
+                        ・トヨタは「安全安心」最重視<br>
+                        ・レクサスは何を重視？<br>
+                        ・差別化ポイントは？<br>
+                        <span style="color: #ff6b6b; font-weight: 600;">→ 提案のカスタマイズに必須</span>
+                    </div>
+                </div>
+                <div class="card" style="border-color: #ff6b6b; box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);">
+                    <div class="card-icon">🔧</div>
+                    <div class="card-title">Q4: 技術基盤【最重要】</div>
+                    <div class="card-description">
+                        <strong>レクサスもArene使用？</strong><br>
+                        ・トヨタブランドと同じ基盤か<br>
+                        ・差分・独自カスタマイズは<br>
+                        ・展開タイミング<br>
+                        <span style="color: #ff6b6b; font-weight: 600;">→ 戦略の大前提</span>
+                    </div>
+                </div>
+            </div>
+            <h3 style="text-align: center; margin-top: 50px; margin-bottom: 20px; color: #00d4ff;">【重要】時間があれば確認</h3>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🔄</div>
+                    <div class="card-title">Q5: 情報更新計画</div>
+                    <div class="card-description">
+                        <strong>OTA更新時の説明は？</strong><br>
+                        ・機能追加時の情報更新<br>
+                        ・既に計画があるか<br>
+                        ・更新頻度・運用体制<br>
+                        <span style="color: #00d4ff; font-weight: 600;">→ SDVの本質的課題</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💡</div>
+                    <div class="card-title">Q6: 弊社への期待</div>
+                    <div class="card-description">
+                        <strong>何を期待しているか？</strong><br>
+                        ・解決したい優先課題<br>
+                        ・期待する効果・KPI<br>
+                        ・予算感・投資意欲<br>
+                        <span style="color: #00d4ff; font-weight: 600;">→ 提案の方向性</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🖥️</div>
+                    <div class="card-title">Q7: 表示・出力方法</div>
+                    <div class="card-description">
+                        <strong>HUD・MMへの表示想定？</strong><br>
+                        ・HUD（ヘッドアップ）対応<br>
+                        ・MM（マルチメディア）対応<br>
+                        ・音声案内の可能性
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔗</div>
+                    <div class="card-title">Q8: 外部連携事例</div>
+                    <div class="card-description">
+                        <strong>コネクティッド統合例は？</strong><br>
+                        ・LexusLinkと外部サービス<br>
+                        ・連携パターン・成功例<br>
+                        ・学べるポイント
+                    </div>
+                </div>
+            </div>
+            <h3 style="text-align: center; margin-top: 50px; margin-bottom: 20px; opacity: 0.8;">【補足】余裕があれば</h3>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🎪</div>
+                    <div class="card-title">Q9: 既存の取り組み</div>
+                    <div class="card-description">
+                        <strong>今何をやっているか？</strong><br>
+                        ・LexusLinkの機能と利用状況<br>
+                        ・デジタル化の進捗<br>
+                        ・社内での検討状況
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🏢</div>
+                    <div class="card-title">Q10: 意思決定プロセス</div>
+                    <div class="card-description">
+                        <strong>どう進めるか？</strong><br>
+                        ・承認フロー・キーパーソン<br>
+                        ・PoC実施の可能性<br>
+                        ・タイムライン感
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🤔</div>
+                    <div class="card-title">Q11: 懸念点</div>
+                    <div class="card-description">
+                        <strong>何が心配か？</strong><br>
+                        ・技術的な不安<br>
+                        ・コスト・ROIへの懸念<br>
+                        ・社内調整の障壁
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📋</div>
+                    <div class="card-title">Q12: その他確認</div>
+                    <div class="card-description">
+                        <strong>追加で確認すべきこと</strong><br>
+                        ・面談中に出てきた疑問<br>
+                        ・深掘りしたいポイント<br>
+                        ・次回面談の議題
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド11: 面談で確認すべきこと（実現可能性） -->
+    <div class="slide">
+        <span class="slide-number">10/12</span>
+        <div class="content">
+            <h2>🎯 面談で確認すべきこと</h2>
+            <h3 style="text-align: center; color: #00d4ff; margin-bottom: 40px;">【実現可能性】具体的に進められるか</h3>
+            <div class="key-points">
+                <h4>💡 前段で「Go」判断なら、ここを深掘り</h4>
+                <p>価値が確認できたら、<br><strong>「本当に1年でArene統合できるか」</strong><br>を技術面・体制面で確認する。</p>
+            </div>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🔑</div>
+                    <div class="card-title">Q13: Arene SDK</div>
+                    <div class="card-description">
+                        <strong>提供時期は確定？</strong><br>
+                        → 6ヶ月前（2025年7月）可能か？<br>
+                        → SDK内容・仕様の開示時期<br>
+                        → 【最重要】
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🤝</div>
+                    <div class="card-title">Q14: サポート体制</div>
+                    <div class="card-description">
+                        <strong>技術支援は？</strong><br>
+                        → 専任窓口の設置<br>
+                        → 定期MTGの可能性<br>
+                        → テスト環境の提供
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📚</div>
+                    <div class="card-title">Q15: 先行事例</div>
+                    <div class="card-description">
+                        <strong>外部統合事例は？</strong><br>
+                        → 学べる先行ケース<br>
+                        → 成功・失敗のポイント<br>
+                        → 開発期間の実績
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🚗</div>
+                    <div class="card-title">Q16: 対象車種</div>
+                    <div class="card-description">
+                        <strong>どの車種が最適？</strong><br>
+                        → 販売台数・ユーザー層<br>
+                        → 技術的な制約<br>
+                        → リリース時期
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📱</div>
+                    <div class="card-title">Q17: 段階的アプローチ</div>
+                    <div class="card-description">
+                        <strong>Phase 1先行は可能？</strong><br>
+                        → スマホアプリ先行の受容度<br>
+                        → LexusLink統合の可能性<br>
+                        → ハイブリッド戦略への理解
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔒</div>
+                    <div class="card-title">Q18: セキュリティ</div>
+                    <div class="card-description">
+                        <strong>審査プロセスは？</strong><br>
+                        → 審査期間・要件<br>
+                        → 必要な認証<br>
+                        → スケジュールへの影響
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド12: まとめ -->
+    <div class="slide">
+        <span class="slide-number">11/12</span>
+        <div class="content">
+            <h2>🎯 まとめ</h2>
+            <div class="highlight-box">
+                <h3>やりたいこと</h3>
+                <p>弊社システムをAreneに統合し、<br>トヨタの「交通事故ゼロ」戦略に貢献</p>
+            </div>
+            <div class="highlight-box">
+                <h3>実現可能性</h3>
+                <p><strong>70-80%で可能</strong>（条件付き）<br>ハイブリッドアプローチでリスクヘッジ完璧</p>
+            </div>
+            <div class="highlight-box">
+                <h3>狙い</h3>
+                <p>① 業界初の実績獲得<br>② トヨタの公式パートナーに<br>③ 他OEMへの展開基盤を構築</p>
+            </div>
+            <div class="highlight-box">
+                <h3>投資</h3>
+                <p>1.7億円 / 1年<br>Year 5で回収完了（想定）<br>長期的な競争優位性は<strong>プライスレス</strong></p>
+            </div>
+            <div style="text-align: center; margin-top: 60px;">
+                <p style="font-size: 1.5em; font-weight: 700; color: #00d4ff;">面談での成功を祈っています！🚀</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- スライド13: 3回の面談ステップ -->
+    <div class="slide">
+        <span class="slide-number">12/12</span>
+        <div class="content">
+            <h2>📋 3回の面談で進める</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-phase">【今回】第1回: ヒアリング</div>
+                        <div class="timeline-desc">
+                            <strong>Q1-Q12を中心に徹底ヒアリング</strong><br>
+                            ① 課題認識・現状データ<br>
+                            ② ブランド差別化・技術基盤<br>
+                            ③ 情報更新計画・外部連携事例<br>
+                            ④ 期待値・投資意欲<br><br>
+                            <span style="color: #ff6b6b; font-weight: 700;">
+                            ゴール: レクサスの実態を完全理解
+                            </span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-phase">【次回】第2回: 提案（2-3週間後）</div>
+                        <div class="timeline-desc">
+                            <strong>ヒアリング結果を基にカスタマイズ提案</strong><br>
+                            ① レクサスの実データに基づくROI試算<br>
+                            ② ブランド価値に合わせた提案内容<br>
+                            ③ 技術基盤に応じた開発計画<br>
+                            ④ カスタマージャーニーマップ（HTML）デモ<br><br>
+                            <span style="color: #00d4ff; font-weight: 700;">
+                            ゴール: 「これなら進めたい」と思ってもらう
+                            </span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-phase">【次々回】第3回: 実現可能性（1-2ヶ月後）</div>
+                        <div class="timeline-desc">
+                            <strong>Q13-Q18を深掘り、PoC計画策定</strong><br>
+                            ① Arene SDK提供時期の確定<br>
+                            ② 技術サポート体制の合意<br>
+                            ③ 対象車種・スケジュールの決定<br>
+                            ④ PoC契約・予算の合意<br><br>
+                            <span style="color: #00d4ff; font-weight: 700;">
+                            ゴール: PoC実施の正式合意
+                            </span>
+                        </div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+            <div class="key-points">
+                <h4>🎯 今回の面談の成功定義</h4>
+                <p>
+                    <strong>【最低ライン（必達）】</strong><br>
+                    ✓ レクサスの課題・実態を深く理解<br>
+                    ✓ Q1-Q4（最優先4問）は必ず確認<br>
+                    ✓ 次回面談（2-3週間後）の約束<br><br>
+                    <strong>【理想】</strong><br>
+                    ✓ Q1-Q8（最優先+重要）まで確認完了<br>
+                    ✓ 「興味深い、次回の提案を聞きたい」という反応<br>
+                    ✓ キーパーソンの同席約束<br><br>
+                    <span style="color: #ff6b6b; font-weight: 700;">
+                    ⚠️ 今回は「ヒアリングに徹する」！<br>
+                    具体的な提案・数字は次回に。
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // キーボードナビゲーション
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        
+        function showSlide(n) {
+            slides[currentSlide].style.display = 'none';
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].style.display = 'flex';
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                showSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft') {
+                showSlide(currentSlide - 1);
+            }
+        });
+        
+        // 初期化
+        slides.forEach((slide, index) => {
+            if (index !== 0) slide.style.display = 'none';
+        });
+        
+        // クリックで次のスライドへ
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('a')) {
+                showSlide(currentSlide + 1);
+            }
+        });
+    </script>
+</body>
+</html>
+

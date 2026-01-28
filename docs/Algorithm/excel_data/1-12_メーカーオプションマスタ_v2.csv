@@ -1,0 +1,13 @@
+﻿車両個体ID,車種グレードID,オプション種類,オプション価格,装着有無,備考
+VEH_001,CAR_001,なし,なし,FALSE,アクアG・オプションなし
+VEH_002,CAR_001,BSM,5,TRUE,アクアG・BSM装着
+VEH_003,CAR_002,なし,なし,FALSE,アクアZ・オプションなし
+VEH_004,CAR_002,AHS,10,TRUE,アクアZ・AHS装着
+VEH_005,CAR_007,なし,なし,FALSE,クラウンRS・オプションなし
+VEH_006,CAR_007,PVM,5,TRUE,クラウンRS・PVM装着
+VEH_007,CAR_001,BSM,5,FALSE,アクアG・BSM未装着
+VEH_008,CAR_002,AHS,10,FALSE,アクアZ・AHS未装着
+VEH_009,CAR_007,PVM,5,FALSE,クラウンRS・PVM未装着
+VEH_010,CAR_004,なし,なし,FALSE,ランドクルーザー250VX・オプションなし
+VEH_011,CAR_004,ハンズフリーパワーバックドア,8,TRUE,ランドクルーザー250VX・ハンズフリーPBD装着
+VEH_012,CAR_004,ハンズフリーパワーバックドア,8,FALSE,ランドクルーザー250VX・ハンズフリーPBD未装着

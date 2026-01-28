@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>取扱説明書DX システム要件定義書（開発部門向け）</title>
+<style>
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+    line-height: 1.8;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f5f5f5;
+    color: #333;
+}
+.container {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+h1 {
+    color: #2c3e50;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+}
+h2 {
+    color: #34495e;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    border-left: 4px solid #3498db;
+    padding-left: 15px;
+    font-size: 1.8em;
+}
+h3 {
+    color: #555;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+h4 {
+    color: #666;
+    margin-top: 25px;
+    margin-bottom: 12px;
+    font-size: 1.2em;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    font-size: 0.95em;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+th {
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+}
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+tr:hover {
+    background-color: #f0f0f0;
+}
+code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', Consolas, monospace;
+    font-size: 0.9em;
+    color: #c7254e;
+}
+pre {
+    background: #2c3e50;
+    color: #ecf0f1;
+    padding: 20px;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin: 20px 0;
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+}
+ul, ol {
+    margin: 15px 0;
+    padding-left: 30px;
+}
+li {
+    margin: 8px 0;
+    line-height: 1.6;
+}
+strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+hr {
+    border: none;
+    border-top: 2px solid #ecf0f1;
+    margin: 40px 0;
+}
+p {
+    margin: 15px 0;
+    line-height: 1.8;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>取扱説明書DX システム要件定義書（開発部門向け）</h1>
+
+<p>
+<strong>作成日</strong>: 2026年1月22日  
+<strong>作成者</strong>: 事業開発部門  
+<strong>対象</strong>: 開発部門  
+<strong>基づく資料</strong>: <code>docs/input/取扱説明書DX_事業計画_統合版.md</code>
+</p>
+
+<hr>
+
+<h2>📋 エグゼクティブサマリー（開発部門向け）</h2>
+
+<h3>事業の目的</h3>
+
+<p>
+従来の「読む取扱説明書」を、<strong>AIエージェントを活用した"先回りして最適化した情報を届ける仕組み"</strong>へ進化させるDX事業。
+</p>
+
+<p>
+<strong>核心コンセプト</strong>: 「探す」から「届く」へ  
+→ ユーザーが探さなくても、必要な情報が自動で届くシステムを構築
+</p>
+
+<h3>開発の目標</h3>
+
+<p>
+<strong>Phase 1（2026年度、0-9ヶ月）で実現すべき成果:</strong>
+<ul>
+<li>問合せ削減率：20-30%（最終目標30%以上）</li>
+<li>回答精度：90%以上</li>
+<li>レスポンス時間：1秒以下</li>
+<li>プロアクティブ案内利用率：40%以上</li>
+<li>緊急時問合せ削減率：50%以上</li>
+</ul>
+</p>
+
+<p>
+<strong>売上目標</strong>: 2026年度2億円（PoC実施、市場検証・基盤構築）
+</p>
+
+<hr>
+
+<h2>1. 開発すべきシステムの全体像</h2>
+
+<h3>1.1 システムの位置づけ</h3>
+
+<pre><code>【提供チャネル】
+├─ 車載AIエージェント（車内）
+├─ スマホアプリ（iOS/Android）
+├─ コールセンター連携
+└─ Web管理画面（OEM向け）
+
+【コアシステム】
+├─ RAGベースの検索型AI（9つのインテント分類対応）
+├─ プロアクティブ情報提供エンジン
+├─ データクリーニング・構造化システム
+└─ データ還流システム（Phase 2以降）</code></pre>
+
+<h3>1.2 情報アーキテクチャ（4層構造）</h3>
+
+<table>
+<thead><tr>
+<th>レイヤー</th>
+<th>内容</th>
+<th>開発優先度</th>
+<th>Phase</th>
+</tr></thead><tbody>
+<tr>
+<td>:--</td>
+<td>:--</td>
+<td>:--</td>
+<td>:--</td>
+</tr>
+<tr>
+<td><strong>L1：取扱情報ベース</strong></td>
+<td>製品機能、操作手順、安全情報の構造化データ</td>
+<td>最高</td>
+<td>Phase 1</td>
+</tr>
+<tr>
+<td><strong>L2：文脈データ層</strong></td>
+<td>状況・環境・ユーザー属性データ</td>
+<td>高</td>
+<td>Phase 2</td>
+</tr>
+<tr>
+<td><strong>L3：AIガイド層</strong></td>
+<td>状況認識＋提案生成</td>
+<td>最高</td>
+<td>Phase 1（限定版）→ Phase 3（本格版）</td>
+</tr>
+<tr>
+<td><strong>L4：体験ログ層</strong></td>
+<td>利用データ・嗜好・行動ログ</td>
+<td>中</td>
+<td>Phase 2以降</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<h2>2. Phase 1で開発すべき機能（0-9ヶ月）</h2>
+
+<h3>2.1 必須機能（MVP）</h3>
+
+<h4>FR-1: RAGベースの検索型AI</h4>
+
+<p>
+<strong>開発期間</strong>: 2-3ヶ月  
+<strong>優先度</strong>: 最高
+</p>
+
+<p>
+<strong>実装すべき機能:</strong>
+</p>
+
+<ul>
+<li><strong>データクリーニング・構造化</strong>（FR-1.1）</li>
+<li>PDFやドキュメントから不要な要素（ヘッダー・フッター・ページ番号など）を除去</li>
+<li>取扱説明書特有の構造（章・節・手順・注意事項など）に基づいて構造化</li>
+<li><strong>技術要件</strong>: PDFパーサー、構造解析アルゴリズム</li>
+</ul>
+
+<ul>
+<li><strong>セマンティック境界チャンキング</strong>（FR-1.2）</li>
+<li>章・節・手順単位での分割</li>
+<li>コンテキストオーバーラップ設計</li>
+<li><strong>目標</strong>: 検索精度15-20%向上</li>
+</ul>
+
+<ul>
+<li><strong>マルチベクトル戦略</strong>（FR-1.3）</li>
+<li>タイトル・本文・メタデータを個別にベクトル化</li>
+<li>用途に応じて使い分け</li>
+<li><strong>目標</strong>: 検索速度40%向上</li>
+</ul>
+
+<ul>
+<li><strong>ハイブリッド検索</strong>（FR-1.4）</li>
+<li>ベクトル検索+キーワード検索の統合（RRF: Reciprocal Rank Fusion）</li>
+<li>検索前フィルタリング（メタデータ活用で不要な検索を削減、コスト40%削減）</li>
+</ul>
+
+<ul>
+<li><strong>インテント検出・ルーティング</strong>（FR-1.5）</li>
+<li>9つのインテント分類の検出（検索型5つ＋プロアクティブ型4つ）</li>
+<li><strong>目標</strong>: インテント検出精度95%+</li>
+<li>インテント別に最適化された10種類以上のプロンプトテンプレート</li>
+</ul>
+
+<ul>
+<li><strong>回答生成</strong>（FR-1.6）</li>
+<li><strong>目標</strong>: 回答精度90-95%、レスポンス時間1秒以下</li>
+<li>複合質問対応</li>
+</ul>
+
+<p>
+<strong>技術スタック（推奨）:</strong>
+<ol>
+<li><strong>RAGフレームワーク</strong>: LangChain / LlamaIndex</li>
+<li><strong>LLM</strong>: GPT-4 / Claude 3.5 / Gemini 1.5 Pro（マルチプロバイダー対応）</li>
+<li><strong>エンベディング</strong>: OpenAI text-embedding-3-large</li>
+<li><strong>ベクトルDB</strong>: Supabase + pgvector（第一候補）または Pinecone / Weaviate</li>
+</ol>
+</p>
+
+<hr>
+
+<h4>FR-2: プロアクティブ情報提供（限定版）</h4>
+
+<p>
+<strong>開発期間</strong>: 2-3ヶ月  
+<strong>優先度</strong>: 最高（差別化機能）
+</p>
+
+<p>
+<strong>Phase 1で実装すべき機能:</strong>
+</p>
+
+<ul>
+<li><strong>緊急時自動案内</strong>（FR-2.1）</li>
+<li>警告灯点灯時、異常検知時に自動で対応方法を提示</li>
+<li><strong>目標</strong>: 緊急時問合せ削減率50%以上</li>
+<li><strong>技術要件</strong>: 車両データ連携（OBD-II、コネクテッドカーAPI）、リアルタイム処理</li>
+</ul>
+
+<ul>
+<li><strong>タイミングベース案内</strong>（FR-2.2）</li>
+<li>納車直後、初回利用時など、特定タイミングで必要な情報を自動提示</li>
+<li><strong>技術要件</strong>: ユーザー状態管理、タイミング判定エンジン</li>
+</ul>
+
+<ul>
+<li><strong>よくある質問の自動提示</strong>（FR-2.3）</li>
+<li>ユーザーの状況に応じて、関連するよくある質問を自動表示</li>
+<li><strong>技術要件</strong>: ユーザーコンテキスト分析、FAQマッチング</li>
+</ul>
+
+<p>
+<strong>Phase 1では実装しない機能（Phase 3以降）:</strong>
+<ul>
+<li>状況認識による先回り案内（FR-2.4）</li>
+<li>新機能・便利機能の発見提案（FR-2.5）</li>
+<li>環境・状況に応じた最適提案（FR-2.6）</li>
+</ul>
+</p>
+
+<hr>
+
+<h4>FR-3: マルチチャネル展開</h4>
+
+<p>
+<strong>開発期間</strong>: 並行開発（Phase 1全体を通じて）  
+<strong>優先度</strong>: 高
+</p>
+
+<p>
+<strong>Phase 1で実装すべきチャネル:</strong>
+</p>
+
+<ul>
+<li><strong>スマホアプリ</strong>（FR-3.2）</li>
+<li>iOS/Android対応</li>
+<li>プッシュ通知機能</li>
+<li><strong>技術スタック</strong>: Flutter（既存計画で検討）</li>
+</ul>
+
+<ul>
+<li><strong>Web管理画面</strong>（FR-3.4）</li>
+<li>OEM向け管理画面</li>
+<li>基本的なデータ分析・レポート機能</li>
+<li><strong>技術スタック</strong>: Next.js + TypeScript + Supabase（推奨）</li>
+</ul>
+
+<p>
+<strong>Phase 1では実装しないチャネル（Phase 2以降）:</strong>
+<ul>
+<li>車載AIエージェント連携（FR-3.1）</li>
+<li>コールセンター連携（FR-3.3）</li>
+</ul>
+</p>
+
+<hr>
+
+<h3>2.2 非機能要件（Phase 1）</h3>
+
+<h4>パフォーマンス要件</h4>
+
+<p>
+<strong>想定ユーザー規模</strong>: Phase 1初期は1,000-5,000ユーザー規模
+</p>
+
+<table>
+<thead><tr>
+<th>項目</th>
+<th>目標値</th>
+<th>測定方法</th>
+</tr></thead><tbody>
+<tr>
+<td>:--</td>
+<td>:--</td>
+<td>:--</td>
+</tr>
+<tr>
+<td><strong>レスポンス時間</strong></td>
+<td>1秒以下（90-95%のクエリ）</td>
+<td>API応答時間の測定</td>
+</tr>
+<tr>
+<td><strong>同時接続数</strong></td>
+<td>1,000接続以上</td>
+<td>負荷テスト</td>
+</tr>
+<tr>
+<td><strong>スループット</strong></td>
+<td>1,000リクエスト/分以上</td>
+<td>負荷テスト</td>
+</tr>
+<tr>
+<td><strong>可用性</strong></td>
+<td>99.5%以上</td>
+<td>監視システム</td>
+</tr>
+</tbody></table>
+
+<h4>セキュリティ要件</h4>
+
+<ol>
+<li><strong>認証・認可</strong>: 多要素認証（MFA）対応、OAuth 2.0対応</li>
+<li><strong>データ暗号化</strong>: 転送時（TLS 1.3）、保存時（AES-256）</li>
+<li><strong>プライバシー保護</strong>: 個人情報保護法対応</li>
+<li><strong>アクセス制御</strong>: ロールベースアクセス制御（RBAC）</li>
+</ol>
+
+<h4>スケーラビリティ要件</h4>
+
+<ol>
+<li><strong>水平スケーリング</strong>: クラウドネイティブアーキテクチャ</li>
+<li><strong>データベーススケーリング</strong>: 読み取りレプリカ対応</li>
+<li><strong>キャッシュ戦略</strong>: Redis等によるキャッシュ層</li>
+</ol>
+
+<hr>
+
+<h2>3. 技術スタック（推奨）</h2>
+
+<h3>3.1 推奨技術スタック</h3>
+
+<h4>バックエンド（RAGシステム）</h4>
+
+<table>
+<thead><tr>
+<th>レイヤー</th>
+<th>技術</th>
+<th>選定理由</th>
+</tr></thead><tbody>
+<tr>
+<td>:--</td>
+<td>:--</td>
+<td>:--</td>
+</tr>
+<tr>
+<td><strong>言語</strong></td>
+<td>Python 3.11+</td>
+<td>AI/ML統合、豊富なライブラリ、LangChain対応</td>
+</tr>
+<tr>
+<td><strong>フレームワーク</strong></td>
+<td>FastAPI</td>
+<td>高速、非同期対応、自動ドキュメント生成</td>
+</tr>
+<tr>
+<td><strong>RAGフレームワーク</strong></td>
+<td>LangChain / LlamaIndex</td>
+<td>実績、コミュニティ、取扱説明書向けカスタマイズが容易</td>
+</tr>
+<tr>
+<td><strong>LLM</strong></td>
+<td>GPT-4 / Claude 3.5 / Gemini 1.5 Pro</td>
+<td>マルチプロバイダー対応、コスト最適化</td>
+</tr>
+<tr>
+<td><strong>エンベディング</strong></td>
+<td>OpenAI text-embedding-3-large</td>
+<td>高精度、多言語対応</td>
+</tr>
+<tr>
+<td><strong>ベクトルDB</strong></td>
+<td>Supabase + pgvector（第一候補）</td>
+<td>PostgreSQL拡張、コスト効率、Supabase統合</td>
+</tr>
+<tr>
+<td><strong>代替案</strong></td>
+<td>Pinecone / Weaviate</td>
+<td>スケーラビリティが必要な場合</td>
+</tr>
+</tbody></table>
+
+<h4>フロントエンド</h4>
+
+<table>
+<thead><tr>
+<th>プラットフォーム</th>
+<th>技術</th>
+<th>選定理由</th>
+</tr></thead><tbody>
+<tr>
+<td>:--</td>
+<td>:--</td>
+<td>:--</td>
+</tr>
+<tr>
+<td><strong>Web管理画面</strong></td>
+<td>Next.js + TypeScript</td>
+<td>SSR、API Routes、Vercel統合、開発効率</td>
+</tr>
+<tr>
+<td><strong>モバイルアプリ</strong></td>
+<td>Flutter</td>
+<td>クロスプラットフォーム、既存計画、AR機能対応</td>
+</tr>
+</tbody></table>
+
+<h4>インフラ・データベース</h4>
+
+<table>
+<thead><tr>
+<th>カテゴリ</th>
+<th>技術</th>
+<th>選定理由</th>
+</tr></thead><tbody>
+<tr>
+<td>:--</td>
+<td>:--</td>
+<td>:--</td>
+</tr>
+<tr>
+<td><strong>BaaS</strong></td>
+<td>Supabase</td>
+<td>PostgreSQL、認証、リアルタイム、コスト効率</td>
+</tr>
+<tr>
+<td><strong>データベース</strong></td>
+<td>Neon (PostgreSQL) または Supabase</td>
+<td>サーバーレス、自動スケーリング、Supabase統合</td>
+</tr>
+<tr>
+<td><strong>ホスティング（Web）</strong></td>
+<td>Vercel</td>
+<td>Next.js統合、自動デプロイ、CDN</td>
+</tr>
+<tr>
+<td><strong>ホスティング（API）</strong></td>
+<td>AWS / Azure / GCP</td>
+<td>スケーラビリティ、既存パートナーとの整合性</td>
+</tr>
+<tr>
+<td><strong>キャッシュ</strong></td>
+<td>Redis</td>
+<td>高速、セッション管理</td>
+</tr>
+<tr>
+<td><strong>ストレージ</strong></td>
+<td>Supabase Storage または AWS S3</td>
+<td>ファイルストレージ、CDN統合</td>
+</tr>
+</tbody></table>
+
+<h4>外部API連携</h4>
+
+<table>
+<thead><tr>
+<th>用途</th>
+<th>API/サービス</th>
+<th>備考</th>
+</tr></thead><tbody>
+<tr>
+<td>:--</td>
+<td>:--</td>
+<td>:--</td>
+</tr>
+<tr>
+<td><strong>車両データ</strong></td>
+<td>OBD-II、コネクテッドカーAPI</td>
+<td>Phase 2で本格実装</td>
+</tr>
+<tr>
+<td><strong>天気情報</strong></td>
+<td>OpenWeatherMap API等</td>
+<td>Phase 3で本格実装</td>
+</tr>
+<tr>
+<td><strong>地図データ</strong></td>
+<td>Google Maps API等</td>
+<td>Phase 3で本格実装</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<h3>3.2 技術スタック選定の根拠</h3>
+
+<p>
+<strong>既存の開発計画との整合性:</strong>
+<ol>
+<li>既存計画ではPython + FastAPI、Flutterが検討されている</li>
+<li>プロンプトではNext.js + Supabaseが推奨されている</li>
+</ol>
+</p>
+
+<p>
+<strong>推奨アプローチ（ハイブリッド）:</strong>
+<ol>
+<li><strong>RAGシステム（バックエンドAPI）</strong>: Python + FastAPI + LangChain</li>
+<li><strong>Web管理画面</strong>: Next.js + TypeScript + Supabase + Vercel</li>
+<li><strong>モバイルアプリ</strong>: Flutter</li>
+<li><strong>データベース</strong>: Supabase（PostgreSQL）+ pgvector（ベクトル検索用）</li>
+</ol>
+</p>
+
+<p>
+<strong>理由:</strong>
+<ol>
+<li>RAGシステムはPython + LangChainが最適（既存の開発計画と整合）</li>
+<li>Web管理画面はNext.js + Supabaseで開発効率が高い</li>
+<li>モバイルアプリはFlutterでクロスプラットフォーム開発</li>
+<li>データベースはSupabase + pgvectorでベクトル検索も対応可能</li>
+</ol>
+</p>
+
+<hr>
+
+<h2>4. 開発スケジュール（Phase 1: 0-9ヶ月）</h2>
+
+<h3>4.1 開発フェーズ</h3>
+
+<h4>フェーズ1-1: RAGシステム構築（0-3ヶ月）</h4>
+
+<p>
+<strong>目的</strong>: 検索型AIの基盤構築
+</p>
+
+<p>
+<strong>主要タスク:</strong>
+<ul>
+<li><strong>データクリーニング・構造化機能の実装</strong>（3-4週間）</li>
+<li>PDFパーサーの実装</li>
+<li>構造解析アルゴリズムの実装</li>
+<li>メタデータ付与機能の実装</li>
+</ul>
+</p>
+
+<ul>
+<li><strong>セマンティック境界チャンキングの実装</strong>（2-3週間）</li>
+<li>章・節・手順単位での分割アルゴリズム</li>
+<li>コンテキストオーバーラップ設計</li>
+</ul>
+
+<ul>
+<li><strong>マルチベクトル戦略の実装</strong>（2-3週間）</li>
+<li>タイトル・本文・メタデータの個別ベクトル化</li>
+<li>ベクトルDBへの保存</li>
+</ul>
+
+<ul>
+<li><strong>ハイブリッド検索の実装</strong>（3-4週間）</li>
+<li>ベクトル検索の実装</li>
+<li>キーワード検索（BM25等）の実装</li>
+<li>RRF（Reciprocal Rank Fusion）の実装</li>
+<li>検索前フィルタリングの実装</li>
+</ul>
+
+<p>
+<strong>成果物:</strong>
+<ol>
+<li>データクリーニング・構造化システム</li>
+<li>ベクトルDB構築</li>
+<li>ハイブリッド検索API</li>
+</ol>
+</p>
+
+<hr>
+
+<h4>フェーズ1-2: 検索型AI実装（2-5ヶ月）</h4>
+
+<p>
+<strong>目的</strong>: 9つのインテント分類に対応した検索型AIの実装
+</p>
+
+<p>
+<strong>主要タスク:</strong>
+<ul>
+<li><strong>インテント検出・ルーティングの実装</strong>（3-4週間）</li>
+<li>9つのインテント分類の検出アルゴリズム</li>
+<li>インテント別ルーティングロジック</li>
+<li>プロンプトテンプレートの実装（10種類以上）</li>
+</ul>
+</p>
+
+<ul>
+<li><strong>回答生成機能の実装</strong>（3-4週間）</li>
+<li>LLM連携（GPT-4 / Claude 3.5 / Gemini 1.5 Pro）</li>
+<li>マルチプロバイダー対応</li>
+<li>回答品質管理</li>
+</ul>
+
+<ul>
+<li><strong>API実装</strong>（2-3週間）</li>
+<li>RESTful APIの実装</li>
+<li>エラーハンドリング</li>
+<li>ログ・監視機能</li>
+</ul>
+
+<p>
+<strong>成果物:</strong>
+<ol>
+<li>検索型AI API</li>
+<li>インテント検出精度95%+</li>
+<li>回答精度90%以上、レスポンス時間1秒以下</li>
+</ol>
+</p>
+
+<hr>
+
+<h4>フェーズ1-3: プロアクティブ機能実装（3-6ヶ月）</h4>
+
+<p>
+<strong>目的</strong>: 限定プロアクティブ型（緊急時自動案内、タイミングベース案内）の実装
+</p>
+
+<p>
+<strong>主要タスク:</strong>
+<ul>
+<li><strong>緊急時自動案内の実装</strong>（4-5週間）</li>
+<li>車両データ連携（OBD-II、コネクテッドカーAPI）</li>
+<li>警告灯・異常検知の判定ロジック</li>
+<li>自動案内の生成・配信</li>
+</ul>
+</p>
+
+<ul>
+<li><strong>タイミングベース案内の実装</strong>（3-4週間）</li>
+<li>ユーザー状態管理（納車日、初回利用日等）</li>
+<li>タイミング判定エンジン</li>
+<li>案内コンテンツの生成・配信</li>
+</ul>
+
+<ul>
+<li><strong>よくある質問の自動提示の実装</strong>（2-3週間）</li>
+<li>ユーザーコンテキスト分析</li>
+<li>FAQマッチングアルゴリズム</li>
+<li>自動提示機能</li>
+</ul>
+
+<p>
+<strong>成果物:</strong>
+<ol>
+<li>緊急時自動案内システム</li>
+<li>タイミングベース案内システム</li>
+<li>プロアクティブ案内利用率40%以上</li>
+<li>緊急時問合せ削減率50%以上</li>
+</ol>
+</p>
+
+<hr>
+
+<h4>フェーズ1-4: フロントエンド開発（並行、0-9ヶ月）</h4>
+
+<p>
+<strong>目的</strong>: スマホアプリ、Web管理画面の開発
+</p>
+
+<p>
+<strong>主要タスク:</strong>
+</p>
+
+<p>
+<strong>スマホアプリ（Flutter）:</strong>
+<ul>
+<li><strong>基本UI実装</strong>（4-6週間）</li>
+<li>検索画面</li>
+<li>回答表示画面</li>
+<li>プロアクティブ通知画面</li>
+</ul>
+</p>
+
+<ul>
+<li><strong>API連携</strong>（2-3週間）</li>
+<li>RAG API連携</li>
+<li>プロアクティブAPI連携</li>
+</ul>
+
+<ul>
+<li><strong>プッシュ通知機能</strong>（2-3週間）</li>
+<li>Firebase Cloud Messaging連携</li>
+<li>通知設定機能</li>
+</ul>
+
+<p>
+<strong>Web管理画面（Next.js）:</strong>
+<ul>
+<li><strong>基本UI実装</strong>（3-4週間）</li>
+<li>ダッシュボード</li>
+<li>データ分析画面</li>
+<li>設定画面</li>
+</ul>
+</p>
+
+<ul>
+<li><strong>API連携</strong>（2-3週間）</li>
+<li>Supabase連携</li>
+<li>データ分析API連携</li>
+</ul>
+
+<p>
+<strong>成果物:</strong>
+<ol>
+<li>iOS/Androidアプリ（基本機能）</li>
+<li>Web管理画面（基本機能）</li>
+</ol>
+</p>
+
+<hr>
+
+<h3>4.2 開発体制（想定）</h3>
+
+<p>
+<strong>必要なスキルセット:</strong>
+<ul>
+<li>AI/MLエンジニア（RAG、LLM、データエンジニアリング）：2-3名</li>
+<li>バックエンドエンジニア（Python、FastAPI）：1-2名</li>
+<li>フロントエンドエンジニア（Next.js、TypeScript）：1-2名</li>
+<li>Flutterエンジニア：1-2名</li>
+<li>プロダクトマネージャー：1名</li>
+<li>QAエンジニア：1名</li>
+</ul>
+</p>
+
+<p>
+<strong>合計</strong>: 7-11名
+</p>
+
+<hr>
+
+<h2>5. 成功基準（KPI）</h2>
+
+<h3>5.1 Phase 1の成功基準</h3>
+
+<table>
+<thead><tr>
+<th>カテゴリ</th>
+<th>指標</th>
+<th>目標値</th>
+<th>測定方法</th>
+</tr></thead><tbody>
+<tr>
+<td>:--</td>
+<td>:--</td>
+<td>:--</td>
+<td>:--</td>
+</tr>
+<tr>
+<td><strong>技術</strong></td>
+<td>回答精度</td>
+<td>90%以上</td>
+<td>評価データセットでの測定</td>
+</tr>
+<tr>
+<td><strong>技術</strong></td>
+<td>レスポンス時間</td>
+<td>1秒以下</td>
+<td>API応答時間の測定</td>
+</tr>
+<tr>
+<td><strong>技術</strong></td>
+<td>インテント検出精度</td>
+<td>95%+</td>
+<td>インテント検出の精度測定</td>
+</tr>
+<tr>
+<td><strong>ビジネス</strong></td>
+<td>問合せ削減率</td>
+<td>20-30%（最終目標30%以上）</td>
+<td>コールセンター問い合わせ件数</td>
+</tr>
+<tr>
+<td><strong>ビジネス</strong></td>
+<td>緊急時問合せ削減率</td>
+<td>50%以上</td>
+<td>緊急時問い合わせ件数</td>
+</tr>
+<tr>
+<td><strong>ユーザー</strong></td>
+<td>プロアクティブ案内利用率</td>
+<td>40%以上</td>
+<td>アプリログ分析</td>
+</tr>
+<tr>
+<td><strong>ユーザー</strong></td>
+<td>情報提示の満足度</td>
+<td>4.5/5.0以上</td>
+<td>ユーザー満足度アンケート</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<h2>6. 制約条件</h2>
+
+<h3>6.1 予算制約</h3>
+
+<p>
+<strong>初期投資</strong>: 2.5億円（R&D費用）
+<ol>
+<li>基本機能開発：1.5億円</li>
+<li>緊急対応・先読みガイド機能開発：1.0億円</li>
+</ol>
+</p>
+
+<p>
+<strong>内訳（想定）:</strong>
+<ul>
+<li>人件費：60-70%</li>
+<li>インフラコスト：10-15%</li>
+<li>外部パートナー・ツール：15-20%</li>
+<li>その他：5-10%</li>
+</ul>
+</p>
+
+<h3>6.2 期間制約</h3>
+
+<p>
+<strong>Phase 1</strong>: 0-9ヶ月（2026年度内に完了）
+</p>
+
+<p>
+<strong>マイルストーン:</strong>
+<ol>
+<li>3ヶ月：RAGシステム基盤完成</li>
+<li>6ヶ月：検索型AI + プロアクティブ機能（限定版）完成</li>
+<li>9ヶ月：フロントエンド完成、PoC開始</li>
+</ol>
+</p>
+
+<h3>6.3 技術的制約</h3>
+
+<ul>
+<li><strong>車両データ連携</strong>: OBD-II、コネクテッドカーAPIの具体的な連携方法が未確定（Phase 1では簡易版で対応）</li>
+<li><strong>OEM要件</strong>: セキュリティ要件、ブランドガイドラインが未確定（後で対応が必要）</li>
+</ul>
+
+<hr>
+
+<h2>7. 開発上の重要な考慮事項</h2>
+
+<h3>7.1 技術的優位性の確保</h3>
+
+<p>
+<strong>DOI独自のRAG最適化技術を実装することが最重要</strong>
+</p>
+
+<ol>
+<li>セマンティック境界チャンキング</li>
+<li>マルチベクトル戦略</li>
+<li>ハイブリッド検索（RRF）</li>
+<li>検索前フィルタリング</li>
+</ol>
+
+<p>
+<strong>これらが競合との差別化要因となるため、必ず実装すること</strong>
+</p>
+
+<h3>7.2 「届く」体験の実装</h3>
+
+<p>
+<strong>重要</strong>: 検索型のみでは「取扱説明書を読まないユーザー」は使わない
+</p>
+
+<p>
+<strong>Phase 1で必ず実装すべき「届く」要素:</strong>
+<ol>
+<li>緊急時自動案内</li>
+<li>タイミングベース案内</li>
+<li>よくある質問の自動提示</li>
+</ol>
+</p>
+
+<h3>7.3 データ品質の確保</h3>
+
+<ol>
+<li>データクリーニング・構造化は回答精度に直結するため、品質を最優先</li>
+<li>継続的な品質改善プロセスの構築</li>
+</ol>
+
+<h3>7.4 コスト最適化</h3>
+
+<ol>
+<li>APIコストの削減（検索前フィルタリング、キャッシュ戦略）</li>
+<li><strong>目標</strong>: APIコスト/質問を¥2-3に抑制（一般的RAGは¥5-10）</li>
+</ol>
+
+<hr>
+
+<h2>8. 開発で参照すべき資料</h2>
+
+<h3>8.1 既存の開発計画書</h3>
+
+<ul>
+<li><code>docs/development/phase0-requirements.md</code>: Phase 0の技術要件</li>
+<li><code>docs/development/rag-data-strategy.md</code>: RAGシステムのデータ戦略</li>
+<li><code>docs/development/車両機能通知_system-development-plan.md</code>: システム開発計画</li>
+</ul>
+
+<h3>8.2 技術的詳細</h3>
+
+<ol>
+<li><strong>データ最適化レイヤー</strong>: 事業計画書 2.5.1</li>
+<li><strong>インテント検出・ルーティング</strong>: 事業計画書 2.5.2</li>
+<li><strong>情報アーキテクチャ</strong>: 事業計画書 3</li>
+</ol>
+
+<hr>
+
+<h2>9. 開発部門への質問事項</h2>
+
+<h3>優先度：高</h3>
+
+<ol>
+<li><strong>技術スタックの最終決定</strong></li>
+<li>RAGシステム：Python + FastAPI + LangChain で問題ないか？</li>
+<li>Web管理画面：Next.js + Supabase + Vercel で問題ないか？</li>
+<li>モバイルアプリ：Flutter で問題ないか？</li>
+</ol>
+
+<ol>
+<li><strong>開発体制の確認</strong></li>
+<li>既存メンバーで対応可能なスキルは何か？</li>
+<li>新規採用が必要なスキル・人数は？</li>
+</ol>
+
+<ol>
+<li><strong>開発スケジュールの実現可能性</strong></li>
+<li>Phase 1（0-9ヶ月）のスケジュールは実現可能か？</li>
+<li>リスク要因は何か？</li>
+</ol>
+
+<ol>
+<li><strong>車両データ連携の技術的実現可能性</strong></li>
+<li>OBD-II、コネクテッドカーAPIの連携は技術的に可能か？</li>
+<li>Phase 1で簡易版を実装することは可能か？</li>
+</ol>
+
+<h3>優先度：中</h3>
+
+<ol>
+<li><strong>インフラコストの見積もり</strong></li>
+<li>Phase 1のインフラコスト（クラウド、データベース、API等）の月額見積もりは？</li>
+</ol>
+
+<ol>
+<li><strong>セキュリティ要件の確認</strong></li>
+<li>OEMから要求されるセキュリティ要件は何か？</li>
+<li>実装に必要な期間・コストは？</li>
+</ol>
+
+<hr>
+
+<h2>10. 次のステップ</h2>
+
+<h3>開発部門での確認事項</h3>
+
+<ol>
+<li><strong>技術スタックの最終決定</strong></li>
+<li>上記の推奨技術スタックで問題ないか確認</li>
+<li>代替案があれば提案</li>
+</ol>
+
+<ol>
+<li><strong>開発体制の確定</strong></li>
+<li>必要な人材の確保計画</li>
+<li>外部パートナーの活用可否</li>
+</ol>
+
+<ol>
+<li><strong>詳細設計の開始</strong></li>
+<li>Phase 1の詳細設計書の作成</li>
+<li>アーキテクチャ設計の開始</li>
+</ol>
+
+<ol>
+<li><strong>PoC準備</strong></li>
+<li>2026年度内のPoC実施に向けた準備</li>
+</ol>
+
+<hr>
+
+<p>
+<strong>作成者</strong>: 事業開発部門  
+<strong>連絡先</strong>: [連絡先情報]  
+<strong>次回更新予定</strong>: 開発部門からのフィードバック後
+</p>
+
+</div>
+</body>
+</html>

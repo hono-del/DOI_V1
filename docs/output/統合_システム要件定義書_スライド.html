@@ -1,0 +1,2316 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>取扱説明書DX システム要件定義書</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/white.css">
+    
+    <!-- Mermaid.js -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* グローバルスタイル */
+        .reveal {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: #f8f9fa;
+        }
+        
+        .reveal .slides {
+            text-align: left;
+        }
+        
+        .reveal .slides > section {
+            height: 100%;
+            padding: 0 !important;
+        }
+        
+        .reveal .slides section > section {
+            background: white;
+            padding: 35px 50px !important;
+            box-shadow: none;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-y: auto;
+        }
+        
+        .reveal .slides section > section::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .reveal .slides section > section::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .reveal .slides section > section::-webkit-scrollbar-thumb {
+            background: #1976d2;
+            border-radius: 3px;
+        }
+        
+        /* フォントサイズの統一 */
+        /* 大タイトル (h1) */
+        .reveal h1 {
+            font-size: 2.2em;
+            font-weight: 900;
+            color: #0d47a1;
+            margin-bottom: 0.4em;
+            margin-top: 0;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        
+        /* 中タイトル (h2) */
+        .reveal h2 {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #1565c0;
+            margin-bottom: 0.5em;
+            margin-top: 0.3em;
+            border-left: 5px solid #1976d2;
+            padding-left: 15px;
+            line-height: 1.3;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        
+        /* 小タイトル (h3) */
+        .reveal h3 {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #424242;
+            margin-bottom: 0.4em;
+            margin-top: 0.6em;
+            line-height: 1.4;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        
+        /* 超小タイトル (h4) */
+        .reveal h4 {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 0.3em;
+            margin-top: 0.5em;
+            line-height: 1.4;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        
+        /* 本文 */
+        .reveal p, .reveal li {
+            font-size: 0.85em;
+            line-height: 1.7;
+            color: #212121;
+            margin-bottom: 0.4em;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        
+        /* リスト */
+        .reveal ul, .reveal ol {
+            margin-left: 1.5em;
+            margin-bottom: 0.8em;
+        }
+        
+        .reveal li {
+            margin-bottom: 0.4em;
+        }
+        
+        .reveal li::marker {
+            color: #1976d2;
+        }
+        
+        /* タイトルスライド */
+        .reveal .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%) !important;
+            color: white !important;
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center !important;
+            align-items: center !important;
+            height: 100% !important;
+            padding: 40px 60px !important;
+            box-sizing: border-box !important;
+        }
+        
+        .reveal .title-slide h1,
+        .reveal .title-slide h2,
+        .reveal .title-slide p {
+            color: white !important;
+            margin: 0.3em 0 !important;
+        }
+        
+        .reveal .title-slide h1 {
+            font-size: 2.2em;
+            margin-bottom: 0.2em !important;
+            line-height: 1.2;
+        }
+        
+        .reveal .title-slide h2 {
+            font-size: 1.3em;
+            border: none;
+            padding: 0;
+            font-weight: 500;
+            opacity: 0.95;
+            margin-bottom: 1em !important;
+        }
+        
+        .reveal .title-slide p {
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        
+        /* テーブル */
+        .reveal table {
+            font-size: 0.7em;
+            margin: 15px auto;
+            border-collapse: collapse;
+            width: 100%;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .reveal table th {
+            background: #1976d2;
+            color: white;
+            padding: 12px 10px;
+            font-weight: 700;
+            text-align: left;
+            font-size: 1em;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+            border: 1px solid #1565c0;
+        }
+        
+        .reveal table td {
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        
+        .reveal table tbody tr:nth-child(even) {
+            background: #f5f5f5;
+        }
+        
+        .reveal table tbody tr:hover {
+            background: #e3f2fd;
+        }
+        
+        /* ハイライト */
+        .reveal .highlight {
+            color: #d32f2f;
+            font-weight: 700;
+            padding: 2px 6px;
+            background: #ffebee;
+            border-radius: 3px;
+            white-space: nowrap;
+        }
+        
+        /* フェーズバッジ */
+        .reveal .phase-badge {
+            display: inline-block;
+            background: #1976d2;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin: 3px 5px 3px 0;
+            white-space: nowrap;
+        }
+        
+        /* リスクレベル */
+        .reveal .risk-high {
+            color: #c62828;
+            font-weight: 700;
+        }
+        
+        .reveal .risk-medium {
+            color: #f57c00;
+            font-weight: 700;
+        }
+        
+        /* チャートコンテナ */
+        .reveal .chart-container {
+            width: 100%;
+            height: 350px;
+            margin: 15px 0;
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+        }
+        
+        /* 2カラムレイアウト */
+        .reveal .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 15px;
+        }
+        
+        .reveal .two-column > div {
+            background: #f5f5f5;
+            padding: 18px;
+            border-radius: 4px;
+            border-left: 4px solid #1976d2;
+        }
+        
+        /* KPIテーブル */
+        .reveal .kpi-table {
+            font-size: 0.65em;
+        }
+        
+        /* コードブロック風のスタイル */
+        .reveal code {
+            background: #37474f;
+            color: #4db6ac;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            word-break: keep-all;
+        }
+        
+        /* strong要素 */
+        .reveal strong {
+            color: #0d47a1;
+            font-weight: 700;
+        }
+        
+        /* Mermaid図のスタイル調整 */
+        .reveal .mermaid {
+            background: #fafafa;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            margin: 15px 0;
+        }
+        
+        /* スライド番号のスタイル */
+        .reveal .slide-number {
+            background: #1976d2;
+            color: white;
+            padding: 4px 8px;
+            font-weight: 600;
+            font-size: 0.8em;
+            top: 15px !important;
+            right: 15px !important;
+            bottom: auto !important;
+            border-radius: 4px;
+        }
+        
+        /* プログレスバー */
+        .reveal .progress {
+            background: #e0e0e0;
+            height: 3px;
+        }
+        
+        .reveal .progress span {
+            background: #1976d2;
+        }
+        
+        /* スクロールバーのスタイル */
+        .reveal .slides section::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .reveal .slides section::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .reveal .slides section::-webkit-scrollbar-thumb {
+            background: #1976d2;
+            border-radius: 4px;
+        }
+        
+        .reveal .slides section::-webkit-scrollbar-thumb:hover {
+            background: #0d47a1;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- タイトルスライド -->
+            <section class="title-slide">
+                <h1>取扱説明書DX システム要件定義書</h1>
+                <h2>統合版 v2.0</h2>
+                <p style="margin-top: 50px;">
+                    <strong>作成日</strong>: 2026年1月22日<br>
+                    <strong>対象</strong>: 開発部門、事業開発部門、ステークホルダー
+                </p>
+            </section>
+
+            <!-- エグゼクティブサマリー -->
+            <section>
+                <section>
+                    <h2>📋 エグゼクティブサマリー</h2>
+                    <h3>事業の目的</h3>
+                    <p>従来の「読む取扱説明書」を、<span class="highlight">AIエージェントを活用した"先回りして最適化した情報を届ける仕組み"</span>へ進化させるDX事業。</p>
+                    <div style="margin-top: 30px;">
+                        <p><strong>核心コンセプト</strong>: 「探す」から「届く」へ</p>
+                        <p>→ ユーザーが探さなくても、必要な情報が自動で届くシステムを構築</p>
+                    </div>
+                </section>
+            </section>
+
+            <!-- システム概要 -->
+            <section>
+                <section>
+                    <h2>1. システム概要</h2>
+                    <h3>解決する具体的な課題</h3>
+                    <ul>
+                        <li>取扱説明書は読まれない：従来の「読む」前提の説明書では、実際の利用率が極めて低い</li>
+                        <li>機能の未活用：自動車機能の高度化により、ユーザーは多くの機能を十分に活用できていない</li>
+                        <li>情報が配布物として固定化されている：SDV（ソフトウェア定義車両）の普及により、継続的な更新が必要</li>
+                        <li>問い合わせ増加によるコスト増大：顧客満足度の低下や、問い合わせ増加によるコスト増大のリスク</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>1.2 システムの位置づけ</h2>
+                    <div class="mermaid">
+                        graph TD
+                            A[提供チャネル] --> B[車載AIエージェント<br/>Phase 2以降]
+                            A --> C[スマホアプリ<br/>Phase 1]
+                            A --> D[Web版Chatbot<br/>Phase 1]
+                            A --> E[Web管理画面<br/>Phase 1]
+                            A --> F[コールセンター連携<br/>Phase 2以降]
+                            
+                            G[コアシステム] --> H[RAGベースの検索型AI<br/>9つのインテント分類対応]
+                            G --> I[プロアクティブ情報提供エンジン]
+                            G --> J[データクリーニング・構造化システム]
+                            G --> K[データ還流システム<br/>Phase 2以降]
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <h3>提供チャネル</h3>
+                        <ul>
+                            <li>車載AIエージェント（車内）※Phase 2以降</li>
+                            <li>スマホアプリ（iOS/Android）※Phase 1</li>
+                            <li>Web版Chatbot（コールセンター・販売店スタッフ向け）※Phase 1</li>
+                            <li>Web管理画面（OEM向け）※Phase 1</li>
+                            <li>コールセンター連携※Phase 2以降</li>
+                        </ul>
+                        <h3>コアシステム</h3>
+                        <ul>
+                            <li>RAGベースの検索型AI（9つのインテント分類対応）</li>
+                            <li>プロアクティブ情報提供エンジン</li>
+                            <li>データクリーニング・構造化システム</li>
+                            <li>データ還流システム（Phase 2以降）</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>情報アーキテクチャ（4層構造）</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>レイヤー</th>
+                                <th>内容</th>
+                                <th>開発優先度</th>
+                                <th>Phase</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>L1：取扱情報ベース</strong></td>
+                                <td>製品機能、操作手順、安全情報の構造化データ</td>
+                                <td>最高</td>
+                                <td>Phase 1</td>
+                            </tr>
+                            <tr>
+                                <td><strong>L2：文脈データ層</strong></td>
+                                <td>状況・環境・ユーザー属性データ</td>
+                                <td>高</td>
+                                <td>Phase 2</td>
+                            </tr>
+                            <tr>
+                                <td><strong>L3：AIガイド層</strong></td>
+                                <td>状況認識＋提案生成</td>
+                                <td>最高</td>
+                                <td>Phase 1（限定版）→ Phase 3（本格版）</td>
+                            </tr>
+                            <tr>
+                                <td><strong>L4：体験ログ層</strong></td>
+                                <td>利用データ・嗜好・行動ログ</td>
+                                <td>中</td>
+                                <td>Phase 2以降</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </section>
+
+            <!-- 主な機能 -->
+            <section>
+                <section>
+                    <h2>2. 主な機能</h2>
+                    <h3>コア機能（5個）</h3>
+                    <ol>
+                        <li><strong>RAGベースの検索型AI</strong>: 9つのインテント分類に対応（回答精度90-95%、レスポンス1秒以下）</li>
+                        <li><strong>プロアクティブ情報提供</strong>: 緊急時自動案内、タイミングベース案内</li>
+                        <li><strong>データクリーニング・構造化</strong>: PDFから構造化データへの変換</li>
+                        <li><strong>マルチチャネル展開</strong>: スマホアプリ、Web版Chatbot、Web管理画面</li>
+                        <li><strong>データ還流システム</strong>: ユーザーデータを商品企画へフィードバック</li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h2>差別化機能（3個）</h2>
+                    <ol>
+                        <li><strong>DOI独自のRAG最適化技術</strong>
+                            <ul>
+                                <li>セマンティック境界チャンキング</li>
+                                <li>マルチベクトル戦略</li>
+                                <li>ハイブリッド検索（RRF）</li>
+                                <li>検索精度15-20%向上、検索速度40%向上</li>
+                            </ul>
+                        </li>
+                        <li><strong>インテント別動的最適化</strong>: 9つのインテント対応（検出精度95%+）</li>
+                        <li><strong>Safe × Smart × Delightの3軸体験設計</strong></li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h2>2.3 付加価値機能（1-2個）</h2>
+                    <ol>
+                        <li><strong>取扱データ編集のAI化</strong>
+                            <ul>
+                                <li>FR-1.1のデータクリーニング・構造化技術を活用した制作支援ツール</li>
+                                <li>従来の手作業による編集から、AI支援による効率化</li>
+                                <li>制作工数60%削減</li>
+                            </ul>
+                        </li>
+                        <li><strong>多様化対応機能</strong>
+                            <ul>
+                                <li>高齢者・外国人・デジタルネイティブ向けカスタマイズ機能</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h2>2.4 提供する価値</h2>
+                    <div class="two-column">
+                        <div>
+                            <h3>ユーザーにとっての価値</h3>
+                            <ul>
+                                <li>必要なタイミングで必要な説明が届く「安心感」</li>
+                                <li>機能をすぐに使いこなせる「利便性」（学習時間50%削減）</li>
+                                <li>個々の利用状況に応じた「パーソナライズ体験」</li>
+                                <li>緊急時の即座な対応支援による「安全性向上」</li>
+                                <li>情報提示の満足度：3.0/5.0 → <span class="highlight">4.5/5.0以上</span></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3>ビジネスにとっての価値</h3>
+                            <ul>
+                                <li>問合せ30%削減、サポートコスト40%削減</li>
+                                <li>CSAT 85%以上、NPS 50以上</li>
+                                <li>商品企画へのデータ還流率60%以上</li>
+                                <li>開発効率20%向上</li>
+                                <li>「安全性ブランド」の差別化</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>2.4 提供する価値（続き）</h2>
+                    <h3>社会的価値</h3>
+                    <ul>
+                        <li>紙削減・印刷事業縮小への対応（環境規制強化への対応）</li>
+                        <li>新エネルギー車・自動運転時代の安全性確保</li>
+                        <li>SDV化による複雑化への対応</li>
+                        <li>ユーザーの多様化（高齢化・国際化）への対応</li>
+                        <li>スマートシティの普及への対応</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- 機能要件 -->
+            <section>
+                <section>
+                    <h2>3. 機能要件</h2>
+                    <h3>FR-1: RAGベースの検索型AI</h3>
+                    <p><strong>概要</strong>: 9つのインテント分類に対応した高精度な情報検索・回答システム</p>
+                    <p><strong>開発期間</strong>: 2-3ヶ月 | <strong>優先度</strong>: 最高（コア機能）</p>
+                </section>
+
+                <section>
+                    <h2>FR-1: 詳細要件</h2>
+                    <ul>
+                        <li><strong>FR-1.1 データクリーニング・構造化</strong>
+                            <ul>
+                                <li>PDFやドキュメントから不要な要素を除去</li>
+                                <li>取扱説明書特有の構造に基づいて構造化</li>
+                                <li>技術要件: PDFパーサー、構造解析アルゴリズム</li>
+                            </ul>
+                        </li>
+                        <li><strong>FR-1.2 セマンティック境界チャンキング</strong>
+                            <ul>
+                                <li>章・節・手順単位での分割</li>
+                                <li>目標: 検索精度15-20%向上</li>
+                            </ul>
+                        </li>
+                        <li><strong>FR-1.3 マルチベクトル戦略</strong>
+                            <ul>
+                                <li>タイトル・本文・メタデータを個別にベクトル化</li>
+                                <li>目標: 検索速度40%向上</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>FR-1: 詳細要件（続き）</h2>
+                    <ul>
+                        <li><strong>FR-1.4 ハイブリッド検索</strong>
+                            <ul>
+                                <li>ベクトル検索+キーワード検索の統合（RRF）</li>
+                                <li>検索前フィルタリング（コスト40%削減）</li>
+                            </ul>
+                        </li>
+                        <li><strong>FR-1.5 インテント検出・ルーティング</strong>
+                            <ul>
+                                <li>9つのインテント分類の検出（検出精度95%+）</li>
+                                <li>インテント別に最適化された10種類以上のプロンプトテンプレート</li>
+                            </ul>
+                        </li>
+                        <li><strong>FR-1.6 回答生成</strong>
+                            <ul>
+                                <li>回答精度90-95%</li>
+                                <li>レスポンス時間1秒以下</li>
+                                <li>複合質問対応</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>9つのインテント分類</h2>
+                    <div class="two-column">
+                        <div>
+                            <h3>検索型（5つ）</h3>
+                            <ol>
+                                <li>緊急時対応</li>
+                                <li>操作方法の質問</li>
+                                <li>段階的ガイド</li>
+                                <li>機能比較・選択</li>
+                                <li>トラブルシューティング</li>
+                            </ol>
+                        </div>
+                        <div>
+                            <h3>プロアクティブ型（4つ）</h3>
+                            <ol start="6">
+                                <li>状況認識による先回り案内</li>
+                                <li>タイミングベース案内</li>
+                                <li>新機能・便利機能の発見提案</li>
+                                <li>環境・状況に応じた最適提案</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>FR-2: プロアクティブ情報提供</h2>
+                    <p><strong>概要</strong>: ユーザーが探さなくても、必要な情報が自動で届くシステム</p>
+                    <p><strong>開発期間</strong>: 2-3ヶ月 | <strong>優先度</strong>: 最高（差別化機能）</p>
+                    
+                    <h3>Phase 1で実装すべき機能:</h3>
+                    <ul>
+                        <li><strong>FR-2.1 緊急時自動案内</strong>: 警告灯点灯時、異常検知時に自動で対応方法を提示（目標: 緊急時問合せ削減率50%以上）</li>
+                        <li><strong>FR-2.2 タイミングベース案内</strong>: 納車直後、初回利用時など、特定タイミングで必要な情報を自動提示</li>
+                        <li><strong>FR-2.3 よくある質問の自動提示</strong>: ユーザーの状況に応じて、関連するよくある質問を自動表示</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>FR-2: Phase 1では実装しない機能（Phase 3以降）</h2>
+                    <ul>
+                        <li><strong>FR-2.4 状況認識による先回り案内</strong>（Phase 3以降）
+                            <ul>
+                                <li>車両状態・環境（天候・道路状況など）を認識し、必要な情報を自動提示</li>
+                                <li>例：雨天時のワイパー操作、高速道路進入時のクルーズコントロール案内</li>
+                            </ul>
+                        </li>
+                        <li><strong>FR-2.5 新機能・便利機能の発見提案</strong>（Phase 4）
+                            <ul>
+                                <li>ユーザーが知らない便利な機能や使いこなし方を提案（Delight体験）</li>
+                                <li>機能発見率：20-30% → <span class="highlight">60%以上</span></li>
+                            </ul>
+                        </li>
+                        <li><strong>FR-2.6 環境・状況に応じた最適提案</strong>（Phase 4）
+                            <ul>
+                                <li>ユーザーの知識レベル・使用履歴・環境を総合的に判断し、最適な情報を提示（Smart体験）</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>FR-3: マルチチャネル展開</h2>
+                    <p><strong>開発期間</strong>: 並行開発（Phase 1全体を通じて） | <strong>優先度</strong>: 高</p>
+                    
+                    <h3>Phase 1で実装すべきチャネル:</h3>
+                    <ul>
+                        <li><strong>FR-3.2 スマホアプリ</strong>
+                            <ul>
+                                <li>iOS/Android対応、プッシュ通知機能、AR機能</li>
+                                <li>技術スタック: Flutter</li>
+                            </ul>
+                        </li>
+                        <li><strong>FR-3.3 Web版Chatbot</strong>
+                            <ul>
+                                <li>コールセンター・販売店スタッフ向け</li>
+                                <li>技術スタック: Next.js + TypeScript + Supabase</li>
+                            </ul>
+                        </li>
+                        <li><strong>FR-3.4 Web管理画面</strong>
+                            <ul>
+                                <li>OEM向け管理画面、データ分析・レポート機能</li>
+                                <li>技術スタック: Next.js + TypeScript + Supabase</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>FR-3: Phase 1では実装しないチャネル（Phase 2以降）</h2>
+                    <ul>
+                        <li><strong>FR-3.1 車載AIエージェント連携</strong>（Phase 2以降）
+                            <ul>
+                                <li>車載システムとのAPI連携</li>
+                                <li>リアルタイムでの情報提供</li>
+                            </ul>
+                        </li>
+                        <li><strong>FR-3.5 コールセンター連携</strong>（Phase 2以降）
+                            <ul>
+                                <li>コールセンターシステムとの連携</li>
+                                <li>問合せ削減支援</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>FR-4: データ還流システム</h2>
+                    <p><strong>概要</strong>: ユーザーの利用データや行動ログを商品企画へフィードバック</p>
+                    <p><strong>優先度</strong>: 中（Phase 2以降）</p>
+                    
+                    <h3>詳細要件:</h3>
+                    <ul>
+                        <li><strong>FR-4.1 利用データ収集</strong>
+                            <ul>
+                                <li>ユーザー行動ログの収集</li>
+                                <li>車両データの収集（車両状態、使用環境、操作履歴など）</li>
+                                <li>問合せログ、満足度指標の収集</li>
+                            </ul>
+                        </li>
+                        <li><strong>FR-4.2 データ分析</strong>
+                            <ul>
+                                <li>利用パターン分析</li>
+                                <li>機能利用率分析</li>
+                                <li>問合せパターン分析</li>
+                            </ul>
+                        </li>
+                        <li><strong>FR-4.3 データ還流</strong>
+                            <ul>
+                                <li>商品企画へのデータ還流率60%以上</li>
+                                <li>企画会議でのデータ活用</li>
+                                <li>開発効率20%向上</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>FR-5: 取扱データ編集のAI化</h2>
+                    <p><strong>概要</strong>: 従来の手作業による編集から、AI支援による効率化</p>
+                    <p><strong>FR-1.1のデータクリーニング・構造化技術を活用した制作支援ツール</strong>として、OEM/制作担当者が新規取扱説明書を編集・制作する際の工数を削減する機能</p>
+                    <p><strong>優先度</strong>: 中</p>
+                    
+                    <h3>詳細要件:</h3>
+                    <ul>
+                        <li><strong>FR-5.1 AI支援編集</strong>
+                            <ul>
+                                <li>取扱説明書の自動構造化</li>
+                                <li>メタデータの自動付与</li>
+                                <li>制作工数60%削減</li>
+                            </ul>
+                        </li>
+                        <li><strong>FR-5.2 品質管理</strong>
+                            <ul>
+                                <li>自動品質チェック</li>
+                                <li>継続的な改善プロセス</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>FR-6: 多様化対応機能</h2>
+                    <p><strong>概要</strong>: 高齢者・外国人・デジタルネイティブ向けカスタマイズ機能</p>
+                    <p><strong>優先度</strong>: 中</p>
+                    
+                    <h3>詳細要件:</h3>
+                    <ul>
+                        <li><strong>FR-6.1 多言語対応</strong>
+                            <ul>
+                                <li>多言語翻訳機能</li>
+                                <li>多言語コンテンツ管理</li>
+                            </ul>
+                        </li>
+                        <li><strong>FR-6.2 アクセシビリティ対応</strong>
+                            <ul>
+                                <li>高齢者向けUI/UX</li>
+                                <li>音声案内機能</li>
+                                <li>文字サイズ調整</li>
+                            </ul>
+                        </li>
+                        <li><strong>FR-6.3 パーソナライゼーション</strong>
+                            <ul>
+                                <li>ユーザーの知識レベルに応じた説明の詳細度調整</li>
+                                <li>コミュニケーション設定（音声/テキスト入力の好み）</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- 非機能要件 -->
+            <section>
+                <section>
+                    <h2>4. 非機能要件</h2>
+                    <h3>NFR-1: パフォーマンス</h3>
+                    <p><strong>想定ユーザー規模</strong>:</p>
+                    <ul>
+                        <li>Phase 1初期：1,000-5,000ユーザー規模</li>
+                        <li>Phase 1完了時：10,000-50,000ユーザー規模</li>
+                        <li>最終目標：MAU 100万人</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>パフォーマンス要件</h2>
+                    <table class="kpi-table">
+                        <thead>
+                            <tr>
+                                <th>項目</th>
+                                <th>目標値</th>
+                                <th>測定方法</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>レスポンス時間</td>
+                                <td class="highlight">1秒以下（90-95%のクエリ）</td>
+                                <td>API応答時間の測定</td>
+                            </tr>
+                            <tr>
+                                <td>同時接続数</td>
+                                <td>初期1,000接続、最終10,000接続以上</td>
+                                <td>負荷テスト</td>
+                            </tr>
+                            <tr>
+                                <td>スループット</td>
+                                <td>初期1,000リクエスト/分、最終10,000リクエスト/分以上</td>
+                                <td>負荷テスト</td>
+                            </tr>
+                            <tr>
+                                <td>可用性</td>
+                                <td class="highlight">99.5%以上</td>
+                                <td>監視システム</td>
+                            </tr>
+                            <tr>
+                                <td>平均復旧時間（MTTR）</td>
+                                <td>30分以内</td>
+                                <td>監視システム</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>その他の非機能要件</h2>
+                    <ul>
+                        <li><strong>NFR-2: セキュリティ</strong>
+                            <ul>
+                                <li>多要素認証（MFA）、OAuth 2.0対応</li>
+                                <li>データ暗号化（TLS 1.3、AES-256）</li>
+                                <li>個人情報保護法、GDPR対応</li>
+                                <li>ロールベースアクセス制御（RBAC）</li>
+                            </ul>
+                        </li>
+                        <li><strong>NFR-3: スケーラビリティ</strong>
+                            <ul>
+                                <li>水平スケーリング、データベーススケーリング</li>
+                                <li>Redis等によるキャッシュ層、CDN</li>
+                            </ul>
+                        </li>
+                        <li><strong>NFR-4: 信頼性・可用性</strong>
+                            <ul>
+                                <li>可用性99.5%以上、日次バックアップ</li>
+                                <li>RTO 4時間以内、RPO 1時間以内</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>NFR-5: 保守性・拡張性</h2>
+                    <h3>要件:</h3>
+                    <ul>
+                        <li><strong>モジュール化</strong>: マイクロサービスアーキテクチャまたはモジュール設計</li>
+                        <li><strong>API設計</strong>: RESTful API、GraphQL対応</li>
+                        <li><strong>ドキュメント</strong>: API仕様書、システム設計書の整備</li>
+                        <li><strong>バージョン管理</strong>: 適切なバージョニング戦略</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>NFR-6: コンプライアンス</h2>
+                    <h3>要件:</h3>
+                    <ul>
+                        <li><strong>個人情報保護</strong>: 個人情報保護法、GDPR対応</li>
+                        <li><strong>データローカライゼーション</strong>: 各国のデータ保存要件への対応</li>
+                        <li><strong>監査ログ</strong>: すべての操作の監査ログ記録</li>
+                        <li><strong>データ保持期間</strong>: 法的要件に基づくデータ保持期間の管理</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- 技術スタック -->
+            <section>
+                <section>
+                    <h2>5. 技術スタック</h2>
+                    <h3>5.1 推奨技術スタック（本格運用対応版）</h3>
+                    <h4>バックエンド（RAGシステム）</h4>
+                    <table style="font-size: 0.75em;">
+                        <thead>
+                            <tr>
+                                <th>レイヤー</th>
+                                <th>技術</th>
+                                <th>選定理由</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>言語</strong></td>
+                                <td>Python 3.12+</td>
+                                <td>AI/ML統合、豊富なライブラリ、最新機能対応、型安全性向上</td>
+                            </tr>
+                            <tr>
+                                <td><strong>フレームワーク</strong></td>
+                                <td>FastAPI 0.115+</td>
+                                <td>高速、非同期対応、自動ドキュメント生成、本格運用向け機能</td>
+                            </tr>
+                            <tr>
+                                <td><strong>RAGフレームワーク</strong></td>
+                                <td>LangChain / LangGraph / LlamaIndex</td>
+                                <td>実績、コミュニティ、エージェント機能（LangGraph）、取扱説明書向けカスタマイズが容易</td>
+                            </tr>
+                            <tr>
+                                <td><strong>LLM</strong></td>
+                                <td>GPT-4o / Claude 3.7 Sonnet / Gemini 2.0 Pro</td>
+                                <td>最新モデル、マルチプロバイダー対応、コスト最適化、高精度</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>バックエンド（RAGシステム）続き</h2>
+                    <table style="font-size: 0.75em;">
+                        <thead>
+                            <tr>
+                                <th>レイヤー</th>
+                                <th>技術</th>
+                                <th>選定理由</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>エンベディング</strong></td>
+                                <td>OpenAI text-embedding-3-large / Cohere Embed v3</td>
+                                <td>高精度、多言語対応、最新モデル</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ベクトルDB（本格運用）</strong></td>
+                                <td class="highlight">Pinecone（第一候補）</td>
+                                <td>マネージド、99.99% SLA、自動スケーリング、サブ50ms p99レイテンシ、本格運用向け</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ベクトルDB（代替案）</strong></td>
+                                <td>Weaviate / Qdrant</td>
+                                <td>オープンソース、ハイブリッド検索対応、オンプレミス対応可能</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ベクトルDB（小規模・PoC）</strong></td>
+                                <td>Supabase + pgvector</td>
+                                <td>PostgreSQL拡張、コスト効率、小規模向け（<10Mベクトル）</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>フロントエンド</h2>
+                    <table style="font-size: 0.75em;">
+                        <thead>
+                            <tr>
+                                <th>プラットフォーム</th>
+                                <th>技術</th>
+                                <th>選定理由</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Web管理画面</strong></td>
+                                <td>Next.js + TypeScript</td>
+                                <td>SSR、API Routes、Vercel統合、開発効率</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Web版Chatbot</strong></td>
+                                <td>Next.js + TypeScript</td>
+                                <td>SSR、API Routes、Vercel統合、開発効率</td>
+                            </tr>
+                            <tr>
+                                <td><strong>モバイルアプリ</strong></td>
+                                <td>Flutter</td>
+                                <td>クロスプラットフォーム、既存計画、AR機能対応</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>インフラ・データベース</h2>
+                    <table style="font-size: 0.75em;">
+                        <thead>
+                            <tr>
+                                <th>カテゴリ</th>
+                                <th>技術</th>
+                                <th>選定理由</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>BaaS</strong></td>
+                                <td>Supabase</td>
+                                <td>PostgreSQL、認証、リアルタイム、コスト効率</td>
+                            </tr>
+                            <tr>
+                                <td><strong>データベース</strong></td>
+                                <td>Neon (PostgreSQL) または Supabase</td>
+                                <td>サーバーレス、自動スケーリング、Supabase統合、本格運用対応</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ホスティング（Web）</strong></td>
+                                <td>Vercel</td>
+                                <td>Next.js統合、自動デプロイ、CDN、本格運用向け機能</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ホスティング（API）</strong></td>
+                                <td>AWS ECS / Azure Container Apps / GCP Cloud Run</td>
+                                <td>コンテナベース、自動スケーリング、本格運用対応、既存パートナーとの整合性</td>
+                            </tr>
+                            <tr>
+                                <td><strong>オーケストレーション</strong></td>
+                                <td>Kubernetes（本格運用時）</td>
+                                <td>コンテナオーケストレーション、高可用性、スケーラビリティ</td>
+                            </tr>
+                            <tr>
+                                <td><strong>キャッシュ</strong></td>
+                                <td>Redis（AWS ElastiCache / Azure Cache）</td>
+                                <td>高速、セッション管理、マネージドサービスで運用性向上</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ストレージ</strong></td>
+                                <td>AWS S3 / Azure Blob Storage / GCP Cloud Storage</td>
+                                <td>ファイルストレージ、CDN統合、本格運用向け</td>
+                            </tr>
+                            <tr>
+                                <td><strong>メッセージキュー</strong></td>
+                                <td>AWS SQS / Azure Service Bus / RabbitMQ</td>
+                                <td>非同期処理、タスクキュー、スケーラビリティ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>モニタリング・可観測性（本格運用必須）</h2>
+                    <table style="font-size: 0.7em;">
+                        <thead>
+                            <tr>
+                                <th>カテゴリ</th>
+                                <th>技術</th>
+                                <th>選定理由</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>RAG/LLM監視</strong></td>
+                                <td class="highlight">LangSmith（第一候補） / LangFuse</td>
+                                <td>LLMトレース、コスト追跡、パフォーマンス監視、本格運用向け</td>
+                            </tr>
+                            <tr>
+                                <td><strong>APM</strong></td>
+                                <td>Datadog / New Relic / AWS X-Ray</td>
+                                <td>アプリケーションパフォーマンス監視、分散トレーシング</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ログ管理</strong></td>
+                                <td>AWS CloudWatch / Azure Monitor / GCP Cloud Logging</td>
+                                <td>ログ集約、検索、アラート</td>
+                            </tr>
+                            <tr>
+                                <td><strong>メトリクス</strong></td>
+                                <td>Prometheus + Grafana</td>
+                                <td>メトリクス収集、可視化、カスタムダッシュボード</td>
+                            </tr>
+                            <tr>
+                                <td><strong>エラー追跡</strong></td>
+                                <td>Sentry</td>
+                                <td>エラー追跡、パフォーマンス監視、リリース追跡</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Uptime監視</strong></td>
+                                <td>Pingdom / UptimeRobot</td>
+                                <td>可用性監視、アラート</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>セキュリティ（本格運用必須）</h2>
+                    <table style="font-size: 0.7em;">
+                        <thead>
+                            <tr>
+                                <th>カテゴリ</th>
+                                <th>技術</th>
+                                <th>選定理由</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>認証・認可</strong></td>
+                                <td>Supabase Auth / Auth0 / AWS Cognito</td>
+                                <td>多要素認証、OAuth 2.0、本格運用対応</td>
+                            </tr>
+                            <tr>
+                                <td><strong>シークレット管理</strong></td>
+                                <td>AWS Secrets Manager / Azure Key Vault / HashiCorp Vault</td>
+                                <td>APIキー、認証情報の安全な管理</td>
+                            </tr>
+                            <tr>
+                                <td><strong>WAF</strong></td>
+                                <td>AWS WAF / Cloudflare WAF</td>
+                                <td>Webアプリケーションファイアウォール、DDoS対策</td>
+                            </tr>
+                            <tr>
+                                <td><strong>脆弱性スキャン</strong></td>
+                                <td>Snyk / Dependabot</td>
+                                <td>依存関係の脆弱性検出、自動修正提案</td>
+                            </tr>
+                            <tr>
+                                <td><strong>コンプライアンス</strong></td>
+                                <td>SOC 2 / ISO 27001対応</td>
+                                <td>セキュリティ認証、顧客要件対応</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>CI/CD・DevOps（本格運用必須）</h2>
+                    <table style="font-size: 0.7em;">
+                        <thead>
+                            <tr>
+                                <th>カテゴリ</th>
+                                <th>技術</th>
+                                <th>選定理由</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>CI/CD</strong></td>
+                                <td>GitHub Actions / GitLab CI / Jenkins</td>
+                                <td>自動ビルド、テスト、デプロイ</td>
+                            </tr>
+                            <tr>
+                                <td><strong>コンテナレジストリ</strong></td>
+                                <td>AWS ECR / Azure Container Registry / Docker Hub</td>
+                                <td>コンテナイメージ管理</td>
+                            </tr>
+                            <tr>
+                                <td><strong>インフラ即コード</strong></td>
+                                <td>Terraform / AWS CDK / Pulumi</td>
+                                <td>インフラのコード化、バージョン管理</td>
+                            </tr>
+                            <tr>
+                                <td><strong>設定管理</strong></td>
+                                <td>Ansible / Chef / Puppet</td>
+                                <td>サーバー設定の自動化</td>
+                            </tr>
+                            <tr>
+                                <td><strong>テスト</strong></td>
+                                <td>pytest / Jest / Playwright</td>
+                                <td>ユニットテスト、統合テスト、E2Eテスト</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>外部API連携</h2>
+                    <table style="font-size: 0.75em;">
+                        <thead>
+                            <tr>
+                                <th>用途</th>
+                                <th>API/サービス</th>
+                                <th>備考</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>車両データ</strong></td>
+                                <td>OBD-II、コネクテッドカーAPI</td>
+                                <td>Phase 2で本格実装</td>
+                            </tr>
+                            <tr>
+                                <td><strong>天気情報</strong></td>
+                                <td>OpenWeatherMap API等</td>
+                                <td>Phase 3で本格実装</td>
+                            </tr>
+                            <tr>
+                                <td><strong>地図データ</strong></td>
+                                <td>Google Maps API等</td>
+                                <td>Phase 3で本格実装</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>5.2 技術スタック選定の根拠</h2>
+                    <h3>本格運用を考慮した選定方針</h3>
+                    <div class="two-column">
+                        <div>
+                            <h4>Phase 1（PoC・初期段階）</h4>
+                            <ul>
+                                <li>ベクトルDB: Supabase + pgvector（コスト効率、小規模向け）</li>
+                                <li>モニタリング: LangSmith（無料プランから開始可能）</li>
+                                <li>インフラ: Vercel + Supabase（サーバーレス、運用負荷低）</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>本格サービス化（Phase 2以降）</h4>
+                            <ul>
+                                <li>ベクトルDB: Pinecone（マネージド、99.99% SLA、自動スケーリング）</li>
+                                <li>モニタリング: LangSmith + Datadog/New Relic（包括的監視）</li>
+                                <li>インフラ: AWS/Azure/GCP（コンテナベース、Kubernetes対応）</li>
+                                <li>セキュリティ: 包括的セキュリティスタック</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>推奨アプローチ（ハイブリッド・段階的移行）</h2>
+                    <div class="two-column" style="font-size: 0.85em;">
+                        <div>
+                            <h4>RAGシステム（バックエンドAPI）</h4>
+                            <ul>
+                                <li><strong>Phase 1</strong>: Python 3.12+ + FastAPI + LangChain/LangGraph</li>
+                                <li><strong>本格運用</strong>: コンテナ化（Docker）→ Kubernetes（スケール時）</li>
+                                <li><strong>モニタリング</strong>: LangSmith（LLM監視）+ APM（アプリ監視）</li>
+                            </ul>
+                            <h4>データベース戦略</h4>
+                            <ul>
+                                <li><strong>Phase 1</strong>: Supabase（PostgreSQL）+ pgvector（<10Mベクトル）</li>
+                                <li><strong>本格運用</strong>: Pinecone（ベクトルDB）+ Supabase（PostgreSQL、アプリデータ）</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Webアプリケーション</h4>
+                            <ul>
+                                <li><strong>Web管理画面</strong>: Next.js 15+ + TypeScript + Supabase + Vercel</li>
+                                <li><strong>Web版Chatbot</strong>: Next.js 15+ + TypeScript + Supabase + Vercel</li>
+                                <li><strong>モバイルアプリ</strong>: Flutter 3.24+</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>選定理由（本格運用視点）</h2>
+                    <div style="font-size: 0.75em;">
+                        <h4>RAGシステム</h4>
+                        <ul>
+                            <li><strong>Python + LangChain/LangGraph</strong>: 実績、コミュニティ、エージェント機能対応</li>
+                            <li><strong>FastAPI</strong>: 非同期処理、自動ドキュメント生成、本格運用向け機能</li>
+                            <li><strong>最新LLM（GPT-4o/Claude 3.7/Gemini 2.0）</strong>: 高精度、最新機能</li>
+                        </ul>
+                        <h4>ベクトルDB</h4>
+                        <ul>
+                            <li><strong>Pinecone（本格運用）</strong>: マネージド、99.99% SLA、自動スケーリング、サブ50ms p99レイテンシ</li>
+                            <li><strong>pgvector（PoC）</strong>: コスト効率、小規模向け、PostgreSQL統合</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>選定理由（本格運用視点）- 続き</h2>
+                    <div style="font-size: 0.75em;">
+                        <h4>モニタリング</h4>
+                        <ul>
+                            <li><strong>LangSmith</strong>: LLMトレース、コスト追跡、RAG品質監視、本格運用必須</li>
+                            <li><strong>APM（Datadog等）</strong>: アプリケーションパフォーマンス、分散トレーシング</li>
+                        </ul>
+                        <h4>セキュリティ</h4>
+                        <ul>
+                            <li><strong>多層防御</strong>: WAF、認証・認可、シークレット管理、脆弱性スキャン</li>
+                            <li><strong>コンプライアンス</strong>: SOC 2、ISO 27001対応準備</li>
+                        </ul>
+                        <h4>CI/CD</h4>
+                        <ul>
+                            <li><strong>GitHub Actions</strong>: 自動ビルド、テスト、デプロイ、本格運用必須</li>
+                            <li><strong>インフラ即コード</strong>: Terraform等でインフラのバージョン管理</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>既存の開発計画との整合性</h2>
+                    <ul style="font-size: 0.9em;">
+                        <li>既存計画ではPython + FastAPI、Flutterが検討されている → <strong>維持</strong></li>
+                        <li>本格運用に向けて段階的に技術スタックを強化</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>5.3 Phase別技術スタック移行戦略</h2>
+                    <h3>Phase 1（0-9ヶ月）：PoC・初期段階</h3>
+                    <p><strong>目標</strong>: 早期効果実証、コスト最適化</p>
+                    <table style="font-size: 0.7em;">
+                        <thead>
+                            <tr>
+                                <th>カテゴリ</th>
+                                <th>技術</th>
+                                <th>理由</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ベクトルDB</td>
+                                <td>Supabase + pgvector</td>
+                                <td>コスト効率、小規模向け（<10Mベクトル）、PostgreSQL統合</td>
+                            </tr>
+                            <tr>
+                                <td>LLM</td>
+                                <td>GPT-4o / Claude 3.7 Sonnet / Gemini 2.0 Pro</td>
+                                <td>最新モデル、マルチプロバイダー対応</td>
+                            </tr>
+                            <tr>
+                                <td>モニタリング</td>
+                                <td>LangSmith（無料プラン）</td>
+                                <td>LLM監視、コスト追跡、無料から開始可能</td>
+                            </tr>
+                            <tr>
+                                <td>インフラ</td>
+                                <td>Vercel + Supabase</td>
+                                <td>サーバーレス、運用負荷低、自動スケーリング</td>
+                            </tr>
+                            <tr>
+                                <td>セキュリティ</td>
+                                <td>Supabase Auth + 基本セキュリティ</td>
+                                <td>認証・認可、基本的なセキュリティ対策</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>Phase 2（9-15ヶ月）：本格サービス化準備</h2>
+                    <p><strong>目標</strong>: スケーラビリティ確保、運用体制構築</p>
+                    <table style="font-size: 0.7em;">
+                        <thead>
+                            <tr>
+                                <th>カテゴリ</th>
+                                <th>技術</th>
+                                <th>理由</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ベクトルDB</td>
+                                <td class="highlight">Pinecone（移行）</td>
+                                <td>マネージド、99.99% SLA、自動スケーリング、本格運用対応</td>
+                            </tr>
+                            <tr>
+                                <td>モニタリング</td>
+                                <td>LangSmith + Datadog/New Relic</td>
+                                <td>包括的監視、APM、分散トレーシング</td>
+                            </tr>
+                            <tr>
+                                <td>インフラ</td>
+                                <td>AWS/Azure/GCP（コンテナベース）</td>
+                                <td>スケーラビリティ、高可用性、本格運用対応</td>
+                            </tr>
+                            <tr>
+                                <td>セキュリティ</td>
+                                <td>包括的セキュリティスタック</td>
+                                <td>WAF、シークレット管理、脆弱性スキャン、コンプライアンス準備</td>
+                            </tr>
+                            <tr>
+                                <td>CI/CD</td>
+                                <td>GitHub Actions + Terraform</td>
+                                <td>自動デプロイ、インフラ即コード、本格運用必須</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>Phase 3以降：本格運用・スケール</h2>
+                    <p><strong>目標</strong>: 高可用性、グローバル展開、高度な運用</p>
+                    <table style="font-size: 0.7em;">
+                        <thead>
+                            <tr>
+                                <th>カテゴリ</th>
+                                <th>技術</th>
+                                <th>理由</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>オーケストレーション</td>
+                                <td>Kubernetes</td>
+                                <td>コンテナオーケストレーション、高可用性、マルチリージョン対応</td>
+                            </tr>
+                            <tr>
+                                <td>モニタリング</td>
+                                <td>包括的監視スタック</td>
+                                <td>LangSmith + APM + ログ管理 + メトリクス + エラー追跡</td>
+                            </tr>
+                            <tr>
+                                <td>セキュリティ</td>
+                                <td>エンタープライズ級セキュリティ</td>
+                                <td>SOC 2、ISO 27001対応、多層防御</td>
+                            </tr>
+                            <tr>
+                                <td>災害復旧</td>
+                                <td>マルチリージョン + バックアップ</td>
+                                <td>RTO/RPO目標達成、高可用性</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section>
+                    <h2>移行時の考慮事項</h2>
+                    <ul>
+                        <li><strong>ベクトルDB移行（pgvector → Pinecone）</strong>
+                            <ul>
+                                <li>Phase 1でpgvectorで構築、Phase 2でPineconeに移行</li>
+                                <li>移行スクリプトの準備、データ移行計画</li>
+                                <li>ダウンタイム最小化のための段階的移行</li>
+                            </ul>
+                        </li>
+                        <li><strong>モニタリング強化</strong>
+                            <ul>
+                                <li>Phase 1でLangSmithから開始、段階的にAPM等を追加</li>
+                                <li>メトリクス定義、アラート設定、ダッシュボード構築</li>
+                            </ul>
+                        </li>
+                        <li><strong>インフラ移行</strong>
+                            <ul>
+                                <li>Phase 1でVercel + Supabase、Phase 2でコンテナベースに移行</li>
+                                <li>段階的移行、ブルー・グリーンデプロイメント</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- 開発ロードマップ -->
+            <section>
+                <section>
+                    <h2>6. 開発ロードマップ</h2>
+                    <h3>Phase 1：ハイブリッド型AI実証（0-9ヶ月）</h3>
+                    <p><strong>目的</strong>: 検索型＋限定プロアクティブ型で早期効果実証</p>
+                    <div class="mermaid">
+                        gantt
+                            title Phase 1 開発スケジュール
+                            dateFormat YYYY-MM-DD
+                            section RAGシステム構築
+                            データクリーニング・構造化 :a1, 2026-01-01, 4w
+                            セマンティック境界チャンキング :a2, after a1, 3w
+                            マルチベクトル戦略 :a3, after a2, 3w
+                            ハイブリッド検索 :a4, after a3, 4w
+                            section 検索型AI実装
+                            インテント検出・ルーティング :b1, 2026-02-01, 4w
+                            回答生成機能 :b2, after b1, 4w
+                            API実装 :b3, after b2, 3w
+                            section プロアクティブ機能
+                            緊急時自動案内 :c1, 2026-03-01, 5w
+                            タイミングベース案内 :c2, after c1, 4w
+                            よくある質問の自動提示 :c3, after c2, 3w
+                            section フロントエンド
+                            スマホアプリ :d1, 2026-01-01, 12w
+                            Web版Chatbot :d2, 2026-01-01, 6w
+                            Web管理画面 :d3, 2026-01-01, 6w
+                    </div>
+                </section>
+
+                <section>
+                    <h2>フェーズ1-1: RAGシステム構築（0-3ヶ月）</h2>
+                    <p><strong>目的</strong>: 検索型AIの基盤構築</p>
+                    <h3>主要タスク:</h3>
+                    <ol>
+                        <li><strong>データクリーニング・構造化機能の実装</strong>（3-4週間）
+                            <ul>
+                                <li>PDFパーサーの実装</li>
+                                <li>構造解析アルゴリズムの実装</li>
+                                <li>メタデータ付与機能の実装</li>
+                            </ul>
+                        </li>
+                        <li><strong>セマンティック境界チャンキングの実装</strong>（2-3週間）</li>
+                        <li><strong>マルチベクトル戦略の実装</strong>（2-3週間）</li>
+                        <li><strong>ハイブリッド検索の実装</strong>（3-4週間）</li>
+                    </ol>
+                    <p><strong>成果物</strong>: データクリーニング・構造化システム、ベクトルDB構築、ハイブリッド検索API</p>
+                </section>
+
+                <section>
+                    <h2>フェーズ1-2: 検索型AI実装（2-5ヶ月）</h2>
+                    <p><strong>目的</strong>: 9つのインテント分類に対応した検索型AIの実装</p>
+                    <h3>主要タスク:</h3>
+                    <ol>
+                        <li><strong>インテント検出・ルーティングの実装</strong>（3-4週間）
+                            <ul>
+                                <li>9つのインテント分類の検出アルゴリズム</li>
+                                <li>インテント別ルーティングロジック</li>
+                                <li>プロンプトテンプレートの実装（10種類以上）</li>
+                            </ul>
+                        </li>
+                        <li><strong>回答生成機能の実装</strong>（3-4週間）</li>
+                        <li><strong>API実装</strong>（2-3週間）</li>
+                    </ol>
+                    <p><strong>成果物</strong>: 検索型AI API、インテント検出精度95%+、回答精度90%以上、レスポンス時間1秒以下</p>
+                </section>
+
+                <section>
+                    <h2>フェーズ1-3: プロアクティブ機能実装（3-6ヶ月）</h2>
+                    <p><strong>目的</strong>: 限定プロアクティブ型の実装</p>
+                    <h3>主要タスク:</h3>
+                    <ol>
+                        <li><strong>緊急時自動案内の実装</strong>（4-5週間）
+                            <ul>
+                                <li>車両データ連携（OBD-II、コネクテッドカーAPI）</li>
+                                <li>警告灯・異常検知の判定ロジック</li>
+                                <li>自動案内の生成・配信</li>
+                            </ul>
+                        </li>
+                        <li><strong>タイミングベース案内の実装</strong>（3-4週間）</li>
+                        <li><strong>よくある質問の自動提示の実装</strong>（2-3週間）</li>
+                    </ol>
+                    <p><strong>成果物</strong>: 緊急時自動案内システム、タイミングベース案内システム、プロアクティブ案内利用率40%以上、緊急時問合せ削減率50%以上</p>
+                </section>
+
+                <section>
+                    <h2>フェーズ1-4: フロントエンド開発（並行、0-9ヶ月）</h2>
+                    <p><strong>目的</strong>: スマホアプリ、Web版Chatbot、Web管理画面の開発</p>
+                    <div class="two-column">
+                        <div>
+                            <h3>スマホアプリ（Flutter）</h3>
+                            <ul>
+                                <li>基本UI実装（4-6週間）</li>
+                                <li>API連携（2-3週間）</li>
+                                <li>プッシュ通知機能（2-3週間）</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3>Web版Chatbot（Next.js）</h3>
+                            <ul>
+                                <li>基本UI実装（3-4週間）</li>
+                                <li>API連携（2-3週間）</li>
+                            </ul>
+                            <h3>Web管理画面（Next.js）</h3>
+                            <ul>
+                                <li>基本UI実装（3-4週間）</li>
+                                <li>API連携（2-3週間）</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p><strong>マイルストーン</strong>: 3ヶ月（RAG基盤完成）→ 6ヶ月（検索型AI+プロアクティブ完成）→ 9ヶ月（フロントエンド完成、PoC開始）</p>
+                </section>
+
+                <section>
+                    <h2>Phase 2〜4: 今後の展開</h2>
+                    <div class="mermaid">
+                        timeline
+                            title 開発ロードマップ全体像
+                            Phase 1 (0-9ヶ月) : ハイブリッド型AI実証
+                                             : 検索型＋限定プロアクティブ型
+                            Phase 2 (9-15ヶ月) : 文脈データ基盤構築
+                                              : 車両データ連携
+                            Phase 3 (15-21ヶ月) : 本格プロアクティブ型への拡張
+                                               : 状況認識による先回り案内
+                            Phase 4 (21-30ヶ月) : 高度化・循環化
+                                              : データ還流システム構築
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Phase 2：文脈データ基盤構築（9-15ヶ月）</h2>
+                    <p><strong>目的</strong>: 文脈理解に必要なデータ収集基盤を構築</p>
+                    <h3>主要タスク:</h3>
+                    <ol style="font-size: 0.85em;">
+                        <li><strong>車両データ連携（2-3ヶ月）</strong>
+                            <ul>
+                                <li>OBD-II、コネクテッドカーAPIとの連携</li>
+                                <li>リアルタイムデータ処理の実装</li>
+                            </ul>
+                        </li>
+                        <li><strong>ユーザー行動ログ収集（1-2ヶ月）</strong>
+                            <ul>
+                                <li>行動ログの収集・保存システム</li>
+                                <li>プライバシー対応</li>
+                            </ul>
+                        </li>
+                        <li><strong>状況認識アルゴリズム開発（2-3ヶ月）</strong>
+                            <ul>
+                                <li>状況認識アルゴリズムの開発</li>
+                                <li>プロアクティブ判定エンジンの実装</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <h3>成果物:</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>データ収集基盤確立</li>
+                        <li>初期アルゴリズム開発</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Phase 3：本格プロアクティブ型への拡張（15-21ヶ月）</h2>
+                    <p><strong>目的</strong>: 状況認識による先回り案内の本格実装</p>
+                    <h3>主要タスク:</h3>
+                    <ol style="font-size: 0.85em;">
+                        <li><strong>状況認識機能の本格実装（3-4ヶ月）</strong>
+                            <ul>
+                                <li>環境・車両状態に応じた自動案内の実装</li>
+                                <li>先回り案内アルゴリズムの精緻化</li>
+                            </ul>
+                        </li>
+                        <li><strong>機能拡張（2-3ヶ月）</strong>
+                            <ul>
+                                <li>新機能・便利機能の発見提案</li>
+                                <li>環境・状況に応じた最適提案</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <h3>成果物:</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>機能利用率向上（30%→60%、最終目標70%）</li>
+                        <li>顧客満足度向上</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Phase 4：高度化・循環化（21-30ヶ月）</h2>
+                    <p><strong>目的</strong>: 体験価値の最大化とデータ循環の確立</p>
+                    <h3>主要タスク:</h3>
+                    <ol style="font-size: 0.85em;">
+                        <li><strong>発見提案機能（2-3ヶ月）</strong>
+                            <ul>
+                                <li>Delight体験の実現</li>
+                            </ul>
+                        </li>
+                        <li><strong>データ還流システム構築（2-3ヶ月）</strong>
+                            <ul>
+                                <li>データ分析・レポート機能</li>
+                                <li>OEM向けデータ還流システム</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <h3>成果物:</h3>
+                    <ul style="font-size: 0.85em;">
+                        <li>NPS 50以上</li>
+                        <li>データ還流率60%以上</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- 開発体制・成功基準 -->
+            <section>
+                <section>
+                    <h2>7. 開発体制（想定）</h2>
+                    <div class="chart-container">
+                        <canvas id="teamChart"></canvas>
+                    </div>
+                    <ul>
+                        <li>AI/MLエンジニア（RAG、LLM、データエンジニアリング）：2-3名</li>
+                        <li>バックエンドエンジニア（Python、FastAPI）：1-2名</li>
+                        <li>フロントエンドエンジニア（Next.js、TypeScript）：1-2名</li>
+                        <li>Flutterエンジニア：1-2名</li>
+                        <li>プロダクトマネージャー：1名</li>
+                        <li>QAエンジニア：1名</li>
+                    </ul>
+                    <p><strong>合計</strong>: 7-11名</p>
+                </section>
+
+                <section>
+                    <h2>8. 成功基準（KPI）</h2>
+                    <h3>Phase 1の成功基準</h3>
+                    <table class="kpi-table">
+                        <thead>
+                            <tr>
+                                <th>カテゴリ</th>
+                                <th>指標</th>
+                                <th>目標値</th>
+                                <th>測定方法</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>技術</td>
+                                <td>回答精度</td>
+                                <td class="highlight">90%以上</td>
+                                <td>評価データセットでの測定</td>
+                            </tr>
+                            <tr>
+                                <td>技術</td>
+                                <td>レスポンス時間</td>
+                                <td class="highlight">1秒以下</td>
+                                <td>API応答時間の測定</td>
+                            </tr>
+                            <tr>
+                                <td>技術</td>
+                                <td>インテント検出精度</td>
+                                <td class="highlight">95%+</td>
+                                <td>インテント検出の精度測定</td>
+                            </tr>
+                            <tr>
+                                <td>ビジネス</td>
+                                <td>問合せ削減率</td>
+                                <td class="highlight">20-30%</td>
+                                <td>コールセンター問い合わせ件数</td>
+                            </tr>
+                            <tr>
+                                <td>ビジネス</td>
+                                <td>緊急時問合せ削減率</td>
+                                <td class="highlight">50%以上</td>
+                                <td>緊急時問い合わせ件数</td>
+                            </tr>
+                            <tr>
+                                <td>ユーザー</td>
+                                <td>プロアクティブ案内利用率</td>
+                                <td class="highlight">40%以上</td>
+                                <td>アプリログ分析</td>
+                            </tr>
+                            <tr>
+                                <td>ユーザー</td>
+                                <td>情報提示の満足度</td>
+                                <td class="highlight">4.5/5.0以上</td>
+                                <td>ユーザー満足度アンケート</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </section>
+
+            <!-- 制約条件 -->
+            <section>
+                <section>
+                    <h2>9. 制約条件</h2>
+                    <h3>9.1 予算制約</h3>
+                    <p><strong>初期投資</strong>: 2.5億円（R&D費用）</p>
+                    <div class="chart-container">
+                        <canvas id="budgetChart"></canvas>
+                    </div>
+                    <ul>
+                        <li>基本機能開発：1.5億円</li>
+                        <li>緊急対応・先読みガイド機能開発：1.0億円</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>予算内訳（想定）</h2>
+                    <div class="chart-container">
+                        <canvas id="budgetBreakdownChart"></canvas>
+                    </div>
+                    <ul>
+                        <li>人件費：60-70%</li>
+                        <li>インフラコスト：10-15%</li>
+                        <li>外部パートナー・ツール：15-20%</li>
+                        <li>その他：5-10%</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>9.2 期間制約</h2>
+                    <p><strong>Phase 1</strong>: 0-9ヶ月（2026年度内に完了）</p>
+                    <h3>マイルストーン:</h3>
+                    <ul style="font-size: 0.9em;">
+                        <li><strong>3ヶ月</strong>：RAGシステム基盤完成</li>
+                        <li><strong>6ヶ月</strong>：検索型AI + プロアクティブ機能（限定版）完成</li>
+                        <li><strong>9ヶ月</strong>：フロントエンド完成、PoC開始</li>
+                    </ul>
+                    <div class="mermaid">
+                        timeline
+                            title Phase 1 マイルストーン
+                            3ヶ月 : RAGシステム基盤完成
+                            6ヶ月 : 検索型AI + プロアクティブ機能（限定版）完成
+                            9ヶ月 : フロントエンド完成、PoC開始
+                    </div>
+                </section>
+
+                <section>
+                    <h2>9.3 技術的制約</h2>
+                    <ul>
+                        <li><strong>車両データ連携</strong>
+                            <ul>
+                                <li>OBD-II、コネクテッドカーAPIの具体的な連携方法が未確定</li>
+                                <li>Phase 1では簡易版で対応</li>
+                            </ul>
+                        </li>
+                        <li><strong>OEM要件</strong>
+                            <ul>
+                                <li>セキュリティ要件、ブランドガイドラインが未確定</li>
+                                <li>後で対応が必要</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- 開発上の重要な考慮事項 -->
+            <section>
+                <section>
+                    <h2>10. 開発上の重要な考慮事項</h2>
+                    <h3>10.1 技術的優位性の確保</h3>
+                    <p><strong>DOI独自のRAG最適化技術を実装することが最重要</strong></p>
+                    <ul>
+                        <li>セマンティック境界チャンキング</li>
+                        <li>マルチベクトル戦略</li>
+                        <li>ハイブリッド検索（RRF）</li>
+                        <li>検索前フィルタリング</li>
+                    </ul>
+                    <p class="highlight">これらが競合との差別化要因となるため、必ず実装すること</p>
+                </section>
+
+                <section>
+                    <h2>10.2 「届く」体験の実装</h2>
+                    <p class="highlight"><strong>重要</strong>: 検索型のみでは「取扱説明書を読まないユーザー」は使わない</p>
+                    <h3>Phase 1で必ず実装すべき「届く」要素:</h3>
+                    <ul>
+                        <li>緊急時自動案内</li>
+                        <li>タイミングベース案内</li>
+                        <li>よくある質問の自動提示</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>10.3 データ品質の確保</h2>
+                    <ul>
+                        <li>データクリーニング・構造化は回答精度に直結するため、品質を最優先</li>
+                        <li>継続的な品質改善プロセスの構築</li>
+                    </ul>
+                    <h3>10.4 コスト最適化</h3>
+                    <ul>
+                        <li>APIコストの削減（検索前フィルタリング、キャッシュ戦略）</li>
+                        <li><strong>目標</strong>: APIコスト/質問を<span class="highlight">¥2-3</span>に抑制（一般的RAGは¥5-10）</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- リスク分析 -->
+            <section>
+                <section>
+                    <h2>11. リスク分析</h2>
+                    <h3>11.1 技術的リスク</h3>
+                    <h4 class="risk-high">🔴 高リスク</h4>
+                    <ol>
+                        <li><strong>AIの回答精度が目標に届かない</strong>
+                            <ul>
+                                <li>発生確率: 中 | 影響度: 高</li>
+                                <li>対策: 段階的な開発、継続的な改善プロセス、専門家アドバイザーの招聘</li>
+                            </ul>
+                        </li>
+                        <li><strong>レスポンス時間が1秒以下に届かない</strong>
+                            <ul>
+                                <li>発生確率: 中 | 影響度: 中</li>
+                                <li>対策: キャッシュ戦略の最適化、CDNの活用、ベクトルDBの最適化</li>
+                            </ul>
+                        </li>
+                        <li><strong>車両データ連携の技術的課題</strong>
+                            <ul>
+                                <li>発生確率: 高 | 影響度: 高</li>
+                                <li>対策: 複数のデータソースの検討、パートナーとの協業、段階的な実装</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h2>リスク分析（続き）</h2>
+                    <h4 class="risk-medium">🟡 中リスク</h4>
+                    <ul>
+                        <li><strong>スケーラビリティの課題</strong>
+                            <ul>
+                                <li>発生確率: 中 | 影響度: 中</li>
+                                <li>対策: クラウドネイティブアーキテクチャの採用、自動スケーリングの実装</li>
+                            </ul>
+                        </li>
+                        <li><strong>データプライバシー・セキュリティリスク</strong>
+                            <ul>
+                                <li>発生確率: 中 | 影響度: 高</li>
+                                <li>対策: セキュリティ監査の実施、プライバシーポリシーの策定、データ暗号化の実装</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>11.2 ビジネス的リスク</h2>
+                    <h4 class="risk-high">🔴 高リスク</h4>
+                    <ol>
+                        <li><strong>OEMの意思決定プロセスの複雑さ</strong>
+                            <ul>
+                                <li>発生確率: 高 | 影響度: 高</li>
+                                <li>対策: ステークホルダーマップの作成、段階的なアプローチ（PoC → 本契約）、早期に効果を実証</li>
+                            </ul>
+                        </li>
+                        <li><strong>競合の参入リスク</strong>
+                            <ul>
+                                <li>発生確率: 中 | 影響度: 高</li>
+                                <li>対策: 技術的差別化の強化、特許出願の検討、早期の市場参入</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h2>11.3 法的/コンプライアンスリスク</h2>
+                    <h4 class="risk-high">🔴 高リスク</h4>
+                    <ol>
+                        <li><strong>AIの誤回答による安全性リスク</strong>
+                            <ul>
+                                <li>発生確率: 低 | 影響度: 高</li>
+                                <li>対策: 品質管理体制の構築、継続的な監視・改善、法的責任の明確化</li>
+                            </ul>
+                        </li>
+                        <li><strong>個人情報保護法・GDPR違反</strong>
+                            <ul>
+                                <li>発生確率: 中 | 影響度: 高</li>
+                                <li>対策: 法務部門との連携、プライバシーポリシーの策定、データ保護の実装</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h2>11.4 運用的リスク</h2>
+                    <h4 class="risk-medium">🟡 中リスク</h4>
+                    <ol>
+                        <li><strong>パートナー依存リスク</strong>
+                            <ul>
+                                <li>発生確率: 中 | 影響度: 中</li>
+                                <li>対策: 複数パートナーの確保、パートナー選定基準の明確化</li>
+                            </ul>
+                        </li>
+                        <li><strong>人材確保の困難</strong>
+                            <ul>
+                                <li>発生確率: 高 | 影響度: 中</li>
+                                <li>対策: 早期の人材確保計画、外部パートナーとの協業、既存メンバーのスキルアップ</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </section>
+            </section>
+
+            <!-- UI/UXの方向性 -->
+            <section>
+                <section>
+                    <h2>12. UI/UXの方向性</h2>
+                    <h3>12.1 デザインコンセプト</h3>
+                    <p><strong>ミニマルで機能的なデザイン</strong></p>
+                    <ul>
+                        <li>情報過多を避け、必要な情報だけを提示</li>
+                        <li>クリーンで読みやすいインターフェース</li>
+                        <li>自動車の安全性を重視した信頼感のあるデザイン</li>
+                    </ul>
+                    <h3>12.2 トーン＆マナー</h3>
+                    <p><strong>プロフェッショナルで親しみやすい</strong></p>
+                    <ul>
+                        <li>安全性を重視した信頼感のあるトーン</li>
+                        <li>ユーザーをサポートする親しみやすいコミュニケーション</li>
+                        <li>技術的でありながら、わかりやすい表現</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>12.3 ターゲットデバイス</h2>
+                    <p><strong>マルチデバイス対応</strong></p>
+                    <ul>
+                        <li><strong>モバイルファースト</strong>: スマホアプリを主要チャネルとして設計</li>
+                        <li><strong>車載ディスプレイ</strong>: 車載システムとの統合を考慮</li>
+                        <li><strong>Web管理画面</strong>: OEM向け管理画面、公開ページ</li>
+                    </ul>
+                    <h3>12.4 参考サイト/アプリ</h3>
+                    <ol>
+                        <li><strong>Mercedes-Benz MBUX</strong>: 車載AIエージェントのUI/UX参考</li>
+                        <li><strong>Tesla Owner's Manual (Mobile App)</strong>: シンプルで機能的なデザイン</li>
+                        <li><strong>Google Assistant</strong>: プロアクティブな情報提供のUI/UX参考</li>
+                    </ol>
+                </section>
+            </section>
+
+            <!-- 追加情報リクエスト・次のステップ -->
+            <section>
+                <section>
+                    <h2>15. 追加情報リクエスト・質問事項</h2>
+                    <h3>優先度：高</h3>
+                    <ol>
+                        <li><strong>技術スタックの最終決定</strong>
+                            <ul>
+                                <li>RAGシステム：Python + FastAPI + LangChain で問題ないか？</li>
+                                <li>Web管理画面：Next.js + Supabase + Vercel で問題ないか？</li>
+                                <li>モバイルアプリ：Flutter で問題ないか？</li>
+                            </ul>
+                        </li>
+                        <li><strong>開発体制の確認</strong>
+                            <ul>
+                                <li>既存メンバーで対応可能なスキルは何か？</li>
+                                <li>新規採用が必要なスキル・人数は？</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h2>追加情報リクエスト（続き）</h2>
+                    <ol start="3">
+                        <li><strong>開発スケジュールの実現可能性</strong>
+                            <ul>
+                                <li>Phase 1（0-9ヶ月）のスケジュールは実現可能か？</li>
+                                <li>リスク要因は何か？</li>
+                            </ul>
+                        </li>
+                        <li><strong>車両データ連携の技術的実現可能性</strong>
+                            <ul>
+                                <li>OBD-II、コネクテッドカーAPIの連携は技術的に可能か？</li>
+                                <li>Phase 1で簡易版を実装することは可能か？</li>
+                            </ul>
+                        </li>
+                        <li><strong>初期ユーザー規模の明確化</strong>
+                            <ul>
+                                <li>Phase 1の初期ユーザー数は何名を想定しているか？（1,000名？5,000名？）</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h2>16. 次のステップ</h2>
+                    <h3>開発部門での確認事項</h3>
+                    <ol>
+                        <li><strong>技術スタックの最終決定</strong>
+                            <ul>
+                                <li>上記の推奨技術スタックで問題ないか確認</li>
+                                <li>代替案があれば提案</li>
+                            </ul>
+                        </li>
+                        <li><strong>開発体制の確定</strong>
+                            <ul>
+                                <li>必要な人材の確保計画</li>
+                                <li>外部パートナーの活用可否</li>
+                            </ul>
+                        </li>
+                        <li><strong>詳細設計の開始</strong>
+                            <ul>
+                                <li>Phase 1の詳細設計書の作成</li>
+                                <li>アーキテクチャ設計の開始</li>
+                            </ul>
+                        </li>
+                        <li><strong>PoC準備</strong>
+                            <ul>
+                                <li>2026年度内のPoC実施に向けた準備</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </section>
+            </section>
+
+            <!-- 最終スライド -->
+            <section class="title-slide">
+                <h1>ご清聴ありがとうございました</h1>
+                <h2>質問・ご意見をお待ちしております</h2>
+                <p style="margin-top: 50px;">
+                    <strong>作成者</strong>: 事業開発部門、開発部門<br>
+                    <strong>次回更新予定</strong>: 開発部門からのフィードバック後<br>
+                    <strong>要件定義書作成完了日</strong>: 2026年1月22日
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+    
+    <script>
+        // Mermaid初期化
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: { useMaxWidth: true }
+        });
+
+        // Reveal.js初期化
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: false,
+            touch: true,
+            loop: false,
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            width: 1280,
+            height: 720,
+            margin: 0.1,
+            minScale: 0.2,
+            maxScale: 2.0,
+            slideNumber: 'c/t',
+            showSlideNumber: 'all'
+        });
+
+        // チャートの初期化（Reveal.jsのスライドが表示された後に実行）
+        Reveal.addEventListener('ready', function(event) {
+            initializeCharts();
+        });
+
+        function initializeCharts() {
+            // 売上目標チャート
+            const revenueCtx = document.getElementById('revenueChart');
+            if (revenueCtx) {
+                new Chart(revenueCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['2026年度', '2027年度', '2028年度'],
+                        datasets: [{
+                            label: '売上（億円）',
+                            data: [2, 12, 35],
+                            backgroundColor: ['#3498db', '#2ecc71', '#e74c3c'],
+                            borderColor: ['#2980b9', '#27ae60', '#c0392b'],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: '期待されるビジネスインパクト'
+                            },
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: '売上（億円）'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 目標成果チャート
+            const targetCtx = document.getElementById('targetChart');
+            if (targetCtx) {
+                new Chart(targetCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['機能利用率', '問合せ削減率', '緊急時問合せ削減率', 'プロアクティブ案内利用率', '回答精度', 'NPS'],
+                        datasets: [{
+                            label: '現状',
+                            data: [30, 0, 0, 0, 0, 0],
+                            borderColor: '#e74c3c',
+                            backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                            borderWidth: 2
+                        }, {
+                            label: '目標',
+                            data: [70, 30, 50, 40, 90, 50],
+                            borderColor: '#2ecc71',
+                            backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: '目標とする成果'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                title: {
+                                    display: true,
+                                    text: '達成率（%）'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 開発体制チャート
+            const teamCtx = document.getElementById('teamChart');
+            if (teamCtx) {
+                new Chart(teamCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['AI/MLエンジニア', 'バックエンドエンジニア', 'フロントエンドエンジニア', 'Flutterエンジニア', 'プロダクトマネージャー', 'QAエンジニア'],
+                        datasets: [{
+                            data: [2.5, 1.5, 1.5, 1.5, 1, 1],
+                            backgroundColor: [
+                                '#3498db',
+                                '#2ecc71',
+                                '#e74c3c',
+                                '#f39c12',
+                                '#9b59b6',
+                                '#1abc9c'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: '開発体制（想定）合計: 7-11名'
+                            },
+                            legend: {
+                                position: 'right'
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 予算チャート
+            const budgetCtx = document.getElementById('budgetChart');
+            if (budgetCtx) {
+                new Chart(budgetCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['基本機能開発', '緊急対応・先読みガイド機能開発'],
+                        datasets: [{
+                            label: '予算（億円）',
+                            data: [1.5, 1.0],
+                            backgroundColor: ['#3498db', '#2ecc71'],
+                            borderColor: ['#2980b9', '#27ae60'],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: '初期投資: 2.5億円（R&D費用）'
+                            },
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: '予算（億円）'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 予算内訳チャート
+            const budgetBreakdownCtx = document.getElementById('budgetBreakdownChart');
+            if (budgetBreakdownCtx) {
+                new Chart(budgetBreakdownCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['人件費', 'インフラコスト', '外部パートナー・ツール', 'その他'],
+                        datasets: [{
+                            data: [65, 12.5, 17.5, 5],
+                            backgroundColor: [
+                                '#3498db',
+                                '#2ecc71',
+                                '#e74c3c',
+                                '#f39c12'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: '予算内訳（想定）'
+                            },
+                            legend: {
+                                position: 'right'
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

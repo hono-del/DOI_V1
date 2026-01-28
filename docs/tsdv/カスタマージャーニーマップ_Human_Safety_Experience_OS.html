@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human Safety Experience OS - カスタマージャーニーマップ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0066CC 0%, #004999 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .subtitle {
+            background: #f8f9fa;
+            padding: 30px 40px;
+            border-bottom: 3px solid #0066CC;
+        }
+
+        .subtitle h2 {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .subtitle p {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .journey-container {
+            padding: 40px;
+            background: #fafafa;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+        }
+
+        .legend-color.problem {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        }
+
+        .legend-color.solution {
+            background: linear-gradient(135deg, #00AA44 0%, #00d45a 100%);
+        }
+
+        .journey-map {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 20px;
+        }
+
+        .journey-phases {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .phase-label {
+            height: 400px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2em;
+            color: #333;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 5px solid #0066CC;
+        }
+
+        .journey-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .journey-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            min-height: 400px;
+        }
+
+        .journey-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            padding: 25px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .card-header.problem {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        }
+
+        .card-header.solution {
+            background: linear-gradient(135deg, #00AA44 0%, #00d45a 100%);
+        }
+
+        .card-icon {
+            font-size: 2.5em;
+        }
+
+        .card-title {
+            flex: 1;
+        }
+
+        .card-title h3 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .card-title .phase-tag {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .card-content {
+            padding: 25px;
+        }
+
+        .scenario {
+            margin-bottom: 25px;
+        }
+
+        .scenario h4 {
+            color: #333;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .scenario-type {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .scenario-type.before {
+            background: #ffe0e0;
+            color: #d63031;
+        }
+
+        .scenario-type.after {
+            background: #d4edda;
+            color: #00AA44;
+        }
+
+        .scenario-description {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .scenario-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .scenario-list li {
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #0066CC;
+            color: #555;
+        }
+
+        .scenario-list.problem li {
+            border-left-color: #ff6b6b;
+            background: #fff5f5;
+        }
+
+        .scenario-list.solution li {
+            border-left-color: #00AA44;
+            background: #f0fdf4;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #0066CC;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .arrow-down {
+            text-align: center;
+            padding: 15px;
+            font-size: 2em;
+            color: #0066CC;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+            margin: 40px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #ff6b6b 0%, #0066CC 50%, #00AA44 100%);
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            flex: 1;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 0 20px;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: #0066CC;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 0 4px #0066CC;
+            z-index: 1;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #0066CC 0%, #004999 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 1.3em;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 40px;
+            background: white;
+            color: #0066CC;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 700;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .journey-map {
+                grid-template-columns: 1fr;
+            }
+
+            .phase-label {
+                height: auto;
+                padding: 15px;
+            }
+
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .legend {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        .layer-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .layer-1 {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .layer-2 {
+            background: #f3e5f5;
+            color: #6a1b9a;
+        }
+
+        .layer-3 {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .emotion-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .emotion-indicator.negative {
+            background: #fff5f5;
+            color: #d63031;
+            border-left: 4px solid #d63031;
+        }
+
+        .emotion-indicator.positive {
+            background: #f0fdf4;
+            color: #00AA44;
+            border-left: 4px solid #00AA44;
+        }
+
+        .emotion-icon {
+            font-size: 1.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚗 Human Safety Experience OS</h1>
+            <p>交通事故ゼロへの道のり - カスタマージャーニーマップ</p>
+        </header>
+
+        <div class="subtitle">
+            <h2>事故が起きる4つの層とその解決</h2>
+            <p>ドライバーが直面する「情報体験の問題」を、Human Safety Experience OSがどのように解決するかを時系列で示します。</p>
+        </div>
+
+        <div class="journey-container">
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color problem"></div>
+                    <span><strong>課題（Before）</strong>: 現状の問題</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color solution"></div>
+                    <span><strong>解決（After）</strong>: 弊社システムによる改善</span>
+                </div>
+            </div>
+
+            <!-- レイヤー1: 認知の問題 -->
+            <div class="journey-card">
+                <div class="card-header problem">
+                    <div class="card-icon">❌</div>
+                    <div class="card-title">
+                        <div class="layer-badge layer-1">レイヤー❶ 認知の問題</div>
+                        <h3>警告灯の意味を理解していない</h3>
+                        <p class="phase-tag">フェーズ: 情報認識</p>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="scenario">
+                        <h4>
+                            <span class="scenario-type before">BEFORE</span>
+                            現状の課題
+                        </h4>
+                        <div class="emotion-indicator negative">
+                            <span class="emotion-icon">😰</span>
+                            <span>感情: 困惑、不安、焦り</span>
+                        </div>
+                        <p class="scenario-description">
+                            郊外をドライブ中、突然「ブレーキパッド摩耗」の警告灯が点灯。ドライバーは警告の意味が分からず困惑。
+                        </p>
+                        <ul class="scenario-list problem">
+                            <li>🚨 警告灯が点灯するが、意味が分からない</li>
+                            <li>📖 分厚い取扱説明書を探すが、運転中は見られない</li>
+                            <li>❓ 「これは危険？今すぐ止まるべき？」と不安</li>
+                            <li>⏱️ 理解までに平均3-5分、その間危険な状態が続く</li>
+                        </ul>
+                        <div class="metrics">
+                            <div class="metric">
+                                <div class="metric-value">35%</div>
+                                <div class="metric-label">警告灯の理解率</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">3-5分</div>
+                                <div class="metric-label">情報取得までの時間</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">⬇️</div>
+
+                    <div class="scenario">
+                        <h4>
+                            <span class="scenario-type after">AFTER</span>
+                            Human Safety Experience OS による解決
+                        </h4>
+                        <div class="emotion-indicator positive">
+                            <span class="emotion-icon">😌</span>
+                            <span>感情: 安心、理解、自信</span>
+                        </div>
+                        <p class="scenario-description">
+                            <strong>Safety Knowledge Skeleton（知識OS）</strong>が即座に「人の判断単位」で情報を提供。
+                        </p>
+                        <ul class="scenario-list solution">
+                            <li>✅ 警告灯の意味を即座に明確に説明</li>
+                            <li>✅ 「今すぐすべきこと」を優先順位付きで提示</li>
+                            <li>✅ 「なぜ重要か」を納得できる形で説明</li>
+                            <li>✅ 「放置するとどうなるか」を明示</li>
+                        </ul>
+                        <div class="metrics">
+                            <div class="metric">
+                                <div class="metric-value">90%+</div>
+                                <div class="metric-label">理解率（改善）</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">&lt;3秒</div>
+                                <div class="metric-label">情報取得時間</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">100%</div>
+                                <div class="metric-label">法的説明責任対応</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- レイヤー2: 判断の問題 -->
+            <div class="journey-card">
+                <div class="card-header problem">
+                    <div class="card-icon">❌</div>
+                    <div class="card-title">
+                        <div class="layer-badge layer-2">レイヤー❷ 判断の問題</div>
+                        <h3>「今、何をすべきか」が瞬時に分からない</h3>
+                        <p class="phase-tag">フェーズ: 意思決定</p>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="scenario">
+                        <h4>
+                            <span class="scenario-type before">BEFORE</span>
+                            現状の課題
+                        </h4>
+                        <div class="emotion-indicator negative">
+                            <span class="emotion-icon">😨</span>
+                            <span>感情: パニック、混乱、不安（家族全員）</span>
+                        </div>
+                        <p class="scenario-description">
+                            家族でドライブ中にブレーキパッド摩耗警告。「今すぐ止まるべき？」「このまま帰れる？」判断に迷う。
+                        </p>
+                        <ul class="scenario-list problem">
+                            <li>👨‍👩‍👧‍👦 家族全員が不安になる</li>
+                            <li>❓ 「このまま帰れるのか？」判断できない</li>
+                            <li>📱 スマホで検索しようとするが運転中は危険</li>
+                            <li>⏱️ 判断に平均45秒、その間迷いながら運転</li>
+                            <li>🚗 適切でない判断で事故リスク増大</li>
+                        </ul>
+                        <div class="metrics">
+                            <div class="metric">
+                                <div class="metric-value">45秒</div>
+                                <div class="metric-label">平均判断時間</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">60%</div>
+                                <div class="metric-label">適切な判断率</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">⬇️</div>
+
+                    <div class="scenario">
+                        <h4>
+                            <span class="scenario-type after">AFTER</span>
+                            Human Safety Experience OS による解決
+                        </h4>
+                        <div class="emotion-indicator positive">
+                            <span class="emotion-icon">😊</span>
+                            <span>感情: 安堵、自信、家族の笑顔</span>
+                        </div>
+                        <p class="scenario-description">
+                            <strong>Contextual Safety Guidance（文脈型支援）</strong>が状況を総合判断し、明確な指示を提供。
+                        </p>
+                        <ul class="scenario-list solution">
+                            <li>✅ 車両データ × 環境 × ユーザー状況を統合判断</li>
+                            <li>✅ 「自宅まで帰れます（残り12km、安全）」と明示</li>
+                            <li>✅ 優先順位付きの具体的行動指示</li>
+                            <li>✅ 理由と結果予測で納得感を提供</li>
+                            <li>✅ 「お子様へ：パパは安全運転してるから大丈夫」</li>
+                        </ul>
+                        <div class="metrics">
+                            <div class="metric">
+                                <div class="metric-value">22秒</div>
+                                <div class="metric-label">判断時間（50%短縮）</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">90%+</div>
+                                <div class="metric-label">適切な判断率</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">100%</div>
+                                <div class="metric-label">家族の安心度</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- レイヤー3: 行動の問題 -->
+            <div class="journey-card">
+                <div class="card-header problem">
+                    <div class="card-icon">❌</div>
+                    <div class="card-title">
+                        <div class="layer-badge layer-1">レイヤー❸ 行動の問題</div>
+                        <h3>正しい操作を迷う／間違える</h3>
+                        <p class="phase-tag">フェーズ: 実行</p>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="scenario">
+                        <h4>
+                            <span class="scenario-type before">BEFORE</span>
+                            現状の課題
+                        </h4>
+                        <div class="emotion-indicator negative">
+                            <span class="emotion-icon">😣</span>
+                            <span>感情: 焦り、イライラ、後悔</span>
+                        </div>
+                        <p class="scenario-description">
+                            新車で初ドライブ。「エコモード」にしようとして複雑なボタン配置に困惑、間違えて「パワーモード」を押しかける。
+                        </p>
+                        <ul class="scenario-list problem">
+                            <li>🎛️ 複雑な操作パネル、似たようなボタンが多数</li>
+                            <li>❌ 間違ったボタンを押してしまう</li>
+                            <li>🚦 信号待ちで操作中、後ろからクラクション</li>
+                            <li>😰 焦って「初期化」ボタンを誤タップ</li>
+                            <li>⚠️ 運転中の誤操作で事故リスク3倍</li>
+                        </ul>
+                        <div class="metrics">
+                            <div class="metric">
+                                <div class="metric-value">25%</div>
+                                <div class="metric-label">誤操作率</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">65%</div>
+                                <div class="metric-label">操作ミス経験者</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">⬇️</div>
+
+                    <div class="scenario">
+                        <h4>
+                            <span class="scenario-type after">AFTER</span>
+                            Human Safety Experience OS による解決
+                        </h4>
+                        <div class="emotion-indicator positive">
+                            <span class="emotion-icon">😄</span>
+                            <span>感情: 助かった、感謝、自信</span>
+                        </div>
+                        <p class="scenario-description">
+                            <strong>Contextual Safety Guidance（文脈型支援）</strong>が危険な操作を事前に検知して警告。
+                        </p>
+                        <ul class="scenario-list solution">
+                            <li>✅ 住宅街（30km/h制限）でパワーモードは不適切と判断</li>
+                            <li>✅ 「💡ちょっと待って！」と優しく介入</li>
+                            <li>✅ 状況説明：「お子様同乗、住宅街では適していません」</li>
+                            <li>✅ 代替案提案：「エコモードがおすすめ」と具体的な位置を表示</li>
+                            <li>✅ 誤操作を未然に防ぎ、適切な選択を支援</li>
+                        </ul>
+                        <div class="metrics">
+                            <div class="metric">
+                                <div class="metric-value">17%</div>
+                                <div class="metric-label">誤操作率（30%削減）</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">85%+</div>
+                                <div class="metric-label">タスク完了率</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">90%</div>
+                                <div class="metric-label">ユーザー満足度</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- レイヤー4: 継続の問題 -->
+            <div class="journey-card">
+                <div class="card-header problem">
+                    <div class="card-icon">❌</div>
+                    <div class="card-title">
+                        <div class="layer-badge layer-3">レイヤー❹ 継続の問題</div>
+                        <h3>学習・習熟が定着しない</h3>
+                        <p class="phase-tag">フェーズ: 定着・継続</p>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="scenario">
+                        <h4>
+                            <span class="scenario-type before">BEFORE</span>
+                            現状の課題
+                        </h4>
+                        <div class="emotion-indicator negative">
+                            <span class="emotion-icon">😓</span>
+                            <span>感情: 忘れた、また同じ、面倒</span>
+                        </div>
+                        <p class="scenario-description">
+                            冬の朝、フロントガラス凍結。「デフロスター」の使い方を前回調べたが忘れてしまった。また同じことを調べ直す。
+                        </p>
+                        <ul class="scenario-list problem">
+                            <li>🔄 同じ問題が再発しても、前回の学習が定着していない</li>
+                            <li>📖 何度も同じことを調べ直す無駄な時間</li>
+                            <li>😤 「前もやったのに...」というストレス</li>
+                            <li>📉 安全機能の利用率わずか10%（知らない・使えない）</li>
+                            <li>⚠️ 習熟しないまま、潜在的な危険が継続</li>
+                        </ul>
+                        <div class="metrics">
+                            <div class="metric">
+                                <div class="metric-value">10%</div>
+                                <div class="metric-label">安全機能利用率</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">低い</div>
+                                <div class="metric-label">学習定着率</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">⬇️</div>
+
+                    <div class="scenario">
+                        <h4>
+                            <span class="scenario-type after">AFTER</span>
+                            Human Safety Experience OS による解決
+                        </h4>
+                        <div class="emotion-indicator positive">
+                            <span class="emotion-icon">😎</span>
+                            <span>感情: できる、慣れた、自信</span>
+                        </div>
+                        <p class="scenario-description">
+                            <strong>Safety Experience Analytics（学習ループ）</strong>が習熟度に応じて最適な支援を提供。
+                        </p>
+                        <ul class="scenario-list solution">
+                            <li>✅ <strong>Day 1</strong>: 詳細なステップバイステップガイド（理解度40%）</li>
+                            <li>✅ <strong>Day 7</strong>: 簡略版「先週やったやつ」（理解度70%）</li>
+                            <li>✅ <strong>Day 30</strong>: 確認のみ「✓正しく設定されました！」（理解度95%）</li>
+                            <li>✅ 段階的に支援を減らし、自力での実行を促進</li>
+                            <li>✅ 「もう慣れた！」という達成感と自信</li>
+                        </ul>
+                        <div class="metrics">
+                            <div class="metric">
+                                <div class="metric-value">60%</div>
+                                <div class="metric-label">安全機能利用率（6倍）</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">80%+</div>
+                                <div class="metric-label">学習定着率</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">95%</div>
+                                <div class="metric-label">3回目の習熟度</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 緊急時対応 -->
+            <div class="journey-card">
+                <div class="card-header solution">
+                    <div class="card-icon">🚨</div>
+                    <div class="card-title">
+                        <div class="layer-badge layer-2">特別シーン: 緊急時対応</div>
+                        <h3>高速道路でのパンク - パニックから冷静な対応へ</h3>
+                        <p class="phase-tag">フェーズ: 危機管理</p>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="scenario">
+                        <h4>
+                            <span class="scenario-type before">BEFORE</span>
+                            現状の課題
+                        </h4>
+                        <div class="emotion-indicator negative">
+                            <span class="emotion-icon">😱</span>
+                            <span>感情: パニック、恐怖、混乱</span>
+                        </div>
+                        <p class="scenario-description">
+                            高速道路100km/hで走行中、突然タイヤがパンク。車が大きく揺れ、ドライバーはパニック状態に。
+                        </p>
+                        <ul class="scenario-list problem">
+                            <li>💥 突然の「BOOM」、車が激しく揺れる</li>
+                            <li>😨 ドライバーは完全にパニック状態</li>
+                            <li>❓ 「どうすればいい？」判断できない</li>
+                            <li>🚗 後続車が高速で接近、非常に危険</li>
+                            <li>⏱️ 対応に平均45秒、二次事故のリスク大</li>
+                        </ul>
+                        <div class="metrics">
+                            <div class="metric">
+                                <div class="metric-value">45秒</div>
+                                <div class="metric-label">平均対応時間</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">高い</div>
+                                <div class="metric-label">二次事故リスク</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">⬇️</div>
+
+                    <div class="scenario">
+                        <h4>
+                            <span class="scenario-type after">AFTER</span>
+                            Human Safety Experience OS による解決
+                        </h4>
+                        <div class="emotion-indicator positive">
+                            <span class="emotion-icon">😌</span>
+                            <span>感情: パニック → 集中 → 安堵</span>
+                        </div>
+                        <p class="scenario-description">
+                            システムが即座にパンクを検知。AR HUDでステップバイステップガイドを表示、音声でも支援。
+                        </p>
+                        <ul class="scenario-list solution">
+                            <li>✅ 🚨「タイヤ故障を検知しました」即座に通知</li>
+                            <li>✅ 「1. ✓ハザードランプON（自動作動）」</li>
+                            <li>✅ 「2. 路肩へ →」AR矢印で安全な経路を表示</li>
+                            <li>✅ 「3. エンジンOFF」</li>
+                            <li>✅ 「4. ☎ロードサービス（タップで発信）」</li>
+                            <li>✅ 冷静な音声ガイドでドライバーを落ち着かせる</li>
+                        </ul>
+                        <div class="metrics">
+                            <div class="metric">
+                                <div class="metric-value">15秒</div>
+                                <div class="metric-label">対応時間（67%短縮）</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">80%</div>
+                                <div class="metric-label">二次事故リスク削減</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">90%+</div>
+                                <div class="metric-label">成功率</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 統合効果 -->
+            <div class="journey-card">
+                <div class="card-header solution">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title">
+                        <h3>統合効果：4つの層すべてで改善を実現</h3>
+                        <p class="phase-tag">成果: 交通事故ゼロへの貢献</p>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="scenario">
+                        <h4>総合的な改善効果</h4>
+                        <div class="metrics">
+                            <div class="metric">
+                                <div class="metric-value">35%→90%</div>
+                                <div class="metric-label">❶ 認知: 理解率</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">45秒→22秒</div>
+                                <div class="metric-label">❷ 判断: 判断時間</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">25%→17%</div>
+                                <div class="metric-label">❸ 行動: 誤操作率</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">10%→60%</div>
+                                <div class="metric-label">❹ 継続: 機能利用率</div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #00AA44 0%, #00d45a 100%); color: white; border-radius: 15px;">
+                            <h2 style="font-size: 2.5em; margin-bottom: 15px;">🎯 総合効果</h2>
+                            <p style="font-size: 1.8em; font-weight: 700;">事故率 5-10% 低減</p>
+                            <p style="font-size: 1.2em; margin-top: 10px; opacity: 0.95;">車両側の安全（トヨタ様）× 人間側の安全（弊社）= 交通事故ゼロの実現</p>
+                        </div>
+                    </div>
+
+                    <div class="scenario" style="margin-top: 30px;">
+                        <h4>ビジネス効果</h4>
+                        <div class="metrics">
+                            <div class="metric">
+                                <div class="metric-value">-30%</div>
+                                <div class="metric-label">コールセンターコスト削減</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">-40%</div>
+                                <div class="metric-label">販売店対応時間削減</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">+15pt</div>
+                                <div class="metric-label">顧客満足度向上</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">4.5/5.0</div>
+                                <div class="metric-label">ユーザー評価</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario" style="margin-top: 30px;">
+                        <h4>🔄 データ還流による継続的改善</h4>
+                        <p class="scenario-description">
+                            Safety Experience Analyticsが4つの層すべてのデータを収集・分析。商品企画へフィードバックすることで、SDV開発の精度が向上します。
+                        </p>
+                        <ul class="scenario-list solution">
+                            <li>📊 どの警告で困っているか（認知の課題）→ 表示方法改善</li>
+                            <li>📊 どこで判断に迷うか（判断の課題）→ UI/UX改善</li>
+                            <li>📊 どの操作で間違えるか（行動の課題）→ システム設計見直し</li>
+                            <li>📊 何が習熟を妨げるか（継続の課題）→ 学習プログラム最適化</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>🚀 まずは3ヶ月のPoCから始めませんか？</h2>
+            <p>Human Safety Experience OS で、交通事故ゼロの実現に貢献します。</p>
+            <a href="#contact" class="cta-button">お問い合わせはこちら</a>
+            <div style="margin-top: 40px; font-size: 1.1em;">
+                <p><strong>We translate SDV into human-safe experience.</strong></p>
+                <p style="margin-top: 10px;">事故ゼロ社会を、人の理解から支える。</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Human Safety Experience OS Project | DOI 2512</p>
+            <p style="margin-top: 10px; opacity: 0.8;">トヨタ自動車株式会社 様 ご提案資料</p>
+        </footer>
+    </div>
+
+    <script>
+        // カードをクリックしたときのアニメーション
+        document.querySelectorAll('.journey-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+        });
+
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ページロード時のフェードインアニメーション
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.journey-card').forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+

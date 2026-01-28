@@ -1,0 +1,14 @@
+No,Type,Title,Core
+1,cover,Digital Owner's Informationご提案,
+2,concept,取扱説明書をなくす。,私たちが取扱説明書をつくり続ける目的は「誰もが迷うことなく、安心して製品を、最大限に使いこなせる体験」の提供
+3,vision,WITH AFRICA FOR AFRICA×Digital Owner's Information,情報でユーザー中心の利用体験をつくり、デジタル資産化することでアフリカモビリティ市場の成長を支援
+4,problem,現場課題（仮説）,情報が配布物のままで、ユーザーに使われていない/資産化されていない
+5,problem,現場課題（仮説）詳細,このままの場合、現場負荷が上がる・ユーザー体験が下がる一方
+6,roadmap,ROAD MAP,電子化→AI対話→文脈理解→自律行動で変化する
+7,insight,OM情報の役割,PLに関する情報：漏れなく、固定で、確実に残す　CSに関する情報：ユーザーの状況に合わせて必要な時に、必要な形で届ける
+8,case,AI Chatbot PoC,ユーザー接点創出とログデータ取得
+9,case,Owner’s App,製品化されたAppへのAI Chatbot導入
+10,case,小冊子化,印刷費削減が可能
+11,plan,PoC案：CS情報の体験化による現場負荷低減＋UX向上,PoC実施でKPI計測（理解度向上、一次解決率、問合せ削減、対応負荷削減など）
+12,plan,PoC案：CS情報の体験化による現場負荷低減＋UX向上,PoC実施の対象車種、対象国、対象販売店の選定基準
+13,schedule,PoC案：CS情報の体験化による現場負荷低減＋UX向上,約9か月のPoC準備～実施

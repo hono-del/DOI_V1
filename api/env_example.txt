@@ -1,0 +1,17 @@
+# Flask Configuration
+FLASK_APP=app.py
+FLASK_ENV=development
+SECRET_KEY=your-secret-key-here-change-in-production
+
+# Database
+DATABASE_URL=sqlite:///guide_system.db
+
+# Google Places API
+GOOGLE_PLACES_API_KEY=your-google-places-api-key-here
+
+# CORS
+CORS_ORIGINS=*
+
+# API設定
+DEFAULT_SEARCH_RADIUS_KM=5
+MAX_SEARCH_RADIUS_KM=50

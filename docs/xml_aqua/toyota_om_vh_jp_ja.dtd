@@ -1,0 +1,1062 @@
+<!--
+システム名：TOYOTA OM 
+更新日：2015/02/10
+更新日：2015/04/14
+更新日：2015/04/16
+更新日：2015/04/27
+更新日：2015/05/18
+更新日：2015/05/28CMC
+更新日：2015/06/03CMC
+更新日：2015/06/10CMC
+更新日：2015/06/15ITP
+更新日：2015/06/22ITP
+更新日：2015/06/26ITP
+更新日：2015/06/29ITP
+更新日：2015/07/06ITP
+更新日：2015/11/04CMC
+更新日：2015/11/10CMC
+更新日：2015/11/11CMC
+更新日：2015/11/12CMC
+更新日：2015/11/18CMC
+更新日：2015/12/17CMC
+更新日：2016/01/28CMC
+更新日：2016/02/29ITP
+更新日：2016/04/13ITP
+
+-->
+
+<!-- 特殊文字ENTITY -->
+<!ENTITY  rarr  "→" >
+<!ENTITY  mdash  "―" >
+<!ENTITY  and  "∧" >
+<!ENTITY  or  "∨" >
+<!ENTITY  times  "×" >
+<!ENTITY  plusmn	"±">
+
+
+<!-- toyota om DTD -->
+
+<!ENTITY % content "paraselect | para | p | p_sub | p_select | list1 | step | fig | table | footnote | attention | note">
+
+<!ENTITY % chardat "#PCDATA | b | u | i | sup | sub | break | symbol | xref | indexmarker | option | function">
+
+<!ENTITY % treedat "subsection_introduction | subsection_operation | subsection_attention | subsection_supplement | subsection_law | subsection_maintenance | subsection_specification | topic | topic_function_basic | topic_function_advanced | subtopiclv1 | subtopiclv1_function_basic | subtopiclv1_function_advanced | subtopiclv2 | subtopiclv2_function_basic | subtopiclv2_function_advanced">
+
+<!ENTITY % paradat "overview | basic_operation | advanced_operation | basic_description | advanced_description | automatic_control | alert_attention | main_explanation | om_body | body | paragroup | attention_para | note_para">
+
+<!ENTITY % listdat "list1_item | list2_item | stepitem | att_list1_item | att_list2_item | att_stepitem">
+
+
+
+<!ELEMENT	toyota_om_vh_jp_ja				(book+) >
+
+<!ELEMENT	book						(intro | illusttoc | toc | chapter | appendix | index)+ >
+<!ATTLIST	book				
+					id								ID														#IMPLIED
+					manualtype				(vh | nv)									#REQUIRED
+					lang							(ja | en | es | fr | de | it | pt | nl | sv | no | da | ru | fi | el | pl | uk | tr | hu | cs | sk | ro | fm | ar | zh | tw | hk | ko | th | ms | id | vi | he)						#REQUIRED
+					vehicle_code				CDATA									#REQUIRED
+					dev_code				CDATA									#REQUIRED
+					lo_date				CDATA									#REQUIRED
+					scale				(new | major | minor | improvement | rc)									#REQUIRED
+					change_info				CDATA									#IMPLIED
+					my												CDATA									#IMPLIED
+					vehicle_type			(conventional	| hv | conventional_hv | ev | fcv)			#REQUIRED
+					body_type					(sedan | hb | wg | truck | coupe | onebox)									#REQUIRED
+					model									CDATA									#REQUIRED
+					drive_train				(ff | fr)									#REQUIRED
+					brand									(le | to | sc)					#REQUIRED
+					period_from				CDATA									#REQUIRED
+					period_to				CDATA									#REQUIRED
+					pubno				CDATA									#REQUIRED
+					pubname				CDATA									#REQUIRED
+					identify_code				CDATA									#REQUIRED
+					om_style						CDATA									#REQUIRED
+					destination			(jp | us | mx | eu | au | se | me | in | la | za | cn | hk | tw | kr | ge)																															#REQUIRED
+					revision				CDATA									#REQUIRED
+					publish_date				CDATA									#REQUIRED
+					production				CDATA									#REQUIRED >
+
+<!ELEMENT	illusttoc					(title, (subtitle, body)*) >
+<!ATTLIST	illusttoc				
+					id								ID														#REQUIRED
+					version				CDATA										#IMPLIED
+					date							CDATA										#IMPLIED >
+
+<!ELEMENT	toc							(title, (chapgroup | introtoc)*) >
+
+<!ELEMENT	chapgroup				(chaptitletable , toclevel1*)  >
+
+<!ELEMENT	chaptitletable			(chaptitletablebody)+ >
+<!ATTLIST	chaptitletable				
+					tabletype					CDATA													#IMPLIED
+					width						CDATA													#IMPLIED>
+
+<!ELEMENT	chaptitletablebody	(chaptitletablerow)+ >
+
+<!ELEMENT	chaptitletablerow	(chapnumcell , chaptitlecell)+ >
+
+<!ELEMENT	chapnumcell			(#PCDATA) >
+<!ATTLIST	chapnumcell				
+					numtype					(normal | none)									#IMPLIED>
+
+<!ELEMENT	chaptitlecell				(#PCDATA) >
+
+<!ELEMENT	introtoc					(tocleveltxt | toclevelref) >
+<!ATTLIST	introtoc				
+					label						CDATA													#IMPLIED >
+
+<!ELEMENT	index						(title, chapcontents?, section*, keywordindex*) >
+<!ATTLIST	index				
+					id								ID														#REQUIRED >
+
+<!ELEMENT	keywordindex			(title, (indexgroup | indexlevel1)*) >
+<!ATTLIST	keywordindex				
+					column					(col | full)											"col"
+					id								ID														#REQUIRED
+					type							CDATA													#IMPLIED  >
+
+<!ELEMENT	indexgroup				(grouplabel, grouptitle, indexlevel1*) >
+<!ATTLIST	indexgroup
+					type							(index | navi_index)							"index">
+
+<!ELEMENT	grouplabel				EMPTY >
+<!ATTLIST	grouplabel
+					page						(page | col | none)								"none">
+
+<!ELEMENT	grouptitle					(#PCDATA) >
+
+<!ELEMENT	indexlevel1				(indexleveltxt, indexlevel2*) >
+<!ATTLIST	indexlevel1				
+					label						CDATA													#IMPLIED >
+
+<!ELEMENT	indexlevel2				(indexleveltxt) >
+<!ATTLIST	indexlevel2				
+					label						CDATA													#IMPLIED >
+
+<!ELEMENT	indexlevelref			EMPTY >
+<!ATTLIST	indexlevelref
+					refid							IDREF													#IMPLIED
+					idref							CDATA													#IMPLIED
+					srcfile						CDATA													#IMPLIED  >
+
+<!ELEMENT	indexleveltxt			(#PCDATA |  b | u | i | sup | sub | break | symbol | indexlevelref | option | function)* >
+<!ATTLIST	indexleveltxt
+					page						(page | col | none)								"none">
+
+<!ELEMENT intro							 (titlegroup, (introsub | body)*)>
+<!ATTLIST	intro
+					id                 ID                            #REQUIRED
+					num        CDATA                          #IMPLIED
+					column					(col | full)									"col"
+					version     CDATA                         #IMPLIED
+					date         CDATA                         #IMPLIED
+					publish_em (yes | no)               "yes"
+					publish_pm (yes | no)               "yes"
+					publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT introsub						 (titlegroup, body*)>
+<!ATTLIST	introsub
+					id                 ID                            #REQUIRED
+					column					(col | full)									"col"
+					page						(page | col | none)								"none"
+					version     CDATA                         #IMPLIED
+					date         CDATA                         #IMPLIED
+					ominfo     NMTOKENS                 #IMPLIED
+					publish_em (yes | no)               "yes"
+					publish_pm (yes | no)               "yes"
+					publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT appendix							 (titlegroup, body*)>
+<!ATTLIST	appendix
+					id                 ID                            #REQUIRED
+					num        CDATA                          #IMPLIED
+					column					(col | full)									"col"
+					version     CDATA                         #IMPLIED
+					date         CDATA                         #IMPLIED
+					publish_em (yes | no)               "yes"
+					publish_pm (yes | no)               "yes"
+					publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT	chapter					(title, subtitle?, chapcontents?, (section | body)*) >
+<!ATTLIST	chapter				
+					id								ID														#REQUIRED
+					chapnum					CDATA													#REQUIRED
+					chaptype					(intro | anzen | quick | chapter | trouble | other )											#REQUIRED
+    version     CDATA     #IMPLIED
+    date        CDATA     #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes" 
+    publish_fullpm (yes | no) "yes">
+
+
+<!ELEMENT	section (title, (subsection_introduction | subsection_operation | subsection_attention | subsection_supplement | subsection_law | subsection_maintenance | subsection_specification | body)*) >
+<!ATTLIST	section
+    id                 ID                          #REQUIRED
+    secnum       CDATA                   #IMPLIED
+    version      CDATA                   #IMPLIED
+    date         CDATA                   #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes" 
+    publish_fullpm (yes | no)           "yes">
+
+<!ELEMENT subsection_introduction (titlegroup, (overview | quickref | topic | attention | note | body)*)>
+<!ATTLIST	subsection_introduction
+    id                 ID                            #REQUIRED
+    column					(col | full)									"col"
+    version     CDATA                         #IMPLIED
+    date         CDATA                         #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT subsection_attention (titlegroup, (overview | quickref | topic | attention | note | body)*)>
+<!ATTLIST	subsection_attention
+    id                 ID                            #REQUIRED
+    column					(col | full)									"col"
+    version     CDATA                         #IMPLIED
+    date         CDATA                         #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes" 
+    publish_fullpm (yes | no)           "yes">
+
+<!ELEMENT subsection_supplement (titlegroup, (overview | quickref | topic | attention | note | body)*)>
+<!ATTLIST	subsection_supplement
+    id                 ID                            #REQUIRED
+    column					(col | full)									"col"
+    version     CDATA                         #IMPLIED
+    date         CDATA                         #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT subsection_law (titlegroup, (overview | quickref | topic | attention | note | body)*)>
+<!ATTLIST	subsection_law
+    id                 ID                            #REQUIRED
+    column					(col | full)									"col"
+    version     CDATA                         #IMPLIED
+    date         CDATA                         #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT subsection_maintenance (titlegroup, (overview | quickref | topic | attention | note | body)*)>
+<!ATTLIST	subsection_maintenance
+    id                 ID                            #REQUIRED
+    column					(col | full)									"col"
+    version     CDATA                         #IMPLIED
+    date         CDATA                         #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT subsection_specification (titlegroup, (overview | quickref | topic | attention | note | body)*)>
+<!ATTLIST	subsection_specification
+    id                 ID                            #REQUIRED
+    column					(col | full)									"col"
+    version     CDATA                         #IMPLIED
+    date         CDATA                         #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT subsection_operation (titlegroup, (overview | quickref | topic_function_basic | topic_function_advanced | attention | note)*)>
+<!ATTLIST	subsection_operation
+    id                 ID                            #REQUIRED
+    column					(col | full)									"col"
+    version     CDATA                         #IMPLIED
+    date         CDATA                         #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+
+<!ELEMENT topic_function_basic (titlegroup, (subtopiclv1_function_basic | basic_operation | advanced_operation | basic_description | advanced_description | attention | note)*)>
+<!ATTLIST	topic_function_basic
+    id                 ID                            #REQUIRED
+    column					(col | full)									"col"
+    page           (page | col | none)  "none"
+    version     CDATA                         #IMPLIED
+    date         CDATA                         #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT topic_function_advanced (titlegroup, (subtopiclv1_function_advanced | basic_operation | advanced_operation | basic_description | advanced_description | automatic_control | alert_attention | main_explanation | attention | note)*)>
+<!ATTLIST	topic_function_advanced
+    id                 ID                            #REQUIRED
+    column					(col | full)									"col"
+    page           (page | col | none)  "none"
+    version     CDATA                         #IMPLIED
+    date         CDATA                         #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT	overview	(para | paraselect | p | p_sub | list1 | fig | footnote)* >
+<!ATTLIST overview
+    id          ID        #REQUIRED
+    version     CDATA     #IMPLIED
+    date        CDATA     #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	basic_operation (title?, (%content;)*)>
+<!ATTLIST basic_operation
+    id   ID   #REQUIRED
+    version     CDATA                   #IMPLIED
+    date         CDATA                  #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	advanced_operation (title?, (%content;)*)>
+<!ATTLIST advanced_operation
+    id   ID   #REQUIRED
+    version     CDATA                   #IMPLIED
+    date         CDATA                  #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	basic_description (title?, (%content;)*)>
+<!ATTLIST basic_description
+    id   ID   #REQUIRED
+    version     CDATA                   #IMPLIED
+    date         CDATA                  #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	advanced_description (title?, (%content;)*)>
+<!ATTLIST advanced_description
+    id   ID   #REQUIRED
+    version     CDATA                   #IMPLIED
+    date         CDATA                  #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	automatic_control (title?, (%content;)*)>
+<!ATTLIST automatic_control
+    id   ID   #REQUIRED
+    version     CDATA                   #IMPLIED
+    date         CDATA                  #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	alert_attention (title?, (%content;)*)>
+<!ATTLIST alert_attention
+    id   ID   #REQUIRED
+    version     CDATA                   #IMPLIED
+    date         CDATA                  #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	main_explanation (title?, (%content;)*)>
+<!ATTLIST main_explanation
+    id   ID   #REQUIRED
+    version     CDATA                   #IMPLIED
+    date         CDATA                  #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	topic (titlegroup, (subtopiclv1 | om_body | attention | note)*)>
+<!ATTLIST	topic
+    id	                ID	                           #REQUIRED
+    column      (col | full)                 "col"
+    page          (page | col | none)  "none"
+    version     CDATA                         #IMPLIED
+    date         CDATA                         #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT	subtopiclv1				(titlegroup, (subtopiclv2 | om_body | attention | note)*) >
+<!ATTLIST	subtopiclv1				
+    id	                ID	                           #REQUIRED
+    column      (col | full)                 "col"
+    page          (page | col | none)  "none"
+    version     CDATA                   #IMPLIED
+    date         CDATA                  #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT	subtopiclv2				(titlegroup, (om_body | attention | note)*) >
+<!ATTLIST	subtopiclv2				
+    id	                ID	                           #REQUIRED
+    column      (col | full)                 "col"
+    page          (page | col | none)  "none"
+    version     CDATA                   #IMPLIED
+    date         CDATA                  #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT subtopiclv1_function_basic (titlegroup, (subtopiclv2_function_basic | basic_operation | advanced_operation | basic_description | advanced_description | attention | note)*)>
+<!ATTLIST	subtopiclv1_function_basic
+    id                 ID                            #REQUIRED
+    column					(col | full)									"col"
+    page           (page | col | none)  "none"
+    version     CDATA                   #IMPLIED
+    date         CDATA                  #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT subtopiclv1_function_advanced (titlegroup, (subtopiclv2_function_advanced | basic_operation | advanced_operation | basic_description | advanced_description | automatic_control | alert_attention | main_explanation | attention | note)*)>
+<!ATTLIST	subtopiclv1_function_advanced
+    id                 ID                            #REQUIRED
+    column					(col | full)									"col"
+    page           (page | col | none)  "none"
+    version     CDATA                   #IMPLIED
+    date         CDATA                  #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT subtopiclv2_function_basic (titlegroup, (basic_operation | advanced_operation | basic_description | advanced_description | attention | note)*)>
+<!ATTLIST	subtopiclv2_function_basic
+    id                 ID                            #REQUIRED
+    column					(col | full)									"col"
+    page           (page | col | none)  "none"
+    version     CDATA                   #IMPLIED
+    date        CDATA                   #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+<!ELEMENT subtopiclv2_function_advanced (titlegroup, (basic_operation | advanced_operation | basic_description | advanced_description | automatic_control | alert_attention | main_explanation | attention | note)*)>
+<!ATTLIST	subtopiclv2_function_advanced
+    id                 ID                            #REQUIRED
+    column					(col | full)									"col"
+    page           (page | col | none)  "none"
+    version    CDATA                    #IMPLIED
+    date       CDATA                    #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no)               "yes"
+    publish_pm (yes | no)               "yes"
+    publish_fullpm (yes | no)           "yes" >
+
+
+<!ELEMENT	om_body (title?, (paragroup | %content;)*)>
+<!ATTLIST om_body
+    id   ID   #REQUIRED
+    version   CDATA                     #IMPLIED
+    date      CDATA                     #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	chapcontents			(toclevel1)* >
+<!ATTLIST	chapcontents				
+					type							(left | right)											"right" >
+
+<!ELEMENT	toclevel1					(tocleveltxt?, toclevel2*) >
+<!ATTLIST	toclevel1				
+					label						CDATA													#IMPLIED >
+
+<!ELEMENT	toclevel2					(tocleveltxt) >
+<!ATTLIST	toclevel2				
+					label						CDATA													#IMPLIED
+					keyword					CDATA													#IMPLIED >
+
+<!ELEMENT	toclevelref				EMPTY >
+<!ATTLIST	toclevelref
+					refid							IDREF													#IMPLIED
+					idref							CDATA													#IMPLIED
+					srcfile						CDATA													#IMPLIED  >
+
+<!ELEMENT	tocleveltxt				(#PCDATA |  b | u | i | sup | sub | break | symbol | toclevelref | option | keyword | function)* >
+<!ATTLIST	tocleveltxt
+					page						(page | col | none)								"none">
+
+<!ELEMENT	keyword					EMPTY >
+<!ATTLIST	keyword				
+					keyword					CDATA													#REQUIRED >
+
+<!ELEMENT	body						(paragroup | paraselect | para | p | p_sub | p_select | list1 | step | fig | table | footnote | attention | note | quickref)* >
+<!ATTLIST	body
+    id   ID   #REQUIRED
+    version     CDATA                   #IMPLIED
+    date         CDATA                  #IMPLIED
+    ominfo     NMTOKENS                 #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	paragroup				(title, (paraselect | para | p | p_sub | p_select | list1 | step | fig | table | footnote | attention | note)*) >
+<!ATTLIST	paragroup
+    ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	paraselect				(paraselectitem+) >
+<!ATTLIST	paraselect
+    ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	paraselectitem		(title, (para | p | p_sub | p_select | list1 | step | fig | table | footnote | attention | note)*) >
+<!ATTLIST	paraselectitem
+    ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	titlegroup					(titlegroupbody)+ >
+<!ATTLIST	titlegroup				
+					tabletype					CDATA													#IMPLIED
+					width						CDATA													#IMPLIED>
+
+<!ELEMENT	titlegroupbody			(titlegrouprow)+ >
+
+<!ELEMENT	titlegrouprow			(titlegroupcell)+ >
+
+<!ELEMENT	titlegroupcell			(title) >
+
+<!ELEMENT	title							(%chardat;)* >
+<!ATTLIST	title
+					column					(col | full)											"col"
+					page						(page | col | none)								"none"
+					ominfo     NMTOKENS               #IMPLIED >
+
+<!ELEMENT	subtitle					(%chardat;)* >
+
+<!ELEMENT	p								(%chardat;)* >
+<!ATTLIST	p				
+					column					(col | full)											"col"
+					page						(page | col | none)								"none"
+					ominfo     NMTOKENS               #IMPLIED >
+
+<!ELEMENT	p_sub						(%chardat;)* >
+<!ATTLIST	p_sub				
+					column					(col | full)											"col"
+					page						(page | col | none)								"none"
+					ominfo     NMTOKENS               #IMPLIED >
+
+<!ELEMENT	p_select					(%chardat;)* >
+<!ATTLIST	p_select				
+					column					(col | full)											"col"
+					page						(page | col | none)								"none">
+
+<!ELEMENT	para							(paratable)+ >
+<!ATTLIST	para				
+					column					(col | full)											"col"
+					page						(page | col | none)								"none">
+
+<!ELEMENT	paratable					(paratablebody)+ >
+<!ATTLIST	paratable				
+					tabletype					CDATA													#IMPLIED
+					width						CDATA													#IMPLIED>
+
+<!ELEMENT	paratablebody			(paratablerow)+ >
+
+<!ELEMENT	paratablerow			(paratablecell)+ >
+
+<!ELEMENT	paratablecell			(paratitle?, (paratabletxt | para_list | para_fig | footnote)*) >
+
+<!ELEMENT	paratabletxt			(%chardat;)* >
+<!ATTLIST	paratabletxt				
+					type							(typeA | typeB)									"typeA"
+					ominfo     NMTOKENS               #IMPLIED >
+
+<!ELEMENT	paratitle					(%chardat;)* >
+<!ATTLIST	paratitle
+    ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	para_list					(para_list_item+) >
+<!ATTLIST	para_list				
+					type							(bull | dot | dash)								"bull"
+					ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	para_list_item			(para_fig?, itemtxt, (itemtxt | itemtxt_sub | footnote)*) >
+<!ATTLIST	para_list_item
+    ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	para_fig					((image | audio | video)*,  p?, (para_callout | calloutgroup)*) >
+<!ATTLIST	para_fig
+    ominfo     NMTOKENS            #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	para_callout			(calloutitem+, footnote?)>
+<!ATTLIST	para_callout
+					type							(number | illust)									"illust"
+					startnumber			(1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10)		"1">
+
+<!ELEMENT	footnote					(p | p_sub)* >
+<!ATTLIST	footnote			
+					id								ID														#IMPLIED
+					type					(option | other)									"other"
+					num			 		(0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10)													#IMPLIED
+     ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	list1							(list1_item)+>
+<!ATTLIST	list1				
+					type							(bull | dot | dash)								"bull"
+					column					(col | full)											"col"
+     ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	list2							(list2_item)+ >
+<!ATTLIST	list2				
+					type							(dot | dash)											"dot"
+     ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	list1_item					(fig?, itemtxt, (itemtxt | itemtxt_sub | p_select | para | fig | attention | note | table | footnote | list2)*) >
+<!ATTLIST	list1_item
+    ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	list2_item					(itemtxt, (itemtxt | itemtxt_sub | p_select | para | fig | attention | note | table | footnote)*) >
+<!ATTLIST	list2_item
+    ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	itemtxt						(%chardat;)* >
+<!ATTLIST	itemtxt				
+					page						(page | col | none)								"none">
+
+<!ELEMENT	itemtxt_sub				(%chardat;)* >
+<!ATTLIST	itemtxt_sub				
+					page						(page | col | none)								"none">
+
+<!ELEMENT	quickref					(quickreftable)+ >
+<!ATTLIST	quickref				
+    id   ID   #REQUIRED
+					column					(col | full)											"col"
+					page						(page | col | none)								"none"
+    version     CDATA                   #IMPLIED
+    date         CDATA                  #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	quickreftable			(quickreftablebody)+ >
+<!ATTLIST	quickreftable
+					tabletype					CDATA													#IMPLIED
+					width						CDATA													#IMPLIED>
+
+<!ELEMENT	quickreftablebody	(quickreftablerow)+ >
+
+<!ELEMENT	quickreftablerow		(quickreftablecell)+ >
+
+<!ELEMENT	quickreftablecell		(quickrefcomment | quickreflist | quickrefkeyword)* >
+<!ATTLIST	quickreftablecell				
+					border-top				NMTOKEN											#IMPLIED
+					border-bottom		NMTOKEN											#IMPLIED
+					border-left				NMTOKEN											#IMPLIED
+					border-right				NMTOKEN											#IMPLIED 
+					backgroundcolor		(colorA | colorB | colorC)					#IMPLIED >
+
+<!ELEMENT	quickrefcomment	(%chardat;)* >
+<!ATTLIST	quickrefcomment				
+					type							(typeA | typeB | typeC)						#IMPLIED>
+
+<!ELEMENT	quickrefkeyword		EMPTY >
+<!ATTLIST	quickrefkeyword				
+					keyword					CDATA													#REQUIRED>
+
+<!ELEMENT	quickreflist				(%chardat;)* >
+
+<!ELEMENT	step							(stepitem)+ >
+<!ATTLIST	step				
+					column					(col | full)											"col"
+					startnumber			(1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10)	"1"
+					ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	stepitem					(steptxt, (steptxt_sub | p_select | para | fig | list1 | attention | note | table | footnote)*) >
+<!ATTLIST	stepitem				
+					column					(col | full)											"col"
+					ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	steptxt						(%chardat;)* >
+<!ATTLIST	steptxt
+					num							(num | none)										"num"
+					number					CDATA													#IMPLIED
+					page						(page | col | none)								"none" 
+					ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	steptxt_sub				(%chardat;)* >
+<!ATTLIST	steptxt_sub				
+					page						(page | col | none)								"none"
+					ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	attention					(attentiontbl)+ >
+<!ATTLIST	attention	
+     id   ID   #REQUIRED
+					type							(warning | notice)								#REQUIRED
+					column					(col | full)											"col"
+					page						(page | col | none)								"none"
+					version     CDATA                   #IMPLIED
+					date         CDATA                  #IMPLIED
+					ominfo     NMTOKENS            #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	attentiontbl				(attentiontbl_body*) >
+<!ATTLIST	attentiontbl				
+					tabletype					CDATA													#IMPLIED
+					width						CDATA													#IMPLIED>
+
+<!ELEMENT	attentiontbl_body	(attentiontbl_body_row)+ >
+
+<!ELEMENT	attentiontbl_body_row	(attention_body)+ >
+
+<!ELEMENT	attention_body		(attention_para | attention_mark)* >
+<!ATTLIST	attention_body
+    ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	attention_mark		EMPTY >
+
+<!ELEMENT	attention_para		(title?, (p | p_sub | p_select | att_list1 | att_fig | footnote)*) >
+<!ATTLIST attention_para
+    id   ID   #REQUIRED
+    ominfo     NMTOKENS            #IMPLIED
+    version     CDATA              #IMPLIED
+    date         CDATA             #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	note							(note_body)+ >
+<!ATTLIST	note	
+    id   ID   #REQUIRED
+					column					(col | full)											"col"
+					page						(page | col | none)								"none"
+    version     CDATA                   #IMPLIED
+    date        CDATA                   #IMPLIED
+    ominfo     NMTOKENS            #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	note_body (note_para)* >
+<!ATTLIST	note_body
+    ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	note_para	 (title?, (p | p_sub | p_select | att_list1 | att_step | att_fig | table | footnote)*) >
+<!ATTLIST note_para
+    id   ID   #REQUIRED
+    category   CDATA               #IMPLIED
+    version     CDATA              #IMPLIED
+    date        CDATA              #IMPLIED
+    ominfo     NMTOKENS            #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	att_list1					(att_list1_item)+ >
+<!ATTLIST	att_list1				
+					type							(bull | dot | dash)								"bull"
+					column					(col | full)											"col"
+     ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	att_list2					(att_list2_item)+ >
+<!ATTLIST	att_list2				
+					type							(dot | dash)											"dot"
+    ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	att_list1_item			(att_fig?, itemtxt, (itemtxt | itemtxt_sub | p_select | att_fig | footnote | att_list2)*) >
+<!ATTLIST	att_list1_item
+    ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	att_list2_item			(itemtxt, (itemtxt | itemtxt_sub | p_select | footnote)*) >
+<!ATTLIST	att_list2_item
+    ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	att_fig						((image | audio | video)*,  p?, (att_callout | calloutgroup)*) >
+<!ATTLIST	att_fig
+    ominfo     NMTOKENS            #IMPLIED
+    publish_em (yes | no) "yes"
+    publish_pm (yes | no) "yes"
+    publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	att_callout				(calloutitem+, footnote?)>
+<!ATTLIST	att_callout
+					type							(number | illust)									"illust"
+					startnumber			(1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10)		"1"
+     ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	att_step					(att_stepitem)+ >
+<!ATTLIST	att_step				
+					startnumber			(1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10)		"1"
+     ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	att_stepitem			(steptxt, (steptxt_sub | p_select | para | att_fig | att_list1 | table | footnote)*) >
+<!ATTLIST	att_stepitem
+    ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	diagnostic				(diagbody, result) >
+<!ATTLIST	diagnostic
+					id								ID														#IMPLIED>
+
+<!ELEMENT	diagbody					((diagtxt, diagtxt_sub*) | p | p_sub | diag_list1)* >
+
+<!ELEMENT	diagtxt						(%chardat;)* >
+
+<!ELEMENT	diagtxt_sub				(%chardat;)* >
+
+<!ELEMENT	result						((resulttxt | diag_list1), (p | p_sub | diag_list1)*, footnote?)* >
+
+<!ELEMENT	resulttxt					(%chardat;)* >
+
+<!ELEMENT	diag_list1					(diag_list1_item+) >
+<!ATTLIST	diag_list1				
+					type							(bull | dot | dash)								"bull">
+
+<!ELEMENT	diag_list2					(diag_list2_item+) >
+<!ATTLIST	diag_list2				
+					type							(dot | dash)											"dot">
+
+<!ELEMENT	diag_list1_item		(diag_fig?, itemtxt, (itemtxt | itemtxt_sub | p_select | diag_fig | footnote | diag_list2)*) >
+
+<!ELEMENT	diag_list2_item		(itemtxt, (itemtxt | itemtxt_sub | p_select | footnote)*) >
+
+<!ELEMENT	diag_fig					((image | audio | video)*, p?, (diag_callout | calloutgroup)*) >
+<!ATTLIST	diag_fig
+     publish_em (yes | no) "yes"
+     publish_pm (yes | no) "yes"
+     publish_fullpm (yes | no) "yes" >
+
+
+<!ELEMENT	diag_callout				(calloutitem+, footnote?)>
+<!ATTLIST	diag_callout
+					type							(number | illust)									"illust"
+					startnumber			(1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10)		"1">
+
+<!ELEMENT	fig							((image | audio | video)*, p?, (callout | calloutgroup)*) >
+<!ATTLIST	fig				
+					column					(col | full)											"col"
+					page						(page | col | none)								"none" 
+     ominfo     NMTOKENS            #IMPLIED
+     publish_em (yes | no) "yes"
+     publish_pm (yes | no) "yes"
+     publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	image					EMPTY >
+<!ATTLIST	image
+					id								ID														#IMPLIED
+					href							CDATA													#IMPLIED
+					width						CDATA													#IMPLIED
+					height						CDATA													#IMPLIED
+					scale						CDATA													#IMPLIED
+					border						(0 | 1)													"1"
+					align						CDATA													#IMPLIED
+					xoffset						CDATA													#IMPLIED
+					yoffset						CDATA													#IMPLIED >
+
+<!ELEMENT	audio					EMPTY >
+<!ATTLIST	audio
+					id								ID														#IMPLIED
+					href							CDATA													#IMPLIED
+					preload						(none | metadata | auto)													"metadata"
+					autoplay							CDATA													#IMPLIED
+					mediagroup							CDATA													#IMPLIED
+					loop						CDATA													#IMPLIED
+					muted						CDATA													#IMPLIED
+					controls						CDATA													#IMPLIED >
+
+<!ELEMENT video (vtt)* >
+<!ATTLIST	video
+					id								ID														#IMPLIED
+					href							CDATA													#IMPLIED
+					preload						(none | metadata | auto)													"metadata"
+					autoplay							CDATA													#IMPLIED
+					mediagroup							CDATA													#IMPLIED
+					loop						CDATA													#IMPLIED
+					muted						CDATA													#IMPLIED
+					controls						CDATA													#IMPLIED
+					poster						CDATA													#IMPLIED
+					height						CDATA													#IMPLIED
+					width						CDATA													#IMPLIED >
+
+<!ELEMENT vtt (#PCDATA | b | u | i | break)* >
+<!ATTLIST vtt
+     title CDATA #IMPLIED
+     begin CDATA #REQUIRED
+     end   CDATA #REQUIRED
+     line  CDATA #IMPLIED >
+
+<!ELEMENT	symbol						EMPTY >
+<!ATTLIST	symbol
+					id								ID														#IMPLIED
+					href							CDATA													#IMPLIED
+					width						CDATA													#IMPLIED
+					height						CDATA													#IMPLIED
+					xoffset						CDATA													#IMPLIED
+					yoffset						CDATA													#IMPLIED  >
+
+<!ELEMENT	calloutgroup			(title, (calloutitem | table)+, footnote?) >
+<!ATTLIST	calloutgroup
+					type							(number | illust)									"illust"
+					startnumber			(1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10)		"1"
+					titletype					(triangle | square)									"triangle">
+
+<!ELEMENT	callout						((calloutitem | table)+, footnote?)>
+<!ATTLIST	callout
+					type							(number | illust)									"illust"
+					startnumber			(1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10)		"1">
+
+<!ELEMENT	calloutitem				(callouttxt, (callouttxt_sub | calloutlist | footnote)*)>
+<!ATTLIST	calloutitem
+    ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	callouttxt					(%chardat;)* >
+<!ATTLIST	callouttxt
+					number					CDATA													#IMPLIED
+					column					(col | full)											"col"
+					page						(page | col | none)								"none">
+
+<!ELEMENT	callouttxt_sub			(%chardat;)* >
+<!ATTLIST	callouttxt_sub				
+					column					(col | full)											"col"
+					page						(page | col | none)								"none">
+
+<!ELEMENT	calloutlist					(calloutlist_item+) >
+<!ATTLIST	calloutlist				
+					column					(col | full)											"col">
+
+<!ELEMENT	calloutlist_item		(itemtxt, (itemtxt | itemtxt_sub)*)  >
+
+<!ELEMENT	table						(tabletitle?, tgroup+, footnote?) >
+<!ATTLIST	table				
+					frame						(top | bottom | topbot | all | sides | none)			#IMPLIED
+					fontsize					(9.5 | 8.5)											"8.5"
+					pgwide					NMTOKEN											#IMPLIED
+					column					(col | full)											"col"
+					colsep						CDATA													#IMPLIED
+					rowsep					CDATA													#IMPLIED
+					page						(page | col | none)								"none" 
+     ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	tgroup						(colspec*,thead?,tbody) >
+<!ATTLIST	tgroup				
+					cols							NMTOKEN											#REQUIRED
+					tabletype					CDATA													#IMPLIED
+					colsep						CDATA													#IMPLIED
+					rowsep					CDATA													#IMPLIED>
+
+<!ELEMENT	colspec					EMPTY >
+<!ATTLIST	colspec				
+					colnum					CDATA													#IMPLIED
+					colname					CDATA													#IMPLIED
+					colwidth					CDATA													#IMPLIED
+					colsep						CDATA													#IMPLIED>
+
+<!ELEMENT	thead						(row+) >
+<!ATTLIST	thead				
+					valign						(top | middle | bottom)						#IMPLIED>
+
+<!ELEMENT	tbody						(row+) >
+<!ATTLIST	tbody				
+					valign						(top | middle | bottom)						#IMPLIED>
+
+<!ELEMENT	row							(entry+) >
+<!ATTLIST	row				
+					valign						(top | middle | bottom)						#IMPLIED
+     ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	entry						(p | p_sub | p_select | tbl_list1 | tbl_fig | image | audio | video | footnote | diagnostic)*>
+<!ATTLIST	entry				
+					align						(left | right | center | justify)				#IMPLIED
+					valign						(top | middle | bottom)						#IMPLIED
+					colname					NMTOKEN											#IMPLIED
+					namest					NMTOKEN											#IMPLIED
+					nameend					NMTOKEN											#IMPLIED
+					morerows				NMTOKEN											#IMPLIED
+					fontwidth					(normal | 90 | 80 | 70 | 60)				"normal"
+					border-top				NMTOKEN											#IMPLIED
+					border-bottom		NMTOKEN											#IMPLIED
+					border-left				NMTOKEN											#IMPLIED
+					border-right				NMTOKEN											#IMPLIED 
+					padding_top			(0 |2 | 4 | 6 | 8 | 10 | 12)					#IMPLIED
+					padding_bottom		(0 |2 | 4 | 6 | 8 | 10 | 12)					#IMPLIED
+					padding_left			(0 |2 | 4 | 6 | 8 | 10 | 12)					#IMPLIED
+					padding_right			(0 |2 | 4 | 6 | 8 | 10 | 12)					#IMPLIED
+					backgroundcolor		(colorA | colorB | colorC)					#IMPLIED
+     ominfo     NMTOKENS            #IMPLIED >
+
+<!ELEMENT	tbl_list1					(tbl_list1_item+) >
+<!ATTLIST	tbl_list1				
+					type							(bull | dot | dash)								"bull" >
+
+<!ELEMENT	tbl_list2					(tbl_list2_item+) >
+<!ATTLIST	tbl_list2				
+					type							(dot | dash)											"dot">
+
+<!ELEMENT	tbl_fig						(image | audio | video | p | p_sub)* >
+<!ATTLIST	tbl_fig
+     publish_em (yes | no) "yes"
+     publish_pm (yes | no) "yes"
+     publish_fullpm (yes | no) "yes" >
+
+<!ELEMENT	tbl_list1_item			(itemtxt, (itemtxt | itemtxt_sub | p_select | footnote | tbl_list2)*) >
+
+<!ELEMENT	tbl_list2_item			(itemtxt, (itemtxt | itemtxt_sub | p_select | footnote)*) >
+
+<!ELEMENT	tabletitle					(%chardat;)* >
+<!ATTLIST	tabletitle				
+					column					(col | full)											"col"
+					page						(page | col | none)								"none">
+
+<!ELEMENT	b								(%chardat;)* >
+<!ATTLIST	b
+					type							(stepnum | mbold | other)					"other" >
+
+<!ELEMENT	u								(%chardat;)* >
+
+<!ELEMENT	i								(%chardat;)* >
+
+<!ELEMENT	sup							(%chardat;)* >
+
+<!ELEMENT	sub							(%chardat;)* >
+
+<!ELEMENT	xref							EMPTY >
+<!ATTLIST	xref
+					refid							IDREF													#IMPLIED
+					idref							CDATA													#IMPLIED
+					type							CDATA													#IMPLIED 
+					srcfile						CDATA													#IMPLIED 
+					label						CDATA													#IMPLIED 
+					ref_em      (yes | no)  "yes"
+					ref_pm      (yes | no)  "yes"
+					ref_fullpm  (yes | no)  "yes" >
+
+<!ELEMENT	indexmarker			EMPTY >
+<!ATTLIST	indexmarker
+					marker						CDATA													#IMPLIED
+					markerid					ID														#IMPLIED  >
+
+<!ELEMENT	option						(%chardat;)* >
+
+<!ELEMENT	function					(%chardat;)* >
+<!ATTLIST	function
+					functionid				ID												#IMPLIED >
+
+<!ELEMENT	break						EMPTY >
+<!ATTLIST	break				
+					type							(return | tab)										"return" >
+

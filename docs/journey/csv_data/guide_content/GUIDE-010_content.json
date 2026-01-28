@@ -1,0 +1,223 @@
+{
+  "guide_id": "GUIDE-010",
+  "title": "ドアロック故障時の対応",
+  "type": "troubleshooting",
+  "estimated_time": "10min",
+  "difficulty": "medium",
+  "content": {
+    "overview": "ドアロックシステムが故障して開閉できない場合の対処法を説明します。",
+    "symptoms": {
+      "description": "以下のような症状が見られる場合、ドアロックの故障が疑われます",
+      "symptom_list": [
+        {
+          "symptom": "スマートキーでも機械キーでも開かない",
+          "severity": "重度",
+          "action": "専門的な対応が必要"
+        },
+        {
+          "symptom": "ロックはできるがアンロックできない（またはその逆）",
+          "severity": "中度",
+          "action": "機械的な故障の可能性"
+        },
+        {
+          "symptom": "特定のドアのみ開閉できない",
+          "severity": "中度",
+          "action": "個別ドアの故障"
+        },
+        {
+          "symptom": "ロック時に異音がする",
+          "severity": "軽度",
+          "action": "早めの点検が必要"
+        }
+      ]
+    },
+    "immediate_actions": {
+      "description": "故障が疑われる場合の初期対応",
+      "steps": [
+        {
+          "step": 1,
+          "action": "電池切れを確認",
+          "description": "スマートキーの電池が消耗していないか確認します",
+          "reference": "GUIDE-005参照"
+        },
+        {
+          "step": 2,
+          "action": "電波干渉を確認",
+          "description": "強い電波の影響を受けている場所でないか確認します",
+          "reference": "GUIDE-008参照"
+        },
+        {
+          "step": 3,
+          "action": "機械キーで開閉を試す",
+          "description": "スマートエントリーではなく、機械キーで直接操作してみます",
+          "reference": "GUIDE-001参照"
+        },
+        {
+          "step": 4,
+          "action": "予備キーで試す",
+          "description": "お持ちの場合、予備のスマートキーで操作してみます"
+        }
+      ]
+    },
+    "troubleshooting": {
+      "description": "症状別のトラブルシューティング",
+      "cases": [
+        {
+          "case": "すべてのドアが開かない",
+          "possible_causes": [
+            "中央集中ドアロックの故障",
+            "ヒューズの断線",
+            "バッテリー上がり",
+            "メインコンピューターの不具合"
+          ],
+          "actions": [
+            "バッテリー電圧を確認",
+            "ヒューズボックスを確認",
+            "販売店またはロードサービスに連絡"
+          ],
+          "urgency": "高"
+        },
+        {
+          "case": "運転席ドアのみ開かない",
+          "possible_causes": [
+            "ドアロックアクチュエーターの故障",
+            "配線の断線",
+            "ドアハンドル内部の故障"
+          ],
+          "actions": [
+            "他のドアから乗車",
+            "内側から運転席ドアを開けられるか確認",
+            "販売店で点検"
+          ],
+          "urgency": "中"
+        },
+        {
+          "case": "ロックはできるがアンロックできない",
+          "possible_causes": [
+            "アクチュエーターの片側故障",
+            "ロック機構の固着"
+          ],
+          "actions": [
+            "機械キーで複数回開閉を試す",
+            "販売店で点検"
+          ],
+          "urgency": "中"
+        }
+      ]
+    },
+    "emergency_access": {
+      "description": "車内に閉じ込められた場合や外から開けられない場合",
+      "scenarios": [
+        {
+          "scenario": "車外から開けられない",
+          "solutions": [
+            {
+              "method": "他のドアを試す",
+              "description": "全てのドア（前後左右、リヤハッチ）を試してください"
+            },
+            {
+              "method": "内側から開閉",
+              "description": "開いているドアまたは窓から内側のロックノブを操作"
+            },
+            {
+              "method": "ロードサービスを呼ぶ",
+              "reference": "GUIDE-011参照"
+            }
+          ]
+        },
+        {
+          "scenario": "車内に閉じ込められた",
+          "solutions": [
+            {
+              "method": "内側のロック解除ボタンを使用",
+              "description": "ドア内側のロック解除ボタンまたはレバーを操作"
+            },
+            {
+              "method": "窓を開ける",
+              "description": "パワーウインドウが動作する場合、窓を開けて外から操作"
+            },
+            {
+              "method": "緊急脱出",
+              "description": "危険な状況では、窓ガラスを割って脱出（緊急時のみ）",
+              "note": "車載の緊急脱出ツールの場所を確認しておきましょう"
+            }
+          ]
+        }
+      ]
+    },
+    "professional_help": {
+      "description": "専門家のサポートが必要な場合",
+      "when_to_call": [
+        "すべての対処法を試しても開閉できない",
+        "異常な音や振動がある",
+        "ドアロック機構が物理的に破損している",
+        "電気系統の焼けた臭いがする"
+      ],
+      "contact_options": [
+        {
+          "option": "トヨタ販売店",
+          "description": "営業時間内の対応",
+          "reference": "GUIDE-012参照",
+          "recommended_for": "非緊急時"
+        },
+        {
+          "option": "ロードサービス",
+          "description": "24時間対応",
+          "reference": "GUIDE-011参照",
+          "recommended_for": "緊急時"
+        }
+      ]
+    },
+    "prevention": {
+      "description": "故障を予防するための定期メンテナンス",
+      "maintenance_items": [
+        {
+          "item": "ドアロックの動作確認",
+          "frequency": "月1回",
+          "method": "全てのドアでロック/アンロックを確認"
+        },
+        {
+          "item": "ドアヒンジの注油",
+          "frequency": "半年に1回",
+          "method": "専用潤滑剤でヒンジ部を注油"
+        },
+        {
+          "item": "ゴムパッキンのメンテナンス",
+          "frequency": "年1回",
+          "method": "保護剤で劣化を防止"
+        },
+        {
+          "item": "異音チェック",
+          "frequency": "随時",
+          "method": "開閉時の異音に注意"
+        }
+      ]
+    },
+    "important_warnings": [
+      {
+        "type": "danger",
+        "message": "ドアが開閉中に無理に力を加えないでください。機構を破損する恐れがあります"
+      },
+      {
+        "type": "warning",
+        "message": "自分で分解・修理しようとしないでください。複雑な電子制御のため、専門知識が必要です"
+      },
+      {
+        "type": "caution",
+        "message": "寒冷地では凍結による開閉不良の可能性もあります"
+      }
+    ],
+    "tips": [
+      "定期的にすべてのドアで開閉テストを行いましょう",
+      "異音や動作の遅れを感じたら早めに点検を",
+      "冬季は凍結防止スプレーを準備しておくと安心",
+      "緊急脱出ツールの場所を家族全員が知っておきましょう"
+    ],
+    "related_guides": ["GUIDE-001", "GUIDE-008", "GUIDE-011", "GUIDE-012"]
+  },
+  "source": {
+    "xml_file": "M52P95tojpjavhch07.xml",
+    "section_id": "ch07se020401",
+    "manual_page": "推定 7-5ページ"
+  }
+}

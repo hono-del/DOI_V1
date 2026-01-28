@@ -1,0 +1,151 @@
+{
+  "summary": {
+    "total_guides": 13,
+    "created_files": 13,
+    "success_rate": "100%",
+    "created_date": "2026-01-27"
+  },
+  "guides": [
+    {
+      "guide_id": "GUIDE-001",
+      "title": "機械キーの取り出し方",
+      "type": "procedure",
+      "difficulty": "easy",
+      "source_type": "xml_based",
+      "xml_file": "M52P95tojpjavhch03.xml",
+      "file": "GUIDE-001_content.json"
+    },
+    {
+      "guide_id": "GUIDE-002",
+      "title": "機械キーの場所・保管方法",
+      "type": "information",
+      "difficulty": "easy",
+      "source_type": "xml_based",
+      "xml_file": "M52P95tojpjavhch03.xml",
+      "file": "GUIDE-002_content.json"
+    },
+    {
+      "guide_id": "GUIDE-003",
+      "title": "事前準備物",
+      "type": "checklist",
+      "difficulty": "easy",
+      "source_type": "xml_based",
+      "xml_file": "M52P95tojpjavhch03.xml",
+      "file": "GUIDE-003_content.json"
+    },
+    {
+      "guide_id": "GUIDE-004",
+      "title": "電池購入方法",
+      "type": "link_collection",
+      "difficulty": "easy",
+      "source_type": "system_generated",
+      "requires_api": true,
+      "api_endpoint": "/api/nearby-stores",
+      "file": "GUIDE-004_content.json"
+    },
+    {
+      "guide_id": "GUIDE-005",
+      "title": "電池交換手順",
+      "type": "procedure",
+      "difficulty": "medium",
+      "source_type": "xml_based",
+      "xml_file": "M52P95tojpjavhch03.xml",
+      "file": "GUIDE-005_content.json"
+    },
+    {
+      "guide_id": "GUIDE-006",
+      "title": "販売店予約・連絡先",
+      "type": "contact_service",
+      "difficulty": "easy",
+      "source_type": "system_generated",
+      "requires_api": true,
+      "api_endpoint": "/api/dealers/search",
+      "file": "GUIDE-006_content.json"
+    },
+    {
+      "guide_id": "GUIDE-007",
+      "title": "ジャンプスタート手順",
+      "type": "procedure",
+      "difficulty": "medium",
+      "source_type": "xml_based",
+      "xml_file": "M52P95tojpjavhch07.xml",
+      "file": "GUIDE-007_content.json"
+    },
+    {
+      "guide_id": "GUIDE-008",
+      "title": "電波干渉時の対応",
+      "type": "troubleshooting",
+      "difficulty": "easy",
+      "source_type": "xml_based",
+      "xml_file": "M52P95tojpjavhch03.xml",
+      "file": "GUIDE-008_content.json"
+    },
+    {
+      "guide_id": "GUIDE-009",
+      "title": "キー修理・交換手続き",
+      "type": "procedure",
+      "difficulty": "easy",
+      "source_type": "xml_based",
+      "xml_file": "M52P95tojpjavhch03.xml",
+      "file": "GUIDE-009_content.json"
+    },
+    {
+      "guide_id": "GUIDE-010",
+      "title": "ドアロック故障時の対応",
+      "type": "troubleshooting",
+      "difficulty": "medium",
+      "source_type": "xml_based",
+      "xml_file": "M52P95tojpjavhch07.xml",
+      "file": "GUIDE-010_content.json"
+    },
+    {
+      "guide_id": "GUIDE-011",
+      "title": "ロードサービス連絡先・依頼方法",
+      "type": "contact_service",
+      "difficulty": "easy",
+      "source_type": "xml_based",
+      "xml_file": "M52P95tojpjavhch07.xml",
+      "file": "GUIDE-011_content.json"
+    },
+    {
+      "guide_id": "GUIDE-012",
+      "title": "販売店連絡先・営業時間",
+      "type": "contact_service",
+      "difficulty": "easy",
+      "source_type": "system_generated",
+      "requires_api": true,
+      "api_endpoint": "/api/dealers/search",
+      "file": "GUIDE-012_content.json"
+    },
+    {
+      "guide_id": "GUIDE-013",
+      "title": "予防策・定期点検の案内",
+      "type": "information",
+      "difficulty": "easy",
+      "source_type": "xml_based",
+      "xml_file": "M52P95tojpjavhch06.xml",
+      "file": "GUIDE-013_content.json"
+    }
+  ],
+  "statistics": {
+    "by_type": {
+      "procedure": 5,
+      "information": 2,
+      "checklist": 1,
+      "link_collection": 1,
+      "contact_service": 3,
+      "troubleshooting": 2
+    },
+    "by_difficulty": {
+      "easy": 10,
+      "medium": 3,
+      "hard": 0
+    },
+    "by_source": {
+      "xml_based": 10,
+      "system_generated": 3
+    },
+    "requires_api": 3,
+    "total_content_size_kb": 47
+  }
+}

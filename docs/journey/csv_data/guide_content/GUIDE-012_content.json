@@ -1,0 +1,243 @@
+{
+  "guide_id": "GUIDE-012",
+  "title": "販売店連絡先・営業時間",
+  "type": "contact_service",
+  "estimated_time": "3min",
+  "difficulty": "easy",
+  "content": {
+    "overview": "トヨタ販売店の連絡先情報と営業時間、提供サービスについて説明します。",
+    "search_methods": {
+      "description": "お近くのトヨタ販売店を探す方法",
+      "methods": [
+        {
+          "method": "公式ウェブサイト",
+          "url": "https://toyota.jp/store/",
+          "description": "トヨタ公式サイトの販売店検索",
+          "features": [
+            "郵便番号・住所から検索",
+            "地図表示",
+            "詳細情報（営業時間、サービス内容など）",
+            "オンライン予約"
+          ],
+          "recommended": true
+        },
+        {
+          "method": "電話での問い合わせ",
+          "phone": "トヨタお客様相談センター: 0800-700-7700",
+          "available": "365日 9:00-18:00",
+          "description": "オペレーターが最寄りの販売店をご案内"
+        },
+        {
+          "method": "T-Connect/G-BOOK",
+          "description": "ナビゲーションシステムから検索",
+          "note": "契約者のみ利用可能"
+        },
+        {
+          "method": "スマートフォンアプリ",
+          "app_name": "TOYOTAアプリ",
+          "features": [
+            "GPS位置情報から最寄り店を表示",
+            "予約機能",
+            "メンテナンス履歴確認"
+          ]
+        }
+      ]
+    },
+    "dealer_search": {
+      "api_endpoint": "/api/dealers/search",
+      "parameters": {
+        "location": "user_location",
+        "service_type": "all",
+        "radius_km": 20,
+        "sort_by": "distance"
+      },
+      "result_fields": [
+        "dealer_name",
+        "address",
+        "phone",
+        "business_hours",
+        "services",
+        "distance",
+        "map_url"
+      ]
+    },
+    "typical_business_hours": {
+      "description": "一般的な営業時間（店舗により異なる場合があります）",
+      "showroom": {
+        "weekday": "9:30-19:00",
+        "saturday": "9:30-19:00",
+        "sunday": "9:30-19:00",
+        "holiday": "年末年始・GW・お盆期間は休業"
+      },
+      "service": {
+        "weekday": "9:00-18:00",
+        "saturday": "9:00-17:00",
+        "sunday": "定休日または9:00-17:00（店舗により異なる）",
+        "holiday": "年末年始・GW・お盆期間は休業"
+      },
+      "parts": {
+        "weekday": "9:00-18:00",
+        "saturday": "9:00-17:00",
+        "sunday": "定休日",
+        "holiday": "年末年始・GW・お盆期間は休業"
+      },
+      "notes": [
+        "店舗により営業時間が異なります",
+        "定休日は店舗により異なります（月曜日または火曜日が多い）",
+        "祝日の営業は店舗により異なります",
+        "必ず事前に電話で確認することをおすすめします"
+      ]
+    },
+    "available_services": {
+      "description": "トヨタ販売店で利用できる主なサービス",
+      "services": [
+        {
+          "category": "販売",
+          "services": [
+            "新車販売",
+            "中古車販売",
+            "試乗",
+            "見積もり",
+            "購入相談"
+          ]
+        },
+        {
+          "category": "点検・整備",
+          "services": [
+            "定期点検（6ヶ月、12ヶ月点検）",
+            "車検",
+            "一般整備・修理",
+            "オイル交換",
+            "タイヤ交換",
+            "バッテリー点検・交換",
+            "エアコンガス補充"
+          ]
+        },
+        {
+          "category": "緊急対応",
+          "services": [
+            "スマートキー電池交換",
+            "キー修理・交換・複製",
+            "簡易的なトラブル対応",
+            "ロードサービス手配"
+          ]
+        },
+        {
+          "category": "用品・部品",
+          "services": [
+            "純正部品販売",
+            "用品（アクセサリー）販売・取付",
+            "タイヤ・ホイール販売",
+            "カー用品販売"
+          ]
+        },
+        {
+          "category": "保険",
+          "services": [
+            "自動車保険",
+            "各種損害保険",
+            "保険相談"
+          ]
+        },
+        {
+          "category": "その他",
+          "services": [
+            "カーリース",
+            "残価設定型ローン",
+            "買取査定",
+            "代車貸出",
+            "洗車サービス（店舗により異なる）"
+          ]
+        }
+      ]
+    },
+    "contact_information": {
+      "description": "連絡時に伝える情報",
+      "basic_info": [
+        "お名前",
+        "電話番号",
+        "車両情報（車種、年式、ナンバー）",
+        "用件（点検、修理、相談など）"
+      ],
+      "for_service": [
+        "症状の詳細",
+        "希望日時",
+        "緊急性の有無"
+      ],
+      "tips": [
+        "車検証を手元に用意しておくとスムーズです",
+        "症状がある場合は、いつから、どんな状況で発生するかを説明できるように",
+        "希望日時は第3希望まで用意しておくと予約しやすい"
+      ]
+    },
+    "online_services": {
+      "description": "オンラインで利用できるサービス",
+      "services": [
+        {
+          "service": "オンライン予約",
+          "url": "https://toyota.jp/service/reserve",
+          "available_for": [
+            "点検・車検",
+            "オイル交換",
+            "タイヤ交換",
+            "一般整備"
+          ],
+          "benefits": [
+            "24時間予約可能",
+            "待ち時間短縮",
+            "予約確認メール"
+          ]
+        },
+        {
+          "service": "オンライン見積もり",
+          "description": "メンテナンスやパーツの見積もりをオンラインで依頼",
+          "response_time": "1-2営業日"
+        },
+        {
+          "service": "マイページ",
+          "description": "車両情報・メンテナンス履歴の確認",
+          "features": [
+            "点検履歴",
+            "次回点検時期の確認",
+            "リコール情報",
+            "キャンペーン情報"
+          ]
+        }
+      ]
+    },
+    "tips": [
+      "初めて訪問する販売店には事前に電話で確認すると安心です",
+      "混雑する時間帯（土日の午前中など）は予約をおすすめします",
+      "定期点検や車検は早めの予約で代車の確保がしやすくなります",
+      "メンテナンスパックに加入すると、お得に点検を受けられます",
+      "担当営業やサービススタッフの連絡先を保存しておくと便利です"
+    ],
+    "emergency_contact": {
+      "description": "緊急時の連絡先",
+      "contacts": [
+        {
+          "name": "トヨタお客様相談センター",
+          "phone": "0800-700-7700",
+          "available": "365日 9:00-18:00",
+          "for": "一般的な問い合わせ・苦情・提案"
+        },
+        {
+          "name": "T-Connectヘルプネット",
+          "phone": "0800-500-0024",
+          "available": "24時間365日",
+          "for": "T-Connect契約者の緊急時（契約者のみ）"
+        },
+        {
+          "name": "ロードサービス",
+          "reference": "GUIDE-011参照",
+          "for": "車両トラブル時の緊急対応"
+        }
+      ]
+    },
+    "related_guides": ["GUIDE-006", "GUIDE-009", "GUIDE-011", "GUIDE-013"]
+  },
+  "source": {
+    "type": "system_generated",
+    "based_on": "トヨタ公式サービス情報"
+  }
+}

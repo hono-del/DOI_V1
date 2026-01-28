@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2027年プロダクトビジョン - 社内承認用プレゼンテーション</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', 'Meiryo', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .slide-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #00d4ff, #0066ff, #00d4ff);
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 14px;
+            color: #999;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #0066ff;
+        }
+
+        h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            color: #333;
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 5px solid #0066ff;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border-left: 5px solid #f59e0b;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-left: 5px solid #10b981;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .metric-value {
+            font-size: 48px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .metric-label {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 30px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 80px;
+            top: 40px;
+            bottom: -40px;
+            width: 3px;
+            background: linear-gradient(180deg, #0066ff, #00d4ff);
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-year {
+            width: 100px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #0066ff;
+            flex-shrink: 0;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #0066ff;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: #0066ff;
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #0066ff;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .comparison-table td {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 15px;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .big-number {
+            font-size: 72px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, #0066ff, #00d4ff);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 15px 40px rgba(0, 102, 255, 0.3);
+        }
+
+        .cta-box h3 {
+            color: white;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .cta-box p {
+            font-size: 18px;
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+
+        ul, ol {
+            margin: 20px 0 20px 30px;
+            line-height: 1.8;
+        }
+
+        li {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .risk-card {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .risk-title {
+            font-weight: 700;
+            color: #dc2626;
+            margin-bottom: 10px;
+        }
+
+        .mitigation {
+            background: #f0fdf4;
+            border-left: 4px solid #10b981;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .product-visual {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+            color: white;
+        }
+
+        .product-visual pre {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media print {
+            .slide {
+                page-break-after: always;
+                box-shadow: none;
+                margin-bottom: 0;
+            }
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #0066ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        
+        <!-- Slide 1: タイトル -->
+        <div class="slide">
+            <div class="slide-number">1/15</div>
+            <h1 style="font-size: 64px; margin-bottom: 30px;">2027年プロダクトビジョン</h1>
+            <div class="subtitle" style="font-size: 32px;">予測AI時代の「Human Safety Experience OS」</div>
+            <div class="highlight-box" style="margin-top: 60px;">
+                <h3 style="font-size: 28px; color: #0066ff;">SafeSight AI（仮称）</h3>
+                <p style="font-size: 20px; margin-top: 15px; line-height: 1.8;">
+                    事故が起きる前に、あなた個人の行動パターンから予測し、<br>
+                    最適なタイミングで、最適な方法で、安全をサポートする。
+                </p>
+            </div>
+            <div style="text-align: right; margin-top: 80px; color: #666; font-size: 18px;">
+                社内承認用プレゼンテーション<br>
+                2025年1月9日
+            </div>
+        </div>
+
+        <!-- Slide 2: エグゼクティブサマリー -->
+        <div class="slide">
+            <div class="logo">SafeSight AI</div>
+            <div class="slide-number">2/15</div>
+            <h2>エグゼクティブサマリー</h2>
+            
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="metric-label">2027年目標ARR</div>
+                    <div class="metric-value">¥2.5B</div>
+                </div>
+                <div class="metric-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <div class="metric-label">3年間投資総額</div>
+                    <div class="metric-value">¥520M</div>
+                </div>
+                <div class="metric-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <div class="metric-label">ROI</div>
+                    <div class="metric-value">5.4倍</div>
+                </div>
+                <div class="metric-card" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                    <div class="metric-label">事故削減率</div>
+                    <div class="metric-value">30%</div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>なぜ今、決断すべきか</h3>
+                <p style="font-size: 18px; line-height: 1.8; margin-top: 15px;">
+                    AI技術は2027年に「予測AI」時代に突入します。<br>
+                    <strong style="color: #0066ff;">今始めれば市場リーダーになれる。2年遅れれば永遠に追いつけない。</strong><br>
+                    データとAIの世界では、先行者が圧倒的に有利です。
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 3: AI技術進化のタイムライン -->
+        <div class="slide">
+            <div class="logo">SafeSight AI</div>
+            <div class="slide-number">3/15</div>
+            <h2>AI技術進化のタイムライン</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2023</div>
+                    <div class="timeline-content">
+                        <h3 style="margin-top: 0;">ChatGPT登場（LLM実用化）</h3>
+                        <p>質問に答える、文章を生成する</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2024</div>
+                    <div class="timeline-content">
+                        <h3 style="margin-top: 0;">マルチモーダルAI</h3>
+                        <p>画像・音声・動画を理解する</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2025</div>
+                    <div class="timeline-content">
+                        <h3 style="margin-top: 0;">エージェントAI ← 今ここ</h3>
+                        <p>自律的にタスクを実行する</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2026</div>
+                    <div class="timeline-content">
+                        <h3 style="margin-top: 0;">パーソナライズAI ← 次の主戦場</h3>
+                        <p><strong style="color: #0066ff;">個人を深く理解し、最適化する</strong></p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2027</div>
+                    <div class="timeline-content">
+                        <h3 style="margin-top: 0;">予測AI ← 最終形態</h3>
+                        <p><strong style="color: #0066ff;">未来を予測し、先回りして行動する</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ 重要：</strong> 予測AIには最低3年分の個人データが必要。<br>
+                今始めないと、2027年に間に合わない。
+            </div>
+        </div>
+
+        <!-- Slide 4: 2027年のプロダクト像 -->
+        <div class="slide">
+            <div class="logo">SafeSight AI</div>
+            <div class="slide-number">4/15</div>
+            <h2>2027年のプロダクト像</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔮</div>
+                    <div class="feature-title">予測的安全支援</div>
+                    <p>あなたの運転パターンから事故リスクを予測し、事前に警告</p>
+                    <div style="margin-top: 15px; padding: 10px; background: #f0f9ff; border-radius: 5px; font-size: 14px;">
+                        例：「この交差点、あなたは歩行者確認が遅れがち。200m先で注意」
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👨‍🏫</div>
+                    <div class="feature-title">パーソナル学習コーチ</div>
+                    <p>あなたの学習スタイルに合わせた最適な説明と学習順序</p>
+                    <div style="margin-top: 15px; padding: 10px; background: #f0f9ff; border-radius: 5px; font-size: 14px;">
+                        例：「あなたは視覚的な説明で理解が早いタイプ。動画で解説します」
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <div class="feature-title">先回りメンテナンス</div>
+                    <p>運転パターンから部品交換の最適タイミングを予測</p>
+                    <div style="margin-top: 15px; padding: 10px; background: #f0f9ff; border-radius: 5px; font-size: 14px;">
+                        例：「あと2ヶ月で交換時期。来月の帰省前がお勧めです」
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👨‍👩‍👧‍👦</div>
+                    <div class="feature-title">家族安全ダッシュボード</div>
+                    <p>家族の運転を見守り、それぞれに最適なサポート</p>
+                    <div style="margin-top: 15px; padding: 10px; background: #f0f9ff; border-radius: 5px; font-size: 14px;">
+                        例：「親の夜間運転時の反応速度が低下。自動ブレーキを強化」
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <div class="feature-title">コミュニティ学習</div>
+                    <p>匿名化データから新しい危険を早期発見</p>
+                    <div style="margin-top: 15px; padding: 10px; background: #f0f9ff; border-radius: 5px; font-size: 14px;">
+                        例：「この道路、先週から路面状態が悪化。15人がヒヤリハット」
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-title">Arene OS統合</div>
+                    <p>トヨタ車載OSに直接統合し、シームレスな体験を提供</p>
+                    <div style="margin-top: 15px; padding: 10px; background: #f0f9ff; border-radius: 5px; font-size: 14px;">
+                        例：「HUD表示、音声対話、車両データ連携」
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: 具体的なユースケース -->
+        <div class="slide">
+            <div class="logo">SafeSight AI</div>
+            <div class="slide-number">5/15</div>
+            <h2>具体的なユースケース</h2>
+            
+            <h3>ケース1：疲労予測アラート</h3>
+            <div class="comparison-table">
+                <tr>
+                    <th style="width: 30%;">従来（2024年）</th>
+                    <th style="width: 70%;">SafeSight AI（2027年）</th>
+                </tr>
+                <tr>
+                    <td>疲労を検知してから警告<br>→ すでに判断力が低下</td>
+                    <td>
+                        <strong style="color: #0066ff;">過去3ヶ月のデータから学習</strong><br>
+                        「あなたは高速道路を60分以上運転すると、車線維持の精度が15%低下する傾向」<br>
+                        → 50分時点で先回り提案：「あと10分で〇〇SAです。休憩をお勧めします」
+                    </td>
+                </tr>
+            </table>
+
+            <h3 style="margin-top: 40px;">ケース2：危険地点の個人化予測</h3>
+            <div class="comparison-table">
+                <tr>
+                    <th style="width: 30%;">従来（2024年）</th>
+                    <th style="width: 70%;">SafeSight AI（2027年）</th>
+                </tr>
+                <tr>
+                    <td>一般的な危険地点を全員に警告<br>→ 個人特性は考慮されない</td>
+                    <td>
+                        <strong style="color: #0066ff;">あなたの運転パターンを分析</strong><br>
+                        「この交差点、あなたは過去3回、右折時に歩行者の確認が遅れています」<br>
+                        → 200m手前で個人化された警告：「右折時、歩行者に特に注意してください」
+                    </td>
+                </tr>
+            </table>
+
+            <div class="success-box" style="margin-top: 30px;">
+                <strong>💡 ポイント：</strong> 一般的な警告ではなく、<strong>「あなた専用」</strong>の安全支援。<br>
+                これが予測AIの真価です。
+            </div>
+        </div>
+
+        <!-- Slide 6: ビジネスモデル -->
+        <div class="slide">
+            <div class="logo">SafeSight AI</div>
+            <div class="slide-number">6/15</div>
+            <h2>ビジネスモデル</h2>
+            
+            <h3>料金プラン</h3>
+            <table class="comparison-table">
+                <tr>
+                    <th>プラン</th>
+                    <th>月額</th>
+                    <th>年額</th>
+                    <th>主要機能</th>
+                </tr>
+                <tr>
+                    <td><strong>Basic</strong></td>
+                    <td>¥980</td>
+                    <td>¥9,800</td>
+                    <td>基本的な安全支援、取説DX</td>
+                </tr>
+                <tr>
+                    <td><strong>Premium</strong></td>
+                    <td>¥2,980</td>
+                    <td>¥29,800</td>
+                    <td>予測的安全支援、パーソナル学習コーチ</td>
+                </tr>
+                <tr>
+                    <td><strong>Family</strong></td>
+                    <td>¥4,980</td>
+                    <td>¥49,800</td>
+                    <td>家族ダッシュボード、複数車両対応（最大5台）</td>
+                </tr>
+                <tr>
+                    <td><strong>Enterprise</strong></td>
+                    <td colspan="2">個別見積</td>
+                    <td>フリート管理、高度な分析、API連携</td>
+                </tr>
+            </table>
+
+            <h3 style="margin-top: 40px;">収益予測（2027年）</h3>
+            <div class="highlight-box">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div>
+                        <h4 style="color: #0066ff; margin-bottom: 15px;">サブスクリプション収益</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>Basic：10,000台 × ¥9,800 = <strong>¥98M</strong></li>
+                            <li>Premium：30,000台 × ¥29,800 = <strong>¥894M</strong></li>
+                            <li>Family：8,000台 × ¥49,800 = <strong>¥398M</strong></li>
+                            <li>Enterprise：2,000台 × ¥100,000 = <strong>¥200M</strong></li>
+                        </ul>
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #0066ff;">
+                            <strong>小計：¥1,590M</strong>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="color: #0066ff; margin-bottom: 15px;">追加収益</h4>
+                        <ul style="margin-left: 20px;">
+                            <li>データライセンス（匿名化）：<strong>¥300M</strong></li>
+                            <li>OEM向けSDKライセンス：<strong>¥400M</strong></li>
+                            <li>コンサルティング：<strong>¥210M</strong></li>
+                        </ul>
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #0066ff;">
+                            <strong>小計：¥910M</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="big-number" style="margin-top: 30px;">総ARR：¥2,500M</div>
+            </div>
+        </div>
+
+        <!-- Slide 7: 成長戦略 -->
+        <div class="slide">
+            <div class="logo">SafeSight AI</div>
+            <div class="slide-number">7/15</div>
+            <h2>成長戦略：3段階アプローチ</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2025</div>
+                    <div class="timeline-content">
+                        <h3 style="margin-top: 0;">Phase 1：アーリーアダプター獲得</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+                            <div>
+                                <strong style="color: #0066ff;">目標：1,000台</strong>
+                                <ul style="margin-top: 10px;">
+                                    <li>レクサスオーナー限定β版</li>
+                                    <li>無料トライアル（6ヶ月）</li>
+                                    <li>フィードバックコミュニティ形成</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <strong style="color: #0066ff;">投資：¥90M</strong>
+                                <ul style="margin-top: 10px;">
+                                    <li>データ基盤構築</li>
+                                    <li>人材採用（ML/DS）</li>
+                                    <li>PoC開発</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2026</div>
+                    <div class="timeline-content">
+                        <h3 style="margin-top: 0;">Phase 2：市場浸透</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+                            <div>
+                                <strong style="color: #0066ff;">目標：10,000台</strong>
+                                <ul style="margin-top: 10px;">
+                                    <li>レクサス全車種展開</li>
+                                    <li>トヨタブランドへ拡大</li>
+                                    <li>口コミ・紹介プログラム</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <strong style="color: #0066ff;">投資：¥210M</strong>
+                                <ul style="margin-top: 10px;">
+                                    <li>パーソナライゼーションエンジン</li>
+                                    <li>予測AI研究開発</li>
+                                    <li>インフラ拡張</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2027</div>
+                    <div class="timeline-content">
+                        <h3 style="margin-top: 0;">Phase 3：市場リーダー確立</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+                            <div>
+                                <strong style="color: #0066ff;">目標：50,000台</strong>
+                                <ul style="margin-top: 10px;">
+                                    <li>他OEMへの展開</li>
+                                    <li>エンタープライズ市場攻略</li>
+                                    <li>グローバル展開準備</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <strong style="color: #0066ff;">投資：¥220M</strong>
+                                <ul style="margin-top: 10px;">
+                                    <li>予測AI本格展開</li>
+                                    <li>事業拡大</li>
+                                    <li>次世代技術研究</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: 投資とリターン -->
+        <div class="slide">
+            <div class="logo">SafeSight AI</div>
+            <div class="slide-number">8/15</div>
+            <h2>投資とリターン</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                <div>
+                    <h3 style="color: #f59e0b;">3年間の投資</h3>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>年度</th>
+                            <th>投資額</th>
+                        </tr>
+                        <tr>
+                            <td>2025年</td>
+                            <td><strong>¥90M</strong></td>
+                        </tr>
+                        <tr>
+                            <td>2026年</td>
+                            <td><strong>¥210M</strong></td>
+                        </tr>
+                        <tr>
+                            <td>2027年</td>
+                            <td><strong>¥220M</strong></td>
+                        </tr>
+                        <tr style="background: #fef2f2;">
+                            <td><strong>合計</strong></td>
+                            <td><strong style="color: #f59e0b; font-size: 24px;">¥520M</strong></td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <h3 style="color: #10b981;">3年間の累積収益</h3>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>年度</th>
+                            <th>ARR</th>
+                        </tr>
+                        <tr>
+                            <td>2025年</td>
+                            <td><strong>¥30M</strong></td>
+                        </tr>
+                        <tr>
+                            <td>2026年</td>
+                            <td><strong>¥300M</strong></td>
+                        </tr>
+                        <tr>
+                            <td>2027年</td>
+                            <td><strong>¥2,500M</strong></td>
+                        </tr>
+                        <tr style="background: #f0fdf4;">
+                            <td><strong>累積</strong></td>
+                            <td><strong style="color: #10b981; font-size: 24px;">¥2,830M</strong></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="success-box" style="margin-top: 40px;">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: center;">
+                    <div>
+                        <div style="font-size: 48px; font-weight: 800; color: #10b981;">5.4倍</div>
+                        <div style="font-size: 18px; margin-top: 10px;">ROI（投資対効果）</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 48px; font-weight: 800; color: #10b981;">2年</div>
+                        <div style="font-size: 18px; margin-top: 10px;">投資回収期間</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 48px; font-weight: 800; color: #10b981;">¥2.3B</div>
+                        <div style="font-size: 18px; margin-top: 10px;">純利益（3年間）</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <strong>📊 2026年Q4に投資回収完了</strong><br>
+                2027年以降は高収益フェーズに突入
+            </div>
+        </div>
+
+        <!-- Slide 9: 競合優位性 -->
+        <div class="slide">
+            <div class="logo">SafeSight AI</div>
+            <div class="slide-number">9/15</div>
+            <h2>競合優位性：なぜ我々が勝てるのか</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">データ優位性</div>
+                    <p><strong style="color: #0066ff;">2027年時点で150,000人年分のデータ</strong></p>
+                    <ul style="margin-top: 10px; font-size: 14px;">
+                        <li>50,000台 × 3年分</li>
+                        <li>数百万件のヒヤリハット事例</li>
+                        <li>多様なシチュエーション</li>
+                    </ul>
+                    <div style="margin-top: 15px; padding: 10px; background: #f0fdf4; border-radius: 5px; font-size: 14px;">
+                        → 競合が追いつくには最低2年必要
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <div class="feature-title">技術優位性</div>
+                    <p><strong style="color: #0066ff;">予測精度70%以上（業界トップ）</strong></p>
+                    <ul style="margin-top: 10px; font-size: 14px;">
+                        <li>リアルタイム処理 <100ms</li>
+                        <li>個人の3年分データで学習</li>
+                        <li>因果推論エンジン搭載</li>
+                    </ul>
+                    <div style="margin-top: 15px; padding: 10px; background: #f0fdf4; border-radius: 5px; font-size: 14px;">
+                        → 競合は50-60%の精度（推定）
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <div class="feature-title">パートナーシップ優位性</div>
+                    <p><strong style="color: #0066ff;">トヨタ/レクサスとの深い連携</strong></p>
+                    <ul style="margin-top: 10px; font-size: 14px;">
+                        <li>Arene OSへの直接統合</li>
+                        <li>車両データへのアクセス</li>
+                        <li>OEMブランドの信頼性</li>
+                    </ul>
+                    <div style="margin-top: 15px; padding: 10px; background: #f0fdf4; border-radius: 5px; font-size: 14px;">
+                        → 他社が真似できない参入障壁
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎓</div>
+                    <div class="feature-title">ドメイン知識優位性</div>
+                    <p><strong style="color: #0066ff;">安全・教育の専門性</strong></p>
+                    <ul style="margin-top: 10px; font-size: 14px;">
+                        <li>3年間の取説DX実績</li>
+                        <li>自動車教習所との連携</li>
+                        <li>認知科学・教育工学の知見</li>
+                    </ul>
+                    <div style="margin-top: 15px; padding: 10px; background: #f0fdf4; border-radius: 5px; font-size: 14px;">
+                        → 単なるAI企業では持てない強み
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-box" style="margin-top: 30px;">
+                <h3>先行者利益の獲得</h3>
+                <p>
+                    2025年開始 → 2027年に市場リーダー<br>
+                    2026年開始 → 2028年にようやく追いつく<br>
+                    2027年開始 → すでに市場は確定済み
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 10: KPI設計 -->
+        <div class="slide">
+            <div class="logo">SafeSight AI</div>
+            <div class="slide-number">10/15</div>
+            <h2>KPI設計：2027年目標</h2>
+            
+            <h3>ビジネスKPI</h3>
+            <table class="comparison-table">
+                <tr>
+                    <th>KPI</th>
+                    <th>2025年</th>
+                    <th>2026年</th>
+                    <th>2027年</th>
+                </tr>
+                <tr>
+                    <td>導入車両数</td>
+                    <td>1,000</td>
+                    <td>10,000</td>
+                    <td><strong style="color: #0066ff;">50,000</strong></td>
+                </tr>
+                <tr>
+                    <td>ARR</td>
+                    <td>¥30M</td>
+                    <td>¥300M</td>
+                    <td><strong style="color: #0066ff;">¥2,500M</strong></td>
+                </tr>
+                <tr>
+                    <td>ARPU（年間）</td>
+                    <td>¥30,000</td>
+                    <td>¥30,000</td>
+                    <td><strong style="color: #0066ff;">¥50,000</strong></td>
+                </tr>
+                <tr>
+                    <td>チャーンレート</td>
+                    <td>15%</td>
+                    <td>10%</td>
+                    <td><strong style="color: #0066ff;">5%</strong></td>
+                </tr>
+                <tr>
+                    <td>NPS</td>
+                    <td>+30</td>
+                    <td>+40</td>
+                    <td><strong style="color: #0066ff;">+50</strong></td>
+                </tr>
+            </table>
+
+            <h3 style="margin-top: 40px;">インパクトKPI</h3>
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="metric-label">事故削減率</div>
+                    <div class="metric-value">30%</div>
+                    <div style="font-size: 14px; margin-top: 10px; opacity: 0.9;">予測的介入による効果</div>
+                </div>
+                <div class="metric-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <div class="metric-label">ヒヤリハット削減率</div>
+                    <div class="metric-value">45%</div>
+                    <div style="font-size: 14px; margin-top: 10px; opacity: 0.9;">先回り警告による効果</div>
+                </div>
+                <div class="metric-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <div class="metric-label">安全機能利用率向上</div>
+                    <div class="metric-value">+60%</div>
+                    <div style="font-size: 14px; margin-top: 10px; opacity: 0.9;">学習支援による効果</div>
+                </div>
+                <div class="metric-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                    <div class="metric-label">問い合わせ削減</div>
+                    <div class="metric-value">-50%</div>
+                    <div style="font-size: 14px; margin-top: 10px; opacity: 0.9;">コールセンターコスト削減</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: 技術アーキテクチャ -->
+        <div class="slide">
+            <div class="logo">SafeSight AI</div>
+            <div class="slide-number">11/15</div>
+            <h2>技術アーキテクチャ：2027年版</h2>
+            
+            <div class="product-visual">
+                <pre style="color: white;">
+┌─────────────────────────────────────────────────────┐
+│                    車載システム                      │
+│  ┌─────────────────────────────────────────────┐   │
+│  │  Arene OS（トヨタ車載OS）                    │   │
+│  │  ┌─────────────────────────────────────┐   │   │
+│  │  │  SafeSight AI SDK                   │   │   │
+│  │  │  ・リアルタイム判断エンジン         │   │   │
+│  │  │  ・オンデバイスAI（軽量モデル）     │   │   │
+│  │  │  ・プライバシー保護処理             │   │   │
+│  │  └─────────────────────────────────────┘   │   │
+│  └─────────────────────────────────────────────┘   │
+│           ↕ 5G/6G通信（低遅延）                     │
+└─────────────────────────────────────────────────────┘
+                        ↓
+┌─────────────────────────────────────────────────────┐
+│                  クラウドシステム                    │
+│  ┌─────────────────────────────────────────────┐   │
+│  │  予測AIエンジン                              │   │
+│  │  ・個人行動予測モデル（LSTM, Transformer）  │   │
+│  │  ・リスク予測エンジン（ベイジアン）         │   │
+│  │  ・パーソナライゼーションエンジン（LLM）    │   │
+│  └─────────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────┐   │
+│  │  データレイク                                │   │
+│  │  ・運転履歴（3年分）                         │   │
+│  │  ・学習進捗・フィードバック                  │   │
+│  │  ・匿名化コミュニティデータ                  │   │
+│  └─────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px;">
+                <div class="highlight-box">
+                    <h4 style="color: #0066ff;">リアルタイム処理</h4>
+                    <p style="font-size: 14px; margin-top: 10px;">
+                        車両センサー → オンデバイスAI<br>
+                        <strong>&lt;100ms</strong>で即座の判断
+                    </p>
+                </div>
+                <div class="highlight-box">
+                    <h4 style="color: #0066ff;">準リアルタイム処理</h4>
+                    <p style="font-size: 14px; margin-top: 10px;">
+                        車両データ → クラウドAI<br>
+                        <strong>&lt;1秒</strong>で個人化された提案
+                    </p>
+                </div>
+                <div class="highlight-box">
+                    <h4 style="color: #0066ff;">バッチ処理</h4>
+                    <p style="font-size: 14px; margin-top: 10px;">
+                        蓄積データ → モデル再学習<br>
+                        <strong>日次</strong>で精度向上
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: リスクと対策 -->
+        <div class="slide">
+            <div class="logo">SafeSight AI</div>
+            <div class="slide-number">12/15</div>
+            <h2>リスクと対策</h2>
+            
+            <div class="risk-grid">
+                <div class="risk-card">
+                    <div class="risk-title">⚠️ リスク1：ユーザー獲得遅延</div>
+                    <p style="font-size: 14px; margin: 10px 0;">想定より導入台数が伸びない</p>
+                    <div class="mitigation">
+                        <strong>✓ 対策：</strong><br>
+                        ・複数チャネル（B2C、B2B、B2B2C）<br>
+                        ・インセンティブ設計（無料トライアル）<br>
+                        ・早期アダプタープログラム
+                    </div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">⚠️ リスク2：プライバシー懸念</div>
+                    <p style="font-size: 14px; margin: 10px 0;">ユーザーがデータ提供に抵抗</p>
+                    <div class="mitigation">
+                        <strong>✓ 対策：</strong><br>
+                        ・プライバシー・バイ・デザイン<br>
+                        ・オンデバイス処理優先<br>
+                        ・透明性の確保（何に使うか明示）
+                    </div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">⚠️ リスク3：技術的困難</div>
+                    <p style="font-size: 14px; margin: 10px 0;">予測精度が想定より低い</p>
+                    <div class="mitigation">
+                        <strong>✓ 対策：</strong><br>
+                        ・段階的アプローチ（ルール→ML→LLM）<br>
+                        ・外部専門家の活用<br>
+                        ・大学との共同研究
+                    </div>
+                </div>
+                <div class="risk-card">
+                    <div class="risk-title">⚠️ リスク4：競合参入</div>
+                    <p style="font-size: 14px; margin: 10px 0;">大手IT企業の参入</p>
+                    <div class="mitigation">
+                        <strong>✓ 対策：</strong><br>
+                        ・先行者利益の確保（データ優位性）<br>
+                        ・OEMとの深い連携<br>
+                        ・ドメイン知識の蓄積
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box" style="margin-top: 30px;">
+                <h3 style="margin-top: 0;">成功の確度を高める要因</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 15px;">
+                    <ul>
+                        <li>✅ トヨタ/レクサスとの既存関係</li>
+                        <li>✅ SDV戦略との完全整合</li>
+                        <li>✅ 明確な市場ニーズ（事故削減）</li>
+                    </ul>
+                    <ul>
+                        <li>✅ 技術的実現可能性（既存技術の組み合わせ）</li>
+                        <li>✅ 先行者利益の獲得可能性</li>
+                        <li>✅ 段階的な投資・検証アプローチ</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: ロードマップ -->
+        <div class="slide">
+            <div class="logo">SafeSight AI</div>
+            <div class="slide-number">13/15</div>
+            <h2>ロードマップ：2025-2027</h2>
+            
+            <table class="comparison-table">
+                <tr>
+                    <th style="width: 15%;">時期</th>
+                    <th style="width: 35%;">マイルストーン</th>
+                    <th style="width: 50%;">主要機能</th>
+                </tr>
+                <tr style="background: #f0f9ff;">
+                    <td colspan="3"><strong style="color: #0066ff; font-size: 18px;">2025年：基盤構築期</strong></td>
+                </tr>
+                <tr>
+                    <td>Q1</td>
+                    <td>データ収集開始</td>
+                    <td>ログ収集SDK、プライバシー機能</td>
+                </tr>
+                <tr>
+                    <td>Q2</td>
+                    <td>β版リリース</td>
+                    <td>基本的な安全支援、取説DX</td>
+                </tr>
+                <tr>
+                    <td>Q3</td>
+                    <td>パーソナライゼーションv1.0</td>
+                    <td>ルールベース個人化、学習履歴管理</td>
+                </tr>
+                <tr>
+                    <td>Q4</td>
+                    <td>レクサスPoC完了</td>
+                    <td>1,000台導入、効果検証</td>
+                </tr>
+                <tr style="background: #f0f9ff;">
+                    <td colspan="3"><strong style="color: #0066ff; font-size: 18px;">2026年：本格展開期</strong></td>
+                </tr>
+                <tr>
+                    <td>Q1</td>
+                    <td>パーソナライゼーションv2.0</td>
+                    <td>MLベース個人化、予測機能（初期）</td>
+                </tr>
+                <tr>
+                    <td>Q2</td>
+                    <td>トヨタブランド展開</td>
+                    <td>複数車種対応、5,000台突破</td>
+                </tr>
+                <tr>
+                    <td>Q3</td>
+                    <td>予測AI β版</td>
+                    <td>行動予測、リスク予測</td>
+                </tr>
+                <tr>
+                    <td>Q4</td>
+                    <td>10,000台達成</td>
+                    <td>市場浸透加速、黒字化</td>
+                </tr>
+                <tr style="background: #f0f9ff;">
+                    <td colspan="3"><strong style="color: #0066ff; font-size: 18px;">2027年：市場リーダー確立期</strong></td>
+                </tr>
+                <tr>
+                    <td>Q1</td>
+                    <td>予測AI正式版</td>
+                    <td>先回り提案、因果推論</td>
+                </tr>
+                <tr>
+                    <td>Q2</td>
+                    <td>家族機能リリース</td>
+                    <td>複数ユーザー対応、見守り機能</td>
+                </tr>
+                <tr>
+                    <td>Q3</td>
+                    <td>エンタープライズ版</td>
+                    <td>フリート管理、高度な分析</td>
+                </tr>
+                <tr>
+                    <td>Q4</td>
+                    <td>50,000台達成</td>
+                    <td>市場No.1確立、ARR ¥2,500M</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Slide 14: なぜ今、決断すべきか -->
+        <div class="slide">
+            <div class="logo">SafeSight AI</div>
+            <div class="slide-number">14/15</div>
+            <h2>なぜ今、決断すべきか</h2>
+            
+            <div class="warning-box" style="font-size: 18px; line-height: 1.8;">
+                <h3 style="color: #f59e0b; margin-top: 0;">時間軸の重要性</h3>
+                <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+                    <tr style="border-bottom: 2px solid #fed7aa;">
+                        <td style="padding: 15px; font-weight: 700;">2025年1月に決断</td>
+                        <td style="padding: 15px;"><strong style="color: #10b981;">→ 2027年に市場リーダー</strong></td>
+                    </tr>
+                    <tr style="border-bottom: 2px solid #fed7aa;">
+                        <td style="padding: 15px; font-weight: 700;">2025年7月に決断</td>
+                        <td style="padding: 15px;"><strong style="color: #f59e0b;">→ 2028年にようやく追いつく</strong></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px; font-weight: 700;">2026年に決断</td>
+                        <td style="padding: 15px;"><strong style="color: #ef4444;">→ すでに市場は確定済み</strong></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <h3 style="margin-top: 0;">AI/データの世界では「先に始めた者が圧倒的に有利」</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-top: 20px;">
+                    <div>
+                        <h4 style="color: #0066ff; margin-bottom: 15px;">理由</h4>
+                        <ul>
+                            <li>データは時間をかけないと貯まらない（3年必要）</li>
+                            <li>予測AIには長期データが必須</li>
+                            <li>ユーザーは最初のサービスに定着</li>
+                            <li>ネットワーク効果（ユーザーが増えるほど価値向上）</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #0066ff; margin-bottom: 15px;">データの複利効果</h4>
+                        <ul>
+                            <li><strong>Year 1：</strong>基本的なパターン理解</li>
+                            <li><strong>Year 2：</strong>個人差の理解が深まる</li>
+                            <li><strong>Year 3：</strong>稀なケースも予測可能</li>
+                            <li><strong>→ 競合が追いつけないレベル</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-box" style="margin-top: 30px;">
+                <h3>今決断すれば、2027年に¥2,500Mの事業を作れる</h3>
+                <p style="font-size: 24px; margin-top: 20px;">
+                    半年遅れれば、その機会を失う。<br>
+                    <strong style="font-size: 32px;">決断の時は、今。</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 15: 次のアクション -->
+        <div class="slide">
+            <div class="logo">SafeSight AI</div>
+            <div class="slide-number">15/15</div>
+            <h2>次のアクション</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">Step 1</div>
+                    <div class="timeline-content">
+                        <h3 style="margin-top: 0;">経営陣の意思決定（2025年1月）</h3>
+                        <ul>
+                            <li>本プロジェクトの承認</li>
+                            <li>3年間で¥520Mの投資承認</li>
+                            <li>専任チームの組成承認</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">Step 2</div>
+                    <div class="timeline-content">
+                        <h3 style="margin-top: 0;">即時アクション（2025年2-3月）</h3>
+                        <ul>
+                            <li>ML/DSエンジニアの採用開始（3-5名）</li>
+                            <li>データ基盤の設計開始</li>
+                            <li>レクサスとの詳細協議</li>
+                            <li>プロトタイプ開発開始</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">Step 3</div>
+                    <div class="timeline-content">
+                        <h3 style="margin-top: 0;">β版リリース準備（2025年4-6月）</h3>
+                        <ul>
+                            <li>最小限の機能実装</li>
+                            <li>100台規模のクローズドβ</li>
+                            <li>フィードバック収集</li>
+                            <li>本格展開の判断（Go/No-Go）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box" style="margin-top: 40px;">
+                <h3 style="margin-top: 0;">求める承認事項</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; text-align: center;">
+                    <div>
+                        <div style="font-size: 36px; font-weight: 800; color: #10b981;">✓</div>
+                        <div style="font-size: 16px; margin-top: 10px;">プロジェクト承認</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 36px; font-weight: 800; color: #10b981;">✓</div>
+                        <div style="font-size: 16px; margin-top: 10px;">投資承認<br>（¥520M / 3年）</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 36px; font-weight: 800; color: #10b981;">✓</div>
+                        <div style="font-size: 16px; margin-top: 10px;">採用承認<br>（専門人材5名）</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-box" style="margin-top: 30px;">
+                <h3>2027年、¥2,500Mの事業を一緒に作りましょう</h3>
+                <p style="font-size: 20px; margin-top: 15px;">
+                    質問・ご意見をお聞かせください
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 印刷用のスタイル調整
+        window.onbeforeprint = function() {
+            document.body.style.background = 'white';
+        };
+        
+        window.onafterprint = function() {
+            document.body.style.background = 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)';
+        };
+    </script>
+</body>
+</html>
+

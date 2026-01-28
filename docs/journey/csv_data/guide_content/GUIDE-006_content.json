@@ -1,0 +1,91 @@
+{
+  "guide_id": "GUIDE-006",
+  "title": "販売店予約・連絡先",
+  "type": "contact_service",
+  "estimated_time": "3min",
+  "difficulty": "easy",
+  "content": {
+    "overview": "お近くのトヨタ販売店で電池交換サービスを予約できます。",
+    "service_description": {
+      "name": "電池交換サービス",
+      "target": "スマートキーの電池交換",
+      "benefit": "専門スタッフによる安全な交換作業"
+    },
+    "reservation_methods": [
+      {
+        "method": "オンライン予約",
+        "url": "https://toyota.jp/service/reserve",
+        "description": "24時間予約可能",
+        "advantages": [
+          "いつでも予約できる",
+          "待ち時間が少ない",
+          "事前に希望日時を指定できる"
+        ]
+      },
+      {
+        "method": "電話予約",
+        "action": "show_dealer_list",
+        "use_location": true,
+        "description": "お近くの販売店に直接お電話ください",
+        "advantages": [
+          "その場で相談できる",
+          "詳細な説明が聞ける",
+          "在庫確認ができる"
+        ]
+      },
+      {
+        "method": "来店予約",
+        "description": "直接販売店にお越しいただく",
+        "note": "混雑時はお待ちいただく場合があります"
+      }
+    ],
+    "business_hours": {
+      "weekday": "9:00-18:00",
+      "saturday": "9:00-17:00",
+      "sunday": "定休日（店舗により異なる）",
+      "holiday": "年末年始・GWなどは休業の場合があります",
+      "note": "営業時間は店舗により異なる場合があります"
+    },
+    "service_info": {
+      "name": "電池交換サービス",
+      "estimated_time": "10-15分",
+      "fee": "店舗にお問い合わせください",
+      "appointment": "予約なしでも対応可能（混雑時はお待ちいただく場合があります）",
+      "included_service": [
+        "電池交換",
+        "動作確認",
+        "簡易清掃"
+      ]
+    },
+    "dealer_search": {
+      "api_endpoint": "/api/dealers/search",
+      "parameters": {
+        "location": "user_location",
+        "service_type": "key_battery",
+        "radius_km": 20
+      },
+      "result_info": [
+        "店舗名",
+        "住所",
+        "電話番号",
+        "営業時間",
+        "アクセス方法"
+      ]
+    },
+    "what_to_bring": [
+      "スマートキー",
+      "車検証（念のため）",
+      "本人確認書類（運転免許証など）"
+    ],
+    "tips": [
+      "予約をすると待ち時間が短縮できます",
+      "他の点検と同時に依頼すると効率的です",
+      "予備キーもある場合は一緒に交換を検討しましょう"
+    ],
+    "related_guides": ["GUIDE-005", "GUIDE-012"]
+  },
+  "source": {
+    "type": "system_generated",
+    "based_on": "トヨタ公式サービス情報"
+  }
+}

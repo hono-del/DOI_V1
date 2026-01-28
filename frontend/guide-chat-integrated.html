@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>取扱説明書DX - インタラクティブガイド</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .mobile-frame {
+            max-width: 375px;
+            margin: 20px auto;
+            border: 8px solid #2d3561;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(79, 172, 254, 0.2);
+            background: #0f3460;
+            height: 667px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-header {
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            color: #4facfe;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(79, 172, 254, 0.3);
+        }
+
+        .mobile-header h2 {
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85em;
+            color: #4ade80;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        #chatContainer {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            scroll-behavior: smooth;
+        }
+
+        .chat-message {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .chat-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .chat-avatar.ai {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .chat-avatar.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .chat-bubble {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .chat-bubble.ai {
+            background: rgba(45, 53, 97, 0.8);
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            color: #e0e0e0;
+        }
+
+        .chat-bubble.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .chat-bubble strong {
+            color: #4facfe;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .guide-link {
+            display: inline-block;
+            background: rgba(79, 172, 254, 0.2);
+            color: #4facfe;
+            padding: 6px 12px;
+            border-radius: 8px;
+            margin: 8px 4px 0 0;
+            cursor: pointer;
+            font-size: 0.9em;
+            border: 1px solid rgba(79, 172, 254, 0.4);
+            transition: all 0.3s;
+        }
+
+        .guide-link:hover {
+            background: rgba(79, 172, 254, 0.3);
+            border-color: #4facfe;
+            transform: translateY(-2px);
+        }
+
+        .action-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #0f3460;
+            padding: 8px 16px;
+            border-radius: 12px;
+            margin: 8px 4px 0 0;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+        }
+
+        .quick-reply-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .quick-reply {
+            background: rgba(79, 172, 254, 0.1);
+            color: #4facfe;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            transition: all 0.3s;
+        }
+
+        .quick-reply:hover {
+            background: rgba(79, 172, 254, 0.2);
+            border-color: #4facfe;
+            transform: translateY(-2px);
+        }
+
+        .loading-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(45, 53, 97, 0.6);
+            border-radius: 18px;
+            width: fit-content;
+        }
+
+        .loading-indicator.active {
+            display: flex;
+        }
+
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            background: #4facfe;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        #chatInputContainer {
+            background: #0f3460;
+            padding: 15px;
+            border-top: 1px solid rgba(79, 172, 254, 0.3);
+        }
+
+        #chatInput {
+            flex: 1;
+            background: rgba(45, 53, 97, 0.6);
+            color: #e0e0e0;
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 0.95em;
+            resize: none;
+            min-height: 45px;
+            max-height: 100px;
+            font-family: inherit;
+            width: 100%;
+        }
+
+        #chatInput:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .send-button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #0f3460;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .input-hint {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 8px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #16213e;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid rgba(79, 172, 254, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(79, 172, 254, 0.3);
+        }
+
+        .modal-title {
+            font-size: 1.3em;
+            color: #4facfe;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #888;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #4facfe;
+        }
+
+        .guide-step {
+            background: rgba(45, 53, 97, 0.6);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 3px solid #4facfe;
+        }
+
+        .guide-step-number {
+            color: #4facfe;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .guide-warning {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid #ef4444;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: #fca5a5;
+        }
+
+        .guide-tip {
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 3px solid #22c55e;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: #86efac;
+        }
+
+        .store-card {
+            background: rgba(45, 53, 97, 0.6);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(79, 172, 254, 0.3);
+        }
+
+        .store-name {
+            color: #4facfe;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        .store-info {
+            font-size: 0.9em;
+            color: #b0b0b0;
+            line-height: 1.8;
+        }
+
+        .flow-visualization {
+            background: rgba(45, 53, 97, 0.4);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border: 1px solid rgba(79, 172, 254, 0.2);
+        }
+
+        .flow-node {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+
+        .flow-arrow {
+            color: #4facfe;
+        }
+
+        .flow-current {
+            background: rgba(79, 172, 254, 0.2);
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid #4facfe;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-frame">
+        <div class="mobile-header">
+            <h2>🤖 AIガイド - THEME-001</h2>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span id="statusText">オンライン</span>
+            </div>
+        </div>
+
+        <div id="chatContainer"></div>
+
+        <div id="chatInputContainer">
+            <div class="input-wrapper">
+                <textarea 
+                    id="chatInput" 
+                    placeholder="質問を入力してください..." 
+                    rows="1"
+                    onkeypress="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }"></textarea>
+                <button class="send-button" onclick="sendMessage()" id="sendButton">
+                    <span>送信</span>
+                    <span>📤</span>
+                </button>
+            </div>
+            <div class="input-hint">
+                💡 Shift+Enterで改行 | 現在地: <span id="currentNodeLabel">START</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ガイド詳細モーダル -->
+    <div id="guideModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle"></div>
+                <div class="modal-close" onclick="closeModal()">×</div>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // 設定
+        const GUIDE_CONTENT_PATH = '../docs/journey/csv_data/guide_content/';
+        const API_BASE_URL = 'http://localhost:5000/api';
+        
+        // グローバル状態
+        let chatHistory = [];
+        let currentFlow = {
+            theme: 'THEME-001',
+            currentNode: 'NODE-START',
+            context: {
+                hasIndicator: null,
+                hasBattery: null,
+                preferredAction: null
+            }
+        };
+        let guidesCache = {};
+
+        // 初期化
+        window.onload = function() {
+            initializeChat();
+            preloadGuides();
+        };
+
+        function initializeChat() {
+            showWelcomeMessage();
+        }
+
+        async function preloadGuides() {
+            // よく使うガイドを事前読み込み
+            const commonGuides = ['GUIDE-001', 'GUIDE-003', 'GUIDE-004', 'GUIDE-005', 'GUIDE-008'];
+            for (const guideId of commonGuides) {
+                await loadGuideContent(guideId);
+            }
+        }
+
+        async function loadGuideContent(guideId) {
+            if (guidesCache[guideId]) {
+                return guidesCache[guideId];
+            }
+            
+            try {
+                const response = await fetch(`${GUIDE_CONTENT_PATH}${guideId}_content.json`);
+                const guide = await response.json();
+                guidesCache[guideId] = guide;
+                return guide;
+            } catch (error) {
+                console.error(`Failed to load ${guideId}:`, error);
+                return null;
+            }
+        }
+
+        function showWelcomeMessage() {
+            addMessage('ai', `こんにちは!トヨタ車取扱説明書AIアシスタントです。🚗
+
+お困りのことがあれば、お気軽にご質問ください。
+
+<div class="quick-reply-container">
+    <div class="quick-reply" onclick="startSmartKeyFlow()">🔑 スマートキーでドアが開かない</div>
+    <div class="quick-reply" onclick="handleQuickReply('電池交換の方法')">🔋 電池交換の方法</div>
+    <div class="quick-reply" onclick="handleQuickReply('機械キーの使い方')">🔧 機械キーの使い方</div>
+</div>`, false);
+        }
+
+        function handleQuickReply(message) {
+            sendMessage(message);
+        }
+
+        async function sendMessage(predefinedMessage) {
+            const input = document.getElementById('chatInput');
+            const message = predefinedMessage || input.value.trim();
+            
+            if (!message) return;
+            
+            // ユーザーメッセージを表示
+            addMessage('user', message);
+            
+            if (!predefinedMessage) {
+                input.value = '';
+            }
+            
+            // ローディング表示
+            showLoading();
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            // メッセージを処理
+            await processMessage(message);
+            
+            hideLoading();
+        }
+
+        async function processMessage(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('スマートキー') || lowerMessage.includes('ドア') || lowerMessage.includes('開かない')) {
+                await startSmartKeyFlow();
+            } else if (lowerMessage.includes('電池交換')) {
+                await handleBatteryReplacement();
+            } else if (lowerMessage.includes('機械キー')) {
+                await showGuideInteractive('GUIDE-001');
+            } else {
+                handleGenericQuery(message);
+            }
+        }
+
+        async function startSmartKeyFlow() {
+            updateNodeLabel('インジケーター確認');
+            
+            addMessage('ai', `<strong>スマートキーでドアが開かない状況ですね</strong>
+
+THEME-001のフローで診断します。
+
+<div class="flow-visualization">
+    <div class="flow-node"><span class="flow-arrow">▶</span> START: 問題発生</div>
+    <div class="flow-node flow-current"><span class="flow-arrow">▶</span> CHECK-001: インジケーター確認</div>
+    <div class="flow-node"><span class="flow-arrow">▶</span> 次のステップ...</div>
+</div>
+
+スマートキーのボタンを押したとき、インジケーターランプ（小さな赤いランプ）は点灯しますか?
+
+<div class="quick-reply-container">
+    <div class="quick-reply" onclick="handleIndicatorCheck('yes')">✅ はい、点灯します</div>
+    <div class="quick-reply" onclick="handleIndicatorCheck('no')">❌ いいえ、点灯しません</div>
+    <div class="quick-reply" onclick="handleIndicatorCheck('unknown')">❓ わかりません</div>
+</div>`, false);
+            
+            currentFlow.currentNode = 'CHECK-001';
+        }
+
+        async function handleIndicatorCheck(response) {
+            currentFlow.context.hasIndicator = response === 'yes';
+            
+            if (response === 'yes') {
+                addMessage('user', 'はい、点灯します');
+                showLoading();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                hideLoading();
+                updateNodeLabel('電波干渉確認');
+                handleElectricInterference();
+            } else if (response === 'no') {
+                addMessage('user', 'いいえ、点灯しません');
+                showLoading();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                hideLoading();
+                updateNodeLabel('電池交換提案');
+                await handleBatteryIssue();
+            } else {
+                addMessage('user', 'わかりません');
+                showLoading();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                hideLoading();
+                showIndicatorCheckGuide();
+            }
+        }
+
+        async function handleBatteryIssue() {
+            currentFlow.currentNode = 'NODE-BATTERY-DEAD';
+            
+            const guide001 = await loadGuideContent('GUIDE-001');
+            
+            addMessage('ai', `<strong>電池切れの可能性が高いです 🔋</strong>
+
+<div class="flow-visualization">
+    <div class="flow-node">✓ CHECK-001: インジケーター確認済み</div>
+    <div class="flow-node flow-current"><span class="flow-arrow">▶</span> NODE-BATTERY-DEAD: 電池切れ対応</div>
+</div>
+
+<strong>今すぐできる対応:</strong>
+
+<div class="guide-link" onclick="showGuideInteractive('GUIDE-001')">📖 機械キーの取り出し方 (1分)</div>
+
+${guide001 ? `<small>機械キーを使えば、電池交換なしで今すぐドアを開けられます。</small>` : ''}
+
+<strong>電池交換について:</strong>
+
+次のステップを選択してください:
+
+<div class="quick-reply-container">
+    <div class="quick-reply" onclick="handleBatteryChoice('diy')">🔧 自分で交換する</div>
+    <div class="quick-reply" onclick="handleBatteryChoice('dealer')">🚗 販売店に依頼する</div>
+</div>`, false);
+        }
+
+        async function handleBatteryChoice(choice) {
+            currentFlow.context.preferredAction = choice;
+            
+            if (choice === 'diy') {
+                addMessage('user', '自分で交換する');
+                updateNodeLabel('DIY電池交換');
+                showLoading();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                hideLoading();
+                await showDIYBatteryFlow();
+            } else {
+                addMessage('user', '販売店に依頼する');
+                updateNodeLabel('販売店検索');
+                showLoading();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                hideLoading();
+                await findDealers();
+            }
+        }
+
+        async function showDIYBatteryFlow() {
+            const guide003 = await loadGuideContent('GUIDE-003');
+            const guide005 = await loadGuideContent('GUIDE-005');
+            
+            addMessage('ai', `<strong>自分で電池交換する手順</strong>
+
+<div class="flow-visualization">
+    <div class="flow-node flow-current"><span class="flow-arrow">▶</span> NODE-DIY-CHECK: 準備物確認</div>
+    <div class="flow-node"><span class="flow-arrow">▶</span> NODE-DIY-EXECUTE: 交換実行</div>
+</div>
+
+<div class="guide-warning">
+⚠️ 注意: 部品が破損するおそれがあるため、トヨタ販売店での交換をおすすめします
+</div>
+
+必要なもの:
+• マイナスドライバー（中サイズ）
+• 小さいマイナスドライバー
+• リチウム電池 CR2450
+
+<div class="guide-link" onclick="showGuideInteractive('GUIDE-003')">📋 準備物の詳細</div>
+<div class="guide-link" onclick="showGuideInteractive('GUIDE-005')">📖 交換手順（7ステップ）</div>
+
+準備物は揃っていますか?
+
+<div class="quick-reply-container">
+    <div class="quick-reply" onclick="handlePreparationCheck('ready')">✅ 揃っています</div>
+    <div class="quick-reply" onclick="handlePreparationCheck('need-battery')">🔋 電池が必要です</div>
+    <div class="quick-reply" onclick="handlePreparationCheck('need-tools')">🔧 道具が必要です</div>
+</div>`, false);
+        }
+
+        async function handlePreparationCheck(status) {
+            if (status === 'ready') {
+                addMessage('user', '準備物は揃っています');
+                showLoading();
+                await new Promise(resolve => setTimeout(resolve, 800));
+                hideLoading();
+                await showBatteryReplacementGuide();
+            } else if (status === 'need-battery') {
+                addMessage('user', '電池が必要です');
+                showLoading();
+                await new Promise(resolve => setTimeout(resolve, 800));
+                hideLoading();
+                await findNearbyStores();
+            } else {
+                addMessage('user', '道具が必要です');
+                showLoading();
+                await new Promise(resolve => setTimeout(resolve, 800));
+                hideLoading();
+                showToolsPurchaseGuide();
+            }
+        }
+
+        async function showBatteryReplacementGuide() {
+            const guide005 = await loadGuideContent('GUIDE-005');
+            
+            if (guide005) {
+                let stepsHtml = '<strong>電池交換手順</strong><br><br>';
+                
+                if (guide005.content.important_notice) {
+                    stepsHtml += `<div class="guide-warning">⚠️ ${guide005.content.important_notice.message}</div>`;
+                }
+                
+                guide005.content.steps.forEach((step, index) => {
+                    stepsHtml += `<strong>${step.step}. ${step.description}</strong><br>`;
+                    if (step.detail) {
+                        stepsHtml += `<small>${step.detail}</small><br>`;
+                    }
+                    if (step.caution) {
+                        stepsHtml += `<small style="color: #fca5a5;">⚠️ ${step.caution}</small><br>`;
+                    }
+                    stepsHtml += '<br>';
+                });
+                
+                stepsHtml += '<div class="action-button" onclick="confirmBatteryReplacement()">✅ 交換完了しました</div>';
+                stepsHtml += '<div class="action-button" onclick="showGuideInteractive(\'GUIDE-005\')">📖 詳細を見る</div>';
+                
+                addMessage('ai', stepsHtml, false);
+            }
+        }
+
+        function confirmBatteryReplacement() {
+            addMessage('user', '交換完了しました');
+            updateNodeLabel('動作確認');
+            
+            addMessage('ai', `<strong>お疲れ様でした! 🎉</strong>
+
+電池交換が完了しましたね。動作確認をしましょう。
+
+<strong>確認項目:</strong>
+1. スマートキーのボタンを押してインジケーターが点灯するか
+2. 車両のドアロック/アンロックが正常に動作するか
+
+動作は正常ですか?
+
+<div class="quick-reply-container">
+    <div class="quick-reply" onclick="handleOperationCheck('success')">✅ 正常に動作します</div>
+    <div class="quick-reply" onclick="handleOperationCheck('failed')">❌ まだ動作しません</div>
+</div>`, false);
+        }
+
+        function handleOperationCheck(result) {
+            if (result === 'success') {
+                addMessage('user', '正常に動作します');
+                updateNodeLabel('解決');
+                
+                addMessage('ai', `<strong>問題が解決しました! 🎊</strong>
+
+<div class="flow-visualization">
+    <div class="flow-node">✓ 電池交換完了</div>
+    <div class="flow-node">✓ 動作確認OK</div>
+    <div class="flow-node flow-current"><span class="flow-arrow">▶</span> 解決!</div>
+</div>
+
+今後の予防策として、以下のガイドもご参照ください:
+
+<div class="guide-link" onclick="showGuideInteractive('GUIDE-013')">📅 予防策・定期点検の案内</div>
+
+<div class="guide-tip">
+✅ 電池の寿命: 約2-3年<br>
+✅ 予防交換: 2年ごとがおすすめ<br>
+✅ 予備キーも確認しましょう
+</div>
+
+他にお困りのことはありますか?`, false);
+            } else {
+                addMessage('user', 'まだ動作しません');
+                
+                addMessage('ai', `<strong>トラブルシューティング</strong>
+
+電池交換後も動作しない場合:
+
+<strong>確認事項:</strong>
+• 電池の向き（+/-）は正しいですか?
+• カバーはしっかり閉まっていますか?
+• 新しい電池を使用しましたか?
+
+それでも改善しない場合は、スマートキー本体の故障の可能性があります。
+
+<div class="action-button" onclick="findDealers()">🚗 販売店で点検してもらう</div>
+<div class="guide-link" onclick="showGuideInteractive('GUIDE-009')">📖 キー修理・交換手続き</div>`, false);
+            }
+        }
+
+        async function findNearbyStores() {
+            updateNodeLabel('電池購入サポート');
+            
+            // 先にデモデータを即時表示して待ち時間をなくす
+            addMessage('ai', `<strong>CR2450電池の購入方法</strong>
+
+まずは目安として、代表的な店舗候補をお知らせします。`, false);
+            displayNearbyStoresDemo();
+            
+            // その後、バックグラウンドで現在地ベースの検索を試みる
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    async (position) => {
+                        await fetchNearbyStores(position.coords.latitude, position.coords.longitude);
+                    },
+                    () => {
+                        // 位置情報が拒否/失敗しても、デモ表示があるので何もしない
+                        console.warn('位置情報が取得できなかったため、デモデータのみを表示します');
+                    }
+                );
+            }
+        }
+
+        async function fetchNearbyStores(latitude, longitude) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/nearby-stores`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        location: { latitude, longitude },
+                        item: 'CR2450',
+                        radius_km: 5
+                    })
+                });
+                
+                const data = await response.json();
+                
+                // 位置情報を使った結果が得られたら、「現在地に基づく候補」として追加表示
+                if (data && data.stores && data.stores.length > 0) {
+                    addMessage('ai', '<strong>現在地に基づく候補</strong><br>先ほどの目安に加えて、現在地から近い店舗もご案内します。', false);
+                    displayNearbyStores(data.stores);
+                }
+            } catch (error) {
+                console.error('API Error:', error);
+                // すでにデモデータを表示しているので、ここでは何もしない
+            }
+        }
+
+        function displayNearbyStoresDemo() {
+            const storesHtml = `<strong>近隣の店舗（5km圏内）</strong>
+
+<div class="store-card">
+    <div class="store-name">1. ヨドバシカメラ 新宿西口本店</div>
+    <div class="store-info">
+        📍 距離: 1.2km<br>
+        🏪 在庫: 高確率であり<br>
+        📞 03-3346-1010<br>
+        ⏰ 9:30-22:00（年中無休）
+    </div>
+</div>
+
+<div class="store-card">
+    <div class="store-name">2. ビックカメラ 渋谷東口店</div>
+    <div class="store-info">
+        📍 距離: 2.5km<br>
+        🏪 在庫: 高確率であり<br>
+        📞 03-5466-1111<br>
+        ⏰ 10:00-21:00
+    </div>
+</div>
+
+<div class="store-card">
+    <div class="store-name">3. セイコーウォッチサロン 銀座</div>
+    <div class="store-info">
+        📍 距離: 3.1km<br>
+        🏪 在庫: 高確率であり<br>
+        📞 03-3563-1111<br>
+        ⏰ 11:00-19:30
+    </div>
+</div>
+
+<div class="guide-tip">
+💡 来店前に電話で在庫確認をおすすめします<br>
+💡 価格: ¥200-500程度
+</div>
+
+<strong>オンライン購入:</strong>
+<div class="action-button" onclick="window.open('https://amazon.co.jp/s?k=CR2450', '_blank')">🛒 Amazonで購入</div>
+<div class="action-button" onclick="window.open('https://search.rakuten.co.jp/search?k=CR2450', '_blank')">🛒 楽天で購入</div>
+
+<div class="guide-link" onclick="showGuideInteractive('GUIDE-004')">📖 購入方法の詳細</div>`;
+            
+            addMessage('ai', storesHtml, false);
+        }
+
+        function displayNearbyStores(stores) {
+            if (!stores || stores.length === 0) {
+                displayNearbyStoresDemo();
+                return;
+            }
+            
+            let storesHtml = '<strong>近隣の店舗</strong><br><br>';
+            
+            stores.slice(0, 3).forEach((store, index) => {
+                storesHtml += `<div class="store-card">`;
+                storesHtml += `<div class="store-name">${index + 1}. ${store.name}</div>`;
+                storesHtml += `<div class="store-info">`;
+                storesHtml += `📍 距離: ${store.distance_km}km<br>`;
+                storesHtml += `🏪 在庫: ${store.battery_availability?.availability || '要確認'}<br>`;
+                if (store.contact?.phone) {
+                    storesHtml += `📞 ${store.contact.phone}<br>`;
+                }
+                if (store.business_hours) {
+                    storesHtml += `⏰ ${store.business_hours.weekday || '営業時間要確認'}`;
+                }
+                storesHtml += `</div></div>`;
+            });
+            
+            addMessage('ai', storesHtml, false);
+        }
+
+        async function findDealers() {
+            updateNodeLabel('販売店予約');
+            
+            addMessage('ai', `<strong>トヨタ販売店を探します</strong>
+
+近くの販売店を検索中...`, false);
+            
+            showLoading();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            hideLoading();
+            
+            displayDealersDemo();
+        }
+
+        function displayDealersDemo() {
+            const dealersHtml = `<strong>近くのトヨタ販売店</strong>
+
+電池交換サービスを提供している販売店です:
+
+<div class="store-card">
+    <div class="store-name">1. トヨタ東京カローラ 新宿店</div>
+    <div class="store-info">
+        📍 距離: 2.3km<br>
+        ⏰ サービス: 平日 9:00-18:00 / 土 9:00-17:00<br>
+        📞 03-3363-5111<br>
+        ✅ 電池交換、キー修理、点検、車検
+    </div>
+    <div class="action-button" onclick="showReservationForm('DEALER-001', 'トヨタ東京カローラ 新宿店')">📅 この店舗を予約</div>
+</div>
+
+<div class="store-card">
+    <div class="store-name">2. トヨタカローラ東京 渋谷店</div>
+    <div class="store-info">
+        📍 距離: 3.5km<br>
+        ⏰ サービス: 毎日 9:00-18:00<br>
+        📞 03-3463-5111<br>
+        ✅ 電池交換、キー修理、点検
+    </div>
+    <div class="action-button" onclick="showReservationForm('DEALER-002', 'トヨタカローラ東京 渋谷店')">📅 この店舗を予約</div>
+</div>
+
+<div class="guide-tip">
+💡 所要時間: 10-15分<br>
+💡 予約なしでも対応可能ですが、予約で待ち時間短縮<br>
+💡 費用: 店舗にお問い合わせください
+</div>
+
+<div class="guide-link" onclick="showGuideInteractive('GUIDE-006')">📖 予約方法の詳細</div>`;
+            
+            addMessage('ai', dealersHtml, false);
+        }
+
+        function showReservationForm(dealerId, dealerName) {
+            const formHtml = `<strong>予約フォーム: ${dealerName}</strong>
+
+<div style="background: rgba(45, 53, 97, 0.6); padding: 15px; border-radius: 12px; margin: 15px 0;">
+    <strong>サービス:</strong> 電池交換<br>
+    <strong>販売店:</strong> ${dealerName}<br><br>
+    
+    <div style="margin: 10px 0;">
+        <strong>希望日:</strong><br>
+        <input type="date" id="reserveDate" min="${getTodayDate()}" 
+               style="background: #1a1a2e; color: #e0e0e0; border: 1px solid #4facfe; padding: 8px; border-radius: 8px; width: 100%;">
+    </div>
+    
+    <div style="margin: 10px 0;">
+        <strong>希望時刻:</strong><br>
+        <select id="reserveTime" style="background: #1a1a2e; color: #e0e0e0; border: 1px solid #4facfe; padding: 8px; border-radius: 8px; width: 100%;">
+            <option value="10:00">10:00</option>
+            <option value="11:00">11:00</option>
+            <option value="14:00">14:00</option>
+            <option value="15:00">15:00</option>
+            <option value="16:00">16:00</option>
+        </select>
+    </div>
+    
+    <div style="margin: 10px 0;">
+        <strong>お名前:</strong><br>
+        <input type="text" id="customerName" placeholder="山田太郎"
+               style="background: #1a1a2e; color: #e0e0e0; border: 1px solid #4facfe; padding: 8px; border-radius: 8px; width: 100%;">
+    </div>
+    
+    <div style="margin: 10px 0;">
+        <strong>電話番号:</strong><br>
+        <input type="tel" id="customerPhone" placeholder="090-1234-5678"
+               style="background: #1a1a2e; color: #e0e0e0; border: 1px solid #4facfe; padding: 8px; border-radius: 8px; width: 100%;">
+    </div>
+</div>
+
+<div class="action-button" onclick="submitReservation('${dealerId}', '${dealerName}')">📅 予約を確定する</div>
+<div class="quick-reply" onclick="findDealers()">← 他の店舗を見る</div>`;
+            
+            addMessage('ai', formHtml, false);
+        }
+
+        function getTodayDate() {
+            const today = new Date();
+            return today.toISOString().split('T')[0];
+        }
+
+        async function submitReservation(dealerId, dealerName) {
+            const date = document.getElementById('reserveDate')?.value;
+            const time = document.getElementById('reserveTime')?.value;
+            const name = document.getElementById('customerName')?.value;
+            const phone = document.getElementById('customerPhone')?.value;
+            
+            if (!date || !name || !phone) {
+                alert('必須項目を入力してください');
+                return;
+            }
+            
+            addMessage('user', `予約内容: ${date} ${time}`);
+            showLoading();
+            
+            // デモ: 予約処理
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            hideLoading();
+            
+            const reservationId = 'RES-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+            
+            addMessage('ai', `<strong>予約が完了しました! 🎉</strong>
+
+<div style="background: rgba(34, 197, 94, 0.1); border: 2px solid #22c55e; padding: 15px; border-radius: 12px; margin: 15px 0;">
+    <strong style="color: #22c55e;">✅ 予約確認</strong><br><br>
+    
+    <strong>予約番号:</strong> ${reservationId}<br>
+    <strong>販売店:</strong> ${dealerName}<br>
+    <strong>日時:</strong> ${date} ${time}<br>
+    <strong>サービス:</strong> 電池交換<br>
+    <strong>お名前:</strong> ${name}<br>
+    <strong>電話:</strong> ${phone}
+</div>
+
+<div class="guide-tip">
+💡 予約確認メールを送信しました<br>
+💡 ご来店の際は、スマートキーをお持ちください<br>
+💡 ご不明な点があれば、販売店にお電話ください
+</div>
+
+<strong>当日の流れ:</strong>
+1. 予約時刻の5-10分前に来店
+2. 受付でお名前を伝える
+3. スマートキーを預ける
+4. 約10-15分で交換完了
+5. 動作確認して受け取り
+
+問題が解決しました! 他にお困りのことはありますか?`, false);
+            
+            updateNodeLabel('解決');
+        }
+
+        function handleElectricInterference() {
+            currentFlow.currentNode = 'NODE-INTERFERENCE';
+            updateNodeLabel('電波干渉対応');
+            
+            addMessage('ai', `<strong>電波干渉の可能性があります 📡</strong>
+
+<div class="flow-visualization">
+    <div class="flow-node">✓ CHECK-001: インジケーター点灯確認済み</div>
+    <div class="flow-node flow-current"><span class="flow-arrow">▶</span> NODE-INTERFERENCE: 電波干渉対応</div>
+</div>
+
+インジケーターが点灯するのに車両が反応しない場合、電波干渉の可能性があります。
+
+<strong>対処法:</strong>
+
+<strong>1. スマートキーを車体に近づける</strong>
+ドアハンドルに直接近づけて操作してみてください
+
+<strong>2. 電波干渉源から離れる</strong>
+空港、放送局、携帯基地局の近くでは電波干渉が起こりやすいです
+
+<div class="guide-link" onclick="showGuideInteractive('GUIDE-008')">📖 電波干渉時の詳しい対応方法</div>
+
+試してみても改善しませんか?
+
+<div class="quick-reply-container">
+    <div class="quick-reply" onclick="handleInterferenceResolved('yes')">✅ 改善しました</div>
+    <div class="quick-reply" onclick="handleInterferenceResolved('no')">❌ 改善しません</div>
+</div>`, false);
+        }
+
+        function handleInterferenceResolved(result) {
+            if (result === 'yes') {
+                addMessage('user', '改善しました');
+                updateNodeLabel('解決');
+                
+                addMessage('ai', `<strong>問題が解決しました! 🎊</strong>
+
+電波干渉が原因だったようですね。
+
+<div class="guide-tip">
+💡 この現象は一時的なもので、故障ではありません<br>
+💡 同じ場所では同じ現象が起こる可能性があります<br>
+💡 機械キーの使い方を覚えておくと安心です
+</div>
+
+<div class="guide-link" onclick="showGuideInteractive('GUIDE-001')">📖 機械キーの使い方</div>
+
+他にお困りのことはありますか?`, false);
+            } else {
+                addMessage('user', '改善しません');
+                
+                addMessage('ai', `<strong>別の原因が考えられます</strong>
+
+電波干渉以外の可能性を確認しましょう。
+
+<div class="quick-reply-container">
+    <div class="quick-reply" onclick="handleBatteryIssue()">🔋 電池切れかもしれない</div>
+    <div class="quick-reply" onclick="findDealers()">🚗 販売店で点検してもらう</div>
+</div>`, false);
+            }
+        }
+
+        function showToolsPurchaseGuide() {
+            addMessage('ai', `<strong>ドライバーの購入場所</strong>
+
+マイナスドライバーは以下の場所で購入できます:
+
+• ホームセンター（コーナン、カインズなど）
+• 100円ショップ（ダイソー、セリアなど）
+• 家電量販店
+• ネット通販（Amazon、楽天など）
+
+<div class="guide-tip">
+💡 100円ショップでも十分使えます<br>
+💡 2本セット（中サイズ+小サイズ）がおすすめ
+</div>
+
+準備が整ったら教えてください!
+
+<div class="quick-reply" onclick="handlePreparationCheck('ready')">✅ 準備できました</div>`, false);
+        }
+
+        function showIndicatorCheckGuide() {
+            addMessage('ai', `<strong>インジケーターランプの確認方法</strong>
+
+スマートキーのボタンを押したとき、小さな赤いランプが光るかどうか確認してください。
+
+<strong>確認方法:</strong>
+1. スマートキーのロックボタン（🔒マーク）を押す
+2. キー本体を見て、小さな赤いランプが光るか確認
+3. 暗い場所だと見やすいです
+
+確認できましたか?
+
+<div class="quick-reply-container">
+    <div class="quick-reply" onclick="handleIndicatorCheck('yes')">✅ 光りました</div>
+    <div class="quick-reply" onclick="handleIndicatorCheck('no')">❌ 光りません</div>
+</div>`, false);
+        }
+
+        async function handleBatteryReplacement() {
+            updateNodeLabel('電池交換選択');
+            
+            addMessage('ai', `<strong>電池交換の方法</strong>
+
+電池交換には2つの選択肢があります:
+
+<strong>選択肢1: 自分で交換する</strong>
+• 所要時間: 約5分
+• 難易度: ★★☆☆☆（ふつう）
+• 必要なもの: ドライバー2本、CR2450電池
+• 費用: 電池代のみ（¥200-500）
+
+<div class="guide-warning">
+⚠️ 部品が破損するおそれがあります
+</div>
+
+<strong>選択肢2: 販売店で交換してもらう（推奨）</strong>
+• 所要時間: 約10-15分
+• 難易度: ☆☆☆☆☆（お任せ）
+• 費用: 店舗にお問い合わせください
+• 安全・確実
+
+どちらの方法をお選びになりますか?
+
+<div class="quick-reply-container">
+    <div class="quick-reply" onclick="handleBatteryChoice('diy')">🔧 自分で交換する</div>
+    <div class="quick-reply" onclick="handleBatteryChoice('dealer')">🚗 販売店に依頼する</div>
+</div>`, false);
+        }
+
+        async function showGuideInteractive(guideId) {
+            const guide = await loadGuideContent(guideId);
+            
+            if (!guide) {
+                alert('ガイドを読み込めませんでした');
+                return;
+            }
+            
+            let modalContent = `<div style="color: #b0b0b0; margin-bottom: 15px;">`;
+            modalContent += `⏱️ 所要時間: ${guide.estimated_time || '5min'} | `;
+            modalContent += `難易度: ${getDifficultyLabel(guide.difficulty)}`;
+            modalContent += `</div>`;
+            
+            if (guide.content.overview) {
+                modalContent += `<p style="margin-bottom: 20px;">${guide.content.overview}</p>`;
+            }
+            
+            // 重要な通知
+            if (guide.content.important_notice) {
+                modalContent += `<div class="guide-warning">⚠️ ${guide.content.important_notice.message}</div>`;
+            }
+            
+            // 手順
+            if (guide.content.steps) {
+                guide.content.steps.forEach(step => {
+                    modalContent += `<div class="guide-step">`;
+                    modalContent += `<div class="guide-step-number">ステップ ${step.step}</div>`;
+                    modalContent += `${step.description}<br>`;
+                    if (step.detail) {
+                        modalContent += `<small>${step.detail}</small><br>`;
+                    }
+                    if (step.caution) {
+                        modalContent += `<small style="color: #fca5a5;">⚠️ ${step.caution}</small>`;
+                    }
+                    if (step.note) {
+                        modalContent += `<small style="color: #86efac;">💡 ${step.note}</small>`;
+                    }
+                    modalContent += `</div>`;
+                });
+            }
+            
+            // チェックリスト
+            if (guide.content.checklist) {
+                guide.content.checklist.forEach(item => {
+                    modalContent += `<div class="guide-step">`;
+                    modalContent += `<div class="guide-step-number">${item.required ? '✅' : '💡'} ${item.item}</div>`;
+                    modalContent += `${item.description}`;
+                    if (item.size) modalContent += `<br><small>サイズ: ${item.size}</small>`;
+                    if (item.specifications) modalContent += `<br><small>${item.specifications}</small>`;
+                    modalContent += `</div>`;
+                });
+            }
+            
+            // 警告
+            if (guide.content.warnings) {
+                guide.content.warnings.forEach(warning => {
+                    modalContent += `<div class="guide-warning">⚠️ ${warning}</div>`;
+                });
+            }
+            
+            // Tips
+            if (guide.content.tips) {
+                let tipsHtml = '<div class="guide-tip">';
+                guide.content.tips.forEach(tip => {
+                    tipsHtml += `💡 ${tip}<br>`;
+                });
+                tipsHtml += '</div>';
+                modalContent += tipsHtml;
+            }
+            
+            // 関連ガイド
+            if (guide.content.related_guides) {
+                modalContent += `<div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(79, 172, 254, 0.3);">`;
+                modalContent += `<strong>関連ガイド:</strong><br>`;
+                guide.content.related_guides.forEach(relatedId => {
+                    modalContent += `<div class="guide-link" onclick="showGuideInteractive('${relatedId}')">${relatedId}</div>`;
+                });
+                modalContent += `</div>`;
+            }
+            
+            document.getElementById('modalTitle').innerHTML = guide.title;
+            document.getElementById('modalBody').innerHTML = modalContent;
+            document.getElementById('guideModal').classList.add('active');
+        }
+
+        function getDifficultyLabel(difficulty) {
+            const labels = {
+                'easy': '⭐ かんたん',
+                'medium': '⭐⭐ ふつう',
+                'hard': '⭐⭐⭐ むずかしい'
+            };
+            return labels[difficulty] || difficulty;
+        }
+
+        function handleGenericQuery(message) {
+            addMessage('ai', `ご質問ありがとうございます。
+
+「${message}」について、もう少し詳しく教えていただけますか?
+
+<div class="quick-reply-container">
+    <div class="quick-reply" onclick="startSmartKeyFlow()">🔑 スマートキーの問題</div>
+    <div class="quick-reply" onclick="handleBatteryReplacement()">🔋 電池交換</div>
+    <div class="quick-reply" onclick="showGuideInteractive('GUIDE-001')">🔧 機械キー</div>
+</div>`, false);
+        }
+
+        function addMessage(sender, content, trackHistory = true) {
+            const container = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = `chat-avatar ${sender}`;
+            avatar.textContent = sender === 'ai' ? '🤖' : '👤';
+            
+            const bubble = document.createElement('div');
+            bubble.className = `chat-bubble ${sender}`;
+            bubble.innerHTML = content;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(bubble);
+            container.appendChild(messageDiv);
+            
+            container.scrollTop = container.scrollHeight;
+            
+            if (trackHistory) {
+                chatHistory.push({ 
+                    sender, 
+                    content, 
+                    timestamp: new Date(),
+                    node: currentFlow.currentNode
+                });
+            }
+        }
+
+        function showLoading() {
+            const container = document.getElementById('chatContainer');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = 'loadingIndicator';
+            loadingDiv.className = 'chat-message ai';
+            loadingDiv.innerHTML = `
+                <div class="chat-avatar ai">🤖</div>
+                <div class="loading-indicator active">
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                </div>
+            `;
+            container.appendChild(loadingDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function hideLoading() {
+            const loadingDiv = document.getElementById('loadingIndicator');
+            if (loadingDiv) {
+                loadingDiv.remove();
+            }
+        }
+
+        function updateNodeLabel(label) {
+            const nodeLabel = document.getElementById('currentNodeLabel');
+            if (nodeLabel) {
+                nodeLabel.textContent = label;
+                nodeLabel.style.color = '#4facfe';
+                
+                // アニメーション
+                nodeLabel.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    nodeLabel.style.transform = 'scale(1)';
+                }, 300);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('guideModal').classList.remove('active');
+        }
+
+        // モーダルの外側クリックで閉じる
+        document.getElementById('guideModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // デバッグ用: チャット履歴を保存
+        window.saveChatHistory = function() {
+            const dataStr = JSON.stringify(chatHistory, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'chat-history.json';
+            link.click();
+        };
+
+        // デバッグ用: フローステートを表示
+        window.showFlowState = function() {
+            console.log('Current Flow State:', currentFlow);
+            console.log('Chat History:', chatHistory);
+        };
+    </script>
+</body>
+</html>
