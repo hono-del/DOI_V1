@@ -13,8 +13,8 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            background: #0a0a1a;
-            color: #e0e0e0;
+            background: #1A1A1A;
+            color: #ffffff;
             line-height: 1.6;
             margin: 0;
             padding: 0;
@@ -35,21 +35,23 @@
         .mobile-frame {
             max-width: 375px;
             margin: 0 auto;
-            border: 8px solid #2d3561;
+            border: 8px solid #2A2A2A;
             border-radius: 30px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(79, 172, 254, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(191, 0, 255, 0.3);
             position: relative;
+            background: #1A1A1A;
         }
 
         .mobile-header {
-            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
-            color: #4facfe;
+            background: #1A1A1A;
+            color: #BF00FF;
             padding: 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(79, 172, 254, 0.3);
+            border-bottom: 1px solid rgba(191, 0, 255, 0.3);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .mobile-header h2 {
@@ -60,7 +62,7 @@
         .mobile-content {
             padding: 20px;
             padding-bottom: 90px;
-            background: linear-gradient(180deg, #0f3460 0%, #16213e 100%);
+            background: #1A1A1A;
             height: 600px;
             overflow-y: auto;
             overflow-x: hidden;
@@ -75,24 +77,27 @@
         }
 
         .mobile-content::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #4facfe 0%, #00f2fe 100%);
+            background: linear-gradient(180deg, #BF00FF 0%, #D200FF 100%);
             border-radius: 3px;
         }
 
         .mobile-content::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, #00f2fe 0%, #4facfe 100%);
+            background: linear-gradient(180deg, #D200FF 0%, #BF00FF 100%);
         }
 
         .search-box {
-            background: rgba(45, 53, 97, 0.6);
-            border: 1px solid rgba(79, 172, 254, 0.3);
+            background: #202020;
+            border: 1px solid rgba(191, 0, 255, 0.3);
             border-radius: 25px;
             padding: 12px 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 1px 2px rgba(79, 172, 254, 0.1);
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.4),
+                -4px -4px 8px rgba(255, 255, 255, 0.05),
+                inset 2px 2px 4px rgba(0, 0, 0, 0.3),
+                inset -2px -2px 4px rgba(191, 0, 255, 0.1);
             display: flex;
             align-items: center;
             margin-bottom: 20px;
-            backdrop-filter: blur(10px);
         }
 
         .search-box input {
@@ -110,33 +115,39 @@
         }
 
         .card {
-            background: rgba(45, 53, 97, 0.4);
-            border: 1px solid rgba(79, 172, 254, 0.2);
+            background: #202020;
+            border: 1px solid rgba(191, 0, 255, 0.2);
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.4),
+                -4px -4px 8px rgba(255, 255, 255, 0.05),
+                inset 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         .card-title {
             font-weight: 600;
-            color: #4facfe;
+            color: #BF00FF;
             margin-bottom: 8px;
             font-size: 1em;
         }
 
         .card-content {
-            color: #b0b0b0;
+            color: #e0e0e0;
             font-size: 0.9em;
             line-height: 1.5;
         }
 
         .alert-card {
-            background: linear-gradient(135deg, rgba(255, 107, 107, 0.3) 0%, rgba(238, 90, 111, 0.3) 100%);
+            background: #202020;
             border: 1px solid rgba(255, 107, 107, 0.5);
             border-left: 5px solid #ff6b6b;
-            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.4),
+                -4px -4px 8px rgba(255, 255, 255, 0.05),
+                inset 1px 1px 2px rgba(0, 0, 0, 0.2),
+                0 0 15px rgba(255, 107, 107, 0.2);
         }
 
         .alert-card .card-title {
@@ -150,8 +161,8 @@
         }
 
         .button {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: #0f3460;
+            background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%);
+            color: #ffffff;
             border: none;
             padding: 10px 20px;
             border-radius: 8px;
@@ -160,14 +171,14 @@
             cursor: pointer;
             margin-top: 10px;
             display: inline-block;
-            box-shadow: 0 4px 8px rgba(79, 172, 254, 0.3);
+            box-shadow: 0 4px 8px rgba(191, 0, 255, 0.4), 0 0 15px rgba(191, 0, 255, 0.2);
             transition: all 0.3s;
         }
 
         .button:hover {
-            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            background: linear-gradient(135deg, #D200FF 0%, #BF00FF 100%);
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(79, 172, 254, 0.5);
+            box-shadow: 0 6px 12px rgba(191, 0, 255, 0.6), 0 0 20px rgba(191, 0, 255, 0.3);
         }
 
         #feedbackSection button:hover {
@@ -196,18 +207,19 @@
         }
 
         .chat-bubble.user {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: #0f3460;
+            background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%);
+            color: #ffffff;
             font-weight: 600;
-            box-shadow: 0 2px 8px rgba(79, 172, 254, 0.3);
+            box-shadow: 0 2px 8px rgba(191, 0, 255, 0.4), 0 0 10px rgba(191, 0, 255, 0.2);
         }
 
         .chat-bubble.ai {
-            background: rgba(45, 53, 97, 0.6);
+            background: #202020;
             color: #e0e0e0;
-            border: 1px solid rgba(79, 172, 254, 0.3);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
+            border: 1px solid rgba(191, 0, 255, 0.3);
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.4),
+                -4px -4px 8px rgba(255, 255, 255, 0.05);
         }
 
         /* クイックリプライ（チャット用） */
@@ -219,13 +231,13 @@
         }
 
         .quick-reply {
-            background: rgba(79, 172, 254, 0.1);
-            color: #4facfe;
+            background: rgba(191, 0, 255, 0.1);
+            color: #BF00FF;
             padding: 8px 14px;
             border-radius: 18px;
             font-size: 0.85em;
             cursor: pointer;
-            border: 1px solid rgba(79, 172, 254, 0.4);
+            border: 1px solid rgba(191, 0, 255, 0.4);
             transition: all 0.2s;
             display: inline-flex;
             align-items: center;
@@ -233,9 +245,9 @@
         }
 
         .quick-reply:hover {
-            background: rgba(79, 172, 254, 0.2);
+            background: rgba(191, 0, 255, 0.2);
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(79, 172, 254, 0.4);
+            box-shadow: 0 2px 8px rgba(191, 0, 255, 0.4), 0 0 10px rgba(191, 0, 255, 0.2);
         }
 
         .badge {
@@ -254,9 +266,9 @@
         }
 
         .badge-info {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: #0f3460;
-            box-shadow: 0 2px 4px rgba(79, 172, 254, 0.3);
+            background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%);
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(191, 0, 255, 0.4);
         }
 
         .feature-list {
@@ -266,13 +278,13 @@
 
         .feature-list li {
             padding: 10px 0;
-            border-bottom: 1px solid rgba(79, 172, 254, 0.2);
+            border-bottom: 1px solid rgba(191, 0, 255, 0.2);
             color: #b0b0b0;
             transition: all 0.3s;
         }
 
         .feature-list li:hover {
-            color: #4facfe;
+            color: #BF00FF;
             padding-left: 5px;
         }
 
@@ -282,14 +294,14 @@
 
         .feature-list li::before {
             content: "✓";
-            color: #4facfe;
+            color: #BF00FF;
             font-weight: bold;
             margin-right: 10px;
         }
 
         .search-button {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: #0f3460;
+            background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%);
+            color: #ffffff;
             border: none;
             padding: 12px 20px;
             border-radius: 25px;
@@ -297,14 +309,14 @@
             cursor: pointer;
             margin-left: 10px;
             font-weight: 600;
-            box-shadow: 0 4px 8px rgba(79, 172, 254, 0.3);
+            box-shadow: 0 4px 8px rgba(191, 0, 255, 0.4), 0 0 15px rgba(191, 0, 255, 0.2);
             transition: all 0.3s;
         }
 
         .search-button:hover {
-            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            background: linear-gradient(135deg, #D200FF 0%, #BF00FF 100%);
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(79, 172, 254, 0.5);
+            box-shadow: 0 6px 12px rgba(191, 0, 255, 0.6), 0 0 20px rgba(191, 0, 255, 0.3);
         }
 
         .hidden {
@@ -330,24 +342,26 @@
 
         .quick-question {
             display: inline-block;
-            background: rgba(45, 53, 97, 0.6);
-            border: 2px solid rgba(79, 172, 254, 0.5);
-            color: #4facfe;
+            background: #202020;
+            border: 2px solid rgba(191, 0, 255, 0.5);
+            color: #BF00FF;
             padding: 8px 15px;
             border-radius: 20px;
             margin: 5px;
             cursor: pointer;
             font-size: 0.9em;
             transition: all 0.3s;
-            backdrop-filter: blur(10px);
+            box-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.3),
+                -2px -2px 4px rgba(255, 255, 255, 0.05);
         }
 
         .quick-question:hover {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: #0f3460;
-            border-color: #4facfe;
+            background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%);
+            color: #ffffff;
+            border-color: #BF00FF;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(79, 172, 254, 0.4);
+            box-shadow: 0 4px 8px rgba(191, 0, 255, 0.5), 0 0 15px rgba(191, 0, 255, 0.3);
         }
 
         .search-input-wrapper {
@@ -365,8 +379,8 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(180deg, #16213e 0%, #0f3460 100%);
-            border-top: 2px solid rgba(79, 172, 254, 0.3);
+            background: #1A1A1A;
+            border-top: 2px solid rgba(191, 0, 255, 0.3);
             display: flex;
             justify-content: space-around;
             padding: 10px 0;
@@ -387,12 +401,12 @@
         }
 
         .tab-item:hover {
-            color: #4facfe;
+            color: #BF00FF;
             transform: translateY(-2px);
         }
 
         .tab-item.active {
-            color: #4facfe;
+            color: #BF00FF;
         }
 
         .tab-item .tab-icon {
@@ -473,7 +487,7 @@
 
                             <!-- 2. 車両画像 -->
                             <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 20px;">
-                                <img src="グレーSUV車両.png" 
+                                <img src="グレーSUV_背景黒.png" 
                                      alt="車両画像" 
                                      style="width: 100%; height: auto; display: block;"
                                      onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 800 500%27%3E%3Crect fill=%27%23e0e0e0%27 width=%27800%27 height=%27500%27/%3E%3Ctext x=%27400%27 y=%27250%27 text-anchor=%27middle%27 font-size=%2724%27 fill=%27%23666%27 font-family=%27Arial%27%3E🚗 あなたの車両%3C/text%3E%3C/svg%3E'">
@@ -626,7 +640,7 @@
                         • バックギアに入れると自動で起動します<br><br>
                         <strong>ステップ 2: 表示切替</strong><br>
                         • ディスプレイの「表示切替」ボタンをタップ<br>
-                        • <span style="color: #4facfe; font-weight: 600;">真上</span>、<span style="color: #4facfe;">前方</span>、<span style="color: #4facfe;">側面</span>ビューを選択可能<br><br>
+                        • <span style="color: #BF00FF; font-weight: 600;">真上</span>、<span style="color: #BF00FF;">前方</span>、<span style="color: #BF00FF;">側面</span>ビューを選択可能<br><br>
                         <strong>ステップ 3: ガイドラインを確認</strong><br>
                         • <span style="color: #ffeb3b; font-weight: 600;">黄色のライン</span>: 車両の幅を示します<br>
                         • <span style="color: #ff5252; font-weight: 600;">赤色のライン</span>: 障害物との危険な距離を示します<br><br>
@@ -667,7 +681,7 @@
                         急な加速が必要な場面では、通常モードに切り替えてください。<br><br>
                         <div style="text-align: center; margin-top: 15px;">
                             <button class="button" onclick="showFuelEfficiencyData()" 
-                                    style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 12px 24px; border-radius: 8px; color: white; font-weight: 600; border: none; cursor: pointer;">
+                                    style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); padding: 12px 24px; border-radius: 8px; color: white; font-weight: 600; border: none; cursor: pointer;">
                                 📊 あなたの燃費データを見る
                             </button>
                         </div>
@@ -692,7 +706,7 @@
                         
                         <strong>使用方法：</strong><br><br>
                         <strong>基本操作：</strong><br>
-                        • <span style="color: #00f2fe; font-weight: 600;">右側パドル（+）</span>: シフトアップ（高いギアへ）<br>
+                        • <span style="color: #D200FF; font-weight: 600;">右側パドル（+）</span>: シフトアップ（高いギアへ）<br>
                         • <span style="color: #ff6b6b; font-weight: 600;">左側パドル（-）</span>: シフトダウン（低いギアへ）<br><br>
                         <strong>減速時の活用：</strong><br><br>
                         <strong>ステップ 1: 下り坂で使用</strong><br>
@@ -795,12 +809,12 @@
                 </div>
                 
                 <div id="feedbackSection" style="margin: 20px 0;">
-                    <div class="card" style="background: rgba(26, 26, 46, 0.6); border: 1px solid rgba(79, 172, 254, 0.2);">
+                    <div class="card" style="background: rgba(26, 26, 46, 0.6); border: 1px solid rgba(191, 0, 255, 0.2);">
                         <div class="card-content" style="text-align: center;">
                             <strong style="font-size: 1.05em; color: #fff;">この情報は役に立ちましたか？</strong>
                             <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
                                 <button onclick="submitFeedback('very_helpful', '${message.detail.title}')" 
-                                        style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
+                                        style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
                                     😊 とても役立った
                                 </button>
                                 <button onclick="submitFeedback('helpful', '${message.detail.title}')" 
@@ -844,11 +858,11 @@
                         📊 あなたの燃費データ
                     </div>
                     <div class="card-content">
-                        <div style="background: linear-gradient(135deg, rgba(79, 172, 254, 0.15) 0%, rgba(0, 242, 254, 0.1) 100%); padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #4facfe;">
-                            <strong style="color: #4facfe; font-size: 1.1em;">💡 エコモードの効果予測</strong><br><br>
+                        <div style="background: linear-gradient(135deg, rgba(191, 0, 255, 0.15) 0%, rgba(210, 0, 255, 0.1) 100%); padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #BF00FF;">
+                            <strong style="color: #BF00FF; font-size: 1.1em;">💡 エコモードの効果予測</strong><br><br>
                             現在の燃費: <strong style="color: #ff6b6b;">8.9 km/L</strong><br>
-                            エコモード使用時: <strong style="color: #4facfe;">10.3 km/L</strong><br>
-                            <strong style="color: #00f2fe;">+15.7% の燃費改善が期待できます！</strong>
+                            エコモード使用時: <strong style="color: #BF00FF;">10.3 km/L</strong><br>
+                            <strong style="color: #D200FF;">+15.7% の燃費改善が期待できます！</strong>
                         </div>
                         
                         <strong>📈 燃費改善のヒント</strong><br><br>
@@ -860,8 +874,8 @@
                             • エアコン使用頻度の増加
                         </div>
                         
-                        <div style="background: rgba(79, 172, 254, 0.1); padding: 12px; border-radius: 8px; margin: 10px 0;">
-                            <strong style="color: #4facfe;">✅ おすすめの改善アクション：</strong><br><br>
+                        <div style="background: rgba(191, 0, 255, 0.1); padding: 12px; border-radius: 8px; margin: 10px 0;">
+                            <strong style="color: #BF00FF;">✅ おすすめの改善アクション：</strong><br><br>
                             <strong>1. エコモードを活用</strong><br>
                             • 市街地走行時にON → 燃費+15%向上<br><br>
                             <strong>2. 急発進・急ブレーキを避ける</strong><br>
@@ -881,12 +895,12 @@
                 </div>
                 
                 <div id="feedbackSection" style="margin: 20px 0;">
-                    <div class="card" style="background: rgba(26, 26, 46, 0.6); border: 1px solid rgba(79, 172, 254, 0.2);">
+                    <div class="card" style="background: rgba(26, 26, 46, 0.6); border: 1px solid rgba(191, 0, 255, 0.2);">
                         <div class="card-content" style="text-align: center;">
                             <strong style="font-size: 1.05em; color: #fff;">この情報は役に立ちましたか？</strong>
                             <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
                                 <button onclick="submitFeedback('very_helpful', '燃費データ')" 
-                                        style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
+                                        style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
                                     😊 とても役立った
                                 </button>
                                 <button onclick="submitFeedback('helpful', '燃費データ')" 
@@ -915,9 +929,9 @@
             const feedbackSection = document.getElementById('feedbackSection');
             if (feedbackSection) {
                 feedbackSection.innerHTML = `
-                    <div style="background: linear-gradient(135deg, rgba(79, 172, 254, 0.2) 0%, rgba(0, 242, 254, 0.15) 100%); padding: 20px; border-radius: 12px; text-align: center; margin: 20px 0; border: 2px solid rgba(79, 172, 254, 0.3);">
+                    <div style="background: linear-gradient(135deg, rgba(191, 0, 255, 0.2) 0%, rgba(210, 0, 255, 0.15) 100%); padding: 20px; border-radius: 12px; text-align: center; margin: 20px 0; border: 2px solid rgba(191, 0, 255, 0.3);">
                         <div style="font-size: 2em; margin-bottom: 10px;">✅</div>
-                        <strong style="color: #4facfe; font-size: 1.1em;">フィードバックをありがとうございます！</strong><br>
+                        <strong style="color: #BF00FF; font-size: 1.1em;">フィードバックをありがとうございます！</strong><br>
                         <div style="color: #aaa; margin-top: 10px; font-size: 0.9em;">
                             お客様の声をもとに、より良いサービスを提供してまいります。
                         </div>
@@ -998,9 +1012,9 @@
             const recommendationContent = document.getElementById('recommendationContent');
             if (recommendationContent) {
                 recommendationContent.innerHTML = `
-                    <div style="background: linear-gradient(135deg, rgba(79, 172, 254, 0.2) 0%, rgba(0, 242, 254, 0.15) 100%); padding: 20px; border-radius: 12px; text-align: center; border: 2px solid rgba(79, 172, 254, 0.3);">
+                    <div style="background: linear-gradient(135deg, rgba(191, 0, 255, 0.2) 0%, rgba(210, 0, 255, 0.15) 100%); padding: 20px; border-radius: 12px; text-align: center; border: 2px solid rgba(191, 0, 255, 0.3);">
                         <div style="font-size: 2em; margin-bottom: 10px;">💬</div>
-                        <strong style="color: #4facfe; font-size: 1.1em;">フィードバックをありがとうございます</strong><br>
+                        <strong style="color: #BF00FF; font-size: 1.1em;">フィードバックをありがとうございます</strong><br>
                         <div style="color: #aaa; margin-top: 10px; font-size: 0.9em;">
                             いただいたご意見を参考に、<br>より良い提案ができるよう改善してまいります。
                         </div>
@@ -1202,7 +1216,7 @@
                 html += '<div style="margin-top: 15px;">';
                 response.actions.forEach(action => {
                     const buttonStyle = action.type === 'primary' ? 
-                        'background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460;' : 
+                        'background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: #1A1A1A;' : 
                         'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;';
                     
                     let onclick = '';
@@ -1255,7 +1269,7 @@
             },
             {
                 title: 'デバイスを選択してペアリング',
-                content: '• 車のディスプレイに表示された「利用可能なデバイス」リストから、あなたのスマートフォン名を探してタップ<br><br>• 車とスマートフォンの両方に同じPINコード（例: 123456）が表示されます<br><br>• <strong style="color: #4facfe;">PINコードが一致していることを確認</strong>してください',
+                content: '• 車のディスプレイに表示された「利用可能なデバイス」リストから、あなたのスマートフォン名を探してタップ<br><br>• 車とスマートフォンの両方に同じPINコード（例: 123456）が表示されます<br><br>• <strong style="color: #BF00FF;">PINコードが一致していることを確認</strong>してください',
                 image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect fill='%231a1a2e' width='300' height='200' rx='10'/%3E%3Crect fill='%232d3561' x='20' y='20' width='260' height='50' rx='8'/%3E%3Ctext x='40' y='50' font-size='14' fill='%23e0e0e0'%3E📱 iPhone 13%3C/text%3E%3Crect fill='%232d3561' x='20' y='80' width='260' height='50' rx='8'/%3E%3Ctext x='40' y='110' font-size='14' fill='%23e0e0e0'%3E📱 Galaxy S23%3C/text%3E%3Crect fill='%234facfe' x='80' y='150' width='140' height='30' rx='8'/%3E%3Ctext x='150' y='172' text-anchor='middle' font-size='16' fill='%230f3460' font-weight='bold'%3EPIN: 123456%3C/text%3E%3C/svg%3E"
             },
             {
@@ -1291,9 +1305,9 @@
             }
             
             resultDiv.innerHTML = `
-                <div class="card" style="margin-bottom: 15px; border: 2px solid #4facfe;">
-                    <div class="card-title" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460; padding: 15px; margin: -1px -1px 0 -1px; border-radius: 10px 10px 0 0;">
-                        <span class="badge badge-info" style="background: rgba(15, 52, 96, 0.3); color: #0f3460; font-weight: bold;">ステップ ${currentBluetoothStep}/${totalBluetoothSteps}</span> ${step.title}
+                <div class="card" style="margin-bottom: 15px; border: 2px solid #BF00FF;">
+                    <div class="card-title" style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: #1A1A1A; padding: 15px; margin: -1px -1px 0 -1px; border-radius: 10px 10px 0 0;">
+                        <span class="badge badge-info" style="background: rgba(15, 52, 96, 0.3); color: #1A1A1A; font-weight: bold;">ステップ ${currentBluetoothStep}/${totalBluetoothSteps}</span> ${step.title}
                     </div>
                     <div class="card-content">
                         <img src="${step.image}" alt="ステップ${currentBluetoothStep}" style="width: 100%; margin: 15px 0; border-radius: 8px; background: #16213e; padding: 20px;">
@@ -1309,7 +1323,7 @@
                                 </button>
                             ` : ''}
                             ${currentBluetoothStep < totalBluetoothSteps ? `
-                                <button class="button" onclick="nextBluetoothStep()" style="flex: 2; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460; font-size: 1.05em; font-weight: bold;">
+                                <button class="button" onclick="nextBluetoothStep()" style="flex: 2; background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: #1A1A1A; font-size: 1.05em; font-weight: bold;">
                                     次へ →
                                 </button>
                             ` : `
@@ -1362,7 +1376,7 @@
                         <div style="color: #aaa; font-size: 1em; line-height: 1.8;">
                             おめでとうございます！<br>
                             次回からは、エンジンをかけると自動的に接続されます。<br><br>
-                            <strong style="color: #4facfe;">💡 ヒント</strong><br>
+                            <strong style="color: #BF00FF;">💡 ヒント</strong><br>
                             音楽アプリを開けば、車のスピーカーから再生できます。
                         </div>
                         
@@ -1370,7 +1384,7 @@
                             <button class="button" onclick="showBluetoothTroubleshooting()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                                 ❓ うまく接続できない場合
                             </button>
-                            <button class="button" onclick="resetSearch()" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460;">
+                            <button class="button" onclick="resetSearch()" style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: #1A1A1A;">
                                 ホームに戻る
                             </button>
                         </div>
@@ -1396,21 +1410,21 @@
                         </div>
 
                         <div style="background: rgba(45, 53, 97, 0.4); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                            <strong style="color: #4facfe; font-size: 1.05em;">1. Bluetoothをリセット</strong><br><br>
+                            <strong style="color: #BF00FF; font-size: 1.05em;">1. Bluetoothをリセット</strong><br><br>
                             • 車とスマートフォンの両方でBluetoothを一度オフにする<br>
                             • 10秒待ってから再度オンにする<br>
                             • 再度ペアリングを試す
                         </div>
 
                         <div style="background: rgba(45, 53, 97, 0.4); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                            <strong style="color: #4facfe; font-size: 1.05em;">2. 登録済みデバイスを削除</strong><br><br>
+                            <strong style="color: #BF00FF; font-size: 1.05em;">2. 登録済みデバイスを削除</strong><br><br>
                             • 車の設定から「登録済みデバイス」を確認<br>
                             • 古い登録があれば削除<br>
                             • スマートフォンのBluetooth設定からも車のデバイスを「削除」または「登録解除」
                         </div>
 
                         <div style="background: rgba(45, 53, 97, 0.4); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                            <strong style="color: #4facfe; font-size: 1.05em;">3. スマートフォンを再起動</strong><br><br>
+                            <strong style="color: #BF00FF; font-size: 1.05em;">3. スマートフォンを再起動</strong><br><br>
                             • 完全に電源を切る<br>
                             • 10秒待ってから再起動<br>
                             • 再度接続を試す
@@ -1427,7 +1441,7 @@
                     <button class="button" onclick="showBluetoothStepGuide()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin-right: 10px;">
                         ← ガイドに戻る
                     </button>
-                    <button class="button" onclick="resetSearch()" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460;">
+                    <button class="button" onclick="resetSearch()" style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: #1A1A1A;">
                         ホームに戻る
                     </button>
                 </div>
@@ -1448,14 +1462,14 @@
                 <div id="chatMessages"></div>
 
                 <!-- チャット入力欄 -->
-                <div style="position: sticky; bottom: 0; background: #0f3460; padding: 15px 0; margin-top: 20px; border-top: 1px solid rgba(79, 172, 254, 0.3);">
+                <div style="position: sticky; bottom: 0; background: #1A1A1A; padding: 15px 0; margin-top: 20px; border-top: 1px solid rgba(191, 0, 255, 0.3);">
                     <div style="display: flex; gap: 10px; align-items: flex-end;">
                         <textarea id="chatInput" 
                                   placeholder="スマートキーやクルマについて質問できます..." 
-                                  style="flex: 1; 
+                                  style="flex: 1.2; 
                                          background: rgba(45, 53, 97, 0.6); 
                                          color: #e0e0e0; 
-                                         border: 1px solid rgba(79, 172, 254, 0.3); 
+                                         border: 1px solid rgba(191, 0, 255, 0.3); 
                                          border-radius: 12px; 
                                          padding: 12px; 
                                          font-size: 0.95em; 
@@ -1467,18 +1481,17 @@
                                   onkeypress="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendChatMessage(); }"></textarea>
                         <button onclick="sendChatMessage()" 
                                 class="button" 
-                                style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
-                                       color: #0f3460; 
-                                       padding: 12px 20px; 
+                                style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); 
+                                       color: #ffffff; 
+                                       padding: 10px 16px; 
                                        border: none; 
                                        cursor: pointer; 
                                        font-weight: 600;
                                        height: 45px;
                                        display: flex;
                                        align-items: center;
-                                       gap: 5px;">
+                                       flex-shrink: 0;">
                             <span>送信</span>
-                            <span style="font-size: 1.1em;">📤</span>
                         </button>
                     </div>
                     <div style="font-size: 0.8em; color: #888; margin-top: 8px;">
@@ -1523,10 +1536,6 @@
             chatMessages.innerHTML = '';
 
             addTheme001Message('ai', `輝明さん、今知りたいことを入力してください。<br><br>
-キーワードの例：<br>
-・スマートキーでドアが開かない<br>
-・電池交換のやり方<br>
-・警告灯が点灯した など<br><br>
 すぐに試せるメニューもご用意しています：
 <div class="quick-reply-container">
   <div class="quick-reply" onclick="startTheme001SmartKeyFlow()">
@@ -1740,8 +1749,8 @@
                 addTheme001Message('ai', `<strong>電池の購入方法をご案内します</strong><br><br>
 <strong>リチウム電池CR2450の入手先：</strong><br><br>
 <strong>1. オンライン購入</strong><br>
-・Amazon: <a href="https://amazon.co.jp/s?k=CR2450" target="_blank" style="color: #4facfe;">CR2450を検索</a><br>
-・楽天市場: <a href="https://search.rakuten.co.jp/search/mall/CR2450/" target="_blank" style="color: #4facfe;">CR2450を検索</a><br>
+・Amazon: <a href="https://amazon.co.jp/s?k=CR2450" target="_blank" style="color: #BF00FF;">CR2450を検索</a><br>
+・楽天市場: <a href="https://search.rakuten.co.jp/search/mall/CR2450/" target="_blank" style="color: #BF00FF;">CR2450を検索</a><br>
 ・価格目安: ¥200-500<br><br>
 <strong>2. 店舗購入</strong><br>
 ・トヨタ販売店<br>
@@ -1974,7 +1983,7 @@
                 </div>
 
                 <div id="notificationList">
-                    <div class="card" id="notification-1" style="margin-bottom: 15px; border: 1px solid rgba(79, 172, 254, 0.3);">
+                    <div class="card" id="notification-1" style="margin-bottom: 15px; border: 1px solid rgba(191, 0, 255, 0.3);">
                         <div class="card-content">
                             <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">5分前</div>
                             <div style="margin-bottom: 12px;">夜間走行中です。オートハイビームをオンにすると安全です。</div>
@@ -1989,7 +1998,7 @@
                         </div>
                     </div>
 
-                    <div class="card" id="notification-2" style="margin-bottom: 15px; border: 1px solid rgba(79, 172, 254, 0.3);">
+                    <div class="card" id="notification-2" style="margin-bottom: 15px; border: 1px solid rgba(191, 0, 255, 0.3);">
                         <div class="card-content">
                             <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">1時間前</div>
                             <div style="margin-bottom: 12px;">狭い駐車場です。パノラミックビューモニターを使うと安心です。</div>
@@ -2004,7 +2013,7 @@
                         </div>
                     </div>
 
-                    <div class="card" id="notification-3" style="margin-bottom: 15px; border: 1px solid rgba(79, 172, 254, 0.3);">
+                    <div class="card" id="notification-3" style="margin-bottom: 15px; border: 1px solid rgba(191, 0, 255, 0.3);">
                         <div class="card-content">
                             <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">3時間前</div>
                             <div style="margin-bottom: 12px;">市街地走行が続いています。エコモードを使うと燃費が向上します。</div>
@@ -2019,7 +2028,7 @@
                         </div>
                     </div>
 
-                    <div class="card" id="notification-4" style="margin-bottom: 15px; border: 1px solid rgba(79, 172, 254, 0.3);">
+                    <div class="card" id="notification-4" style="margin-bottom: 15px; border: 1px solid rgba(191, 0, 255, 0.3);">
                         <div class="card-content">
                             <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">昨日</div>
                             <div style="margin-bottom: 12px;">ブレーキ操作が増えています。パドルシフトで減速時の操作をサポートできます。</div>
@@ -2034,7 +2043,7 @@
                         </div>
                     </div>
 
-                    <div class="card" id="notification-5" style="margin-bottom: 15px; border: 1px solid rgba(79, 172, 254, 0.3);">
+                    <div class="card" id="notification-5" style="margin-bottom: 15px; border: 1px solid rgba(191, 0, 255, 0.3);">
                         <div class="card-content">
                             <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">2日前</div>
                             <div style="margin-bottom: 12px;">そろそろエアコンフィルターの清掃をしましょう。</div>
@@ -2049,7 +2058,7 @@
                         </div>
                     </div>
 
-                    <div class="card" id="notification-6" style="margin-bottom: 15px; border: 1px solid rgba(79, 172, 254, 0.3);">
+                    <div class="card" id="notification-6" style="margin-bottom: 15px; border: 1px solid rgba(191, 0, 255, 0.3);">
                         <div class="card-content">
                             <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">3日前</div>
                             <div style="margin-bottom: 12px;">長時間運転が続いています。近くで休憩を取ることをおすすめします。</div>
@@ -2108,13 +2117,13 @@
                         notificationList.innerHTML = `
                             <div class="card" style="text-align: center; padding: 40px 20px;">
                                 <div style="font-size: 3em; margin-bottom: 15px;">✅</div>
-                                <div style="color: #4facfe; font-size: 1.1em; font-weight: 600;">
+                                <div style="color: #BF00FF; font-size: 1.1em; font-weight: 600;">
                                     すべての通知を確認しました
                                 </div>
                                 <div style="color: #aaa; margin-top: 10px; font-size: 0.9em;">
                                     フィードバックありがとうございます！
                                 </div>
-                                <button class="button" onclick="switchTab('status')" style="margin-top: 20px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460;">
+                                <button class="button" onclick="switchTab('status')" style="margin-top: 20px; background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: #1A1A1A;">
                                     📊 ステータスを確認する
                                 </button>
                             </div>
@@ -2196,8 +2205,8 @@
                 let badge = '';
                 
                 if (isCurrent) {
-                    cardStyle = 'padding: 12px; background: rgba(79, 172, 254, 0.1); border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #4facfe;';
-                    textColor = '#4facfe';
+                    cardStyle = 'padding: 12px; background: rgba(191, 0, 255, 0.1); border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #BF00FF;';
+                    textColor = '#BF00FF';
                     badge = '<span style="color: #00d084; margin-left: 5px;">● 現在</span>';
                 } else if (isAchieved) {
                     cardStyle = 'padding: 12px; background: rgba(45, 53, 97, 0.4); border-radius: 8px; margin-bottom: 10px; opacity: 0.6;';
@@ -2315,25 +2324,25 @@
                              userStatus.level === 3 ? '頼れるパートナー' : '相棒';
             
             resultDiv.innerHTML = `
-                <div class="card" style="margin-bottom: 15px; border: 2px solid #4facfe;">
-                    <div class="card-title" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460; padding: 15px; margin: -1px -1px 0 -1px; border-radius: 10px 10px 0 0; font-size: 1.1em;">
+                <div class="card" style="margin-bottom: 15px; border: 2px solid #BF00FF;">
+                    <div class="card-title" style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: #1A1A1A; padding: 15px; margin: -1px -1px 0 -1px; border-radius: 10px 10px 0 0; font-size: 1.1em;">
                         🤝 あなたと愛車の関係値
                     </div>
                     <div class="card-content">
                         <div style="text-align: center; margin: 20px 0;">
                             <div style="font-size: 3em; margin-bottom: 10px;">🚗💙</div>
-                            <div style="font-size: 1.8em; font-weight: bold; color: #4facfe; margin-bottom: 5px;">Lv ${userStatus.level} | ${levelName}</div>
+                            <div style="font-size: 1.8em; font-weight: bold; color: #BF00FF; margin-bottom: 5px;">Lv ${userStatus.level} | ${levelName}</div>
                             <div style="color: #aaa; font-size: 0.9em;">次のレベルまで: ${userStatus.totalPoints} / ${userStatus.maxPoints} pt</div>
                         </div>
 
                         <div style="background: rgba(45, 53, 97, 0.6); height: 25px; border-radius: 12px; overflow: hidden; margin: 20px 0; position: relative;">
-                            <div id="statusProgressBar" style="background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%); width: ${percentage}%; height: 100%; border-radius: 12px; transition: width 0.5s ease;">
+                            <div id="statusProgressBar" style="background: linear-gradient(90deg, #BF00FF 0%, #D200FF 100%); width: ${percentage}%; height: 100%; border-radius: 12px; transition: width 0.5s ease;">
                             </div>
                             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 0.85em; font-weight: 600;">${Math.round(percentage)}%</div>
                         </div>
 
-                        <div style="background: linear-gradient(135deg, rgba(79, 172, 254, 0.15) 0%, rgba(0, 242, 254, 0.1) 100%); padding: 15px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #4facfe;">
-                            <strong style="color: #4facfe;">💡 次のレベルへのヒント</strong><br>
+                        <div style="background: linear-gradient(135deg, rgba(191, 0, 255, 0.15) 0%, rgba(210, 0, 255, 0.1) 100%); padding: 15px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #BF00FF;">
+                            <strong style="color: #BF00FF;">💡 次のレベルへのヒント</strong><br>
                             <div style="margin-top: 10px; color: #e0e0e0; font-size: 0.9em;">
                                 • おすすめ機能を試してみましょう<br>
                                 • 定期メンテナンスを実施しましょう<br>
@@ -2351,15 +2360,15 @@
                         <div style="margin-bottom: 15px;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                                 <span style="color: #aaa;">総走行距離</span>
-                                <span style="color: #4facfe; font-weight: 600;">12,450 km</span>
+                                <span style="color: #BF00FF; font-weight: 600;">12,450 km</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                                 <span style="color: #aaa;">月間走行距離</span>
-                                <span style="color: #4facfe; font-weight: 600;">450 km</span>
+                                <span style="color: #BF00FF; font-weight: 600;">450 km</span>
                             </div>
                             <div style="display: flex; justify-content: space-between;">
                                 <span style="color: #aaa;">平均燃費</span>
-                                <span style="color: #4facfe; font-weight: 600;">8.9 km/L</span>
+                                <span style="color: #BF00FF; font-weight: 600;">8.9 km/L</span>
                             </div>
                         </div>
                         <div style="text-align: center; padding: 10px; background: rgba(0, 208, 132, 0.1); border-radius: 8px; border: 1px solid rgba(0, 208, 132, 0.3);">
@@ -2377,7 +2386,7 @@
                         <div style="margin-bottom: 15px;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                                 <span style="color: #aaa;">活用している機能</span>
-                                <span style="color: #4facfe; font-weight: 600;">${userStatus.usedFeatures} / ${userStatus.totalFeatures}</span>
+                                <span style="color: #BF00FF; font-weight: 600;">${userStatus.usedFeatures} / ${userStatus.totalFeatures}</span>
                             </div>
                             <div style="background: rgba(45, 53, 97, 0.6); height: 10px; border-radius: 5px; overflow: hidden;">
                                 <div id="featureProgressBar" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); width: ${(userStatus.usedFeatures / userStatus.totalFeatures) * 100}%; height: 100%; border-radius: 5px; transition: width 0.5s ease;"></div>
@@ -2404,19 +2413,19 @@
                         <div style="margin-bottom: 15px;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                                 <span style="color: #aaa;">前回の点検</span>
-                                <span style="color: #4facfe; font-weight: 600;">2025/12/15</span>
+                                <span style="color: #BF00FF; font-weight: 600;">2025/12/15</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                                 <span style="color: #aaa;">次回の点検</span>
-                                <span style="color: #4facfe; font-weight: 600;">2026/03/15</span>
+                                <span style="color: #BF00FF; font-weight: 600;">2026/03/15</span>
                             </div>
                             <div style="display: flex; justify-content: space-between;">
                                 <span style="color: #aaa;">メンテナンス遵守率</span>
                                 <span style="color: #00d084; font-weight: 600;">95%</span>
                             </div>
                         </div>
-                        <div style="text-align: center; padding: 10px; background: rgba(79, 172, 254, 0.1); border-radius: 8px; border: 1px solid rgba(79, 172, 254, 0.3);">
-                            <span style="color: #4facfe; font-weight: 600;">+70 pt</span>
+                        <div style="text-align: center; padding: 10px; background: rgba(191, 0, 255, 0.1); border-radius: 8px; border: 1px solid rgba(191, 0, 255, 0.3);">
+                            <span style="color: #BF00FF; font-weight: 600;">+70 pt</span>
                             <span style="color: #aaa; font-size: 0.9em; margin-left: 5px;">適切なメンテナンス実施中</span>
                         </div>
                     </div>
