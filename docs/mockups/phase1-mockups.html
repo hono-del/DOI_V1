@@ -76,14 +76,20 @@
 
         .mobile-frame {
             max-width: 375px;
+            width: 100%;
             margin: 0 auto;
             border: 8px solid #2d3561;
             border-radius: 30px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(79, 172, 254, 0.2);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 700px;
         }
 
         .mobile-header {
+            flex-shrink: 0;
             background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
             color: #4facfe;
             padding: 15px;
@@ -99,10 +105,11 @@
         }
 
         .mobile-content {
+            flex: 1;
+            min-height: 0;
             padding: 20px;
-            padding-bottom: 90px; /* タブバーの高さ分の余白 */
+            padding-bottom: 20px;
             background: linear-gradient(180deg, #0f3460 0%, #16213e 100%);
-            height: 600px;
             overflow-y: auto;
             overflow-x: hidden;
         }
@@ -517,16 +524,14 @@
 
         /* 固定タブバー */
         .mobile-tab-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            flex-shrink: 0;
             background: linear-gradient(180deg, #16213e 0%, #0f3460 100%);
             border-top: 2px solid rgba(79, 172, 254, 0.3);
             display: flex;
             justify-content: space-around;
             padding: 10px 0;
             box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 100;
         }
 
         .tab-item {
@@ -637,7 +642,7 @@
                         <div id="defaultContent">
                             <!-- 1. 今すぐ確認（最上部）- ランダム表示 -->
                             <div class="card alert-card" id="alertCard">
-                                <div class="card-title">
+                                <div class="card-title" id="alertCardTitle">
                                     <span>⚠️</span> 今すぐ確認
                                 </div>
                                 <div class="card-content" id="alertContent">
@@ -705,21 +710,21 @@
                         </div>
                     </div>
                     
-                    <!-- 固定タブバー -->
-                    <div class="mobile-tab-bar">
-                        <div class="tab-item active" onclick="switchTab('home')">
+                    <!-- 固定タブバー（必ず表示・クリック可能にする） -->
+                    <div class="mobile-tab-bar" style="position:relative;z-index:9999;flex-shrink:0;">
+                        <div class="tab-item active" data-tab="home" onclick="typeof switchTab==='function'&&switchTab('home',event)">
                             <div class="tab-icon">🏠</div>
                             <div>ホーム</div>
                         </div>
-                        <div class="tab-item" onclick="switchTab('chat')">
+                        <div class="tab-item" data-tab="chat" onclick="typeof switchTab==='function'&&switchTab('chat',event)">
                             <div class="tab-icon">💬</div>
                             <div>チャット</div>
                         </div>
-                        <div class="tab-item" onclick="switchTab('notification')">
+                        <div class="tab-item" data-tab="notification" onclick="typeof switchTab==='function'&&switchTab('notification',event)">
                             <div class="tab-icon notification-badge">🔔</div>
                             <div>通知</div>
                         </div>
-                        <div class="tab-item" onclick="switchTab('status')">
+                        <div class="tab-item" data-tab="status" onclick="typeof switchTab==='function'&&switchTab('status',event)">
                             <div class="tab-icon">📊</div>
                             <div>ステータス</div>
                         </div>
@@ -728,6 +733,9 @@
             </div>
         </div>
 
+        <script>
+(function(){ var t=document.getElementById('alertCardTitle'); if(t)t.innerHTML='<span>⚠️</span> 今すぐ確認'; var d=document.getElementById('defaultContent'); if(d)d.classList.remove('hidden'); var s=document.getElementById('searchResult'); if(s&&!s.querySelector('.chat-message'))s.classList.add('hidden'); })();
+        </script>
         <script>
             // 「今すぐ確認」のランダムメッセージ
             const alertMessages = [
@@ -936,11 +944,13 @@
 
             // ランダムなアラートメッセージを表示
             function displayRandomAlert() {
+                var alertTitle = document.getElementById('alertCardTitle');
+                if (!alertTitle) alertTitle = document.getElementById('alertCard') && document.getElementById('alertCard').querySelector('.card-title');
+                if (alertTitle) alertTitle.innerHTML = '<span>⚠️</span> 今すぐ確認';
                 const randomIndex = Math.floor(Math.random() * alertMessages.length);
                 const message = alertMessages[randomIndex];
                 currentAlertId = message.id;
                 const alertContent = document.getElementById('alertContent');
-                
                 if (alertContent) {
                     alertContent.innerHTML = `
                         ${message.text}
@@ -1200,30 +1210,25 @@
             }
 
             // タブ切り替え
-            function switchTab(tabName) {
-                // すべてのタブからactiveクラスを削除
+            function switchTab(tabName, evt) {
                 const allTabs = document.querySelectorAll('.tab-item');
                 allTabs.forEach(tab => tab.classList.remove('active'));
-                
-                // クリックされたタブにactiveクラスを追加
-                event.currentTarget.classList.add('active');
-                
+                const target = (evt && evt.currentTarget) || document.querySelector(`.tab-item[data-tab="${tabName}"]`);
+                if (target) target.classList.add('active');
+
                 const resultDiv = document.getElementById('searchResult');
                 const defaultContent = document.getElementById('defaultContent');
-                
+
                 console.log(`${tabName} タブに切り替えました`);
-                
+
                 if (tabName === 'home') {
-                    // ホーム画面に戻る
                     resetSearch();
+                    displayRandomAlert();
                 } else if (tabName === 'chat') {
-                    // チャット画面を表示
                     showChatScreen();
                 } else if (tabName === 'notification') {
-                    // 通知画面を表示
                     showNotificationScreen();
                 } else if (tabName === 'status') {
-                    // ステータス画面を表示
                     showStatusScreen();
                 }
             }
@@ -2447,16 +2452,16 @@
                 document.getElementById('homeContent').scrollTop = 0;
             }
 
-            // Enterキーで検索
+            // Enterキーで検索・初期表示
             document.addEventListener('DOMContentLoaded', function() {
-                const searchInput = document.getElementById('searchInput');
+                var searchInput = document.getElementById('searchInput');
                 if (searchInput) {
                     searchInput.addEventListener('keypress', function(e) {
-                        if (e.key === 'Enter') {
-                            performSearch();
-                        }
+                        if (e.key === 'Enter') performSearch();
                     });
                 }
+                try { displayRandomAlert(); } catch (e) { console.warn('displayRandomAlert:', e); }
+                setTimeout(function() { try { displayRandomAlert(); } catch (e) {} }, 100);
             });
 
             // Web管理画面の画面遷移

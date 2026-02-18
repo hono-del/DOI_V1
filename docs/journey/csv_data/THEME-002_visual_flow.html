@@ -34,30 +34,29 @@
     <div class="mermaid">
 graph TD
     THEME_002_START([ブレーキ警告灯が点灯])
-    THEME_002_N001[パーキングブレーキ未解除]
+    THEME_002_N001[パーキングブレーキ解除の確認]
     THEME_002_N002[パーキングブレーキ故障]
-    THEME_002_→__販売店連絡[→  販売店連絡]
     THEME_002_N003[ブレーキ液確認]
     THEME_002_N004[ブレーキ液不足]
     THEME_002_N005[ブレーキ液補充後確認]
     THEME_002_N006[システム異常疑い]
     THEME_002_N007[即時停車]
-    THEME_002_→__緊急連絡[→  緊急連絡]
     THEME_002_販売店連絡[販売店連絡]
     THEME_002_緊急連絡[緊急連絡]
     THEME_002_解決[/解決/]
-    THEME_002_START -->|いいえ| THEME_002_パーキングブレーキ未
-    THEME_002_START -->|はい| THEME_002_ブレーキ液確認
-    THEME_002_N001 -->|はい| THEME_002_✓_解決
-    THEME_002_N001 -->|いいえ| THEME_002_パーキングブレーキ故
-    THEME_002_N003 -->|はい| THEME_002_システム異常疑い
-    THEME_002_N003 -->|いいえ| THEME_002_ブレーキ液不足
-    THEME_002_N004 -->|はい| THEME_002_ブレーキ液補充後確認
-    THEME_002_N004 -->|いいえ| THEME_002_⚠_販売店連絡
-    THEME_002_N005 -->|はい| THEME_002_✓_解決
-    THEME_002_N005 -->|いいえ| THEME_002_システム異常疑い
-    THEME_002_N006 -->|はい| THEME_002_即時停車
-    THEME_002_N006 -->|いいえ| THEME_002_⚠_販売店連絡
+    THEME_002_START --> THEME_002_N001
+    THEME_002_N001 -->|はい| THEME_002_N003
+    THEME_002_N001 -->|いいえ| THEME_002_N002
+    THEME_002_N002 --> THEME_002_販売店連絡
+    THEME_002_N003 -->|はい| THEME_002_N006
+    THEME_002_N003 -->|いいえ| THEME_002_N004
+    THEME_002_N004 -->|はい| THEME_002_N005
+    THEME_002_N004 -->|いいえ| THEME_002_販売店連絡
+    THEME_002_N005 -->|はい| THEME_002_解決
+    THEME_002_N005 -->|いいえ| THEME_002_N006
+    THEME_002_N006 -->|はい| THEME_002_N007
+    THEME_002_N006 -->|いいえ| THEME_002_販売店連絡
+    THEME_002_N007 --> THEME_002_緊急連絡
     </div>
 
     <script>

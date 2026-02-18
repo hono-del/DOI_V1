@@ -1,4 +1,104 @@
-# Journey Graph CSV データ
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Journey Graph CSV データ（READMEスライド）</title>
+  <style>
+    :root { color-scheme: light; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Meiryo, sans-serif;
+      background: #fff;
+      color: #111;
+    }
+    .app {
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+    .topbar {
+      padding: 10px 14px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .topbar .title { font-weight: 700; }
+    .topbar .meta { color: #6b7280; font-size: 12px; }
+    .stage {
+      padding: 18px;
+      overflow: auto;
+    }
+    .slide {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 26px 30px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    }
+    .nav {
+      padding: 10px 14px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    button {
+      appearance: none;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .counter { color: #6b7280; font-size: 12px; }
+    pre {
+      background: #0b1020;
+      color: #e5e7eb;
+      padding: 12px 14px;
+      border-radius: 10px;
+      overflow: auto;
+      line-height: 1.45;
+    }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    h1, h2, h3 { margin-top: 0.2em; }
+    hr { border: 0; border-top: 1px solid #e5e7eb; margin: 18px 0; }
+    a { color: #2563eb; }
+    ul, ol { padding-left: 1.2em; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div>
+        <div class="title">Journey Graph CSV データ（READMEスライド）</div>
+        <div class="meta">←/→キーでも移動できます（HTML単体・オフライン対応）</div>
+      </div>
+      <div class="counter" id="counter"></div>
+    </div>
+
+    <div class="stage">
+      <div class="slide" id="slide"></div>
+    </div>
+
+    <div class="nav">
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button id="prevBtn">← 前</button>
+        <button id="nextBtn">次 →</button>
+      </div>
+      <div class="counter" id="hint"></div>
+    </div>
+  </div>
+
+  <!-- README.md 本文（省略なし・そのまま埋め込み） -->
+  <textarea id="source" style="display:none;"># Journey Graph CSV データ
 
 ## 概要
 
@@ -262,3 +362,174 @@ def estimate_intent(node_id, context_data):
 
 - `/docs/journey/journey_graph_量産用csvテンプレート.md`: テンプレートの詳細説明
 - `/docs/output/統合_システム要件定義書.md`: システム全体の要件定義
+</textarea>
+
+  <script>
+    function escapeHtml(s) {
+      return s
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    // 超簡易 Markdown → HTML（READMEを省略せずに「表示」するための最低限）
+    // - 見出し/箇条書き/太字/インラインコード/コードブロック/区切り線/段落 を扱う
+    function mdToHtml(md) {
+      // コードブロックを先に退避
+      const codeBlocks = [];
+      md = md.replace(/```([\s\S]*?)```/g, (_, body) => {
+        const idx = codeBlocks.length;
+        codeBlocks.push(body.replace(/^\n+|\n+$/g, ''));
+        return `@@CODEBLOCK_${idx}@@`;
+      });
+
+      // エスケープ（プレーン部分）
+      md = escapeHtml(md);
+
+      // インライン装飾
+      md = md.replace(/`([^`]+)`/g, '<code>$1</code>');
+      md = md.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+      const lines = md.split('\n');
+      let html = '';
+      let inUl = false;
+      let inOl = false;
+      let inP = false;
+
+      function closeLists() {
+        if (inUl) { html += '</ul>'; inUl = false; }
+        if (inOl) { html += '</ol>'; inOl = false; }
+      }
+      function closeP() {
+        if (inP) { html += '</p>'; inP = false; }
+      }
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+
+        // 退避済みコードブロック復元ポイント
+        const mCode = line.match(/^@@CODEBLOCK_(\d+)@@$/);
+        if (mCode) {
+          closeP();
+          closeLists();
+          const code = codeBlocks[Number(mCode[1])] ?? '';
+          html += `<pre><code>${escapeHtml(code)}</code></pre>`;
+          continue;
+        }
+
+        if (/^---\s*$/.test(line)) {
+          closeP(); closeLists();
+          html += '<hr />';
+          continue;
+        }
+
+        const mH1 = line.match(/^#\s+(.+)$/);
+        if (mH1) { closeP(); closeLists(); html += `<h1>${mH1[1]}</h1>`; continue; }
+        const mH2 = line.match(/^##\s+(.+)$/);
+        if (mH2) { closeP(); closeLists(); html += `<h2>${mH2[1]}</h2>`; continue; }
+        const mH3 = line.match(/^###\s+(.+)$/);
+        if (mH3) { closeP(); closeLists(); html += `<h3>${mH3[1]}</h3>`; continue; }
+
+        const mOl = line.match(/^\s*\d+\.\s+(.+)$/);
+        if (mOl) {
+          closeP();
+          if (inUl) { html += '</ul>'; inUl = false; }
+          if (!inOl) { html += '<ol>'; inOl = true; }
+          html += `<li>${mOl[1]}</li>`;
+          continue;
+        }
+
+        const mUl = line.match(/^\s*-\s+(.+)$/);
+        if (mUl) {
+          closeP();
+          if (inOl) { html += '</ol>'; inOl = false; }
+          if (!inUl) { html += '<ul>'; inUl = true; }
+          html += `<li>${mUl[1]}</li>`;
+          continue;
+        }
+
+        // 空行
+        if (line.trim() === '') {
+          closeP();
+          closeLists();
+          continue;
+        }
+
+        // 段落
+        closeLists();
+        if (!inP) { html += '<p>'; inP = true; }
+        html += `${line}<br/>`;
+      }
+
+      closeP();
+      closeLists();
+      return html;
+    }
+
+    function splitSlides(fullMd) {
+      // "## " を境にスライド分割（先頭の # も含めて1枚目に）
+      const lines = fullMd.split(/\r?\n/);
+      const chunks = [];
+      let buf = [];
+
+      function pushBuf() {
+        while (buf.length > 0 && buf[buf.length - 1] === '') buf.pop();
+        if (buf.length > 0) chunks.push(buf.join('\n'));
+        buf = [];
+      }
+
+      for (const line of lines) {
+        const isH2 = /^##\s+/.test(line);
+        if (isH2 && buf.length > 0) pushBuf();
+        buf.push(line);
+      }
+      pushBuf();
+      return chunks;
+    }
+
+    const md = document.getElementById('source').value;
+    const slides = splitSlides(md);
+    let idx = 0;
+
+    const slideEl = document.getElementById('slide');
+    const counterEl = document.getElementById('counter');
+    const hintEl = document.getElementById('hint');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function render() {
+      slideEl.innerHTML = mdToHtml(slides[idx]);
+      counterEl.textContent = `${idx + 1} / ${slides.length}`;
+      hintEl.textContent = '印刷: ブラウザの印刷 → PDF';
+      prevBtn.disabled = idx === 0;
+      nextBtn.disabled = idx === slides.length - 1;
+      history.replaceState(null, '', `#${idx + 1}`);
+    }
+
+    function go(n) {
+      idx = Math.max(0, Math.min(slides.length - 1, n));
+      render();
+    }
+
+    prevBtn.addEventListener('click', () => go(idx - 1));
+    nextBtn.addEventListener('click', () => go(idx + 1));
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') go(idx - 1);
+      if (e.key === 'ArrowRight') go(idx + 1);
+    });
+
+    // hashから初期スライド
+    const m = location.hash.match(/^#(\d+)$/);
+    if (m) {
+      const n = Number(m[1]);
+      if (Number.isFinite(n) && n >= 1) idx = Math.min(slides.length - 1, n - 1);
+    }
+
+    render();
+  </script>
+</body>
+</html>
+

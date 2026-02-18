@@ -34,6 +34,7 @@
 
         .mobile-frame {
             max-width: 375px;
+            width: 100%;
             margin: 0 auto;
             border: 8px solid #2A2A2A;
             border-radius: 30px;
@@ -41,9 +42,13 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(191, 0, 255, 0.3);
             position: relative;
             background: #1A1A1A;
+            display: flex;
+            flex-direction: column;
+            height: 700px;
         }
 
         .mobile-header {
+            flex-shrink: 0;
             background: #1A1A1A;
             color: #BF00FF;
             padding: 15px;
@@ -60,10 +65,11 @@
         }
 
         .mobile-content {
+            flex: 1;
+            min-height: 0;
             padding: 20px;
-            padding-bottom: 90px;
+            padding-bottom: 20px;
             background: #1A1A1A;
-            height: 600px;
             overflow-y: auto;
             overflow-x: hidden;
         }
@@ -84,6 +90,102 @@
         .mobile-content::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(180deg, #D200FF 0%, #BF00FF 100%);
         }
+
+        .view-screen {
+            flex: 1;
+            min-height: 0;
+            padding: 20px;
+            overflow-y: auto;
+            background: #1A1A1A;
+            display: none;
+        }
+        .view-screen.active { display: block; }
+
+        .login-form input, .vehicle-select input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            border: 1px solid rgba(191, 0, 255, 0.3);
+            border-radius: 10px;
+            background: #202020;
+            color: #e0e0e0;
+            font-size: 1em;
+        }
+        .login-form input::placeholder { color: #808080; }
+        .login-form label { display: block; margin-bottom: 6px; font-size: 0.9em; color: #aaa; }
+        .login-form .button { width: 100%; margin-top: 16px; padding: 14px; }
+
+        .vehicle-model-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .vehicle-model-card {
+            background: #202020;
+            border: 2px solid rgba(191, 0, 255, 0.3);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .vehicle-model-card:hover, .vehicle-model-card.selected {
+            border-color: #BF00FF;
+            box-shadow: 0 0 16px rgba(191, 0, 255, 0.3);
+        }
+        .vehicle-model-card img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            display: block;
+        }
+        .vehicle-model-card .label { padding: 10px; font-weight: 600; color: #BF00FF; font-size: 0.95em; }
+        .vehicle-year-list { margin-top: 16px; }
+        .vehicle-year-item {
+            background: #202020;
+            border: 1px solid rgba(191, 0, 255, 0.3);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            text-align: center;
+            color: #e0e0e0;
+            transition: all 0.2s;
+        }
+        .vehicle-year-item:hover { background: rgba(191, 0, 255, 0.15); border-color: #BF00FF; }
+
+        .settings-menu { display: flex; flex-direction: column; gap: 12px; }
+        .settings-menu-btn {
+            width: 100%;
+            padding: 16px 18px;
+            text-align: left;
+            background: #202020;
+            border: 1px solid rgba(191, 0, 255, 0.3);
+            border-radius: 12px;
+            color: #e0e0e0;
+            font-size: 1em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .settings-menu-btn:hover { background: rgba(191, 0, 255, 0.15); border-color: #BF00FF; }
+        .settings-menu-btn span { font-size: 1.2em; }
+        .language-options { margin-top: 12px; }
+        .language-option {
+            background: #202020;
+            border: 1px solid rgba(191, 0, 255, 0.3);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            text-align: center;
+            color: #e0e0e0;
+            transition: all 0.2s;
+        }
+        .language-option:hover, .language-option.selected { background: rgba(191, 0, 255, 0.15); border-color: #BF00FF; }
 
         .search-box {
             background: #202020;
@@ -377,16 +479,14 @@
         }
 
         .mobile-tab-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            flex-shrink: 0;
             background: #1A1A1A;
             border-top: 2px solid rgba(191, 0, 255, 0.3);
             display: flex;
             justify-content: space-around;
             padding: 10px 0;
             box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 100;
         }
 
         .tab-item {
@@ -468,10 +568,73 @@
     <div class="container">
         <div class="mobile-frame">
                     <div class="mobile-header">
-                        <h2>DIGITAL OM</h2>
-                        <span>⚙️</span>
+                        <h2 id="headerTitle" data-i18n="app-title">DIGITAL OM</h2>
+                        <span id="headerBackBtn" style="display:none; cursor:pointer; font-size:1.1em;" onclick="showScreen('home')" title="戻る" data-i18n="btn-back">← 戻る</span>
+                        <span id="headerSettingsBtn" style="display:none; cursor:pointer; font-size:1.2em; user-select:none;" onclick="showScreen('settings')" data-i18n="btn-settings" title="設定">⚙️</span>
                     </div>
-                    <div class="mobile-content" id="homeContent">
+                    <!-- ①ID/PWログイン画面 -->
+                    <div id="loginScreen" class="view-screen active">
+                        <div style="margin-bottom: 24px; font-size: 1.1em; color: #BF00FF;" data-i18n="screen-login">ログイン</div>
+                        <form class="login-form" onsubmit="handleLogin(event)">
+                            <label for="loginId" data-i18n="label-id">ID</label>
+                            <input type="text" id="loginId" placeholder="IDを入力" data-i18n-placeholder="placeholder-id" autocomplete="username">
+                            <label for="loginPw" data-i18n="label-password">パスワード</label>
+                            <input type="password" id="loginPw" placeholder="パスワードを入力" data-i18n-placeholder="placeholder-password" autocomplete="current-password">
+                            <button type="submit" class="button" data-i18n="btn-login">ログイン</button>
+                        </form>
+                    </div>
+                    <!-- ②車種選択画面 -->
+                    <div id="vehicleSelectScreen" class="view-screen">
+                        <div style="margin-bottom: 16px; font-size: 1.1em; color: #BF00FF;" data-i18n="screen-vehicle-select">車種を選択</div>
+                        <div id="vehicleModelStep">
+                            <div class="vehicle-model-grid">
+                                <div class="vehicle-model-card" data-model="G" onclick="selectModel('G')">
+                                    <img src="../docs/mockups/グレーSUV_背景黒.png" alt="Model G">
+                                    <div class="label">Model G</div>
+                                </div>
+                                <div class="vehicle-model-card" data-model="B" onclick="selectModel('B')">
+                                    <img src="../docs/mockups/ブルーセダン.png" alt="Model B">
+                                    <div class="label">Model B</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="vehicleYearStep" style="display: none;">
+                            <button type="button" class="button" style="background:#333; margin-bottom:14px; font-size:0.9em;" onclick="document.getElementById('vehicleYearStep').style.display='none'; document.getElementById('vehicleModelStep').style.display='block';" data-i18n="btn-back-to-model">← 車種を選び直す</button>
+                            <div style="margin-bottom: 10px; color: #aaa;" data-i18n="screen-vehicle-year">年式を選択</div>
+                            <div class="vehicle-year-list">
+                                <div class="vehicle-year-item" onclick="selectYear('2025-06')">2025年6月発売</div>
+                                <div class="vehicle-year-item" onclick="selectYear('2024-11')">2024年11月発売</div>
+                                <div class="vehicle-year-item" onclick="selectYear('2023-04')">2023年4月発売</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ③設定画面（ホームから⚙で遷移） -->
+                    <div id="settingsScreen" class="view-screen">
+                        <div style="margin-bottom: 20px; font-size: 1.1em; color: #BF00FF;" data-i18n="screen-settings">設定</div>
+                        <div class="settings-menu">
+                            <button type="button" class="settings-menu-btn" onclick="openLanguageSettings()">
+                                <span>🌐</span> <span data-i18n="menu-language">言語設定</span>
+                            </button>
+                            <button type="button" class="settings-menu-btn" onclick="goToVehicleSelect()">
+                                <span>🚗</span> <span data-i18n="menu-vehicle">車両選択</span>
+                            </button>
+                            <a href="oem-dashboard.html" target="_blank" rel="noopener" class="settings-menu-btn" style="display: block; text-align: left; text-decoration: none; color: inherit;">
+                                <span>📊</span> <span data-i18n="menu-dashboard">管理者向けダッシュボード</span>
+                            </a>
+                        </div>
+                        <!-- 言語選択サブ画面 -->
+                        <div id="languageSelectPanel" style="display: none; margin-top: 20px;">
+                            <button type="button" class="button" style="background:#333; margin-bottom:14px; font-size:0.9em;" onclick="closeLanguageSettings()" data-i18n="btn-back-to-settings">← 設定に戻る</button>
+                            <div style="margin-bottom: 10px; color: #aaa;" data-i18n="language-select-title">表示言語を選択</div>
+                            <div class="language-options">
+                                <div class="language-option selected" data-lang="ja" onclick="selectLanguage('ja')">日本語</div>
+                                <div class="language-option" data-lang="en" onclick="selectLanguage('en')">English</div>
+                                <div class="language-option" data-lang="fr" onclick="selectLanguage('fr')">Français</div>
+                                <div class="language-option" data-lang="es" onclick="selectLanguage('es')">Español</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mobile-content" id="homeContent" style="display: none;">
                         <!-- 検索結果エリア -->
                         <div id="searchResult" class="hidden"></div>
 
@@ -479,18 +642,18 @@
                         <div id="defaultContent">
                             <!-- 1. 今すぐ確認（最上部）- ランダム表示 -->
                             <div class="card alert-card" id="alertCard">
-                                <div class="card-title">
-                                    <span>⚠️</span> 今すぐ確認
+                                <div class="card-title" id="alertCardTitle">
+                                    <span>⚠️</span> <span data-i18n="alert-title">今すぐ確認</span>
                                 </div>
                                 <div class="card-content" id="alertContent">
                                     <!-- JavaScriptで動的に表示 -->
                                 </div>
                             </div>
 
-                            <!-- 2. 車両画像 -->
+                            <!-- 2. 車両画像（車種選択で設定） -->
                             <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 20px;">
-                                <img src="グレーSUV_背景黒.png" 
-                                     alt="車両画像" 
+                                <img id="homeVehicleImage" src="../docs/mockups/グレーSUV_背景黒.png"
+                                     alt="あなたの車両"
                                      style="width: 100%; height: auto; display: block;"
                                      onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 800 500%27%3E%3Crect fill=%27%23e0e0e0%27 width=%27800%27 height=%27500%27/%3E%3Ctext x=%27400%27 y=%27250%27 text-anchor=%27middle%27 font-size=%2724%27 fill=%27%23666%27 font-family=%27Arial%27%3E🚗 あなたの車両%3C/text%3E%3C/svg%3E'">
                             </div>
@@ -499,29 +662,29 @@
                             <div class="search-input-wrapper">
                                 <div class="search-box" style="flex: 1; margin-bottom: 0;">
                                     <span>🔍</span>
-                                    <input type="text" id="searchInput" placeholder="操作方法や機能を検索...">
+                                    <input type="text" id="searchInput" placeholder="操作方法や機能を検索..." data-i18n-placeholder="search-placeholder">
                                 </div>
-                                <button class="search-button" onclick="performSearch()">検索</button>
+                                <button class="search-button" onclick="performSearch()" data-i18n="btn-search">検索</button>
                             </div>
 
                             <!-- クイック質問ボタン -->
                             <div style="margin-bottom: 20px; text-align: center;">
-                                <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">よくある質問をタップ:</div>
-                                <span class="quick-question" onclick="setQuestion('ドアが開かない')">🚪 ドアが開かない</span>
-                                <span class="quick-question" onclick="setQuestion('Bluetooth接続はどうやってやるの？')">📱 Bluetooth接続</span>
-                                <span class="quick-question" onclick="setQuestion('警告灯が点灯した')">⚠️ 警告灯が点灯</span>
+                                <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;" data-i18n="quick-question-label">よくある質問をタップ:</div>
+                                <span class="quick-question" onclick="setQuestion('ドアが開かない')">🚪 <span data-i18n="quick-door">ドアが開かない</span></span>
+                                <span class="quick-question" onclick="setQuestion('Bluetooth接続はどうやってやるの？')">📱 <span data-i18n="quick-bluetooth">Bluetooth接続</span></span>
+                                <span class="quick-question" onclick="setQuestion('警告灯が点灯した')">⚠️ <span data-i18n="quick-warning">警告灯が点灯</span></span>
                             </div>
 
                             <!-- 4. おすすめ機能 -->
                             <div class="card" id="recommendationCard">
                                 <div class="card-title">
-                                    <span class="badge badge-new">NEW</span> おすすめ機能
+                                    <span class="badge badge-new" data-i18n="badge-new">NEW</span> <span data-i18n="card-recommendation">おすすめ機能</span>
                                 </div>
                                 <div class="card-content" id="recommendationContent">
-                                    <div id="recommendationText">シートヒーター機能をまだ使っていませんね。冬に便利な機能です。</div>
+                                    <div id="recommendationText" data-i18n="recommendation-seat-heater">シートヒーター機能をまだ使っていませんね。冬に便利な機能です。</div>
                                     <div style="display: flex; gap: 10px; margin-top: 12px; align-items: center; flex-wrap: wrap;">
                                         <a href="https://www.youtube.com/shorts/-rbaCNJrUc0" target="_blank" class="button" style="text-decoration: none; display: inline-block; flex: 1; min-width: 140px;">
-                                            🎥 使い方を見る
+                                            🎥 <span data-i18n="btn-watch-video">使い方を見る</span>
                                         </a>
                                         <button onclick="showNextRecommendation()" class="button" style="background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px 18px; flex: 0;">
                                             ✅
@@ -535,47 +698,488 @@
 
                             <!-- 5. よくある質問 -->
                             <div class="card">
-                                <div class="card-title">よくある質問</div>
+                                <div class="card-title" data-i18n="card-faq">よくある質問</div>
                                 <div class="card-content">
                                     <ul class="feature-list">
-                                        <li>Bluetooth接続の設定方法</li>
-                                        <li>エアコンの使い方</li>
-                                        <li>ワイパーの操作方法</li>
+                                        <li data-i18n="faq-bluetooth">Bluetooth接続の設定方法</li>
+                                        <li data-i18n="faq-aircon">エアコンの使い方</li>
+                                        <li data-i18n="faq-wiper">ワイパーの操作方法</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- 固定タブバー -->
-                    <div class="mobile-tab-bar">
-                        <div class="tab-item active" onclick="switchTab('home')">
+                    <!-- 固定タブバー（ログイン・車種選択後表示） -->
+                    <div id="mainTabBar" class="mobile-tab-bar" style="position:relative;z-index:9999;flex-shrink:0; display: none;">
+                        <div class="tab-item active" data-tab="home" onclick="typeof switchTab==='function'&&switchTab('home',event)">
                             <div class="tab-icon">🏠</div>
-                            <div>ホーム</div>
+                            <div data-i18n="tab-home">ホーム</div>
                         </div>
-                        <div class="tab-item" onclick="switchTab('chat')">
+                        <div class="tab-item" data-tab="chat" onclick="typeof switchTab==='function'&&switchTab('chat',event)">
                             <div class="tab-icon">💬</div>
-                            <div>チャット</div>
+                            <div data-i18n="tab-chat">チャット</div>
                         </div>
-                        <div class="tab-item" onclick="switchTab('notification')">
+                        <div class="tab-item" data-tab="notification" onclick="typeof switchTab==='function'&&switchTab('notification',event)">
                             <div class="tab-icon notification-badge">🔔</div>
-                            <div>通知</div>
+                            <div data-i18n="tab-notification">通知</div>
                         </div>
-                        <div class="tab-item" onclick="switchTab('status')">
+                        <div class="tab-item" data-tab="status" onclick="typeof switchTab==='function'&&switchTab('status',event)">
                             <div class="tab-icon">📊</div>
-                            <div>ステータス</div>
+                            <div data-i18n="tab-status">ステータス</div>
                         </div>
+                    </div>
+                    <!-- Bluetoothステップガイド用モーダル -->
+                    <div id="bluetoothStepGuideModal" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.92); z-index: 9000; overflow-y: auto; padding: 15px;">
+                        <div id="bluetoothStepGuideContent"></div>
                     </div>
                 </div>
     </div>
 
+    <!-- 救済: 今すぐ確認とタブを確実に表示（メインスクリプトより先に実行） -->
     <script>
+(function(){
+  function fix(){
+    try{
+      var t=document.getElementById('alertCardTitle');
+      if(t)t.innerHTML='<span>\u26a0\ufe0f</span> 今すぐ確認';
+      var d=document.getElementById('defaultContent');
+      if(d)d.classList.remove('hidden');
+      var s=document.getElementById('searchResult');
+      if(s&&!s.querySelector('.chat-message'))s.classList.add('hidden');
+    }catch(e){}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fix);
+  else fix();
+  setTimeout(fix,50);
+})();
+    </script>
+    <script>
+        // 多言語対応システム
+        var currentLang = 'ja';
+        var translations = {
+            ja: {
+                'app-title': 'DIGITAL OM',
+                'btn-back': '戻る',
+                'btn-settings': '設定',
+                'screen-login': 'ログイン',
+                'label-id': 'ID',
+                'label-password': 'パスワード',
+                'placeholder-id': 'IDを入力',
+                'placeholder-password': 'パスワードを入力',
+                'btn-login': 'ログイン',
+                'screen-vehicle-select': '車種を選択',
+                'screen-vehicle-year': '年式を選択',
+                'btn-back-to-model': '← 車種を選び直す',
+                'screen-settings': '設定',
+                'menu-language': '言語設定',
+                'menu-vehicle': '車両選択',
+                'menu-dashboard': '管理者向けダッシュボード',
+                'language-select-title': '表示言語を選択',
+                'btn-back-to-settings': '← 設定に戻る',
+                'alert-title': '今すぐ確認',
+                'search-placeholder': '操作方法や機能を検索...',
+                'btn-search': '検索',
+                'quick-question-label': 'よくある質問をタップ:',
+                'quick-door': 'ドアが開かない',
+                'quick-bluetooth': 'Bluetooth接続',
+                'quick-warning': '警告灯が点灯',
+                'card-recommendation': 'おすすめ機能',
+                'badge-new': 'NEW',
+                'btn-watch-video': '使い方を見る',
+                'card-faq': 'よくある質問',
+                'tab-home': 'ホーム',
+                'tab-chat': 'チャット',
+                'tab-notification': '通知',
+                'tab-status': 'ステータス',
+                'chat-placeholder': 'スマートキーやクルマについて質問できます...',
+                'btn-send': '送信',
+                // 動的コンテンツ用
+                'recommendation-seat-heater': 'シートヒーター機能をまだ使っていませんね。冬に便利な機能です。',
+                'faq-bluetooth': 'Bluetooth接続の設定方法',
+                'faq-aircon': 'エアコンの使い方',
+                'faq-wiper': 'ワイパーの操作方法',
+                'chat-intro-name': 'さん、今知りたいことを入力してください。',
+                'chat-intro-quick': 'すぐに試せるメニューもご用意しています：',
+                'chat-quick-door': 'スマートキーでドアが開かない',
+                'chat-quick-battery': 'キー電池切れの表示が出ている',
+                'chat-quick-warning': '警告灯が点灯',
+                // 通知
+                'notif-title': '通知履歴',
+                'notif-feedback': '以下の通知が役に立ちましたか？フィードバックをお願いします。',
+                'notif-helpful': '役立った',
+                'notif-not-helpful': '役立たなかった',
+                'notif-time-minutes': '分前',
+                'notif-time-hours': '時間前',
+                'notif-time-yesterday': '昨日',
+                'notif-time-days': '日前',
+                'notif-1': '夜間走行中です。オートハイビームをオンにすると安全です。',
+                'notif-2': '狭い駐車場です。パノラミックビューモニターを使うと安心です。',
+                'notif-3': '市街地走行が続いています。エコモードを使うと燃費が向上します。',
+                'notif-4': 'ブレーキ操作が増えています。パドルシフトで減速時の操作をサポートできます。',
+                'notif-5': 'そろそろエアコンフィルターの清掃をしましょう。',
+                'notif-6': '長時間運転が続いています。近くで休憩を取ることをおすすめします。',
+                // ステータス画面
+                'status-title': 'あなたと愛車の関係値',
+                'status-level-1': 'はじめまして',
+                'status-level-2': '顔なじみ',
+                'status-level-3': '頼れるパートナー',
+                'status-level-4': '相棒',
+                'status-next-level': '次のレベルまで:',
+                'status-hint-title': '次のレベルへのヒント',
+                'status-hint-1': 'おすすめ機能を試してみましょう',
+                'status-hint-2': '定期メンテナンスを実施しましょう',
+                'status-hint-3': '運転データを改善しましょう',
+                'status-drive-title': '運転データ',
+                'status-total-distance': '総走行距離',
+                'status-monthly-distance': '月間走行距離',
+                'status-avg-fuel': '平均燃費',
+                'status-monthly-goal': '月間目標達成！',
+                'status-feature-title': '機能活用度',
+                'status-features-used': '活用している機能',
+                'status-recent-features': '最近使った機能：',
+                'status-feature-seat': 'シートヒーター',
+                'status-feature-panoramic': 'パノラミックビューモニター',
+                'status-feature-eco': 'エコモード',
+                'status-new-feature': '新機能を活用中',
+                'status-maintenance-title': 'メンテナンス状況',
+                'status-last-check': '前回の点検',
+                'status-next-check': '次回の点検',
+                'status-maintenance-rate': 'メンテナンス遵守率',
+                'status-proper-maintenance': '適切なメンテナンス実施中',
+                'status-level-list-title': '関係値レベル一覧',
+                'status-level-4-desc': '愛車を完全に使いこなし、最高の関係を築いている',
+                'status-level-3-desc': '多くの機能を活用し、愛車を理解している',
+                'status-level-2-desc': '機能を使い始め、愛車のことを少しずつ知ってきました',
+                'status-level-1-desc': 'まだ愛車のことをよく知らない状態',
+                'status-current': '現在',
+                'status-achieved': '達成済み',
+                'status-locked': '🔒',
+                // アラート
+                'alert-parking': '狭い駐車場です。<br>パノラミックビューモニターを使うと安心です。',
+                'alert-btn-howto': '使用方法を見る',
+                'alert-filter': 'そろそろエアコンフィルターの清掃をしましょう。',
+                'alert-btn-filter': '清掃方法を見る',
+                'alert-ecomode': '市街地走行が続いています。エコモードを使うと燃費が向上します。',
+                'alert-btn-ecomode': '設定方法を見る',
+                'alert-highbeam': '夜間走行中です。オートハイビームをオンにすると安全です。',
+                'alert-btn-highbeam': '設定方法を見る',
+                'alert-rest': '長時間運転が続いています。<br>近くで休憩を取ることをおすすめします。',
+                'alert-btn-rest': '2km先のABC PAへ目的地を設定する',
+                'alert-paddle': 'ブレーキ操作が増えています。パドルシフトで減速時の操作をサポートできます。',
+                'alert-btn-paddle': '使用方法を見る'
+            },
+            en: {
+                'app-title': 'DIGITAL OM',
+                'btn-back': 'Back',
+                'btn-settings': 'Settings',
+                'screen-login': 'Login',
+                'label-id': 'ID',
+                'label-password': 'Password',
+                'placeholder-id': 'Enter ID',
+                'placeholder-password': 'Enter password',
+                'btn-login': 'Login',
+                'screen-vehicle-select': 'Select Vehicle Model',
+                'screen-vehicle-year': 'Select Year',
+                'btn-back-to-model': '← Change Model',
+                'screen-settings': 'Settings',
+                'menu-language': 'Language Settings',
+                'menu-vehicle': 'Vehicle Selection',
+                'menu-dashboard': 'Admin Dashboard',
+                'language-select-title': 'Select Display Language',
+                'btn-back-to-settings': '← Back to Settings',
+                'alert-title': 'Check Now',
+                'search-placeholder': 'Search for operations or features...',
+                'btn-search': 'Search',
+                'quick-question-label': 'Tap frequently asked questions:',
+                'quick-door': 'Door won\'t open',
+                'quick-bluetooth': 'Bluetooth',
+                'quick-warning': 'Warning light',
+                'card-recommendation': 'Recommended Features',
+                'badge-new': 'NEW',
+                'btn-watch-video': 'Watch How-To',
+                'card-faq': 'FAQ',
+                'tab-home': 'Home',
+                'tab-chat': 'Chat',
+                'tab-notification': 'Notifications',
+                'tab-status': 'Status',
+                'chat-placeholder': 'Ask about your smart key or vehicle...',
+                'btn-send': 'Send',
+                // Dynamic content
+                'recommendation-seat-heater': 'You haven\'t used the seat heater function yet. It\'s convenient in winter.',
+                'faq-bluetooth': 'How to set up Bluetooth connection',
+                'faq-aircon': 'How to use air conditioner',
+                'faq-wiper': 'How to operate wipers',
+                'chat-intro-name': ', what would you like to know?',
+                'chat-intro-quick': 'Quick menu options are available:',
+                'chat-quick-door': 'Smart key door won\'t open',
+                'chat-quick-battery': 'Key battery low warning displayed',
+                'chat-quick-warning': 'Warning light is on',
+                // Notifications
+                'notif-title': 'Notification History',
+                'notif-feedback': 'Were these notifications helpful? Please provide feedback.',
+                'notif-helpful': 'Helpful',
+                'notif-not-helpful': 'Not Helpful',
+                'notif-time-minutes': 'min ago',
+                'notif-time-hours': 'hr ago',
+                'notif-time-yesterday': 'Yesterday',
+                'notif-time-days': 'days ago',
+                'notif-1': 'You\'re driving at night. Turning on auto high beam is safer.',
+                'notif-2': 'Parking in a narrow space. Panoramic view monitor will help.',
+                'notif-3': 'You\'ve been driving in the city. Eco mode can improve fuel efficiency.',
+                'notif-4': 'Frequent braking detected. Paddle shift can assist with deceleration.',
+                'notif-5': 'Time to clean the air conditioning filter.',
+                'notif-6': 'You\'ve been driving for a long time. We recommend taking a break nearby.',
+                // Status screen
+                'status-title': 'Your Relationship with Your Vehicle',
+                'status-level-1': 'Nice to Meet You',
+                'status-level-2': 'Getting Acquainted',
+                'status-level-3': 'Reliable Partner',
+                'status-level-4': 'Best Buddy',
+                'status-next-level': 'To next level:',
+                'status-hint-title': 'Tips for Next Level',
+                'status-hint-1': 'Try recommended features',
+                'status-hint-2': 'Perform regular maintenance',
+                'status-hint-3': 'Improve driving data',
+                'status-drive-title': 'Driving Data',
+                'status-total-distance': 'Total Distance',
+                'status-monthly-distance': 'Monthly Distance',
+                'status-avg-fuel': 'Avg Fuel Economy',
+                'status-monthly-goal': 'Monthly goal achieved!',
+                'status-feature-title': 'Feature Utilization',
+                'status-features-used': 'Features Used',
+                'status-recent-features': 'Recently used features:',
+                'status-feature-seat': 'Seat Heater',
+                'status-feature-panoramic': 'Panoramic View Monitor',
+                'status-feature-eco': 'Eco Mode',
+                'status-new-feature': 'Using new features',
+                'status-maintenance-title': 'Maintenance Status',
+                'status-last-check': 'Last Inspection',
+                'status-next-check': 'Next Inspection',
+                'status-maintenance-rate': 'Maintenance Compliance',
+                'status-proper-maintenance': 'Proper maintenance being performed',
+                'status-level-list-title': 'Relationship Level List',
+                'status-level-4-desc': 'Master your vehicle and build the best relationship',
+                'status-level-3-desc': 'Utilize many features and understand your vehicle',
+                'status-level-2-desc': 'Starting to use features and getting to know your vehicle',
+                'status-level-1-desc': 'Still learning about your vehicle',
+                'status-current': 'Current',
+                'status-achieved': 'Achieved',
+                'status-locked': '🔒',
+                // Alerts
+                'alert-parking': 'Narrow parking space.<br>Panoramic view monitor will help you feel safe.',
+                'alert-btn-howto': 'How to Use',
+                'alert-filter': 'Time to clean your air conditioning filter.',
+                'alert-btn-filter': 'How to Clean',
+                'alert-ecomode': 'You\'ve been driving in the city. Eco mode can improve fuel efficiency.',
+                'alert-btn-ecomode': 'How to Set',
+                'alert-highbeam': 'Driving at night. Turning on auto high beam is safer.',
+                'alert-btn-highbeam': 'How to Set',
+                'alert-rest': 'You\'ve been driving for a long time.<br>We recommend taking a break nearby.',
+                'alert-btn-rest': 'Set destination to ABC PA 2km ahead',
+                'alert-paddle': 'Frequent braking detected. Paddle shift can assist with deceleration.',
+                'alert-btn-paddle': 'How to Use'
+            }
+        };
+
+        // ヘルパー関数：翻訳テキストを取得
+        function t(key) {
+            return (translations[currentLang] && translations[currentLang][key]) || (translations.ja && translations.ja[key]) || key;
+        }
+
+        function applyTranslations() {
+            var t = translations[currentLang] || translations.ja;
+            
+            // data-i18n 属性を持つ要素
+            document.querySelectorAll('[data-i18n]').forEach(function(el) {
+                var key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+            
+            // data-i18n-html 属性を持つ要素（HTML含む）
+            document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+                var key = el.getAttribute('data-i18n-html');
+                if (t[key]) el.innerHTML = t[key];
+            });
+            
+            // placeholder 属性
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+                var key = el.getAttribute('data-i18n-placeholder');
+                if (t[key]) el.placeholder = t[key];
+            });
+            
+            // title 属性の更新
+            document.title = t['app-title'] || 'DIGITAL OM';
+            
+            // 動的コンテンツを再生成
+            if (typeof displayRandomAlert === 'function') {
+                displayRandomAlert();
+            }
+        }
+
+        // file:// 等でエラーが出ても表示を復元する
+        window.onerror = function() {
+            try {
+                var t = document.getElementById('alertCardTitle');
+                if (t) t.innerHTML = '<span>\u26a0\ufe0f</span> 今すぐ確認';
+                var d = document.getElementById('defaultContent');
+                if (d) d.classList.remove('hidden');
+            } catch (e) {}
+            return false;
+        };
+
+        // OEMダッシュボード連携用統計（localStorage: doi_oem_dashboard_stats）
+        var OEM_STATS_KEY = 'doi_oem_dashboard_stats';
+        function getDefaultOemStats() {
+            return {
+                totalQuestionsEnduser: 25000,
+                totalQuestionsStaff: 3340,
+                answerCorrectEnduser: 23000,
+                answerCorrectStaff: 3080,
+                searchTopics: {
+                    'Bluetooth接続の設定方法': { enduser: 2000, staff: 340 },
+                    'エアコンの使い方': { enduser: 1600, staff: 290 },
+                    'ワイパーの操作方法': { enduser: 1300, staff: 260 },
+                    'クルーズコントロールの設定': { enduser: 1000, staff: 230 },
+                    'タイヤ空気圧の確認方法': { enduser: 800, staff: 180 },
+                    '警告灯が点灯': { enduser: 500, staff: 100 }
+                },
+                proactiveSent: 8340,
+                proactiveViewed: 3753,
+                featureUtilizationUp: 15,
+                activeUsers: 12450
+            };
+        }
+        function getOemStats() {
+            try {
+                var raw = localStorage.getItem(OEM_STATS_KEY);
+                if (!raw) return getDefaultOemStats();
+                var s = JSON.parse(raw);
+                var def = getDefaultOemStats();
+                if (!s.searchTopics) s.searchTopics = def.searchTopics;
+                return s;
+            } catch (e) { return getDefaultOemStats(); }
+        }
+        function setOemStats(s) {
+            try {
+                localStorage.setItem(OEM_STATS_KEY, JSON.stringify(s));
+                try { (new BroadcastChannel('doi_oem_stats_broadcast')).postMessage('update'); } catch (e) {}
+            } catch (e) {}
+        }
+        function mapQueryToTopic(q) {
+            var t = (q || '').toLowerCase();
+            if (t.indexOf('bluetooth') >= 0 || t.indexOf('ブルートゥース') >= 0) return 'Bluetooth接続の設定方法';
+            if (t.indexOf('エアコン') >= 0 || t.indexOf('冷えない') >= 0) return 'エアコンの使い方';
+            if (t.indexOf('ワイパー') >= 0) return 'ワイパーの操作方法';
+            if (t.indexOf('クルーズ') >= 0) return 'クルーズコントロールの設定';
+            if (t.indexOf('タイヤ') >= 0 || t.indexOf('空気圧') >= 0) return 'タイヤ空気圧の確認方法';
+            if (t.indexOf('警告灯') >= 0 || t.indexOf('警告灯が付いた') >= 0) return '警告灯が点灯';
+            if (t.indexOf('ドア') >= 0 || t.indexOf('開かない') >= 0) return 'ドアが開かない';
+            return 'その他';
+        }
+        function recordOemQuestion(query, source) {
+            var s = getOemStats();
+            if (source === 'enduser') {
+                s.totalQuestionsEnduser = (s.totalQuestionsEnduser || 0) + 1;
+                s.answerCorrectEnduser = (s.answerCorrectEnduser || 0) + Math.random() < 0.92 ? 1 : 0;
+            } else {
+                s.totalQuestionsStaff = (s.totalQuestionsStaff || 0) + 1;
+                s.answerCorrectStaff = (s.answerCorrectStaff || 0) + Math.random() < 0.92 ? 1 : 0;
+            }
+            var topic = mapQueryToTopic(query);
+            if (!s.searchTopics[topic]) s.searchTopics[topic] = { enduser: 0, staff: 0 };
+            if (source === 'enduser') s.searchTopics[topic].enduser = (s.searchTopics[topic].enduser || 0) + 1;
+            else s.searchTopics[topic].staff = (s.searchTopics[topic].staff || 0) + 1;
+            setOemStats(s);
+        }
+        function recordOemProactiveView() {
+            var s = getOemStats();
+            s.proactiveViewed = (s.proactiveViewed || 0) + 1;
+            setOemStats(s);
+        }
+        function recordOemProactiveSent() {
+            var s = getOemStats();
+            s.proactiveSent = (s.proactiveSent || 0) + 1;
+            setOemStats(s);
+        }
+
+        // ログイン・車種選択フロー（モック）
+        var selectedVehicle = null;
+        var VEHICLE_IMAGES = { G: '../docs/mockups/グレーSUV_背景黒.png', B: '../docs/mockups/ブルーセダン.png' };
+        function showScreen(name) {
+            var login = document.getElementById('loginScreen');
+            var vehicle = document.getElementById('vehicleSelectScreen');
+            var settings = document.getElementById('settingsScreen');
+            var home = document.getElementById('homeContent');
+            var tabBar = document.getElementById('mainTabBar');
+            var headerTitle = document.getElementById('headerTitle');
+            var headerBack = document.getElementById('headerBackBtn');
+            var headerSettings = document.getElementById('headerSettingsBtn');
+            if (login) login.classList.toggle('active', name === 'login');
+            if (vehicle) vehicle.classList.toggle('active', name === 'vehicle');
+            if (settings) settings.classList.toggle('active', name === 'settings');
+            if (home) home.style.display = name === 'home' ? 'block' : 'none';
+            if (tabBar) tabBar.style.display = name === 'home' ? 'flex' : 'none';
+            if (headerTitle) headerTitle.textContent = (name === 'settings' ? '設定' : 'DIGITAL OM');
+            if (headerBack) headerBack.style.display = (name === 'settings' ? 'inline' : 'none');
+            if (headerSettings) headerSettings.style.display = (name === 'home' ? 'inline' : 'none');
+            if (name === 'settings') closeLanguageSettings();
+        }
+        function handleLogin(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            showScreen('vehicle');
+            document.getElementById('vehicleModelStep').style.display = 'block';
+            document.getElementById('vehicleYearStep').style.display = 'none';
+            document.querySelectorAll('.vehicle-model-card').forEach(function(el) { el.classList.remove('selected'); });
+        }
+        function selectModel(modelId) {
+            document.querySelectorAll('.vehicle-model-card').forEach(function(el) {
+                el.classList.toggle('selected', el.getAttribute('data-model') === modelId);
+            });
+            document.getElementById('vehicleModelStep').style.display = 'none';
+            document.getElementById('vehicleYearStep').style.display = 'block';
+            selectedVehicle = { model: modelId, imageSrc: VEHICLE_IMAGES[modelId] || VEHICLE_IMAGES.G };
+        }
+        function selectYear(yearId) {
+            if (!selectedVehicle) return;
+            selectedVehicle.year = yearId;
+            var img = document.getElementById('homeVehicleImage');
+            if (img && selectedVehicle.imageSrc) img.src = selectedVehicle.imageSrc;
+            showScreen('home');
+        }
+
+        function openLanguageSettings() {
+            document.querySelector('.settings-menu').style.display = 'none';
+            document.getElementById('languageSelectPanel').style.display = 'block';
+        }
+        function closeLanguageSettings() {
+            document.getElementById('languageSelectPanel').style.display = 'none';
+            var menu = document.querySelector('.settings-menu');
+            if (menu) menu.style.display = 'flex';
+        }
+        function selectLanguage(lang) {
+            document.querySelectorAll('.language-option').forEach(function(el) {
+                el.classList.toggle('selected', el.getAttribute('data-lang') === lang);
+            });
+            // 言語切り替え実装
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            applyTranslations();
+            localStorage.setItem('preferred_language', lang);
+        }
+        function goToVehicleSelect() {
+            document.getElementById('vehicleModelStep').style.display = 'block';
+            document.getElementById('vehicleYearStep').style.display = 'none';
+            document.querySelectorAll('.vehicle-model-card').forEach(function(el) { el.classList.remove('selected'); });
+            showScreen('vehicle');
+        }
+
         // 「今すぐ確認」のランダムメッセージ
-        const alertMessages = [
+        var alertMessages = [
             {
                 id: 'highbeam',
-                text: '夜間走行中です。オートハイビームをオンにすると安全です。',
-                button: '設定方法を見る',
+                textKey: 'alert-highbeam',
+                buttonKey: 'alert-btn-highbeam',
                 detail: {
                     title: 'オートハイビームの設定方法',
                     content: `
@@ -598,8 +1202,8 @@
             },
             {
                 id: 'rest',
-                text: '長時間運転が続いています。<br>近くで休憩を取ることをおすすめします。',
-                button: '2km先のABC PAへ目的地を設定する',
+                textKey: 'alert-rest',
+                buttonKey: 'alert-btn-rest',
                 detail: {
                     title: '休憩スポットへのご案内',
                     content: `
@@ -623,8 +1227,8 @@
             },
             {
                 id: 'panoramic',
-                text: '狭い駐車場です。<br>パノラミックビューモニターを使うと安心です。',
-                button: '使用方法を見る',
+                textKey: 'alert-parking',
+                buttonKey: 'alert-btn-howto',
                 detail: {
                     title: 'パノラミックビューモニターの使用方法',
                     content: `
@@ -658,8 +1262,8 @@
             },
             {
                 id: 'ecomode',
-                text: '市街地走行が続いています。エコモードを使うと燃費が向上します。',
-                button: '設定方法を見る',
+                textKey: 'alert-ecomode',
+                buttonKey: 'alert-btn-ecomode',
                 detail: {
                     title: 'エコモードの設定方法',
                     content: `
@@ -692,8 +1296,8 @@
             },
             {
                 id: 'paddle',
-                text: 'ブレーキ操作が増えています。パドルシフトで減速時の操作をサポートできます。',
-                button: '使用方法を見る',
+                textKey: 'alert-paddle',
+                buttonKey: 'alert-btn-paddle',
                 detail: {
                     title: 'パドルシフトの使用方法',
                     content: `
@@ -732,8 +1336,8 @@
             },
             {
                 id: 'filter',
-                text: 'そろそろエアコンフィルターの清掃をしましょう。',
-                button: '清掃方法を見る',
+                textKey: 'alert-filter',
+                buttonKey: 'alert-btn-filter',
                 detail: {
                     title: 'エアコンフィルターの清掃方法',
                     content: `
@@ -777,15 +1381,19 @@
 
         // ランダムなアラートメッセージを表示
         function displayRandomAlert() {
+            var alertTitle = document.getElementById('alertCardTitle');
+            if (!alertTitle) alertTitle = document.getElementById('alertCard') && document.getElementById('alertCard').querySelector('.card-title');
+            if (alertTitle) alertTitle.innerHTML = '<span>⚠️</span> ' + t('alert-title');
             const randomIndex = Math.floor(Math.random() * alertMessages.length);
             const message = alertMessages[randomIndex];
             currentAlertId = message.id;
             const alertContent = document.getElementById('alertContent');
-            
             if (alertContent) {
+                var messageText = message.textKey ? t(message.textKey) : message.text;
+                var buttonText = message.buttonKey ? t(message.buttonKey) : message.button;
                 alertContent.innerHTML = `
-                    ${message.text}
-                    <div class="button" onclick="showAlertDetail('${message.id}')">${message.button}</div>
+                    ${messageText}
+                    <div class="button" onclick="showAlertDetail('${message.id}')">${buttonText}</div>
                 `;
             }
         }
@@ -945,6 +1553,7 @@
 
         // 次のおすすめ機能を表示
         function showNextRecommendation() {
+            try { recordOemProactiveView(); } catch (e) {}
             const recommendationContent = document.getElementById('recommendationContent');
             if (recommendationContent) {
                 recommendationContent.innerHTML = `
@@ -967,6 +1576,7 @@
 
         // サンキューメッセージを表示
         function showThankYouMessage() {
+            try { recordOemProactiveView(); } catch (e) {}
             const recommendationContent = document.getElementById('recommendationContent');
             if (recommendationContent) {
                 recommendationContent.innerHTML = `
@@ -984,6 +1594,7 @@
 
         // おすすめ機能のフィードバック画面を表示
         function showRecommendationFeedback() {
+            try { recordOemProactiveView(); } catch (e) {}
             const recommendationContent = document.getElementById('recommendationContent');
             if (recommendationContent) {
                 recommendationContent.innerHTML = `
@@ -1027,19 +1638,20 @@
         }
 
         // タブ切り替え
-        function switchTab(tabName) {
+        function switchTab(tabName, evt) {
             const allTabs = document.querySelectorAll('.tab-item');
             allTabs.forEach(tab => tab.classList.remove('active'));
-            
-            event.currentTarget.classList.add('active');
-            
+            const target = (evt && evt.currentTarget) || document.querySelector(`.tab-item[data-tab="${tabName}"]`);
+            if (target) target.classList.add('active');
+
             const resultDiv = document.getElementById('searchResult');
             const defaultContent = document.getElementById('defaultContent');
-            
+
             console.log(`${tabName} タブに切り替えました`);
-            
+
             if (tabName === 'home') {
                 resetSearch();
+                displayRandomAlert();
             } else if (tabName === 'chat') {
                 showChatScreen();
             } else if (tabName === 'notification') {
@@ -1136,6 +1748,693 @@
             }
         };
 
+        // ========== T1-T6 フェーズ1: モック知識ベース・状態・エンジン ==========
+        const T16_KB_DOOR_NOT_OPEN = {
+            event_id: 'DOOR_NOT_OPEN',
+            cause_candidates: [
+                { cause_id: 'KEY_BATTERY_EMPTY', description: 'キー電池切れ', required_observations: ['key_indicator_light'], risk_level: 'low', action_group: 'battery_replace' },
+                { cause_id: 'KEY_FAULT', description: 'キー故障', required_observations: ['key_indicator_light'], risk_level: 'low', action_group: 'dealer' },
+                { cause_id: 'RADIO_INTERFERENCE', description: '電波干渉', required_observations: ['key_indicator_light', 'location'], risk_level: 'low', action_group: 'retry_or_relocate' },
+                { cause_id: 'VEHICLE_12V_LOW', description: '車両12V低下', required_observations: ['key_indicator_light', 'vehicle_12v'], risk_level: 'low', action_group: 'jump_start' },
+                { cause_id: 'LOCK_ACTUATOR_FAULT', description: 'ドアロック故障', required_observations: ['other_key_result'], risk_level: 'medium', action_group: 'dealer' },
+                { cause_id: 'USER_OPERATION', description: '操作条件不一致', required_observations: ['key_indicator_light', 'operation_condition'], risk_level: 'low', action_group: 'guide' }
+            ],
+            t3_question: {
+                question_id: 'Q_DOOR_001',
+                question_text: 'スマートキーのボタンを押すとランプは点きますか？',
+                answer_type: 'yes_no',
+                expected_split: { yes: ['RADIO_INTERFERENCE', 'VEHICLE_12V_LOW', 'USER_OPERATION', 'LOCK_ACTUATOR_FAULT'], no: ['KEY_BATTERY_EMPTY', 'KEY_FAULT'] },
+                priority: 1
+            },
+            action_cards_by_cause: {
+                KEY_BATTERY_EMPTY: [
+                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], duration: '約30秒', required_items: [], risk_notice: null, alternative: '開かない場合はロードサービスへ', is_immediate: true },
+                    { action_id: 'A_DOOR_002', guide_id: 'GUIDE-005', title: '恒久対応：電池交換', steps: ['CR2032（またはCR2450）を用意', 'キーを開けて電池を交換', '動作確認'], duration: '約3分', required_items: ['CR2032 または CR2450（ボタン電池）'], risk_notice: '部品破損の恐れがあるため、販売店での交換を推奨します。', alternative: '電池購入先の案内へ', is_immediate: false },
+                    { action_id: 'A_DOOR_003', guide_id: 'GUIDE-006', title: '不安なら：販売店・ロードサービス', steps: ['位置共有・症状要約付きで連絡'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ],
+                RADIO_INTERFERENCE: [
+                    { action_id: 'A_DOOR_004', guide_id: 'GUIDE-008', title: 'キーをドアハンドルに近づけて再試行', steps: ['スマートキーをドアハンドルにできるだけ近づけて操作', '数メートル移動して再試行'], duration: '約1分', required_items: [], risk_notice: null, alternative: '機械キーで開ける', is_immediate: true },
+                    { action_id: 'A_DOOR_005', guide_id: null, title: '予備のスマートキーで試す', steps: ['予備のスマートキーがあれば、同じようにドアの解錠を試す'], duration: '約1分', required_items: [], risk_notice: null, alternative: '予備キーがない場合は機械キーで開ける', is_immediate: true },
+                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], duration: '約30秒', required_items: [], risk_notice: null, alternative: 'ロードサービスへ', is_immediate: true }
+                ],
+                LOCK_ACTUATOR_FAULT: [
+                    { action_id: 'A_DOOR_005', guide_id: null, title: '予備のスマートキーで試す', steps: ['予備のスマートキーがあれば、同じようにドアの解錠を試す'], duration: '約1分', required_items: [], risk_notice: null, alternative: '予備キーがない場合は機械キーで開ける', is_immediate: true },
+                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], duration: '約30秒', required_items: [], risk_notice: null, alternative: '開かない場合はロードサービスへ', is_immediate: true },
+                    { action_id: 'A_DOOR_003', guide_id: 'GUIDE-006', title: '販売店・ロードサービスに連絡', steps: ['位置共有・症状要約付きで連絡'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ],
+                _default: [
+                    { action_id: 'A_DOOR_005', guide_id: null, title: '予備のスマートキーで試す', steps: ['予備のスマートキーがあれば、同じようにドアの解錠を試す'], duration: '約1分', required_items: [], risk_notice: null, alternative: '予備キーがない場合は機械キーで開ける', is_immediate: true },
+                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], duration: '約30秒', required_items: [], risk_notice: null, alternative: '開かない場合はロードサービスへ', is_immediate: true },
+                    { action_id: 'A_DOOR_003', guide_id: 'GUIDE-006', title: '販売店・ロードサービス', steps: ['位置共有・症状要約付きで連絡'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ]
+            },
+            escalation_option: { dealer: '販売店予約', road_service: 'ロードサービス' }
+        };
+
+        // 警告灯アイコン用SVG（取説イメージに準拠: https://manual.toyota.jp/aqua/2509/hev/ja_JP/contents/vhch07se020402.php ）
+        var WARNING_LIGHT_ICONS = {
+            brake_red: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='none' stroke='%23e53935' stroke-width='3'/%3E%3Ctext x='32' y='42' text-anchor='middle' fill='%23e53935' font-size='32' font-weight='bold'%3E!%3C/text%3E%3Cpath d='M14 32 Q32 10 50 32' fill='none' stroke='%23e53935' stroke-width='2' stroke-dasharray='4 3'/%3E%3Cpath d='M14 32 Q32 54 50 32' fill='none' stroke='%23e53935' stroke-width='2' stroke-dasharray='4 3'/%3E%3C/svg%3E",
+            brake_yellow: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='none' stroke='%23ffa726' stroke-width='3'/%3E%3Ctext x='32' y='42' text-anchor='middle' fill='%23ffa726' font-size='32' font-weight='bold'%3E!%3C/text%3E%3Cpath d='M14 32 Q32 10 50 32' fill='none' stroke='%23ffa726' stroke-width='2' stroke-dasharray='4 3'/%3E%3Cpath d='M14 32 Q32 54 50 32' fill='none' stroke='%23ffa726' stroke-width='2' stroke-dasharray='4 3'/%3E%3C/svg%3E",
+            coolant: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='26' y='8' width='12' height='40' rx='4' fill='none' stroke='%23e53935' stroke-width='2'/%3E%3Ccircle cx='32' cy='52' r='6' fill='none' stroke='%23e53935' stroke-width='2'/%3E%3Cpath d='M32 20 L32 40' stroke='%23e53935' stroke-width='2'/%3E%3C/svg%3E",
+            oil: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cellipse cx='32' cy='48' rx='20' ry='6' fill='none' stroke='%23e53935' stroke-width='2'/%3E%3Cpath d='M20 48 L20 24 L32 14 L44 24 L44 48' fill='none' stroke='%23e53935' stroke-width='2'/%3E%3Ctext x='32' y='36' text-anchor='middle' fill='%23e53935' font-size='14'%3Eoil%3C/text%3E%3C/svg%3E",
+            charge: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 8 L20 28 L30 28 L22 56 L44 32 L32 32 Z' fill='none' stroke='%23e53935' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E",
+            engine: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='12' y='24' width='40' height='24' rx='2' fill='none' stroke='%23ffa726' stroke-width='2'/%3E%3Cpath d='M28 24 L28 16 L36 16 L36 24' fill='none' stroke='%23ffa726' stroke-width='2'/%3E%3Cpath d='M20 32 L44 32' stroke='%23ffa726' stroke-width='2'/%3E%3C/svg%3E",
+            tyre: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='24' fill='none' stroke='%23ffa726' stroke-width='2'/%3E%3Ctext x='32' y='40' text-anchor='middle' fill='%23ffa726' font-size='28' font-weight='bold'%3E!%3C/text%3E%3C/svg%3E",
+            abs: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='32' y='38' text-anchor='middle' fill='%23ffa726' font-size='18' font-weight='bold'%3EABS%3C/text%3E%3C/svg%3E",
+            other: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='26' fill='none' stroke='%23888' stroke-width='2'/%3E%3Ctext x='32' y='42' text-anchor='middle' fill='%23888' font-size='32' font-weight='bold'%3E!%3C/text%3E%3C/svg%3E"
+        };
+
+        const T16_KB_WARNING_LIGHT = {
+            event_id: 'WARNING_LIGHT',
+            cause_candidates: [
+                { cause_id: 'ENGINE_WARNING', description: 'エンジン警告灯（システム異常）', required_observations: ['lamp_color'], risk_level: 'medium', action_group: 'dealer' },
+                { cause_id: 'ENGINE_OIL', description: 'エンジンオイル', required_observations: ['lamp_color'], risk_level: 'medium', action_group: 'check_oil' },
+                { cause_id: 'BRAKE_SYSTEM', description: 'ブレーキ系統', required_observations: ['lamp_color'], risk_level: 'high', action_group: 'dealer' },
+                { cause_id: 'ENGINE_COOLANT', description: 'エンジン・冷却系', required_observations: ['lamp_color'], risk_level: 'high', action_group: 'dealer' },
+                { cause_id: 'BATTERY_CHARGE', description: 'バッテリー充電', required_observations: ['lamp_color'], risk_level: 'medium', action_group: 'jump_start' },
+                { cause_id: 'TYRE_PRESSURE', description: 'タイヤ空気圧', required_observations: ['lamp_color'], risk_level: 'low', action_group: 'tyre_check' },
+                { cause_id: 'OTHER_WARNING', description: 'その他警告', required_observations: ['lamp_color'], risk_level: 'medium', action_group: 'dealer' }
+            ],
+            warning_light_options: [
+                { option_id: 'BRAKE_RED', label: 'ブレーキ警告灯（赤）', cause_id: 'BRAKE_SYSTEM', icon: 'brake_red' },
+                { option_id: 'BRAKE_YELLOW', label: 'ブレーキ警告灯（黄）', cause_id: 'BRAKE_SYSTEM', icon: 'brake_yellow' },
+                { option_id: 'COOLANT', label: '高水温警告灯', cause_id: 'ENGINE_COOLANT', icon: 'coolant' },
+                { option_id: 'HYBRID_OVERHEAT', label: 'ハイブリッドシステム過熱警告灯', cause_id: 'ENGINE_COOLANT', icon: 'coolant' },
+                { option_id: 'CHARGE', label: '充電警告灯', cause_id: 'BATTERY_CHARGE', icon: 'charge' },
+                { option_id: 'OIL', label: '油圧警告灯', cause_id: 'ENGINE_OIL', icon: 'oil' },
+                { option_id: 'ENGINE', label: 'エンジン警告灯', cause_id: 'ENGINE_WARNING', icon: 'engine' },
+                { option_id: 'ABS', label: 'ABS＆ブレーキアシスト警告灯', cause_id: 'BRAKE_SYSTEM', icon: 'abs' },
+                { option_id: 'TYRE', label: 'タイヤ空気圧警告灯', cause_id: 'TYRE_PRESSURE', icon: 'tyre' },
+                { option_id: 'OTHER', label: 'その他・わからない', cause_id: 'OTHER_WARNING', icon: 'other' }
+            ],
+            t3_question: {
+                question_id: 'Q_WARN_001',
+                question_text: '点灯している警告灯を選んでください。<br><a href="https://manual.toyota.jp/aqua/2509/hev/ja_JP/contents/vhch07se020402.php" target="_blank" rel="noopener" style="color:#BF00FF; font-size:0.9em;">※ 取説「警告灯がついたときは」で詳細を確認できます</a>',
+                answer_type: 'single_choice',
+                options_ref: 'warning_light_options',
+                priority: 1
+            },
+            action_cards_by_cause: {
+                ENGINE_WARNING: [
+                    { action_id: 'A_WARN_ENG', guide_id: null, title: 'エンジン警告灯が点灯したとき（取説ch07準拠）', steps: ['マルチインフォメーションディスプレイに表示される警告メッセージを確認する', '表示内容に従って対処する', '点灯したままのときはシステム異常のおそれがあるため、トヨタ販売店で点検を受けてください'], duration: null, required_items: [], risk_notice: '作動確認のためパワースイッチをONにすると点灯し、数秒後またはハイブリッドシステム始動で消灯するのが正常です。点灯しない場合も点検を。', alternative: '販売店へ', is_immediate: true },
+                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店で点検', steps: ['エンジン警告灯の点灯として点検を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ],
+                BRAKE_SYSTEM: [
+                    { action_id: 'A_WARN_001', guide_id: null, title: '安全な場所に停車し、すぐに点検を', steps: ['速やかに安全な場所へ停車', 'エンジンを止める', '販売店・ロードサービスに連絡'], duration: null, required_items: [], risk_notice: 'ブレーキ系統の警告のため、走行は避けてください。', alternative: null, is_immediate: true },
+                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ロードサービスに連絡', steps: ['位置・症状を伝えて引き取り・点検を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ],
+                ENGINE_COOLANT: [
+                    { action_id: 'A_WARN_002', guide_id: null, title: 'エンジンを止めて冷却を確認', steps: ['安全な場所に停車', 'エンジンを止めて冷ます', '冷却水の量を確認（取説参照）'], duration: '約10分以上', required_items: [], risk_notice: '無理に走行するとエンジン損傷の恐れがあります。', alternative: 'ロードサービスへ', is_immediate: true },
+                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ロードサービスに連絡', steps: ['位置・症状を伝えて点検を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ],
+                ENGINE_OIL: [
+                    { action_id: 'A_WARN_004', guide_id: null, title: 'オイル量を確認', steps: ['水平な場所に停車する', 'エンジンを暖機した後、ハイブリッドシステムを停止する', '5分以上経過してから、レベルゲージ（オイル量計測棒）でオイル量を確認する'], duration: '約5分', required_items: [], risk_notice: 'オイル不足の場合は走行を控え、補充または点検を。', alternative: '販売店へ', is_immediate: true },
+                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店で点検', steps: ['オイル交換・点検を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ],
+                TYRE_PRESSURE: [
+                    { action_id: 'A_WARN_005', guide_id: null, title: 'タイヤ空気圧を確認・補充', steps: ['安全な場所に停車', 'タイヤ空気圧を計測し、規定値に合わせる'], duration: '約15分', required_items: ['空気圧計'], risk_notice: null, alternative: 'ガソリンスタンドや販売店で補充', is_immediate: true },
+                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ガソリンスタンドで確認', steps: ['空気圧チェック・補充を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ],
+                BATTERY_CHARGE: [
+                    { action_id: 'A_WARN_006', guide_id: null, title: 'バッテリー充電状態を確認', steps: ['エンジンがかかる場合はしばらく走行して充電', 'かからない場合はロードサービスへ'], duration: null, required_items: [], risk_notice: null, alternative: 'ロードサービス', is_immediate: true },
+                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ロードサービスに連絡', steps: ['バッテリー点検・交換を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ],
+                _default: [
+                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ロードサービスに連絡', steps: ['警告灯の種類・症状を伝えて点検を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ]
+            },
+            escalation_option: { dealer: '販売店予約', road_service: 'ロードサービス' }
+        };
+
+        const T16_KB_BLUETOOTH = {
+            event_id: 'BLUETOOTH',
+            cause_candidates: [
+                { cause_id: 'NOT_PAIRED', description: 'ペアリング未設定', required_observations: ['was_connected_before'], risk_level: 'low', action_group: 'pairing' },
+                { cause_id: 'PAIRING_LOST', description: 'ペアリングが解除された', required_observations: ['was_connected_before'], risk_level: 'low', action_group: 're_pair' },
+                { cause_id: 'DEVICE_BUSY', description: '他機器と接続中', required_observations: ['was_connected_before'], risk_level: 'low', action_group: 'disconnect_other' },
+                { cause_id: 'AUDIO_SETTING', description: 'オーディオ設定・ソース', required_observations: ['was_connected_before'], risk_level: 'low', action_group: 'guide' },
+                { cause_id: 'HARDWARE_FAULT', description: '機材の不調', required_observations: ['was_connected_before'], risk_level: 'medium', action_group: 'dealer' }
+            ],
+            t3_question: {
+                question_id: 'Q_BT_001',
+                question_text: '以前はこの機種で接続できていましたか？',
+                answer_type: 'yes_no',
+                expected_split: { yes: ['PAIRING_LOST', 'DEVICE_BUSY', 'AUDIO_SETTING', 'HARDWARE_FAULT'], no: ['NOT_PAIRED'] },
+                label_yes: 'はい、以前は接続できた',
+                label_no: 'いいえ、初めて接続する',
+                priority: 1
+            },
+            action_cards_by_cause: {
+                NOT_PAIRED: [
+                    { action_id: 'A_BT_001', guide_id: null, title: 'ペアリング手順を実行', steps: ['車載オーディオでBluetooth設定を開く', 'スマホのBluetoothをONにし、車の名前を選択', '画面の指示に従ってペアリング'], duration: '約2分', required_items: [], risk_notice: null, alternative: '取説のBluetooth項目を参照', is_immediate: true },
+                    { action_id: 'A_BT_002', guide_id: null, title: '取説でペアリング手順を確認', steps: ['車種別取説の「Bluetooth」「オーディオ」の項目を開く'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ],
+                PAIRING_LOST: [
+                    { action_id: 'A_BT_003', guide_id: null, title: 'ペアリングをやり直す', steps: ['車載側で登録機種から当機を削除', 'スマホ側でも車を削除', '再度ペアリング手順を実行'], duration: '約3分', required_items: [], risk_notice: null, alternative: '販売店で設定確認', is_immediate: true },
+                    { action_id: 'A_BT_001', guide_id: null, title: 'ペアリング手順を実行', steps: ['車載オーディオでBluetooth設定を開く', 'スマホのBluetoothをONにし、車の名前を選択'], duration: '約2分', required_items: [], risk_notice: null, alternative: null, is_immediate: true }
+                ],
+                DEVICE_BUSY: [
+                    { action_id: 'A_BT_004', guide_id: null, title: '他機器の接続を解除', steps: ['車載オーディオで接続中の機種を切断', 'スマホのBluetoothで他機器をオフ', '再度この機種で接続'], duration: '約1分', required_items: [], risk_notice: null, alternative: null, is_immediate: true },
+                    { action_id: 'A_BT_003', guide_id: null, title: 'ペアリングをやり直す', steps: ['登録削除後に再ペアリング'], duration: '約3分', required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ],
+                AUDIO_SETTING: [
+                    { action_id: 'A_BT_005', guide_id: null, title: 'オーディオソースをBluetoothに切り替え', steps: ['オーディオ画面でソースを「Bluetooth」に選択', 'スマホで音楽再生や通話を試す'], duration: '約1分', required_items: [], risk_notice: null, alternative: null, is_immediate: true },
+                    { action_id: 'A_BT_002', guide_id: null, title: '取説で設定を確認', steps: ['オーディオ・Bluetoothの項目を参照'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ],
+                HARDWARE_FAULT: [
+                    { action_id: 'A_BT_003', guide_id: null, title: 'ペアリングをやり直して試す', steps: ['削除後に再ペアリング'], duration: '約3分', required_items: [], risk_notice: null, alternative: '改善しない場合は販売店へ', is_immediate: true },
+                    { action_id: 'A_BT_006', guide_id: null, title: '販売店で点検', steps: ['オーディオ・Bluetoothの不調として点検を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ],
+                _default: [
+                    { action_id: 'A_BT_001', guide_id: null, title: 'ペアリング手順を実行', steps: ['車載オーディオとスマホでBluetooth設定から接続'], duration: '約2分', required_items: [], risk_notice: null, alternative: null, is_immediate: true },
+                    { action_id: 'A_BT_002', guide_id: null, title: '取説で確認', steps: ['Bluetooth・オーディオの項目を参照'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ]
+            },
+            escalation_option: { dealer: '販売店予約', road_service: null }
+        };
+
+        const T16_KB_BY_EVENT = {
+            DOOR_NOT_OPEN: T16_KB_DOOR_NOT_OPEN,
+            WARNING_LIGHT: T16_KB_WARNING_LIGHT,
+            BLUETOOTH: T16_KB_BLUETOOTH
+        };
+
+        let T16State = {
+            t1Output: null,
+            t2Output: null,
+            t3Output: null,
+            observationResult: null,
+            t4Output: null,
+            t5Output: null,
+            lastActionId: null,
+            step: null
+        };
+
+        var T3_SKIP_CONFIDENCE_THRESHOLD = 0.8;
+
+        function runT1(userInput) {
+            const s = (userInput || '').trim();
+            var event_id = null;
+            var subtype = null;
+            var confidence = 0.85;
+            if (/ドアが開かない|スマートキー.*開かない|キー電池切れ|電池切れの表示/i.test(s)) {
+                event_id = 'DOOR_NOT_OPEN';
+                if (/キー電池切れの表示|電池切れの表示|電池が切れ|電池切れ/i.test(s)) {
+                    subtype = 'battery_indicator';
+                    confidence = 0.95;
+                }
+            } else if (/警告灯が点灯|警告灯.*点灯|ランプが点灯|エンジン警告/i.test(s)) {
+                event_id = 'WARNING_LIGHT';
+            } else if (/Bluetooth接続ができない|Bluetooth.*接続|ブルートゥース.*つながらない|ペアリング/i.test(s)) {
+                event_id = 'BLUETOOTH';
+            }
+            if (!event_id) return null;
+            return {
+                event_id: event_id,
+                subtype: subtype,
+                confidence: confidence,
+                urgency: event_id === 'WARNING_LIGHT' ? 0.8 : 0.7,
+                psychological_risk: event_id === 'WARNING_LIGHT' ? 'high' : 'high',
+                context_labels: { time_band: 'day', location_type: 'outside', vehicle_state: 'stopped' },
+                evidence: ['user_selected_symptom']
+            };
+        }
+
+        function runT2(t1Output) {
+            if (!t1Output || !t1Output.event_id) return null;
+            var kb = T16_KB_BY_EVENT[t1Output.event_id];
+            if (!kb) return null;
+            var candidates = kb.cause_candidates;
+            if (t1Output.event_id === 'DOOR_NOT_OPEN' && t1Output.subtype === 'battery_indicator') {
+                candidates = candidates.filter(function(c) { return c.cause_id === 'KEY_BATTERY_EMPTY'; });
+            }
+            return { cause_candidates: candidates };
+        }
+
+        function runT3(t2Output, t1Output) {
+            if (!t2Output || !t2Output.cause_candidates || !t1Output) return null;
+            var kb = T16_KB_BY_EVENT[t1Output.event_id];
+            return kb ? kb.t3_question : null;
+        }
+
+        function runT4(observationAnswer, t2Output, t3Output, evidenceFromFailure, t1Output) {
+            if (!t2Output) return null;
+            if (observationAnswer == null && !t3Output) {
+                var causes = t2Output.cause_candidates || [];
+                var n = causes.length;
+                var ranked = causes.map(function(c) {
+                    return { cause_id: c.cause_id, confidence: n === 1 ? 1.0 : 1 / n, evidence: [] };
+                });
+                return { ranked_causes: ranked, status: 'READY_FOR_ACTION' };
+            }
+            if (!t3Output) return null;
+            if (t3Output.answer_type === 'single_choice' && t1Output && observationAnswer != null) {
+                var kb = T16_KB_BY_EVENT[t1Output.event_id];
+                var opts = kb && kb[t3Output.options_ref];
+                var sel = opts && opts.find(function(o) { return o.option_id === observationAnswer; });
+                if (sel) {
+                    var ranked = [{ cause_id: sel.cause_id, confidence: 0.95, evidence: ['warning_light=' + observationAnswer] }];
+                    return { ranked_causes: ranked, status: 'READY_FOR_ACTION' };
+                }
+            }
+            var split = t3Output.expected_split;
+            if (!split) return null;
+            const isYes = observationAnswer === true || observationAnswer === 'yes' || observationAnswer === 'はい';
+            const favored = isYes ? (split.yes || []) : (split.no || []);
+            const other = isYes ? (split.no || []) : (split.yes || []);
+            const evidenceKey = 'key_indicator_light=' + (isYes ? 'yes' : 'no');
+            var ranked = [];
+            favored.forEach(cid => {
+                ranked.push({ cause_id: cid, confidence: favored.length === 1 ? 0.72 : 0.5, evidence: [evidenceKey] });
+            });
+            if (ranked.length === 0) ranked.push({ cause_id: 'OTHER', confidence: 0.3, evidence: [] });
+            other.forEach(cid => {
+                ranked.push({ cause_id: cid, confidence: 0.15, evidence: [] });
+            });
+            ranked.sort((a, b) => b.confidence - a.confidence);
+            if (evidenceFromFailure && (evidenceFromFailure.action_id === 'A_DOOR_004' || evidenceFromFailure.action_id === 'A_DOOR_005')) {
+                ranked.forEach(function(r) {
+                    if (r.cause_id === 'RADIO_INTERFERENCE') r.confidence *= 0.3;
+                    else if (r.cause_id === 'LOCK_ACTUATOR_FAULT' || r.cause_id === 'VEHICLE_12V_LOW') r.confidence = Math.min(1, (r.confidence || 0.15) + 0.3);
+                });
+                ranked.sort((a, b) => b.confidence - a.confidence);
+            }
+            const top = ranked[0] && ranked[0].confidence || 0;
+            const status = top >= 0.5 ? 'READY_FOR_ACTION' : 'MORE_OBSERVATION';
+            return { ranked_causes: ranked, status };
+        }
+
+        function runT5(t4Output, t1Output) {
+            if (!t1Output) return null;
+            var kb = T16_KB_BY_EVENT[t1Output.event_id];
+            if (!kb) return null;
+            var defCards = (kb.action_cards_by_cause._default || []).slice(0, 3);
+            if (!t4Output || t4Output.status === 'ESCALATE') {
+                return { action_cards: defCards, escalation_option: kb.escalation_option };
+            }
+            const topCause = t4Output.ranked_causes && t4Output.ranked_causes[0] && t4Output.ranked_causes[0].cause_id;
+            const cards = kb.action_cards_by_cause[topCause] || kb.action_cards_by_cause._default;
+            const list = (Array.isArray(cards) ? cards : [cards]).slice(0, 3);
+            return { action_cards: list, escalation_option: kb.escalation_option };
+        }
+
+        function runT6(resolved, actionId, t5Output, t1Output) {
+            var event_id = (t1Output && t1Output.event_id) ? t1Output.event_id : 'DOOR_NOT_OPEN';
+            if (resolved === true) {
+                if (event_id === 'DOOR_NOT_OPEN') {
+                    if (actionId === 'A_DOOR_005') {
+                        return { resolved: true, next_step: 'done_with_next_steps', next_steps_guidance: [{ id: 'battery_replace_guide', label: 'そのキーの電池交換のガイド', type: 'guide' }, { id: 'dealer_inspection', label: '販売店での点検', type: 'guide' }], spare_key_worked: true };
+                    }
+                    var isImmediateOnly = actionId === 'A_DOOR_001' || actionId === 'A_DOOR_004';
+                    if (isImmediateOnly) {
+                        return { resolved: true, next_step: 'done_with_next_steps', next_steps_guidance: [{ id: 'engine_start_guide', label: 'エンジンのかけ方', type: 'guide' }, { id: 'battery_replace_guide', label: '電池交換のガイド', type: 'guide' }] };
+                    }
+                }
+                return { resolved: true, next_step: 'done' };
+            }
+            if (event_id === 'DOOR_NOT_OPEN') {
+                if (actionId === 'A_DOOR_001') {
+                    return { resolved: false, next_step: 'retry_with_t4', evidence_from_failure: { action_id: 'A_DOOR_001', action_result: 'failed', summary: '機械キーで解錠を試したが開かなかった' } };
+                }
+                if (actionId === 'A_DOOR_004') {
+                    return { resolved: false, next_step: 'retry_with_t4', evidence_from_failure: { action_id: 'A_DOOR_004', action_result: 'failed', summary: 'キーをドアハンドルに近づけて再試行したが開かなかった' } };
+                }
+                if (actionId === 'A_DOOR_005') {
+                    return { resolved: false, next_step: 'retry_with_t4', evidence_from_failure: { action_id: 'A_DOOR_005', action_result: 'failed', summary: '予備キーでも開かなかった' } };
+                }
+            }
+            return { resolved: false, next_step: 'escalate', handoff_payload: { event_id: event_id, actions_tried: [actionId || '不明'], result_summary: '試したが改善しなかった。' } };
+        }
+
+        function startT16Flow(userMessage) {
+            const msg = (userMessage || '').trim();
+            if (!msg) return;
+            addTheme001Message('user', msg);
+
+            const t1 = runT1(msg);
+            if (!t1) return;
+            T16State.t1Output = t1;
+            T16State.t2Output = runT2(t1);
+            var t2 = T16State.t2Output;
+            var skipT3 = t2 && t2.cause_candidates && t2.cause_candidates.length === 1 && t1.confidence >= T3_SKIP_CONFIDENCE_THRESHOLD;
+
+            if (skipT3) {
+                T16State.t3Output = null;
+                T16State.observationResult = null;
+                T16State.t4Output = runT4(null, t2, null, undefined, t1);
+                T16State.t5Output = runT5(T16State.t4Output, t1);
+                T16State.step = 't5_actions';
+                var cards = T16State.t5Output.action_cards || [];
+                var card0 = cards[0];
+                if (card0) {
+                    var stepsHtml = '<strong>' + (card0.title || '') + '</strong><br><br>';
+                    if (card0.steps && card0.steps.length) {
+                        stepsHtml += '<strong>手順：</strong><br>';
+                        card0.steps.forEach(function(s, i) { stepsHtml += (i + 1) + '. ' + s + '<br>'; });
+                    }
+                    if (card0.duration) stepsHtml += '<br>⏱ ' + card0.duration + '<br>';
+                    if (card0.required_items && card0.required_items.length) stepsHtml += '必要物: ' + card0.required_items.join(', ') + '<br>';
+                    if (card0.risk_notice) stepsHtml += '<br>⚠️ ' + card0.risk_notice + '<br>';
+                    if (card0.alternative) stepsHtml += '<br>うまくいかない場合: ' + card0.alternative + '<br>';
+                    stepsHtml += '<br>試した結果を教えてください：<br>' +
+                        '<div class="quick-reply-container">' +
+                        '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>うまくいった</span></div>' +
+                        '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>うまくいかなかった</span></div>' +
+                        '</div>';
+                    if (cards.length > 1) {
+                        stepsHtml += '<br><details style="margin-top:10px;"><summary style="cursor:pointer; font-size:0.9em; color:#aaa;">その他の選択肢</summary>';
+                        cards.slice(1).forEach(function(c) {
+                            stepsHtml += '<div class="card" style="margin:6px 0; cursor:pointer; padding:8px;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' + (c.title || '') + '</div>';
+                        });
+                        stepsHtml += '</details>';
+                    }
+                    if (T16State.t5Output.escalation_option) {
+                        stepsHtml += '<div style="margin-top: 10px; font-size: 0.9em; color: #aaa;">販売店・ロードサービスも選択できます</div>';
+                    }
+                    addTheme001Message('ai', stepsHtml);
+                } else {
+                    var introHtml = '次の対処をご案内します。<br><br>';
+                    cards.forEach(function(c) {
+                        introHtml += '<div class="card" style="margin-bottom: 10px; cursor: pointer;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' +
+                            '<div class="card-title">' + (c.title || '') + '</div></div>';
+                    });
+                    addTheme001Message('ai', introHtml);
+                }
+                return;
+            }
+
+            T16State.t3Output = runT3(t2, t1);
+            T16State.step = 't3_question';
+            const q = T16State.t3Output;
+            if (t1.event_id === 'WARNING_LIGHT' && q.answer_type === 'single_choice' && q.options_ref) {
+                var kb = T16_KB_BY_EVENT.WARNING_LIGHT;
+                var opts = kb[q.options_ref] || [];
+                var gridHtml = '<strong>確認</strong><br><br>' + (q.question_text || '') + '<br><br>' +
+                    '<div style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">';
+                opts.forEach(function(o) {
+                    var iconUrl = (typeof WARNING_LIGHT_ICONS !== 'undefined' && WARNING_LIGHT_ICONS[o.icon]) ? WARNING_LIGHT_ICONS[o.icon] : '';
+                    gridHtml += '<div class="card" style="cursor:pointer; margin-bottom:0; padding:10px; text-align:center;" onclick="handleT16T3Answer(\'' + (o.option_id || '') + '\')">' +
+                        (iconUrl ? '<img src="' + iconUrl + '" alt="" style="width:48px; height:48px; margin:0 auto 6px; display:block;">' : '') +
+                        '<span style="font-size:0.85em; color:#e0e0e0;">' + (o.label || o.option_id) + '</span></div>';
+                });
+                gridHtml += '</div>';
+                addTheme001Message('ai', gridHtml);
+                return;
+            }
+            var labelYes = (q && q.label_yes) ? q.label_yes : 'はい';
+            var labelNo = (q && q.label_no) ? q.label_no : 'いいえ';
+            const questionHtml = '<strong>確認</strong><br><br>' +
+                (q.question_text || '') + '<br><br>' +
+                '<div class="quick-reply-container">' +
+                '<div class="quick-reply" onclick="handleT16T3Answer(\'yes\')">💡 <span>' + labelYes + '</span></div>' +
+                '<div class="quick-reply" onclick="handleT16T3Answer(\'no\')">🔴 <span>' + labelNo + '</span></div>' +
+                '</div>';
+            addTheme001Message('ai', questionHtml);
+        }
+
+        function handleT16T3Answer(answerYesNo, optionLabel) {
+            var label;
+            if (optionLabel != null) label = optionLabel;
+            else if (T16State.t1Output && T16State.t1Output.event_id === 'WARNING_LIGHT' && answerYesNo !== 'yes' && answerYesNo !== 'no') {
+                var kb = T16_KB_BY_EVENT.WARNING_LIGHT;
+                var opts = kb.warning_light_options || [];
+                var sel = opts.find(function(o) { return o.option_id === answerYesNo; });
+                label = sel ? sel.label : answerYesNo;
+            } else label = answerYesNo === 'yes' ? 'はい、点きます' : 'いいえ、点きません';
+            addTheme001Message('user', label);
+
+            T16State.observationResult = answerYesNo;
+            T16State.t4Output = runT4(answerYesNo, T16State.t2Output, T16State.t3Output, undefined, T16State.t1Output);
+            T16State.t5Output = runT5(T16State.t4Output, T16State.t1Output);
+            var topCause = T16State.t4Output.ranked_causes && T16State.t4Output.ranked_causes[0] && T16State.t4Output.ranked_causes[0].cause_id;
+
+            if (T16State.t1Output && T16State.t1Output.event_id === 'WARNING_LIGHT' && topCause === 'BRAKE_SYSTEM') {
+                T16State.step = 'brake_urgent_done';
+                var brakeHtml = '<strong style="color:#ff6b6b;">⚠️ ブレーキ警告灯が点灯しています</strong><br><br>' +
+                    'ただちに安全な場所に停車してください。<br>ブレーキ系統の警告のため、走行を続けると危険です。<br><br>' +
+                    '<strong>停車後、次のいずれかに連絡してください。</strong><br><br>' +
+                    '<div style="display:flex; flex-wrap:wrap; gap:10px;">' +
+                    '<a href="tel:0120-XXX-XXX" class="button" style="text-decoration:none; display:inline-block; background:linear-gradient(135deg,#e53935 0%,#c62828 100%);">📞 ロードサービスに電話</a>' +
+                    '<a href="tel:0120-XXX-XXX" class="button" style="text-decoration:none; display:inline-block; background:linear-gradient(135deg,#BF00FF 0%,#D200FF 100%);">📞 販売店に連絡</a>' +
+                    '</div>' +
+                    '<div style="margin-top:12px; font-size:0.9em; color:#aaa;">※ 実際の画面ではお持ちの車種・地域に応じた連絡先を表示します。</div>';
+                addTheme001Message('ai', brakeHtml);
+                return;
+            }
+
+            T16State.step = 't5_actions';
+            const cards = T16State.t5Output.action_cards || [];
+            var card0 = cards[0];
+            if (card0) {
+                var stepsHtml = '<strong>' + (card0.title || '') + '</strong><br><br>';
+                if (card0.steps && card0.steps.length) {
+                    stepsHtml += '<strong>手順：</strong><br>';
+                    card0.steps.forEach(function(s, i) { stepsHtml += (i + 1) + '. ' + s + '<br>'; });
+                }
+                if (card0.duration) stepsHtml += '<br>⏱ ' + card0.duration + '<br>';
+                if (card0.required_items && card0.required_items.length) stepsHtml += '必要物: ' + card0.required_items.join(', ') + '<br>';
+                if (card0.risk_notice) stepsHtml += '<br>⚠️ ' + card0.risk_notice + '<br>';
+                if (card0.alternative) stepsHtml += '<br>うまくいかない場合: ' + card0.alternative + '<br>';
+                stepsHtml += '<br>試した結果を教えてください：<br>' +
+                    '<div class="quick-reply-container">' +
+                    '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>うまくいった</span></div>' +
+                    '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>うまくいかなかった</span></div>' +
+                    '</div>';
+                if (cards.length > 1) {
+                    stepsHtml += '<br><details style="margin-top:10px;"><summary style="cursor:pointer; font-size:0.9em; color:#aaa;">その他の選択肢</summary>';
+                    cards.slice(1).forEach(function(c) {
+                        stepsHtml += '<div class="card" style="margin:6px 0; cursor:pointer; padding:8px;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' + (c.title || '') + '</div>';
+                    });
+                    stepsHtml += '</details>';
+                }
+                if (T16State.t1Output && T16State.t1Output.event_id === 'BLUETOOTH') {
+                    stepsHtml += '<div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px;">' +
+                        '<div class="button" style="cursor: pointer; padding: 10px 14px; font-size: 0.9em;" onclick="showBluetoothStepGuide()">📋 ステップバイステップガイドを見る</div>' +
+                        '<div class="button" style="cursor: pointer; padding: 10px 14px; font-size: 0.9em; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="showBluetoothVideo()">📋 動画で見る</div>' +
+                        '</div>';
+                }
+                if (T16State.t5Output.escalation_option) {
+                    stepsHtml += '<div style="margin-top: 10px; font-size: 0.9em; color: #aaa;">販売店・ロードサービスも選択できます</div>';
+                }
+                addTheme001Message('ai', stepsHtml);
+            } else {
+                var fallbackHtml = '';
+                cards.forEach(function(c) {
+                    fallbackHtml += '<div class="card" style="margin-bottom: 10px; cursor: pointer;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' +
+                        '<div class="card-title">' + (c.title || '') + '</div></div>';
+                });
+                addTheme001Message('ai', fallbackHtml);
+            }
+        }
+
+        function handleT16ActionClick(actionId) {
+            T16State.lastActionId = actionId;
+            const cards = (T16State.t5Output && T16State.t5Output.action_cards) || [];
+            const card = cards.find(function(c) { return c.action_id === actionId; });
+            if (!card) return;
+            addTheme001Message('user', card.title || actionId);
+
+            if (actionId === 'A_DOOR_002' && card.risk_notice) {
+                T16State.step = 'battery_replace_choice';
+                var choiceHtml = '<strong>' + (card.title || '電池交換') + '</strong><br><br>';
+                choiceHtml += '⚠️ ' + card.risk_notice + '<br><br>';
+                choiceHtml += 'どちらで対応しますか？<br>' +
+                    '<div class="quick-reply-container">' +
+                    '<div class="quick-reply" onclick="handleT16BatteryReplaceChoice(\'dealer\')">🏢 <span>販売店で交換する</span></div>' +
+                    '<div class="quick-reply" onclick="handleT16BatteryReplaceChoice(\'self\')">🔧 <span>自分で交換する</span></div>' +
+                    '</div>';
+                addTheme001Message('ai', choiceHtml);
+                return;
+            }
+
+            T16State.step = 't6_wait_result';
+            var stepsHtml = '<strong>' + (card.title || '') + '</strong><br><br>';
+            if (card.steps && card.steps.length) {
+                stepsHtml += '<strong>手順：</strong><br>';
+                card.steps.forEach(function(s, i) { stepsHtml += (i + 1) + '. ' + s + '<br>'; });
+            }
+            if (card.required_items && card.required_items.length) stepsHtml += '<br>必要物: ' + card.required_items.join(', ') + '<br>';
+            if (card.risk_notice) stepsHtml += '<br>⚠️ ' + card.risk_notice + '<br>';
+            if (card.alternative) stepsHtml += '<br>うまくいかない場合: ' + card.alternative + '<br>';
+            var resultPrompt = actionId === 'A_DOOR_005' ? '予備キーで試した結果を教えてください：' : '試した結果を教えてください：';
+            stepsHtml += '<br>' + resultPrompt + '<br>' +
+                '<div class="quick-reply-container">' +
+                '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>うまくいった</span></div>' +
+                '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>うまくいかなかった</span></div>' +
+                '</div>';
+            if (T16State.t1Output && T16State.t1Output.event_id === 'BLUETOOTH') {
+                stepsHtml += '<div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px;">' +
+                    '<div class="button" style="cursor: pointer; padding: 10px 14px; font-size: 0.9em;" onclick="showBluetoothStepGuide()">📋 ステップバイステップガイドを見る</div>' +
+                    '<div class="button" style="cursor: pointer; padding: 10px 14px; font-size: 0.9em; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="showBluetoothVideo()">🎥 動画で見る</div>' +
+                    '</div>';
+            }
+            addTheme001Message('ai', stepsHtml);
+        }
+
+        function handleT16BatteryReplaceChoice(choice) {
+            if (choice === 'dealer') {
+                addTheme001Message('user', '販売店で交換する');
+                addTheme001Message('ai', '<strong>販売店での電池交換</strong><br><br>' +
+                    'トヨタ販売店で電池交換を依頼できます。<br><br>' +
+                    '<strong>連絡方法：</strong><br>' +
+                    '・電話で予約: 0120-XXX-XXX<br>' +
+                    '・オンライン予約: 販売店検索ページから予約<br><br>' +
+                    '<strong>予約時の準備：</strong><br>' +
+                    '・車種・年式<br>・スマートキーの種類<br>・希望日時<br><br>' +
+                    '※ 実際の画面では、位置情報に基づいた最寄りの販売店を表示し、オンライン予約ができるようになります。<br><br>' +
+                    '他にご質問はありますか？');
+                T16State.step = null;
+                return;
+            }
+            addTheme001Message('user', '自分で交換する');
+            T16State.step = 't6_wait_result';
+            var card = (T16State.t5Output && T16State.t5Output.action_cards || []).find(function(c) { return c.action_id === 'A_DOOR_002'; });
+            if (!card) card = { title: '恒久対応：電池交換', steps: ['CR2032（またはCR2450）を用意', 'キーを開けて電池を交換', '動作確認'], required_items: ['CR2032 または CR2450（ボタン電池）'], risk_notice: '部品破損の恐れがあるため、慎重に作業してください。', alternative: '電池購入先の案内へ' };
+            var stepsHtml = '<strong>自分で電池交換をする場合</strong><br><br>';
+            stepsHtml += '<strong>手順：</strong><br>';
+            (card.steps || []).forEach(function(s, i) { stepsHtml += (i + 1) + '. ' + s + '<br>'; });
+            if (card.required_items && card.required_items.length) stepsHtml += '<br>必要物: ' + card.required_items.join(', ') + '<br>';
+            if (card.risk_notice) stepsHtml += '<br>⚠️ ' + card.risk_notice + '<br>';
+            if (card.alternative) stepsHtml += '<br>うまくいかない場合: ' + card.alternative + '<br>';
+            stepsHtml += '<br>電池交換後、スマートキーが正常に動作するようになりましたか？<br>' +
+                '<div class="quick-reply-container">' +
+                '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>うまくいった</span></div>' +
+                '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>うまくいかなかった</span></div>' +
+                '</div>';
+            addTheme001Message('ai', stepsHtml);
+        }
+
+        function handleT16T6Result(resolved) {
+            const label = resolved ? 'うまくいった' : 'うまくいかなかった';
+            addTheme001Message('user', label);
+            const t6 = runT6(resolved, T16State.lastActionId, T16State.t5Output, T16State.t1Output);
+
+            if (t6.next_step === 'retry_with_t4') {
+                T16State.t4Output = runT4(T16State.observationResult, T16State.t2Output, T16State.t3Output, t6.evidence_from_failure, T16State.t1Output);
+                T16State.t5Output = runT5(T16State.t4Output, T16State.t1Output);
+                T16State.step = 't5_actions';
+                var cards = T16State.t5Output.action_cards || [];
+                var card0 = cards[0];
+                if (card0) {
+                    var stepsHtml = '<strong>' + (card0.title || '') + '</strong><br><br>';
+                    if (card0.steps && card0.steps.length) {
+                        stepsHtml += '<strong>手順：</strong><br>';
+                        card0.steps.forEach(function(s, i) { stepsHtml += (i + 1) + '. ' + s + '<br>'; });
+                    }
+                    if (card0.duration) stepsHtml += '<br>⏱ ' + card0.duration + '<br>';
+                    if (card0.required_items && card0.required_items.length) stepsHtml += '必要物: ' + card0.required_items.join(', ') + '<br>';
+                    if (card0.risk_notice) stepsHtml += '<br>⚠️ ' + card0.risk_notice + '<br>';
+                    if (card0.alternative) stepsHtml += '<br>うまくいかない場合: ' + card0.alternative + '<br>';
+                    stepsHtml += '<br>試した結果を教えてください：<br>' +
+                        '<div class="quick-reply-container">' +
+                        '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>うまくいった</span></div>' +
+                        '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>うまくいかなかった</span></div>' +
+                        '</div>';
+                    if (cards.length > 1) {
+                        stepsHtml += '<br><details style="margin-top:10px;"><summary style="cursor:pointer; font-size:0.9em; color:#aaa;">その他の選択肢</summary>';
+                        cards.slice(1).forEach(function(c) {
+                            stepsHtml += '<div class="card" style="margin:6px 0; cursor:pointer; padding:8px;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' + (c.title || '') + '</div>';
+                        });
+                        stepsHtml += '</details>';
+                    }
+                    if (T16State.t5Output.escalation_option) {
+                        stepsHtml += '<div style="margin-top: 10px; font-size: 0.9em; color: #aaa;">販売店・ロードサービスも選択できます</div>';
+                    }
+                    addTheme001Message('ai', stepsHtml);
+                } else {
+                    var aiHtml = '別の対処をご案内します。<br><br>';
+                    cards.forEach(function(c) {
+                        aiHtml += '<div class="card" style="margin-bottom: 10px; cursor: pointer;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' +
+                            '<div class="card-title">' + (c.title || '') + '</div></div>';
+                    });
+                    addTheme001Message('ai', aiHtml);
+                }
+                return;
+            }
+
+            var aiHtml = '';
+            if (t6.next_step === 'done') {
+                aiHtml = '<strong>よかったです。解決しました。</strong><br><br>また困ったことがあればお知らせください。';
+            } else if (t6.next_step === 'done_with_next_steps') {
+                if (T16State.t1Output && T16State.t1Output.event_id === 'DOOR_NOT_OPEN' && (T16State.lastActionId === 'A_DOOR_005' || t6.spare_key_worked)) {
+                    aiHtml = '<strong>予備キーで開けられてよかったです。</strong><br><br>今お使いのキー側の不調の可能性があります。そのキーの電池交換や販売店での点検をご案内します。<br><br>';
+                } else if (T16State.t1Output && T16State.t1Output.event_id === 'DOOR_NOT_OPEN') {
+                    aiHtml = '<strong>ドアを開けられてよかったです。</strong><br><br>次に、電池交換をしておくとスマートキーで開けられるようになります。<br><br>';
+                } else {
+                    aiHtml = '<strong>よかったです。解決しました。</strong><br><br>';
+                }
+                if (t6.next_steps_guidance && t6.next_steps_guidance.length) {
+                    t6.next_steps_guidance.forEach(function(g) { aiHtml += '・' + (g.label || g.id) + '<br>'; });
+                }
+            } else if (t6.next_step === 'escalate') {
+                aiHtml = '<strong>専門家へご案内</strong><br><br>試していただいた内容をまとめて、販売店・ロードサービスが引き継ぎやすくしています。<br><br>' +
+                    '📞 ロードサービス: 0120-XXX-XXX（24時間）<br>📞 販売店: 0120-XXX-XXX';
+            } else {
+                aiHtml = '次の対応をご案内します。';
+            }
+            addTheme001Message('ai', aiHtml);
+            T16State.step = null;
+        }
+
+        // Bluetoothステップバイステップガイド（モーダル用）
+        var currentBluetoothStep = 1;
+        var totalBluetoothSteps = 5;
+        var bluetoothStepsData = [
+            { title: '設定画面を開く', content: 'ディスプレイのホーム画面から「⚙️ 設定」アイコンをタップします。<br><br>または、ステアリングホイールの「MENU」ボタンを長押ししても設定画面が開きます。' },
+            { title: 'Bluetoothメニューを選択', content: '• 設定メニューから「📡 Bluetooth」を選択<br>• Bluetoothがオフの場合は「オンにする」をタップ<br>• 画面に「検索中...」と表示されます' },
+            { title: 'スマートフォンを検出可能にする', content: '<strong>📱 iPhoneの場合：</strong><br>• 「設定」→「Bluetooth」を開く<br>• Bluetoothをオンにすると自動的に検出可能になります<br><br><strong>📱 Androidの場合：</strong><br>• 「設定」→「接続済みのデバイス」→「Bluetooth」を開く<br>• 「新しいデバイスとペア設定する」をタップ' },
+            { title: 'デバイスを選択してペアリング', content: '• 車のディスプレイに表示された「利用可能なデバイス」リストから、あなたのスマートフォン名を探してタップ<br><br>• 車とスマートフォンの両方に同じPINコードが表示されます<br><br>• <strong style="color: #BF00FF;">PINコードが一致していることを確認</strong>してください' },
+            { title: 'ペアリングを承認', content: '• 車のディスプレイで「ペアリング」または「接続」をタップ<br><br>• スマートフォンに表示される「ペアリング」確認ダイアログで「ペアリング」をタップ<br><br>• 「✅ 接続しました」というメッセージが表示されたら完了！' }
+        ];
+
+        function showBluetoothStepGuide() {
+            currentBluetoothStep = 1;
+            var modal = document.getElementById('bluetoothStepGuideModal');
+            if (modal) { modal.style.display = 'block'; renderBluetoothStepModal(); }
+        }
+
+        function closeBluetoothStepGuide() {
+            var modal = document.getElementById('bluetoothStepGuideModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function renderBluetoothStepModal() {
+            var container = document.getElementById('bluetoothStepGuideContent');
+            if (!container) return;
+            var step = bluetoothStepsData[currentBluetoothStep - 1];
+            var nextBtn = currentBluetoothStep < totalBluetoothSteps
+                ? '<button class="button" onclick="nextBluetoothStep()" style="flex: 2; background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%);">次へ →</button>'
+                : '<button class="button" onclick="completeBluetoothGuide()" style="flex: 2; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%);">✓ 完了</button>';
+            var prevBtn = currentBluetoothStep > 1 ? '<button class="button" onclick="previousBluetoothStep()" style="flex: 1; background: #444;">← 前へ</button>' : '';
+            container.innerHTML = '<div style="color: #BF00FF; font-weight: 600; margin-bottom: 10px;">ステップ ' + currentBluetoothStep + '/' + totalBluetoothSteps + '</div>' +
+                '<div class="card" style="margin-bottom: 15px;"><div class="card-title">' + (step.title || '') + '</div><div class="card-content" style="line-height: 1.7;">' + (step.content || '') + '</div></div>' +
+                '<div style="display: flex; gap: 10px; margin-bottom: 15px;">' + prevBtn + nextBtn + '</div>' +
+                '<button class="button" onclick="closeBluetoothStepGuide()" style="background: #555; width: 100%;">閉じる</button>';
+        }
+
+        function nextBluetoothStep() {
+            if (currentBluetoothStep < totalBluetoothSteps) { currentBluetoothStep++; renderBluetoothStepModal(); }
+        }
+
+        function previousBluetoothStep() {
+            if (currentBluetoothStep > 1) { currentBluetoothStep--; renderBluetoothStepModal(); }
+        }
+
+        function completeBluetoothGuide() {
+            var container = document.getElementById('bluetoothStepGuideContent');
+            if (!container) return;
+            container.innerHTML = '<div class="card" style="text-align: center; border: 2px solid #00d084;"><div class="card-content" style="padding: 30px 20px;">' +
+                '<div style="font-size: 3em; margin-bottom: 15px;">🎉</div>' +
+                '<div style="font-size: 1.3em; font-weight: bold; color: #00d084; margin-bottom: 10px;">Bluetooth接続完了！</div>' +
+                '<div style="color: #aaa; font-size: 0.95em; line-height: 1.7;">次回からは、エンジンをかけると自動的に接続されます。</div>' +
+                '<button class="button" onclick="closeBluetoothStepGuide()" style="margin-top: 20px; background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%);">閉じる</button></div></div>';
+        }
+
+        function showBluetoothVideo() {
+            addTheme001Message('user', '動画で見る');
+            addTheme001Message('ai', '<strong>🎥 動画で見る</strong><br><br>Bluetooth接続の手順動画は準備中です。<br>しばらくお待ちください。または「ステップバイステップガイドを見る」で手順を確認できます。');
+        }
+
         function setQuestion(question) {
             document.getElementById('searchInput').value = question;
             performSearch();
@@ -1150,6 +2449,14 @@
                 alert('質問を入力してください');
                 return;
             }
+            try { recordOemQuestion(query, 'enduser'); } catch (e) {}
+
+            // 「ドアが開かない」は T1-T6 フローでチャットに接続
+            if (query === 'ドアが開かない' || query.indexOf('ドアが開かない') !== -1) {
+                switchToChatTabProgrammatic(true);
+                setTimeout(function() { startT16Flow(query); }, 50);
+                return;
+            }
 
             defaultContent.classList.add('hidden');
             resultDiv.innerHTML = '<div class="loading">回答を生成中</div>';
@@ -1158,6 +2465,14 @@
             setTimeout(() => {
                 displayAnswer(query);
             }, 1000);
+        }
+
+        function switchToChatTabProgrammatic(skipInit) {
+            document.querySelectorAll('.tab-item').forEach(function(t) {
+                if ((t.getAttribute('onclick') || '').indexOf("'chat'") !== -1) t.classList.add('active');
+                else t.classList.remove('active');
+            });
+            showChatScreen(skipInit ? { skipInit: true } : undefined);
         }
 
         function displayAnswer(query) {
@@ -1248,216 +2563,14 @@
             document.getElementById('defaultContent').classList.remove('hidden');
         }
 
-        // Bluetoothステップバイステップガイドの現在のステップ
-        let currentBluetoothStep = 1;
-        const totalBluetoothSteps = 5;
-
-        // Bluetoothステップデータ
-        const bluetoothSteps = [
-            {
-                title: '設定画面を開く',
-                content: 'ディスプレイのホーム画面から「⚙️ 設定」アイコンをタップします。<br><br>または、ステアリングホイールの「MENU」ボタンを長押ししても設定画面が開きます。',
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect fill='%231a1a2e' width='300' height='200' rx='10'/%3E%3Ctext x='150' y='90' text-anchor='middle' font-size='50' fill='%234facfe'%3E⚙️%3C/text%3E%3Ctext x='150' y='130' text-anchor='middle' font-size='16' fill='%23aaa'%3E設定アイコン%3C/text%3E%3C/svg%3E"
-            },
-            {
-                title: 'Bluetoothメニューを選択',
-                content: '• 設定メニューから「📡 Bluetooth」を選択<br>• Bluetoothがオフの場合は「オンにする」をタップ<br>• 画面に「検索中...」と表示されます',
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect fill='%231a1a2e' width='300' height='200' rx='10'/%3E%3Crect fill='%232d3561' x='20' y='30' width='260' height='40' rx='8'/%3E%3Ctext x='40' y='58' font-size='16' fill='%234facfe'%3E📡 Bluetooth%3C/text%3E%3Crect fill='%23667eea' x='200' y='40' width='60' height='20' rx='10'/%3E%3Ctext x='230' y='55' text-anchor='middle' font-size='12' fill='%23fff'%3EON%3C/text%3E%3Ctext x='150' y='120' text-anchor='middle' font-size='14' fill='%23aaa'%3E検索中...%3C/text%3E%3C/svg%3E"
-            },
-            {
-                title: 'スマートフォンを検出可能にする',
-                content: '<strong>📱 iPhoneの場合：</strong><br>• 「設定」→「Bluetooth」を開く<br>• Bluetoothをオンにすると自動的に検出可能になります<br><br><strong>📱 Androidの場合：</strong><br>• 「設定」→「接続済みのデバイス」→「Bluetooth」を開く<br>• 「新しいデバイスとペア設定する」をタップ',
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect fill='%231a1a2e' width='300' height='200' rx='10'/%3E%3Crect fill='%232d3561' x='40' y='30' width='100' height='140' rx='10'/%3E%3Ccircle cx='90' cy='45' r='5' fill='%234facfe'/%3E%3Crect fill='%23667eea' x='50' y='60' width='80' height='30' rx='5'/%3E%3Ctext x='90' y='80' text-anchor='middle' font-size='12' fill='%23fff'%3EiPhone%3C/text%3E%3Crect fill='%232d3561' x='160' y='30' width='100' height='140' rx='10'/%3E%3Crect fill='%23667eea' x='170' y='60' width='80' height='30' rx='5'/%3E%3Ctext x='210' y='80' text-anchor='middle' font-size='12' fill='%23fff'%3EAndroid%3C/text%3E%3C/svg%3E"
-            },
-            {
-                title: 'デバイスを選択してペアリング',
-                content: '• 車のディスプレイに表示された「利用可能なデバイス」リストから、あなたのスマートフォン名を探してタップ<br><br>• 車とスマートフォンの両方に同じPINコード（例: 123456）が表示されます<br><br>• <strong style="color: #BF00FF;">PINコードが一致していることを確認</strong>してください',
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect fill='%231a1a2e' width='300' height='200' rx='10'/%3E%3Crect fill='%232d3561' x='20' y='20' width='260' height='50' rx='8'/%3E%3Ctext x='40' y='50' font-size='14' fill='%23e0e0e0'%3E📱 iPhone 13%3C/text%3E%3Crect fill='%232d3561' x='20' y='80' width='260' height='50' rx='8'/%3E%3Ctext x='40' y='110' font-size='14' fill='%23e0e0e0'%3E📱 Galaxy S23%3C/text%3E%3Crect fill='%234facfe' x='80' y='150' width='140' height='30' rx='8'/%3E%3Ctext x='150' y='172' text-anchor='middle' font-size='16' fill='%230f3460' font-weight='bold'%3EPIN: 123456%3C/text%3E%3C/svg%3E"
-            },
-            {
-                title: 'ペアリングを承認',
-                content: '• 車のディスプレイで「ペアリング」または「接続」をタップ<br><br>• スマートフォンに表示される「ペアリング」確認ダイアログで「ペアリング」をタップ<br><br>• 「✅ 接続しました」というメッセージが表示されたら完了！',
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect fill='%231a1a2e' width='300' height='200' rx='10'/%3E%3Ccircle cx='150' cy='80' r='40' fill='%2300d084'/%3E%3Ctext x='150' y='95' text-anchor='middle' font-size='40' fill='%23fff'%3E✓%3C/text%3E%3Ctext x='150' y='145' text-anchor='middle' font-size='18' fill='%2300d084' font-weight='bold'%3E接続しました%3C/text%3E%3Ctext x='150' y='170' text-anchor='middle' font-size='12' fill='%23aaa'%3E次回から自動接続されます%3C/text%3E%3C/svg%3E"
-            }
-        ];
-
-        // Bluetoothステップバイステップガイドを表示
-        function showBluetoothStepGuide() {
-            currentBluetoothStep = 1;
-            renderBluetoothStep();
-        }
-
-        // Bluetoothステップを描画
-        function renderBluetoothStep() {
-            const resultDiv = document.getElementById('searchResult');
-            const defaultContent = document.getElementById('defaultContent');
-            const step = bluetoothSteps[currentBluetoothStep - 1];
-            
-            defaultContent.classList.add('hidden');
-            
-            let nextStepsHtml = '';
-            for (let i = currentBluetoothStep; i < totalBluetoothSteps; i++) {
-                nextStepsHtml += `
-                    <div class="card" style="opacity: 0.4; margin-bottom: 10px;">
-                        <div class="card-title">
-                            <span class="badge" style="background: #555; color: #999;">ステップ ${i + 1}/${totalBluetoothSteps}</span> ${bluetoothSteps[i].title}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            resultDiv.innerHTML = `
-                <div class="card" style="margin-bottom: 15px; border: 2px solid #BF00FF;">
-                    <div class="card-title" style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: #1A1A1A; padding: 15px; margin: -1px -1px 0 -1px; border-radius: 10px 10px 0 0;">
-                        <span class="badge badge-info" style="background: rgba(15, 52, 96, 0.3); color: #1A1A1A; font-weight: bold;">ステップ ${currentBluetoothStep}/${totalBluetoothSteps}</span> ${step.title}
-                    </div>
-                    <div class="card-content">
-                        <img src="${step.image}" alt="ステップ${currentBluetoothStep}" style="width: 100%; margin: 15px 0; border-radius: 8px; background: #16213e; padding: 20px;">
-                        
-                        <div style="font-size: 1em; line-height: 1.8; margin: 15px 0;">
-                            ${step.content}
-                        </div>
-                        
-                        <div style="display: flex; gap: 10px; margin-top: 20px;">
-                            ${currentBluetoothStep > 1 ? `
-                                <button class="button" onclick="previousBluetoothStep()" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                    ← 前へ
-                                </button>
-                            ` : ''}
-                            ${currentBluetoothStep < totalBluetoothSteps ? `
-                                <button class="button" onclick="nextBluetoothStep()" style="flex: 2; background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: #1A1A1A; font-size: 1.05em; font-weight: bold;">
-                                    次へ →
-                                </button>
-                            ` : `
-                                <button class="button" onclick="completeBluetoothGuide()" style="flex: 2; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); font-size: 1.05em; font-weight: bold;">
-                                    ✓ 完了
-                                </button>
-                            `}
-                        </div>
-                    </div>
-                </div>
-                
-                ${nextStepsHtml}
-                
-                <div style="text-align: center; margin-top: 20px;">
-                    <button class="button" onclick="resetSearch()" style="background: linear-gradient(135deg, #888 0%, #666 100%);">検索画面に戻る</button>
-                </div>
-            `;
-            
-            resultDiv.classList.remove('hidden');
-            document.getElementById('homeContent').scrollTop = 0;
-        }
-
-        // 次のBluetoothステップへ
-        function nextBluetoothStep() {
-            if (currentBluetoothStep < totalBluetoothSteps) {
-                currentBluetoothStep++;
-                renderBluetoothStep();
-            }
-        }
-
-        // 前のBluetoothステップへ
-        function previousBluetoothStep() {
-            if (currentBluetoothStep > 1) {
-                currentBluetoothStep--;
-                renderBluetoothStep();
-            }
-        }
-
-        // Bluetoothガイド完了
-        function completeBluetoothGuide() {
-            const resultDiv = document.getElementById('searchResult');
-            
-            resultDiv.innerHTML = `
-                <div class="card" style="text-align: center; border: 2px solid #00d084;">
-                    <div class="card-content" style="padding: 40px 20px;">
-                        <div style="font-size: 4em; margin-bottom: 20px;">🎉</div>
-                        <div style="font-size: 1.5em; font-weight: bold; color: #00d084; margin-bottom: 15px;">
-                            Bluetooth接続完了！
-                        </div>
-                        <div style="color: #aaa; font-size: 1em; line-height: 1.8;">
-                            おめでとうございます！<br>
-                            次回からは、エンジンをかけると自動的に接続されます。<br><br>
-                            <strong style="color: #BF00FF;">💡 ヒント</strong><br>
-                            音楽アプリを開けば、車のスピーカーから再生できます。
-                        </div>
-                        
-                        <div style="margin-top: 30px; display: flex; gap: 10px; flex-direction: column;">
-                            <button class="button" onclick="showBluetoothTroubleshooting()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                ❓ うまく接続できない場合
-                            </button>
-                            <button class="button" onclick="resetSearch()" style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: #1A1A1A;">
-                                ホームに戻る
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('homeContent').scrollTop = 0;
-        }
-
-        // Bluetoothトラブルシューティングを表示
-        function showBluetoothTroubleshooting() {
-            const resultDiv = document.getElementById('searchResult');
-            
-            resultDiv.innerHTML = `
-                <div class="card" style="margin-bottom: 15px;">
-                    <div class="card-title">
-                        ❓ うまく接続できない場合
-                    </div>
-                    <div class="card-content">
-                        <div style="background: rgba(255, 107, 107, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #ff6b6b;">
-                            <strong style="color: #ff6b6b;">よくあるトラブルと解決方法</strong>
-                        </div>
-
-                        <div style="background: rgba(45, 53, 97, 0.4); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                            <strong style="color: #BF00FF; font-size: 1.05em;">1. Bluetoothをリセット</strong><br><br>
-                            • 車とスマートフォンの両方でBluetoothを一度オフにする<br>
-                            • 10秒待ってから再度オンにする<br>
-                            • 再度ペアリングを試す
-                        </div>
-
-                        <div style="background: rgba(45, 53, 97, 0.4); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                            <strong style="color: #BF00FF; font-size: 1.05em;">2. 登録済みデバイスを削除</strong><br><br>
-                            • 車の設定から「登録済みデバイス」を確認<br>
-                            • 古い登録があれば削除<br>
-                            • スマートフォンのBluetooth設定からも車のデバイスを「削除」または「登録解除」
-                        </div>
-
-                        <div style="background: rgba(45, 53, 97, 0.4); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                            <strong style="color: #BF00FF; font-size: 1.05em;">3. スマートフォンを再起動</strong><br><br>
-                            • 完全に電源を切る<br>
-                            • 10秒待ってから再起動<br>
-                            • 再度接続を試す
-                        </div>
-
-                        <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.1) 100%); padding: 15px; border-radius: 10px; margin-top: 20px; border: 2px solid rgba(102, 126, 234, 0.3);">
-                            <strong style="color: #667eea;">💬 それでも解決しない場合</strong><br><br>
-                            販売店にご相談ください。<br>
-                            スマートフォンの機種によって対応状況が異なる場合があります。
-                        </div>
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: 20px;">
-                    <button class="button" onclick="showBluetoothStepGuide()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin-right: 10px;">
-                        ← ガイドに戻る
-                    </button>
-                    <button class="button" onclick="resetSearch()" style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: #1A1A1A;">
-                        ホームに戻る
-                    </button>
-                </div>
-            `;
-            
-            document.getElementById('homeContent').scrollTop = 0;
-        }
-
         // チャット画面を表示
-        function showChatScreen() {
+        function showChatScreen(options) {
             const resultDiv = document.getElementById('searchResult');
             const defaultContent = document.getElementById('defaultContent');
             
             defaultContent.classList.add('hidden');
+            
+            var t = translations[currentLang] || translations.ja;
             
             resultDiv.innerHTML = `
                 <!-- チャットメッセージ領域 -->
@@ -1467,7 +2580,7 @@
                 <div style="position: sticky; bottom: 0; background: #1A1A1A; padding: 15px 0; margin-top: 20px; border-top: 1px solid rgba(191, 0, 255, 0.3);">
                     <div style="display: flex; gap: 10px; align-items: flex-end;">
                         <textarea id="chatInput" 
-                                  placeholder="スマートキーやクルマについて質問できます..." 
+                                  placeholder="${t['chat-placeholder']}" 
                                   style="flex: 1.2; 
                                          background: rgba(45, 53, 97, 0.6); 
                                          color: #e0e0e0; 
@@ -1493,7 +2606,7 @@
                                        display: flex;
                                        align-items: center;
                                        flex-shrink: 0;">
-                            <span>送信</span>
+                            <span>${t['btn-send']}</span>
                         </button>
                     </div>
                     <div style="font-size: 0.8em; color: #888; margin-top: 8px;">
@@ -1505,8 +2618,9 @@
             resultDiv.classList.remove('hidden');
             document.getElementById('homeContent').scrollTop = 0;
 
-            // THEME-001 用チャット初期化
-            initTheme001Chat();
+            if (!options || !options.skipInit) {
+                initTheme001Chat();
+            }
         }
 
         // THEME-001 用チャット: メッセージ追加ヘルパー
@@ -1531,41 +2645,27 @@
             }
         }
 
-        // THEME-001 用チャット: 初期メッセージ
+        // THEME-001 用チャット: 初期メッセージ（T1-T6 駆動に統一）
         function initTheme001Chat() {
             const chatMessages = document.getElementById('chatMessages');
             if (!chatMessages) return;
             chatMessages.innerHTML = '';
 
-            addTheme001Message('ai', `輝明さん、今知りたいことを入力してください。<br><br>
-すぐに試せるメニューもご用意しています：
+            var userName = '輝明';
+            addTheme001Message('ai', `${userName}${t('chat-intro-name')}<br><br>
+${t('chat-intro-quick')}
 <div class="quick-reply-container">
-  <div class="quick-reply" onclick="startTheme001SmartKeyFlow()">
-    🔑 <span>スマートキーでドアが開かない</span>
+  <div class="quick-reply" onclick="startT16Flow('スマートキーでドアが開かない')">
+    🔑 <span>${t('chat-quick-door')}</span>
   </div>
-</div>`);
-        }
-
-        // THEME-001: スマートキーでドアが開かないフロー（簡易版）
-        function startTheme001SmartKeyFlow() {
-            addTheme001Message('user', 'スマートキーでドアが開かない');
-
-            addTheme001Message('ai', `<strong>スマートキーでドアが開かないときの確認ポイント</strong><br><br>
-まず、次の2つを確認しましょう。<br><br>
-<strong>1. スマートキーのインジケーターは光りますか？</strong><br>
-・ボタンを押したときに赤いランプが一瞬点灯するか確認してください。<br><br>
-<strong>2. 予備のスマートキーでも同じ症状ですか？</strong><br>
-・予備キーがあれば、同じように試してみてください。<br><br>
-おおよその状況に近いものを教えてください：
-<div class="quick-reply-container">
-  <div class="quick-reply" onclick="handleTheme001Situation('battery')">
-    🔋 <span>インジケーターが光らない / 反応が弱い</span>
+  <div class="quick-reply" onclick="startT16Flow('キー電池切れの表示が出ている')">
+    🔋 <span>${t('chat-quick-battery')}</span>
   </div>
-  <div class="quick-reply" onclick="handleTheme001Situation('interference')">
-    📡 <span>インジケーターは光るが、クルマが反応しない</span>
+  <div class="quick-reply" onclick="startT16Flow('警告灯が点灯')">
+    ⚠️ <span>${t('chat-quick-warning')}</span>
   </div>
-  <div class="quick-reply" onclick="handleTheme001Situation('unknown')">
-    ❓ <span>よく分からない / 確認が難しい</span>
+  <div class="quick-reply" onclick="startT16Flow('Bluetooth接続ができない')">
+    📱 <span>Bluetooth${t('quick-bluetooth')}</span>
   </div>
 </div>`);
         }
@@ -1875,6 +2975,7 @@
             const messageText = input.value.trim();
             
             if (!messageText) return;
+            try { recordOemQuestion(messageText, 'enduser'); } catch (e) {}
             
             const chatMessages = document.getElementById('chatMessages');
             
@@ -1977,24 +3078,24 @@
             resultDiv.innerHTML = `
                 <div class="card" style="margin-bottom: 15px;">
                     <div class="card-title" style="font-size: 1.1em;">
-                        🔔 通知履歴
+                        🔔 ${t('notif-title')}
                     </div>
                     <div class="card-content" style="color: #aaa; font-size: 0.9em;">
-                        以下の通知が役に立ちましたか？フィードバックをお願いします。
+                        ${t('notif-feedback')}
                     </div>
                 </div>
 
                 <div id="notificationList">
                     <div class="card" id="notification-1" style="margin-bottom: 15px; border: 1px solid rgba(191, 0, 255, 0.3);">
                         <div class="card-content">
-                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">5分前</div>
-                            <div style="margin-bottom: 12px;">夜間走行中です。オートハイビームをオンにすると安全です。</div>
+                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">5${t('notif-time-minutes')}</div>
+                            <div style="margin-bottom: 12px;">${t('notif-1')}</div>
                             <div style="display: flex; gap: 10px;">
                                 <button onclick="removeNotification('notification-1', 'helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px;">
-                                    ✅ 役立った
+                                    ✅ ${t('notif-helpful')}
                                 </button>
                                 <button onclick="removeNotification('notification-1', 'not-helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px;">
-                                    😒 役立たなかった
+                                    😒 ${t('notif-not-helpful')}
                                 </button>
                             </div>
                         </div>
@@ -2002,14 +3103,14 @@
 
                     <div class="card" id="notification-2" style="margin-bottom: 15px; border: 1px solid rgba(191, 0, 255, 0.3);">
                         <div class="card-content">
-                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">1時間前</div>
-                            <div style="margin-bottom: 12px;">狭い駐車場です。パノラミックビューモニターを使うと安心です。</div>
+                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">1${t('notif-time-hours')}</div>
+                            <div style="margin-bottom: 12px;">${t('notif-2')}</div>
                             <div style="display: flex; gap: 10px;">
                                 <button onclick="removeNotification('notification-2', 'helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px;">
-                                    ✅ 役立った
+                                    ✅ ${t('notif-helpful')}
                                 </button>
                                 <button onclick="removeNotification('notification-2', 'not-helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px;">
-                                    😒 役立たなかった
+                                    😒 ${t('notif-not-helpful')}
                                 </button>
                             </div>
                         </div>
@@ -2017,14 +3118,14 @@
 
                     <div class="card" id="notification-3" style="margin-bottom: 15px; border: 1px solid rgba(191, 0, 255, 0.3);">
                         <div class="card-content">
-                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">3時間前</div>
-                            <div style="margin-bottom: 12px;">市街地走行が続いています。エコモードを使うと燃費が向上します。</div>
+                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">3${t('notif-time-hours')}</div>
+                            <div style="margin-bottom: 12px;">${t('notif-3')}</div>
                             <div style="display: flex; gap: 10px;">
                                 <button onclick="removeNotification('notification-3', 'helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px;">
-                                    ✅ 役立った
+                                    ✅ ${t('notif-helpful')}
                                 </button>
                                 <button onclick="removeNotification('notification-3', 'not-helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px;">
-                                    😒 役立たなかった
+                                    😒 ${t('notif-not-helpful')}
                                 </button>
                             </div>
                         </div>
@@ -2032,14 +3133,14 @@
 
                     <div class="card" id="notification-4" style="margin-bottom: 15px; border: 1px solid rgba(191, 0, 255, 0.3);">
                         <div class="card-content">
-                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">昨日</div>
-                            <div style="margin-bottom: 12px;">ブレーキ操作が増えています。パドルシフトで減速時の操作をサポートできます。</div>
+                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">${t('notif-time-yesterday')}</div>
+                            <div style="margin-bottom: 12px;">${t('notif-4')}</div>
                             <div style="display: flex; gap: 10px;">
                                 <button onclick="removeNotification('notification-4', 'helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px;">
-                                    ✅ 役立った
+                                    ✅ ${t('notif-helpful')}
                                 </button>
                                 <button onclick="removeNotification('notification-4', 'not-helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px;">
-                                    😒 役立たなかった
+                                    😒 ${t('notif-not-helpful')}
                                 </button>
                             </div>
                         </div>
@@ -2047,14 +3148,14 @@
 
                     <div class="card" id="notification-5" style="margin-bottom: 15px; border: 1px solid rgba(191, 0, 255, 0.3);">
                         <div class="card-content">
-                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">2日前</div>
-                            <div style="margin-bottom: 12px;">そろそろエアコンフィルターの清掃をしましょう。</div>
+                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">2${t('notif-time-days')}</div>
+                            <div style="margin-bottom: 12px;">${t('notif-5')}</div>
                             <div style="display: flex; gap: 10px;">
                                 <button onclick="removeNotification('notification-5', 'helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px;">
-                                    ✅ 役立った
+                                    ✅ ${t('notif-helpful')}
                                 </button>
                                 <button onclick="removeNotification('notification-5', 'not-helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px;">
-                                    😒 役立たなかった
+                                    😒 ${t('notif-not-helpful')}
                                 </button>
                             </div>
                         </div>
@@ -2062,14 +3163,14 @@
 
                     <div class="card" id="notification-6" style="margin-bottom: 15px; border: 1px solid rgba(191, 0, 255, 0.3);">
                         <div class="card-content">
-                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">3日前</div>
-                            <div style="margin-bottom: 12px;">長時間運転が続いています。近くで休憩を取ることをおすすめします。</div>
+                            <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">3${t('notif-time-days')}</div>
+                            <div style="margin-bottom: 12px;">${t('notif-6')}</div>
                             <div style="display: flex; gap: 10px;">
                                 <button onclick="removeNotification('notification-6', 'helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); padding: 10px;">
-                                    ✅ 役立った
+                                    ✅ ${t('notif-helpful')}
                                 </button>
                                 <button onclick="removeNotification('notification-6', 'not-helpful')" class="button" style="flex: 1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px;">
-                                    😒 役立たなかった
+                                    😒 ${t('notif-not-helpful')}
                                 </button>
                             </div>
                         </div>
@@ -2178,10 +3279,10 @@
         // レベル一覧を生成
         function generateLevelList() {
             const levels = [
-                { level: 1, name: 'はじめまして', desc: 'まだ愛車のことをよく知らない状態' },
-                { level: 2, name: '顔なじみ', desc: '機能を使い始め、愛車のことを少しずつ知ってきました' },
-                { level: 3, name: '頼れるパートナー', desc: '多くの機能を活用し、愛車を理解している' },
-                { level: 4, name: '相棒', desc: '愛車を完全に使いこなし、最高の関係を築いている' }
+                { level: 1, name: t('status-level-1'), desc: t('status-level-1-desc') },
+                { level: 2, name: t('status-level-2'), desc: t('status-level-2-desc') },
+                { level: 3, name: t('status-level-3'), desc: t('status-level-3-desc') },
+                { level: 4, name: t('status-level-4'), desc: t('status-level-4-desc') }
             ];
             
             let html = '';
@@ -2198,7 +3299,7 @@
                     if (history.endDate) {
                         periodText = `${history.startDate} 〜 ${history.endDate}`;
                     } else {
-                        periodText = `${history.startDate} 〜 現在`;
+                        periodText = `${history.startDate} 〜 ${t('status-current')}`;
                     }
                 }
                 
@@ -2209,15 +3310,15 @@
                 if (isCurrent) {
                     cardStyle = 'padding: 12px; background: rgba(191, 0, 255, 0.1); border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #BF00FF;';
                     textColor = '#BF00FF';
-                    badge = '<span style="color: #00d084; margin-left: 5px;">● 現在</span>';
+                    badge = `<span style="color: #00d084; margin-left: 5px;">● ${t('status-current')}</span>`;
                 } else if (isAchieved) {
                     cardStyle = 'padding: 12px; background: rgba(45, 53, 97, 0.4); border-radius: 8px; margin-bottom: 10px; opacity: 0.6;';
                     textColor = '#888';
-                    badge = '<span style="color: #888; margin-left: 5px;">✓ 達成済み</span>';
+                    badge = `<span style="color: #888; margin-left: 5px;">✓ ${t('status-achieved')}</span>`;
                 } else {
                     cardStyle = 'padding: 12px; background: rgba(45, 53, 97, 0.4); border-radius: 8px; margin-bottom: 10px;';
                     textColor = '#888';
-                    badge = '<span style="margin-left: 5px;">🔒</span>';
+                    badge = `<span style="margin-left: 5px;">${t('status-locked')}</span>`;
                 }
                 
                 html += `
@@ -2321,20 +3422,20 @@
             defaultContent.classList.add('hidden');
             
             const percentage = (userStatus.totalPoints / userStatus.maxPoints) * 100;
-            const levelName = userStatus.level === 1 ? 'はじめまして' : 
-                             userStatus.level === 2 ? '顔なじみ' : 
-                             userStatus.level === 3 ? '頼れるパートナー' : '相棒';
+            const levelName = userStatus.level === 1 ? t('status-level-1') : 
+                             userStatus.level === 2 ? t('status-level-2') : 
+                             userStatus.level === 3 ? t('status-level-3') : t('status-level-4');
             
             resultDiv.innerHTML = `
                 <div class="card" style="margin-bottom: 15px; border: 2px solid #BF00FF;">
                     <div class="card-title" style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: #1A1A1A; padding: 15px; margin: -1px -1px 0 -1px; border-radius: 10px 10px 0 0; font-size: 1.1em;">
-                        🤝 あなたと愛車の関係値
+                        🤝 ${t('status-title')}
                     </div>
                     <div class="card-content">
                         <div style="text-align: center; margin: 20px 0;">
                             <div style="font-size: 3em; margin-bottom: 10px;">🚗💙</div>
                             <div style="font-size: 1.8em; font-weight: bold; color: #BF00FF; margin-bottom: 5px;">Lv ${userStatus.level} | ${levelName}</div>
-                            <div style="color: #aaa; font-size: 0.9em;">次のレベルまで: ${userStatus.totalPoints} / ${userStatus.maxPoints} pt</div>
+                            <div style="color: #aaa; font-size: 0.9em;">${t('status-next-level')} ${userStatus.totalPoints} / ${userStatus.maxPoints} pt</div>
                         </div>
 
                         <div style="background: rgba(45, 53, 97, 0.6); height: 25px; border-radius: 12px; overflow: hidden; margin: 20px 0; position: relative;">
@@ -2344,11 +3445,11 @@
                         </div>
 
                         <div style="background: linear-gradient(135deg, rgba(191, 0, 255, 0.15) 0%, rgba(210, 0, 255, 0.1) 100%); padding: 15px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #BF00FF;">
-                            <strong style="color: #BF00FF;">💡 次のレベルへのヒント</strong><br>
+                            <strong style="color: #BF00FF;">💡 ${t('status-hint-title')}</strong><br>
                             <div style="margin-top: 10px; color: #e0e0e0; font-size: 0.9em;">
-                                • おすすめ機能を試してみましょう<br>
-                                • 定期メンテナンスを実施しましょう<br>
-                                • 運転データを改善しましょう
+                                • ${t('status-hint-1')}<br>
+                                • ${t('status-hint-2')}<br>
+                                • ${t('status-hint-3')}
                             </div>
                         </div>
                     </div>
@@ -2356,38 +3457,38 @@
 
                 <div class="card" style="margin-bottom: 15px;">
                     <div class="card-title">
-                        🚙 運転データ
+                        🚙 ${t('status-drive-title')}
                     </div>
                     <div class="card-content">
                         <div style="margin-bottom: 15px;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                <span style="color: #aaa;">総走行距離</span>
+                                <span style="color: #aaa;">${t('status-total-distance')}</span>
                                 <span style="color: #BF00FF; font-weight: 600;">12,450 km</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                <span style="color: #aaa;">月間走行距離</span>
+                                <span style="color: #aaa;">${t('status-monthly-distance')}</span>
                                 <span style="color: #BF00FF; font-weight: 600;">450 km</span>
                             </div>
                             <div style="display: flex; justify-content: space-between;">
-                                <span style="color: #aaa;">平均燃費</span>
+                                <span style="color: #aaa;">${t('status-avg-fuel')}</span>
                                 <span style="color: #BF00FF; font-weight: 600;">8.9 km/L</span>
                             </div>
                         </div>
                         <div style="text-align: center; padding: 10px; background: rgba(0, 208, 132, 0.1); border-radius: 8px; border: 1px solid rgba(0, 208, 132, 0.3);">
                             <span style="color: #00d084; font-weight: 600;">+50 pt</span>
-                            <span style="color: #aaa; font-size: 0.9em; margin-left: 5px;">月間目標達成！</span>
+                            <span style="color: #aaa; font-size: 0.9em; margin-left: 5px;">${t('status-monthly-goal')}</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="card" style="margin-bottom: 15px;">
                     <div class="card-title">
-                        ✨ 機能活用度
+                        ✨ ${t('status-feature-title')}
                     </div>
                     <div class="card-content">
                         <div style="margin-bottom: 15px;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                <span style="color: #aaa;">活用している機能</span>
+                                <span style="color: #aaa;">${t('status-features-used')}</span>
                                 <span style="color: #BF00FF; font-weight: 600;">${userStatus.usedFeatures} / ${userStatus.totalFeatures}</span>
                             </div>
                             <div style="background: rgba(45, 53, 97, 0.6); height: 10px; border-radius: 5px; overflow: hidden;">
@@ -2395,47 +3496,47 @@
                             </div>
                         </div>
                         <div style="font-size: 0.9em; color: #aaa;">
-                            最近使った機能：<br>
-                            • シートヒーター<br>
-                            • パノラミックビューモニター<br>
-                            • エコモード
+                            ${t('status-recent-features')}<br>
+                            • ${t('status-feature-seat')}<br>
+                            • ${t('status-feature-panoramic')}<br>
+                            • ${t('status-feature-eco')}
                         </div>
                         <div style="text-align: center; padding: 10px; background: rgba(102, 126, 234, 0.1); border-radius: 8px; border: 1px solid rgba(102, 126, 234, 0.3); margin-top: 10px;">
                             <span style="color: #667eea; font-weight: 600;">+30 pt</span>
-                            <span style="color: #aaa; font-size: 0.9em; margin-left: 5px;">新機能を活用中</span>
+                            <span style="color: #aaa; font-size: 0.9em; margin-left: 5px;">${t('status-new-feature')}</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="card" style="margin-bottom: 15px;">
                     <div class="card-title">
-                        🔧 メンテナンス状況
+                        🔧 ${t('status-maintenance-title')}
                     </div>
                     <div class="card-content">
                         <div style="margin-bottom: 15px;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                <span style="color: #aaa;">前回の点検</span>
+                                <span style="color: #aaa;">${t('status-last-check')}</span>
                                 <span style="color: #BF00FF; font-weight: 600;">2025/12/15</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                <span style="color: #aaa;">次回の点検</span>
+                                <span style="color: #aaa;">${t('status-next-check')}</span>
                                 <span style="color: #BF00FF; font-weight: 600;">2026/03/15</span>
                             </div>
                             <div style="display: flex; justify-content: space-between;">
-                                <span style="color: #aaa;">メンテナンス遵守率</span>
+                                <span style="color: #aaa;">${t('status-maintenance-rate')}</span>
                                 <span style="color: #00d084; font-weight: 600;">95%</span>
                             </div>
                         </div>
                         <div style="text-align: center; padding: 10px; background: rgba(191, 0, 255, 0.1); border-radius: 8px; border: 1px solid rgba(191, 0, 255, 0.3);">
                             <span style="color: #BF00FF; font-weight: 600;">+70 pt</span>
-                            <span style="color: #aaa; font-size: 0.9em; margin-left: 5px;">適切なメンテナンス実施中</span>
+                            <span style="color: #aaa; font-size: 0.9em; margin-left: 5px;">${t('status-proper-maintenance')}</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="card" style="margin-bottom: 15px;">
                     <div class="card-title">
-                        🏆 関係値レベル一覧
+                        🏆 ${t('status-level-list-title')}
                     </div>
                     <div class="card-content">
                         ${generateLevelList()}
@@ -2447,17 +3548,22 @@
             document.getElementById('homeContent').scrollTop = 0;
         }
 
-        // Enterキーで検索
+        // Enterキーで検索・初期表示
         document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchInput');
+            // 言語設定を復元
+            var savedLang = localStorage.getItem('preferred_language');
+            if (savedLang && savedLang !== 'ja') {
+                selectLanguage(savedLang);
+            }
+            
+            var searchInput = document.getElementById('searchInput');
             if (searchInput) {
                 searchInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        performSearch();
-                    }
+                    if (e.key === 'Enter') performSearch();
                 });
             }
-            displayRandomAlert();
+            try { displayRandomAlert(); } catch (e) { console.warn('displayRandomAlert:', e); }
+            setTimeout(function() { try { displayRandomAlert(); } catch (e) {} }, 100);
         });
     </script>
 </body>

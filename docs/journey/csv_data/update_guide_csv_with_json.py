@@ -2,6 +2,9 @@
 """
 Guide.csvにJSONファイルパスを追加するスクリプト
 
+注意: 現在のGuide.csvは既にGUIDE-001〜GUIDE-013の13ガイドで更新済みです。
+このスクリプトは検証用にGuide_updated.csvを出力します。
+
 Usage:
     py update_guide_csv_with_json.py
 """
@@ -13,7 +16,7 @@ from pathlib import Path
 # ファイルパス
 GUIDE_CSV = Path(__file__).parent / "Guide.csv"
 GUIDE_CONTENT_DIR = Path(__file__).parent / "guide_content"
-OUTPUT_CSV = Path(__file__).parent / "Guide_updated.csv"
+OUTPUT_CSV = Path(__file__).parent / "Guide_updated.csv"  # 検証用出力
 
 def load_existing_guides():
     """既存のGuide.csvを読み込む"""
@@ -106,8 +109,8 @@ def main():
     print(f"Total guides: {len(guides)}")
     print(f"Matched with JSON: {matched}")
     print(f"Match rate: {matched/len(guides)*100:.1f}%")
-    print(f"\n[INFO] Guide_updated.csv created")
-    print("[INFO] 確認後、Guide.csvに上書きしてください")
+    print(f"\n[INFO] Guide_updated.csv created (検証用)")
+    print("[INFO] 注意: 現在のGuide.csvは既にGUIDE-001〜GUIDE-013で更新済みです")
     print("\nComplete!")
 
 if __name__ == "__main__":

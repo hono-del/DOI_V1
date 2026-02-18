@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ドアが開かない - T1～T6 プロセススライド</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Meiryo, sans-serif; margin: 0; background: #1a1a2e; color: #eee; }
+    .slide { min-height: 100vh; padding: 2rem; display: flex; flex-direction: column; }
+    .slide h1 { margin: 0 0 0.25rem 0; font-size: 1.75rem; color: #4ade80; border-bottom: 2px solid #4ade80; padding-bottom: 0.5rem; }
+    .slide .subtitle { margin: 0 0 1.5rem 0; font-size: 1rem; color: #94a3b8; }
+    .flow-table { width: 100%; border-collapse: collapse; flex: 1; }
+    .flow-table th { text-align: left; padding: 0.75rem 1rem; background: #2d2d44; color: #94a3b8; font-weight: 600; }
+    .flow-table th.col-input { width: 28%; }
+    .flow-table th.col-arrow { width: 4%; }
+    .flow-table th.col-process { width: 28%; }
+    .flow-table th.col-output { width: 28%; }
+    .flow-table td { padding: 0.75rem 1rem; vertical-align: top; border-bottom: 1px solid #334155; }
+    .flow-table td.col-input { background: #0f172a; }
+    .flow-table td.col-process { background: #0f172a; }
+    .flow-table td.col-output { background: #0f172a; }
+    .flow-table td.col-arrow { padding: 0.5rem 0.25rem; text-align: center; vertical-align: middle; font-size: 1.25rem; font-weight: bold; }
+    .flow-table tr.step1 td.col-arrow { background: #dc2626; color: #fff; }
+    .flow-table tr.step2 td.col-arrow { background: #2563eb; color: #fff; }
+    .flow-table tr.step3 td.col-arrow { background: #16a34a; color: #fff; }
+    .flow-table tr.step4 td.col-arrow { background: #ea580c; color: #fff; }
+    .flow-table tr.step5 td.col-arrow { background: #7c3aed; color: #fff; }
+    .flow-table tr.step1 td.col-process { border-left: 4px solid #dc2626; }
+    .flow-table tr.step1 td.col-output { border-left: 4px solid #dc2626; }
+    .flow-table tr.step2 td.col-process { border-left: 4px solid #2563eb; }
+    .flow-table tr.step2 td.col-output { border-left: 4px solid #2563eb; }
+    .flow-table tr.step3 td.col-process { border-left: 4px solid #16a34a; }
+    .flow-table tr.step3 td.col-output { border-left: 4px solid #16a34a; }
+    .flow-table tr.step4 td.col-process { border-left: 4px solid #ea580c; }
+    .flow-table tr.step4 td.col-output { border-left: 4px solid #ea580c; }
+    .flow-table tr.step5 td.col-process { border-left: 4px solid #7c3aed; }
+    .flow-table tr.step5 td.col-output { border-left: 4px solid #7c3aed; }
+    .flow-table .process-name { font-weight: 600; color: #e2e8f0; margin-bottom: 0.25rem; }
+    .flow-table .necessity { margin-top: 0.5rem; font-size: 0.8rem; color: #94a3b8; padding: 0.35rem 0.5rem; background: #1e293b; border-radius: 4px; border-left: 3px solid #4ade80; }
+    .flow-table .necessity.skip { border-left-color: #fbbf24; }
+    .flow-table .cell-content { font-size: 0.9rem; line-height: 1.5; }
+    .flow-table .output-example { margin-top: 0.5rem; padding: 0.5rem; background: #1e293b; border-radius: 4px; font-size: 0.8rem; line-height: 1.4; white-space: pre-wrap; font-family: Consolas, monospace; }
+    .legend { margin-top: 1.5rem; padding: 0.75rem 1rem; background: #2d2d44; border-radius: 8px; font-size: 0.85rem; display: flex; flex-wrap: wrap; gap: 1rem; }
+    .legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .legend .dot { width: 12px; height: 12px; border-radius: 2px; }
+    .nav { position: fixed; right: 1rem; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 0.25rem; z-index: 10; }
+    .nav a { display: block; padding: 0.25rem 0.5rem; border-radius: 4px; background: #475569; color: #94a3b8; font-size: 0.75rem; text-decoration: none; }
+    .nav a:hover { background: #94a3b8; }
+    .nav a.active { background: #4ade80; color: #1a1a2e; }
+  </style>
+</head>
+<body>
+
+  <!-- T1 -->
+  <section class="slide" id="t1">
+    <h1>T1：事象切り出し</h1>
+    <p class="subtitle">テーマ：ドアが開かない（スマートキー想定）</p>
+    <table class="flow-table">
+      <thead>
+        <tr>
+          <th class="col-input">INPUT</th>
+          <th class="col-arrow"></th>
+          <th class="col-process">PROCESS</th>
+          <th class="col-arrow"></th>
+          <th class="col-output">OUTPUT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="step1">
+          <td class="col-input"><div class="cell-content">困りごと選択「ドアが開かない」、操作ログ（解錠3回/20秒、失敗2回）、文脈（時間帯・位置・走行状態＝停止中）</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">① 兆候の正規化・ラベル化（Feature化）</div><div class="cell-content">選択→symptom=door_not_open、ログ→unlock_fail_count=2 等を抽出。時刻・位置を time_band, location_type, vehicle_state に正規化。</div><div class="necessity">必須：後続の候補生成・確度算出の入力として統一形式が必要なため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">features（symptom, unlock_fail_count, time_window_sec, time_band, location_type, vehicle_state）</div></td>
+        </tr>
+        <tr class="step2">
+          <td class="col-input"><div class="cell-content">features、ルール（unlock_fail >= 2 within 30s → DOOR_NOT_OPEN）</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">② ルール＋軽い分類で事象候補生成</div><div class="cell-content">ルールを満たすため DOOR_NOT_OPEN を候補として出力。候補は1つに収束。</div><div class="necessity skip">選択入力のみのときは省略可：選択→event_id の1対1マッピングで足りるため。自由文・操作ログのみのときは必須：event_id を決めるため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">事象ID候補：DOOR_NOT_OPEN</div></td>
+        </tr>
+        <tr class="step3">
+          <td class="col-input"><div class="cell-content">事象ID候補（DOOR_NOT_OPEN）、features（ユーザー選択＋解錠失敗の重なり）</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">③ 兆候の重なりを集約</div><div class="cell-content">候補が1つのためそのまま採用。subtype を出す場合はここで決定（省略可）。</div><div class="necessity skip">候補1つのときは省略可：集約するまでもないため。複数候補のときは必須：event_id を1つに絞るため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">event_id=DOOR_NOT_OPEN、subtype（あれば）</div></td>
+        </tr>
+        <tr class="step4">
+          <td class="col-input"><div class="cell-content">event_id、支持する兆候（user_selected_symptom, unlock_fail_repeated）</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">④ 事象ラベルごとの確度（confidence）算出</div><div class="cell-content">選択＋解錠失敗の重なりから確度を算出。例：選択あり＋失敗2回 → 0.85。</div><div class="necessity">必須：T1出力として後続・UXで利用するため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">confidence=0.85</div></td>
+        </tr>
+        <tr class="step5">
+          <td class="col-input"><div class="cell-content">context_labels、event_id、confidence。緊急度・心理リスクルール。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">⑤ UX判断用の状態情報算出</div><div class="cell-content">psychological_risk=high、urgency=0.7 等を付与。evidence を列挙。</div><div class="necessity">必須：緊急度・心理リスクは T5・UX 判断に必要なため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">urgency=0.7、psychological_risk=high、context_labels、evidence。T1最終：event_id, subtype, confidence, urgency, psychological_risk, context_labels, evidence</div></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="legend">
+      <span><span class="dot" style="background:#dc2626"></span>①兆候の正規化・ラベル化</span>
+      <span><span class="dot" style="background:#2563eb"></span>②事象候補生成</span>
+      <span><span class="dot" style="background:#16a34a"></span>③兆候の重なり集約</span>
+      <span><span class="dot" style="background:#ea580c"></span>④confidence算出</span>
+      <span><span class="dot" style="background:#7c3aed"></span>⑤UX状態情報算出</span>
+    </div>
+  </section>
+
+  <!-- T2 -->
+  <section class="slide" id="t2">
+    <h1>T2：原因候補列挙</h1>
+    <p class="subtitle">テーマ：ドアが開かない</p>
+    <table class="flow-table">
+      <thead>
+        <tr>
+          <th class="col-input">INPUT</th>
+          <th class="col-arrow"></th>
+          <th class="col-process">PROCESS</th>
+          <th class="col-arrow"></th>
+          <th class="col-output">OUTPUT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="step1">
+          <td class="col-input"><div class="cell-content">T1出力 event_id=DOOR_NOT_OPEN。マニュアル・トラブルシュート表。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">① 知識ベース検索で原因を取得</div><div class="cell-content">DOOR_NOT_OPEN をキーに検索。キー電池切れ、キー故障、電波干渉、車両12V低下、ドアロック故障、操作条件不一致 等を取得。</div><div class="necessity">必須：原因候補が無いと T3・T4・T5 が動かないため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">原因の粗いリスト（KEY_BATTERY_EMPTY, RADIO_INTERFERENCE, VEHICLE_12V_LOW, LOCK_ACTUATOR_FAULT, USER_OPERATION 等）</div></td>
+        </tr>
+        <tr class="step2">
+          <td class="col-input"><div class="cell-content">原因リスト。車種・年式・装備（スマートキー有無等）。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">② 車種・装備でフィルタ</div><div class="cell-content">該当車では原因はほぼすべて存在し得るため大きな除外は行わずリスト維持。</div><div class="necessity">必須：その車に存在しない原因を除外しないと不適切な質問・行動が出るため（車種未取得時はスキップ可）</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">フィルタ済み原因候補</div></td>
+        </tr>
+        <tr class="step3">
+          <td class="col-input"><div class="cell-content">フィルタ済みリスト。知識ベースの必要観察・危険度・対処群。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">③ 各候補にメタ情報を付与</div><div class="cell-content">cause_id に description, required_observations, risk_level, action_group を付与。例：KEY_BATTERY_EMPTY→key_indicator_light, battery_replace。</div><div class="necessity">必須：T3 の質問選定・T4 の確率・T5 の行動選択に必要なため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">cause_candidates[]（原因ID、説明、必要観察、危険度、対処群）</div><div class="output-example">【出力例】
+KEY_BATTERY_EMPTY: キー電池切れ
+  required_observations: [key_indicator_light]
+  risk_level: low, action_group: battery_replace
+RADIO_INTERFERENCE: 電波干渉
+  required_observations: [key_indicator_light, location]
+  risk_level: low, action_group: retry_or_relocate
+LOCK_ACTUATOR_FAULT: ドアロック故障
+  required_observations: [other_key_result]
+  risk_level: medium, action_group: dealer
+USER_OPERATION: 操作条件不一致
+  risk_level: low, action_group: guide</div></td>
+        </tr>
+        <tr class="step4">
+          <td class="col-input"><div class="cell-content">cause_candidates[]</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">④ T3・T4が参照できる形式で出力</div><div class="cell-content">スキーマに沿って JSON 等に整え出力。</div><div class="necessity">必須：T3・T4 が参照する形式で渡すため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">cause_candidates[]（T2最終出力）</div><div class="output-example">【出力例】同上の cause_candidates を JSON 形式で出力。T3・T4 へ渡す。</div></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="legend">
+      <span><span class="dot" style="background:#dc2626"></span>①知識ベース検索</span>
+      <span><span class="dot" style="background:#2563eb"></span>②車種フィルタ</span>
+      <span><span class="dot" style="background:#16a34a"></span>③メタ情報付与</span>
+      <span><span class="dot" style="background:#ea580c"></span>④形式出力</span>
+    </div>
+  </section>
+
+  <!-- T3 -->
+  <section class="slide" id="t3">
+    <h1>T3：観察点選定</h1>
+    <p class="subtitle">テーマ：ドアが開かない</p>
+    <table class="flow-table">
+      <thead>
+        <tr>
+          <th class="col-input">INPUT</th>
+          <th class="col-arrow"></th>
+          <th class="col-process">PROCESS</th>
+          <th class="col-arrow"></th>
+          <th class="col-output">OUTPUT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="step1">
+          <td class="col-input"><div class="cell-content">T2の cause_candidates[]。T1の event_id、context_labels。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">① 原因候補を取得</div><div class="cell-content">cause_candidates を参照。required_observations から「キーランプの有無」が効く観察であることを利用。</div><div class="necessity">必須：質問選定の対象が無いと T3 が成立しないため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="output-example">【出力例】
+cause_ids: [KEY_BATTERY_EMPTY, RADIO_INTERFERENCE, VEHICLE_12V_LOW, LOCK_ACTUATOR_FAULT, USER_OPERATION]
+観察候補: [key_indicator_light, location, other_key_result]</div></td>
+        </tr>
+        <tr class="step2">
+          <td class="col-input"><div class="cell-content">原因候補、required_observations。故障木（ランプでキー側/車両側に分かれる）。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">② 情報利得を評価</div><div class="cell-content">「ランプは点きますか？」を評価。No→キー電池/キー故障、Yes→車両側/電波干渉等。1問で原因分布を大きく分割できるため情報利得が高い。</div><div class="necessity">必須：聞くべき1問を決めるため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="output-example">【出力例】
+採用質問: "ランプは点きますか？"
+情報利得スコア: 0.85（最優先）</div></td>
+        </tr>
+        <tr class="step3">
+          <td class="col-input"><div class="cell-content">1問（キーランプの点灯有無）。緊急度・文脈。禁則ルール。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">③ 禁則チェック</div><div class="cell-content">危険・曖昧・負荷過大に該当しないため除外しない。採用。</div><div class="necessity">必須：危険・曖昧な質問を出さないため（安全な事象のみのときは簡略可）</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="output-example">【出力例】
+採用: question_id "Q_DOOR_001"
+（キーランプ点灯有無）
+禁則: 該当なし</div></td>
+        </tr>
+        <tr class="step4">
+          <td class="col-input"><div class="cell-content">採用した質問。T1の urgency、context_labels。質問優先順ルール。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">④ 質問順の調整</div><div class="cell-content">「キーランプの有無」を最初の1問として優先順位1とする。</div><div class="necessity">必須：最初に出す質問を決めるため（質問1つのときは簡略可）</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="output-example">【出力例】
+priority: 1
+question: "スマートキーのボタンを押すとランプは点きますか？"</div></td>
+        </tr>
+        <tr class="step5">
+          <td class="col-input"><div class="cell-content">採用した質問。原因候補と回答値の対応（故障木）。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">⑤ 1問と expected_split を生成</div><div class="cell-content">question_id=Q_DOOR_001、question_text、answer_type=yes_no。expected_split：No→キー電池/キー故障、Yes→車両側/電波干渉等。</div><div class="necessity">必須：T4 の確率更新と UX の質問表示に必要なため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="output-example">【出力例】T3最終出力
+question_id: "Q_DOOR_001"
+question_text: "スマートキーのボタンを押すとランプは点きますか？"
+answer_type: "yes_no"
+expected_split:
+  no: [KEY_BATTERY_EMPTY, KEY_FAULT]
+  yes: [RADIO_INTERFERENCE, VEHICLE_12V_LOW, USER_OPERATION, LOCK_ACTUATOR_FAULT]
+priority: 1</div></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="legend">
+      <span><span class="dot" style="background:#dc2626"></span>①原因候補取得</span>
+      <span><span class="dot" style="background:#2563eb"></span>②情報利得評価</span>
+      <span><span class="dot" style="background:#16a34a"></span>③禁則チェック</span>
+      <span><span class="dot" style="background:#ea580c"></span>④質問順調整</span>
+      <span><span class="dot" style="background:#7c3aed"></span>⑤1問・expected_split生成</span>
+    </div>
+  </section>
+
+  <!-- T4 -->
+  <section class="slide" id="t4">
+    <h1>T4：仮説評価・順位付け</h1>
+    <p class="subtitle">テーマ：ドアが開かない（Q1=No の例）</p>
+    <table class="flow-table">
+      <thead>
+        <tr>
+          <th class="col-input">INPUT</th>
+          <th class="col-arrow"></th>
+          <th class="col-process">PROCESS</th>
+          <th class="col-arrow"></th>
+          <th class="col-output">OUTPUT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="step1">
+          <td class="col-input"><div class="cell-content">ユーザー回答（Q1=No、ランプは点かない）。T3の expected_split（No→KEY_BATTERY_EMPTY, KEY_FAULT 等）。T2の cause_candidates[]。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">① 観察結果と expected_split を照合</div><div class="cell-content">answer=No の枝に含まれる原因に条件一致度1、それ以外に0。KEY_BATTERY_EMPTY, KEY_FAULT が支持され他は弱まる。</div><div class="necessity">必須：原因の確信度を更新するため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">原因ごとの条件一致度</div><div class="output-example">【出力例】
+KEY_BATTERY_EMPTY: 1（高）
+KEY_FAULT: 1（高）
+RADIO_INTERFERENCE, VEHICLE_12V_LOW, LOCK_ACTUATOR_FAULT, USER_OPERATION: 0（低）</div></td>
+        </tr>
+        <tr class="step2">
+          <td class="col-input"><div class="cell-content">条件一致度。事前確率（一様 or 統計）。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">② 事前確率と組み合わせて事後確率を更新</div><div class="cell-content">事前確率×条件一致度を正規化。Q1=No の場合 KEY_BATTERY_EMPTY=0.70、KEY_FAULT=0.15、OTHER=0.15 等に更新。</div><div class="necessity">必須：確信度が無いと T5 で行動を選べないため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">原因ごとの確信度（0～1）</div><div class="output-example">【出力例】
+KEY_BATTERY_EMPTY: 0.70
+KEY_FAULT: 0.15
+OTHER: 0.15</div></td>
+        </tr>
+        <tr class="step3">
+          <td class="col-input"><div class="cell-content">確信度。cause_id、evidence（key_indicator_light=no）。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">③ 確信度で順位付けし ranked_causes[] を生成</div><div class="cell-content">確信度の降順でソート。各要素に cause_id, confidence, evidence を付与。</div><div class="necessity">必須：T5 の行動列挙に必要なため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">ranked_causes[]（1位 KEY_BATTERY_EMPTY 0.70、2位 KEY_FAULT 0.15、3位 OTHER 0.15）</div><div class="output-example">【出力例】
+ranked_causes: [
+  { cause_id: "KEY_BATTERY_EMPTY", confidence: 0.72, evidence: ["key_indicator_light=no"] },
+  { cause_id: "KEY_FAULT", confidence: 0.15, evidence: ["key_indicator_light=no"] },
+  { cause_id: "OTHER", confidence: 0.13, evidence: [] }
+]</div></td>
+        </tr>
+        <tr class="step4">
+          <td class="col-input"><div class="cell-content">ranked_causes[] 上位確信度。cause_candidates の risk_level。しきい値。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">④ status を決定</div><div class="cell-content">上位確信度が「対処に進んでよい」しきい値を超えているため status=READY_FOR_ACTION。ESCALATE にはしない。</div><div class="necessity">必須：対処に進むか・追加観察か・エスカレーションかを決めるため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">status=READY_FOR_ACTION。T4最終：ranked_causes[], status → T5へ</div><div class="output-example">【出力例】
+status: "READY_FOR_ACTION"
+（ranked_causes は上記のまま T5 へ渡す）</div></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="legend">
+      <span><span class="dot" style="background:#dc2626"></span>①観察結果と照合</span>
+      <span><span class="dot" style="background:#2563eb"></span>②事後確率更新</span>
+      <span><span class="dot" style="background:#16a34a"></span>③ranked_causes生成</span>
+      <span><span class="dot" style="background:#ea580c"></span>④status決定</span>
+    </div>
+  </section>
+
+  <!-- T5 -->
+  <section class="slide" id="t5">
+    <h1>T5：行動選択</h1>
+    <p class="subtitle">テーマ：ドアが開かない</p>
+    <table class="flow-table">
+      <thead>
+        <tr>
+          <th class="col-input">INPUT</th>
+          <th class="col-arrow"></th>
+          <th class="col-process">PROCESS</th>
+          <th class="col-arrow"></th>
+          <th class="col-output">OUTPUT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="step1">
+          <td class="col-input"><div class="cell-content">T4の ranked_causes 上位、action_group。T2の risk_level。知識ベースの推奨行動。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">① action_group とリスクで行動を列挙</div><div class="cell-content">一次解決：機械キー解錠。恒久対応：電池交換、販売店・ロードサービス。リスクに応じて「販売店での交換を推奨」等を付与。</div><div class="necessity">必須：ユーザーに提示する選択肢を出すため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">行動候補：①機械キー解錠 ②電池交換 ③販売店/ロードサービス</div></td>
+        </tr>
+        <tr class="step2">
+          <td class="col-input"><div class="cell-content">3候補。T1の urgency、psychological_risk、context_labels。ユーザープロファイル。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">② 目的関数でスコア付けし最大3つに絞る</div><div class="cell-content">即効性・安全・負荷・成功率でスコア。urgency が高ければ機械キーを先頭に。並び順を確定。</div><div class="necessity">必須：最大3つに絞り、並び順を決めるため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">最大3つの行動（並び順確定）</div></td>
+        </tr>
+        <tr class="step3">
+          <td class="col-input"><div class="cell-content">3行動。各行動の性質（今すぐ開ける vs 電池交換 vs 専門家へ）。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">③ 一次解決と恒久対応を区別</div><div class="cell-content">1枚目：今すぐ開ける。2枚目：恒久対応（電池交換）。3枚目：不安なら販売店/ロードサービス。</div><div class="necessity">必須：UX で「今すぐ」と「きちんと直す」を分けて表示するため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">action_cards（3枚）の並びとラベル</div></td>
+        </tr>
+        <tr class="step4">
+          <td class="col-input"><div class="cell-content">action_cards。手順・必要物・危険注意のテンプレート。T2の risk_level。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">④ 手順・所要時間・必要物・危険注意・代替案を付与</div><div class="cell-content">①機械キー：steps、duration=約30秒、alternative。②電池交換：CR2032、risk_notice=販売店推奨、alternative。<strong>→ UX：risk_notice 表示後「販売店で交換する」「自分で交換する」の選択ステップを入れる。</strong>③販売店/ロードサービス：位置共有・症状要約。</div><div class="necessity">必須：ユーザーが実行できる内容として渡すため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">action_cards[]（3枚、title/steps/duration/required_items/risk_notice/alternative/<strong>guide_id</strong> 付き）</div><div class="output-example">【出力例】
+① action_id: "A_DOOR_001", guide_id: "GUIDE-001"
+   title: "今すぐ開ける：機械キーで解錠"
+   steps: ["キーから機械キーを取り出し、ドアの鍵穴に挿して解錠"]
+   duration: "約30秒", required_items: [], risk_notice: null
+   alternative: "開かない場合はロードサービスへ"
+② action_id: "A_DOOR_002", guide_id: "GUIDE-005"
+   title: "恒久対応：電池交換"
+   required_items: ["CR2032（ボタン電池）"]
+   risk_notice: "部品破損の恐れがあるため、販売店での交換を推奨します。"
+   alternative: "電池購入先の案内へ"
+   → UX: risk_notice 表示後「販売店で交換する」「自分で交換する」を選択させる
+③ action_id: "A_DOOR_003", guide_id: "GUIDE-006"
+   title: "不安なら：販売店・ロードサービス"
+   steps: ["位置共有・症状要約付きで連絡"]</div></td>
+        </tr>
+        <tr class="step5">
+          <td class="col-input"><div class="cell-content">事象 DOOR_NOT_OPEN、action_cards。エスカレーション先マスタ。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">⑤ escalation_option を付与</div><div class="cell-content">販売店予約・ロードサービスを escalation_option として付与。</div><div class="necessity">必須：不安時の出口を明示するため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">escalation_option。T5最終：action_cards[]、escalation_option → UX</div><div class="output-example">【出力例】
+escalation_option: {
+  dealer: "販売店予約",
+  road_service: "ロードサービス"
+}</div></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="legend">
+      <span><span class="dot" style="background:#dc2626"></span>①行動列挙</span>
+      <span><span class="dot" style="background:#2563eb"></span>②スコア付け・絞り込み</span>
+      <span><span class="dot" style="background:#16a34a"></span>③一次/恒久の区別</span>
+      <span><span class="dot" style="background:#ea580c"></span>④手順・危険注意付与</span>
+      <span><span class="dot" style="background:#7c3aed"></span>⑤escalation_option</span>
+    </div>
+  </section>
+
+  <!-- T6 -->
+  <section class="slide" id="t6">
+    <h1>T6：結果評価・再探索</h1>
+    <p class="subtitle">テーマ：ドアが開かない</p>
+    <table class="flow-table">
+      <thead>
+        <tr>
+          <th class="col-input">INPUT</th>
+          <th class="col-arrow"></th>
+          <th class="col-process">PROCESS</th>
+          <th class="col-arrow"></th>
+          <th class="col-output">OUTPUT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="step1">
+          <td class="col-input"><div class="cell-content">action_result（成功/失敗/不明）。実施した action_id。追加観察「開きましたか？」の回答。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">① resolved（true/false）を判定</div><div class="cell-content">「開きましたか？」が Yes かつ action_result=成功 → resolved=true。No または失敗 → resolved=false。</div><div class="necessity">必須：解決したかどうかで分岐が変わるため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">resolved（true/false）</div></td>
+        </tr>
+        <tr class="step2">
+          <td class="col-input"><div class="cell-content">resolved=true。実施した action_id。行動の性質マッピング（機械キー＝一時解決等）。次のステップマスタ。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">② resolved=true：一時解決か／次のステップ誘導</div><div class="cell-content">機械キーで開けただけなら一時解決。next_step=done_with_next_steps、next_steps_guidance に「エンジンのかけ方」「電池交換のガイド」を付与。恒久対応完了なら next_step=done。</div><div class="necessity">必須：一時解決時に次にやることを案内するため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">next_step（done / done_with_next_steps）、next_steps_guidance（一時解決時）</div><div class="output-example">【出力例】機械キーで開けた場合
+resolved: true
+next_step: "done_with_next_steps"
+next_steps_guidance: [
+  { id: "engine_start_guide", label: "エンジンのかけ方", type: "guide" },
+  { id: "battery_replace_guide", label: "電池交換のガイド", type: "guide" }
+]</div></td>
+        </tr>
+        <tr class="step3">
+          <td class="col-input"><div class="cell-content">resolved=false。action_id と action_result（例：機械キーで開かなかった）。試行回数・T5履歴。観察不足判定。エスカレーションしきい値。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">③ resolved=false：T4戻し／T3戻し／エスカレーション</div><div class="cell-content">原則：next_step=retry_with_t4、evidence_from_failure を格納。観察不足時のみ next_question（電波干渉の可能性等）。試行続く or 危険なら escalate。</div><div class="necessity">必須：未解決時の次の一手を決めるため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">next_step（retry_with_t4 / next_question / escalate）、evidence_from_failure または next_question</div><div class="output-example">【出力例】T4に戻す場合
+resolved: false
+next_step: "retry_with_t4"
+evidence_from_failure: {
+  action_id: "A_DOOR_001",
+  action_result: "failed",
+  summary: "機械キーで解錠を試したが開かなかった"
+}</div></td>
+        </tr>
+        <tr class="step4">
+          <td class="col-input"><div class="cell-content">next_step=escalate。event_id。試した T5 の行動一覧と結果。T3の観察履歴。</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-process"><div class="process-name">④ エスカレーション時 handoff_payload を生成</div><div class="cell-content">event_id、actions_tried[]、result_summary をまとめ、専門家が続きを受け取りやすい最小情報で handoff_payload を生成。</div><div class="necessity">必須：エスカレーション時に専門家へ渡す情報をまとめるため</div></td>
+          <td class="col-arrow">→</td>
+          <td class="col-output"><div class="cell-content">handoff_payload。T6最終出力の一部</div><div class="output-example">【出力例】
+handoff_payload: {
+  event_id: "DOOR_NOT_OPEN",
+  actions_tried: ["機械キーで解錠試行", "電池交換試行"],
+  result_summary: "開かなかった。ランプは点かなかった。"
+}</div></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="legend">
+      <span><span class="dot" style="background:#dc2626"></span>①resolved判定</span>
+      <span><span class="dot" style="background:#2563eb"></span>②一時解決・次のステップ誘導</span>
+      <span><span class="dot" style="background:#16a34a"></span>③T4/T3戻し・エスカレーション</span>
+      <span><span class="dot" style="background:#ea580c"></span>④handoff_payload生成</span>
+    </div>
+  </section>
+
+  <nav class="nav" aria-label="スライドナビ">
+    <a href="#t1" title="T1">T1</a>
+    <a href="#t2" title="T2">T2</a>
+    <a href="#t3" title="T3">T3</a>
+    <a href="#t4" title="T4">T4</a>
+    <a href="#t5" title="T5">T5</a>
+    <a href="#t6" title="T6">T6</a>
+  </nav>
+
+  <script>
+    (function() {
+      var sections = document.querySelectorAll('.slide');
+      var navLinks = document.querySelectorAll('.nav a');
+      function updateActive() {
+        var top = window.scrollY + 100;
+        sections.forEach(function(s, i) {
+          var rect = s.getBoundingClientRect();
+          var docTop = s.offsetTop;
+          if (window.scrollY >= docTop - 150 && (i === sections.length - 1 || window.scrollY < sections[i + 1].offsetTop - 150)) {
+            navLinks.forEach(function(l) { l.classList.remove('active'); });
+            if (navLinks[i]) navLinks[i].classList.add('active');
+          }
+        });
+      }
+      window.addEventListener('scroll', updateActive);
+      window.addEventListener('load', updateActive);
+    })();
+  </script>
+</body>
+</html>

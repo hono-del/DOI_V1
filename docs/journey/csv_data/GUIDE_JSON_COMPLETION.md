@@ -543,8 +543,7 @@ export default GuideViewer;
 1. **GUIDE_XML_MAPPING.md** - XMLマッピング詳細
 2. **GUIDE_XML_SIMPLE_MAPPING.md** - JSON設計サンプル
 3. **XML_GUIDE_INTEGRATION_SUMMARY.md** - 統合サマリー
-4. **Guide.csv** - ガイド一覧CSV
-5. **Guide_updated.csv** - JSON紐付け版CSV
+4. **Guide.csv** - ガイド一覧CSV（GUIDE-001〜GUIDE-013の13ガイド）
 
 ---
 

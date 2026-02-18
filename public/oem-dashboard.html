@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web管理画面 - OEM向けダッシュボード（モック）</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #a0a0a0;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        .screen-section {
+            margin-bottom: 60px;
+            display: none;
+        }
+        .screen-section.active {
+            display: block;
+        }
+        .screen-title {
+            background: linear-gradient(135deg, #2d3561 0%, #1a1a2e 100%);
+            color: #4facfe;
+            padding: 15px 25px;
+            border-radius: 10px 10px 0 0;
+            font-size: 1.3em;
+            font-weight: 600;
+            border-bottom: 2px solid #4facfe;
+        }
+        .screen-description {
+            background: #16213e;
+            padding: 15px 25px;
+            border-left: 4px solid #4facfe;
+            margin-bottom: 20px;
+            color: #b0b0b0;
+        }
+        .screen-description strong { color: #4facfe; }
+        .mockup {
+            background: #0f3460;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        .card {
+            background: rgba(45, 53, 97, 0.4);
+            border: 1px solid rgba(79, 172, 254, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+        .card-title {
+            font-weight: 600;
+            color: #4facfe;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+        .card-content {
+            color: #b0b0b0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        .button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #0f3460;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 8px rgba(79, 172, 254, 0.3);
+            transition: all 0.3s;
+        }
+        .button:hover {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(79, 172, 254, 0.5);
+        }
+        .web-frame {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .web-header {
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            padding: 15px 25px;
+            border-bottom: 1px solid rgba(79, 172, 254, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #e0e0e0;
+        }
+        .web-header h2 { color: #4facfe; }
+        .web-header span { color: #e0e0e0; }
+        .web-sidebar { display: flex; }
+        .web-sidebar-left {
+            width: 250px;
+            background: #16213e;
+            color: white;
+            padding: 20px;
+            border-right: 1px solid rgba(79, 172, 254, 0.2);
+        }
+        .web-sidebar-left h3 { color: #4facfe; }
+        .web-main {
+            flex: 1;
+            padding: 30px;
+            background: #0f3460;
+            color: #e0e0e0;
+        }
+        .menu-item {
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #e0e0e0;
+        }
+        .menu-item:hover {
+            background: rgba(79, 172, 254, 0.2);
+            transform: translateX(5px);
+        }
+        .menu-item.active {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #0f3460;
+            font-weight: 600;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: white;
+        }
+        .stat-label {
+            font-size: 1em;
+            opacity: 0.9;
+            color: white;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        }
+        /* コンテンツ管理 */
+        .model-block { margin-bottom: 30px; }
+        .model-block h3 { color: #4facfe; margin-bottom: 15px; font-size: 1.2em; }
+        .year-section {
+            background: rgba(45, 53, 97, 0.3);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(79, 172, 254, 0.2);
+        }
+        .year-section h4 { color: #e0e0e0; margin-bottom: 12px; font-size: 1em; }
+        .content-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #e0e0e0;
+            font-size: 0.9em;
+        }
+        .content-table th {
+            text-align: left;
+            padding: 10px 12px;
+            background: rgba(79, 172, 254, 0.15);
+            color: #4facfe;
+            border-bottom: 1px solid rgba(79, 172, 254, 0.3);
+        }
+        .content-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(79, 172, 254, 0.1);
+        }
+        .content-table tr:hover td { background: rgba(79, 172, 254, 0.05); }
+        .content-type-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        .content-type-xml { background: rgba(79, 172, 254, 0.3); color: #4facfe; }
+        .content-type-html { background: rgba(0, 208, 132, 0.25); color: #00d084; }
+        .content-type-pdf { background: rgba(255, 107, 107, 0.25); color: #ff6b6b; }
+        .btn-delete {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.5);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-delete:hover {
+            background: rgba(255, 107, 107, 0.4);
+            color: #fff;
+        }
+        .import-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+        .btn-import {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-import-xml { background: rgba(79, 172, 254, 0.3); color: #4facfe; border: 1px solid #4facfe; }
+        .btn-import-html { background: rgba(0, 208, 132, 0.25); color: #00d084; border: 1px solid #00d084; }
+        .btn-import-pdf { background: rgba(255, 107, 107, 0.25); color: #ff6b6b; border: 1px solid #ff6b6b; }
+        .btn-import-xml:hover, .btn-import-html:hover, .btn-import-pdf:hover { opacity: 0.9; transform: translateY(-1px); }
+        .file-input-hidden { display: none; }
+        /* 検索・新規格納 */
+        .content-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .content-search-wrap {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+        .content-search-wrap input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            border-radius: 8px;
+            border: 1px solid rgba(79, 172, 254, 0.4);
+            background: rgba(45, 53, 97, 0.5);
+            color: #e0e0e0;
+            font-size: 0.95em;
+        }
+        .content-search-wrap input::placeholder { color: #888; }
+        .content-search-wrap input:focus { outline: none; border-color: #4facfe; box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.2); }
+        .content-search-wrap .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            pointer-events: none;
+        }
+        .btn-add-model {
+            background: linear-gradient(135deg, #00d084 0%, #00b96d 100%);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-add-model:hover { opacity: 0.9; transform: translateY(-1px); }
+        .new-model-form {
+            display: none;
+            background: rgba(45, 53, 97, 0.4);
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .new-model-form.visible { display: flex; }
+        .new-model-form input[type="text"] {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(79, 172, 254, 0.4);
+            background: rgba(22, 33, 62, 0.6);
+            color: #e0e0e0;
+            font-size: 0.95em;
+            width: 180px;
+        }
+        .new-model-form input:focus { outline: none; border-color: #4facfe; }
+        .new-model-form .btn-submit-add { background: #4facfe; color: #0f3460; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .new-model-form .btn-cancel-add { background: transparent; color: #aaa; border: 1px solid #666; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+        .content-model-list { margin-top: 10px; }
+        .lang-toggle-oem {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(79, 172, 254, 0.2);
+            border: 1px solid rgba(79, 172, 254, 0.4);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.9em;
+            color: #4facfe;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10000;
+        }
+        .lang-toggle-oem:hover {
+            background: rgba(79, 172, 254, 0.35);
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle-oem" onclick="toggleLanguage()">
+        <span id="langLabel">EN</span>
+    </button>
+    <div class="container">
+        <div id="oem-sync-notice" style="display: none; background: rgba(255, 165, 0, 0.2); border: 1px solid #ffa500; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; color: #e0e0e0; font-size: 0.95em;">
+            ⚠️ <strong>連動するには</strong> 同じオリジンで開いてください。プロジェクトルートで <code style="background: rgba(0,0,0,0.3); padding: 2px 6px;">npm run serve</code> を実行し、<br>
+            <a href="http://localhost:3000/public/index.html" style="color: #4facfe;">http://localhost:3000/public/index.html</a> と <a href="http://localhost:3000/public/oem-dashboard.html" style="color: #4facfe;">http://localhost:3000/public/oem-dashboard.html</a> を<strong>同じブラウザで</strong>開くと、検索・チャット・「今すぐ確認」がダッシュボードに反映されます（3秒ごとに自動更新）。
+        </div>
+        <div id="oem-sync-ok" style="display: none; background: rgba(0, 200, 100, 0.15); border: 1px solid #00c864; border-radius: 8px; padding: 8px 16px; margin-bottom: 20px; color: #b0f0d0; font-size: 0.9em;">
+            ✓ 統計連動中（index / call-center の操作を3秒ごとに反映）
+        </div>
+        <h1 data-i18n="page-title">Web管理画面 - OEM向けダッシュボード</h1>
+        <p class="subtitle" data-i18n="page-subtitle">取扱説明書DXシステム Phase1 モック（5. Web管理画面）</p>
+
+        <!-- 5. Web管理画面（OEM向け） -->
+        <div class="screen-section active" id="web-dashboard">
+            <div class="screen-title">5. Web管理画面 - OEM向けダッシュボード</div>
+            <div class="screen-description">
+                <strong>目的:</strong> OEMがシステムの利用状況を確認・分析<br>
+                <strong>主要機能:</strong> 利用統計、問合せ分析、データエクスポート
+            </div>
+            <div class="mockup">
+                <div class="web-frame">
+                    <div class="web-header">
+                        <div><h2 style="margin: 0;">📊 管理ダッシュボード</h2></div>
+                        <div>
+                            <span style="margin-right: 20px;">🏢 トヨタ自動車株式会社</span>
+                            <button class="button" style="padding: 8px 15px;">ログアウト</button>
+                        </div>
+                    </div>
+                    <div class="web-sidebar">
+                        <div class="web-sidebar-left">
+                            <h3 style="margin-bottom: 20px;">メニュー</h3>
+                            <div class="menu-item active">📊 ダッシュボード</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-stats-detail')" style="cursor: pointer;">📈 利用統計</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-inquiry-analysis')" style="cursor: pointer;">💬 問合せ分析</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-content-management')" style="cursor: pointer;">📚 コンテンツ管理</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-user-management')" style="cursor: pointer;">👥 ユーザー管理</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-settings')" style="cursor: pointer;">⚙️ 設定</div>
+                        </div>
+                        <div class="web-main">
+                            <h2 style="margin-bottom: 20px; color: #e0e0e0;">システム利用状況（2026年1月）</h2>
+                            <div class="content-toolbar" style="margin-bottom: 16px;">
+                                <label style="color: #aaa; margin-right: 8px;">表示:</label>
+                                <select id="dashboardSourceFilter" onchange="applyDashboardFilter()" style="background: rgba(45, 53, 97, 0.6); color: #e0e0e0; border: 1px solid rgba(79, 172, 254, 0.3); padding: 8px 14px; border-radius: 8px; min-width: 180px;">
+                                    <option value="all">全て（エンドユーザー＋サポートスタッフ）</option>
+                                    <option value="enduser">エンドユーザー</option>
+                                    <option value="staff">サポートスタッフ</option>
+                                </select>
+                            </div>
+                            <div class="grid-3">
+                                <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                    <div class="stat-number" id="oem-stat-activeUsers">12,450</div>
+                                    <div class="stat-label">月間アクティブユーザー</div>
+                                </div>
+                                <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                    <div class="stat-number" id="oem-stat-totalQuestions">28,340</div>
+                                    <div class="stat-label">総質問数</div>
+                                </div>
+                                <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                    <div class="stat-number" id="oem-stat-accuracy">92%</div>
+                                    <div class="stat-label">回答精度</div>
+                                </div>
+                            </div>
+                            <div class="grid-2">
+                                <div class="card">
+                                    <div class="card-title">よく検索される機能 TOP 5</div>
+                                    <div class="card-content">
+                                        <ol id="oem-top5-list" style="padding-left: 20px; color: #e0e0e0;">
+                                            <li style="padding: 8px 0;">Bluetooth接続の設定方法（2,340件）</li>
+                                            <li style="padding: 8px 0;">エアコンの使い方（1,890件）</li>
+                                            <li style="padding: 8px 0;">ワイパーの操作方法（1,560件）</li>
+                                            <li style="padding: 8px 0;">クルーズコントロールの設定（1,230件）</li>
+                                            <li style="padding: 8px 0;">タイヤ空気圧の確認方法（980件）</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-title">問合せ削減効果</div>
+                                    <div class="card-content" style="color: #e0e0e0;">
+                                        <div style="margin-bottom: 15px;">
+                                            <strong style="color: #fff;">コールセンター問合せ件数</strong><br>
+                                            <span style="font-size: 0.9em; color: #aaa;">導入前: 5,600件/月</span><br>
+                                            <span style="font-size: 0.9em; color: #aaa;">導入後: 3,920件/月</span><br>
+                                            <span style="color: #4caf50; font-weight: 600; font-size: 1.2em;">▼ 30% 削減</span>
+                                        </div>
+                                        <div>
+                                            <strong style="color: #fff;">推定コスト削減額</strong><br>
+                                            <span style="font-size: 1.5em; color: #4facfe; font-weight: 600;">¥2,520,000/月</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">プロアクティブ案内の効果</div>
+                                <div class="card-content" style="color: #e0e0e0;">
+                                    <div class="grid-3">
+                                        <div>
+                                            <strong style="color: #fff;">案内配信数</strong><br>
+                                            <span id="oem-proactive-sent" style="font-size: 1.5em; color: #4facfe; font-weight: 600;">8,340件</span>
+                                        </div>
+                                        <div>
+                                            <strong style="color: #fff;">案内閲覧率</strong><br>
+                                            <span id="oem-proactive-rate" style="font-size: 1.5em; color: #4facfe; font-weight: 600;">45%</span>
+                                        </div>
+                                        <div>
+                                            <strong style="color: #fff;">機能利用率向上</strong><br>
+                                            <span id="oem-proactive-util" style="font-size: 1.5em; color: #4caf50; font-weight: 600;">+15%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; margin-top: 30px;">
+                                <button class="button" style="padding: 12px 30px; font-size: 1.1em;">📥 レポートをダウンロード</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5-2. Web管理画面 - 利用統計詳細 -->
+        <div class="screen-section" id="web-stats-detail">
+            <div class="screen-title">5-2. Web管理画面 - 利用統計詳細（機能分析）</div>
+            <div class="screen-description">
+                <strong>目的:</strong> 機能別の利用状況とフィードバックを詳細に分析し、開発・セールス戦略に活用<br>
+                <strong>主要機能:</strong> 機能別利用率、フィードバック分析、ユーザー属性別分析、改善推奨
+            </div>
+            <div class="mockup">
+                <div class="web-frame">
+                    <div class="web-header">
+                        <div><h2 style="margin: 0;">📈 利用統計 - 機能分析</h2></div>
+                        <div>
+                            <span style="margin-right: 20px;">🏢 トヨタ自動車株式会社</span>
+                            <button class="button" style="padding: 8px 15px;">ログアウト</button>
+                        </div>
+                    </div>
+                    <div class="web-sidebar">
+                        <div class="web-sidebar-left">
+                            <h3 style="margin-bottom: 20px;">メニュー</h3>
+                            <div class="menu-item" onclick="navigateToScreen('web-dashboard')" style="cursor: pointer;">📊 ダッシュボード</div>
+                            <div class="menu-item active">📈 利用統計</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-inquiry-analysis')" style="cursor: pointer;">💬 問合せ分析</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-content-management')" style="cursor: pointer;">📚 コンテンツ管理</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-user-management')" style="cursor: pointer;">👥 ユーザー管理</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-settings')" style="cursor: pointer;">⚙️ 設定</div>
+                        </div>
+                        <div class="web-main">
+                            <h2 style="margin-bottom: 20px; color: #e0e0e0;">機能別利用状況（2026年1月）</h2>
+                            <div class="card" style="margin-bottom: 20px;">
+                                <div class="card-content">
+                                    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                                        <div>
+                                            <label style="color: #aaa; font-size: 0.9em; margin-right: 8px;">期間:</label>
+                                            <select style="background: rgba(45, 53, 97, 0.6); color: #e0e0e0; border: 1px solid rgba(79, 172, 254, 0.3); padding: 8px 12px; border-radius: 8px;">
+                                                <option>今月</option>
+                                                <option>先月</option>
+                                                <option>過去3ヶ月</option>
+                                                <option>過去6ヶ月</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label style="color: #aaa; font-size: 0.9em; margin-right: 8px;">車種:</label>
+                                            <select style="background: rgba(45, 53, 97, 0.6); color: #e0e0e0; border: 1px solid rgba(79, 172, 254, 0.3); padding: 8px 12px; border-radius: 8px;">
+                                                <option>全車種</option>
+                                                <option>プリウス</option>
+                                                <option>カローラ</option>
+                                                <option>RAV4</option>
+                                            </select>
+                                        </div>
+                                        <div style="margin-left: auto;">
+                                            <button class="button" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460; padding: 8px 20px;">📥 CSVエクスポート</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card" style="margin-bottom: 20px;">
+                                <div class="card-title">🎯 機能別利用状況・満足度分析</div>
+                                <div class="card-content" style="overflow-x: auto;">
+                                    <table style="width: 100%; border-collapse: collapse; color: #e0e0e0;">
+                                        <thead>
+                                            <tr style="background: rgba(79, 172, 254, 0.1); border-bottom: 2px solid rgba(79, 172, 254, 0.3);">
+                                                <th style="padding: 12px; text-align: left; color: #4facfe;">機能名</th>
+                                                <th style="padding: 12px; text-align: center; color: #4facfe;">利用回数</th>
+                                                <th style="padding: 12px; text-align: center; color: #4facfe;">利用率</th>
+                                                <th style="padding: 12px; text-align: center; color: #4facfe;">満足度</th>
+                                                <th style="padding: 12px; text-align: center; color: #4facfe;">優先度</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="border-bottom: 1px solid rgba(79, 172, 254, 0.1);">
+                                                <td style="padding: 12px;"><strong>シートヒーター</strong><br><span style="font-size: 0.85em; color: #888;">おすすめ機能</span></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #4facfe;">3,240回</strong></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #00d084;">78%</strong></td>
+                                                <td style="padding: 12px; text-align: center;"><span style="color: #00d084;">😊 85%</span></td>
+                                                <td style="padding: 12px; text-align: center;"><span style="background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600;">高効果</span></td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid rgba(79, 172, 254, 0.1);">
+                                                <td style="padding: 12px;"><strong>パノラミックビューモニター</strong><br><span style="font-size: 0.85em; color: #888;">駐車支援</span></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #4facfe;">2,890回</strong></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #00d084;">72%</strong></td>
+                                                <td style="padding: 12px; text-align: center;"><span style="color: #00d084;">😊 82%</span></td>
+                                                <td style="padding: 12px; text-align: center;"><span style="background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%); color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600;">要改善</span></td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid rgba(79, 172, 254, 0.1);">
+                                                <td style="padding: 12px;"><strong>エコモード</strong><br><span style="font-size: 0.85em; color: #888;">燃費向上</span></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #4facfe;">2,560回</strong></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #4facfe;">65%</strong></td>
+                                                <td style="padding: 12px; text-align: center;"><span style="color: #4facfe;">🙂 75%</span></td>
+                                                <td style="padding: 12px; text-align: center;"><span style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600;">標準</span></td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid rgba(79, 172, 254, 0.1);">
+                                                <td style="padding: 12px;"><strong>オートハイビーム</strong><br><span style="font-size: 0.85em; color: #888;">安全機能</span></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #4facfe;">2,340回</strong></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #00d084;">70%</strong></td>
+                                                <td style="padding: 12px; text-align: center;"><span style="color: #00d084;">😊 88%</span></td>
+                                                <td style="padding: 12px; text-align: center;"><span style="background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.85em; font-weight: 600;">高効果</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="grid-2" style="margin-bottom: 20px;">
+                                <div class="card">
+                                    <div class="card-title">👥 年代別利用状況</div>
+                                    <div class="card-content" style="color: #e0e0e0;">
+                                        <div style="margin-bottom: 15px;">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span>20代</span><span style="color: #4facfe; font-weight: 600;">機能活用率: 45%</span></div>
+                                            <div style="font-size: 0.85em; color: #aaa; margin-left: 15px;">人気: シートヒーター、Bluetooth接続、エコモード</div>
+                                        </div>
+                                        <div style="margin-bottom: 15px;">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span>30代</span><span style="color: #00d084; font-weight: 600;">機能活用率: 68%</span></div>
+                                            <div style="font-size: 0.85em; color: #aaa; margin-left: 15px;">人気: パノラミックビュー、オートハイビーム、エコモード</div>
+                                        </div>
+                                        <div style="margin-bottom: 15px;">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span>40代</span><span style="color: #00d084; font-weight: 600;">機能活用率: 72%</span></div>
+                                            <div style="font-size: 0.85em; color: #aaa; margin-left: 15px;">人気: パノラミックビュー、オートハイビーム、シートヒーター</div>
+                                        </div>
+                                        <div style="margin-bottom: 15px;">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span>50代以上</span><span style="color: #4facfe; font-weight: 600;">機能活用率: 52%</span></div>
+                                            <div style="font-size: 0.85em; color: #aaa; margin-left: 15px;">人気: オートハイビーム、シートヒーター、エアコン設定</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-title">🚗 車種別利用状況</div>
+                                    <div class="card-content" style="color: #e0e0e0;">
+                                        <div style="margin-bottom: 15px;">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span><strong>プリウス</strong></span><span style="color: #00d084; font-weight: 600;">満足度: 89%</span></div>
+                                            <div style="font-size: 0.85em; color: #aaa; margin-left: 15px;">高評価: エコモード、燃費データ表示<br>改善要望: パドルシフトの説明不足</div>
+                                        </div>
+                                        <div style="margin-bottom: 15px;">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span><strong>RAV4</strong></span><span style="color: #00d084; font-weight: 600;">満足度: 85%</span></div>
+                                            <div style="font-size: 0.85em; color: #aaa; margin-left: 15px;">高評価: パノラミックビュー、オートハイビーム<br>改善要望: 4WD設定の説明追加希望</div>
+                                        </div>
+                                        <div style="margin-bottom: 15px;">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span><strong>カローラ</strong></span><span style="color: #4facfe; font-weight: 600;">満足度: 82%</span></div>
+                                            <div style="font-size: 0.85em; color: #aaa; margin-left: 15px;">高評価: シンプルな操作説明<br>改善要望: 先進機能の説明強化</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">💡 データに基づく推奨アクション</div>
+                                <div class="card-content" style="color: #e0e0e0;">
+                                    <div class="grid-2">
+                                        <div>
+                                            <h4 style="color: #00d084; margin-bottom: 12px;">✅ 開発優先度：高</h4>
+                                            <div style="background: rgba(0, 208, 132, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #00d084;">
+                                                <strong>シートヒーター</strong><br><span style="font-size: 0.85em; color: #aaa;">利用率78%、満足度85% → 他車種への展開推奨</span>
+                                            </div>
+                                            <div style="background: rgba(0, 208, 132, 0.1); padding: 12px; border-radius: 8px; border-left: 3px solid #00d084;">
+                                                <strong>オートハイビーム</strong><br><span style="font-size: 0.85em; color: #aaa;">利用率70%、満足度88% → 標準装備化を検討</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h4 style="color: #ffa500; margin-bottom: 12px;">⚠️ 改善優先度：高</h4>
+                                            <div style="background: rgba(255, 165, 0, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #ffa500;">
+                                                <strong>パノラミックビューモニター</strong><br><span style="font-size: 0.85em; color: #aaa;">「使い方不明」15% → 説明動画・イラスト追加</span>
+                                            </div>
+                                            <div style="background: rgba(255, 107, 107, 0.1); padding: 12px; border-radius: 8px; border-left: 3px solid #ff6b6b;">
+                                                <strong>パドルシフト</strong><br><span style="font-size: 0.85em; color: #aaa;">「使い方不明」35%、「嬉しくない」22% → UI改善・価値訴求強化</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; margin-top: 30px;">
+                                <button class="button" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460; padding: 12px 30px; font-size: 1.1em; margin-right: 10px;">📥 詳細レポートをダウンロード</button>
+                                <button class="button" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px 30px; font-size: 1.1em;">📧 開発チームに共有</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5-3. Web管理画面 - 問合せ分析 -->
+        <div class="screen-section" id="web-inquiry-analysis">
+            <div class="screen-title">5-3. Web管理画面 - 問合せ分析（問合せ削減）</div>
+            <div class="screen-description">
+                <strong>目的:</strong> 問合せ数の削減とチャネル最適化<br>
+                <strong>主要機能:</strong> 機能別問合せ件数、緊急度分析、解決チャネル分析、削減効果測定
+            </div>
+            <div class="mockup">
+                <div class="web-frame">
+                    <div class="web-header">
+                        <div><h2 style="margin: 0;">💬 問合せ分析 - 削減効果測定</h2></div>
+                        <div>
+                            <span style="margin-right: 20px;">🏢 トヨタ自動車株式会社</span>
+                            <button class="button" style="padding: 8px 15px;">ログアウト</button>
+                        </div>
+                    </div>
+                    <div class="web-sidebar">
+                        <div class="web-sidebar-left">
+                            <h3 style="margin-bottom: 20px;">メニュー</h3>
+                            <div class="menu-item" onclick="navigateToScreen('web-dashboard')" style="cursor: pointer;">📊 ダッシュボード</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-stats-detail')" style="cursor: pointer;">📈 利用統計</div>
+                            <div class="menu-item active">💬 問合せ分析</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-content-management')" style="cursor: pointer;">📚 コンテンツ管理</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-user-management')" style="cursor: pointer;">👥 ユーザー管理</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-settings')" style="cursor: pointer;">⚙️ 設定</div>
+                        </div>
+                        <div class="web-main">
+                            <h2 style="margin-bottom: 20px; color: #e0e0e0;">問合せ分析（2026年1月）</h2>
+                            <div class="content-toolbar" style="margin-bottom: 16px;">
+                                <label style="color: #aaa; margin-right: 8px;">表示:</label>
+                                <select id="inquirySourceFilter" onchange="var d=document.getElementById('dashboardSourceFilter');if(d)d.value=this.value;updateOemDashboard();" style="background: rgba(45, 53, 97, 0.6); color: #e0e0e0; border: 1px solid rgba(79, 172, 254, 0.3); padding: 8px 14px; border-radius: 8px; min-width: 180px;">
+                                    <option value="all">全て（エンドユーザー＋サポートスタッフ）</option>
+                                    <option value="enduser">エンドユーザー</option>
+                                    <option value="staff">サポートスタッフ</option>
+                                </select>
+                            </div>
+                            <div class="card" style="margin-bottom: 20px;">
+                                <div class="card-content">
+                                    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                                        <div>
+                                            <label style="color: #aaa; font-size: 0.9em; margin-right: 8px;">期間:</label>
+                                            <select style="background: rgba(45, 53, 97, 0.6); color: #e0e0e0; border: 1px solid rgba(79, 172, 254, 0.3); padding: 8px 12px; border-radius: 8px;">
+                                                <option>今月</option>
+                                                <option>先月</option>
+                                                <option>過去3ヶ月</option>
+                                                <option>過去6ヶ月</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label style="color: #aaa; font-size: 0.9em; margin-right: 8px;">緊急度:</label>
+                                            <select style="background: rgba(45, 53, 97, 0.6); color: #e0e0e0; border: 1px solid rgba(79, 172, 254, 0.3); padding: 8px 12px; border-radius: 8px;">
+                                                <option>全て</option>
+                                                <option>高</option>
+                                                <option>中</option>
+                                                <option>低</option>
+                                            </select>
+                                        </div>
+                                        <div style="margin-left: auto;">
+                                            <button class="button" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460; padding: 8px 20px;">📥 CSVエクスポート</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid-3" style="margin-bottom: 20px;">
+                                <div class="stat-card" style="background: linear-gradient(135deg, #00d084 0%, #00b96d 100%);">
+                                    <div class="stat-number">▼ 30%</div>
+                                    <div class="stat-label">問合せ削減率（前年比）</div>
+                                </div>
+                                <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                    <div class="stat-number">78%</div>
+                                    <div class="stat-label">チャット内解決率</div>
+                                </div>
+                                <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                    <div class="stat-number">3.2分</div>
+                                    <div class="stat-label">平均解決時間</div>
+                                </div>
+                            </div>
+                            <div class="card" style="margin-bottom: 20px;">
+                                <div class="card-title">🎯 緊急度別問合せ割合</div>
+                                <div class="card-content" style="color: #e0e0e0;">
+                                    <div class="grid-3">
+                                        <div>
+                                            <div style="text-align: center; margin-bottom: 10px;">
+                                                <div style="font-size: 2.5em; color: #ff6b6b;">🔴</div>
+                                                <div style="font-size: 1.8em; font-weight: 600; color: #ff6b6b; margin-top: 5px;">12%</div>
+                                                <div style="color: #aaa; margin-top: 5px;">緊急度：高</div>
+                                            </div>
+                                            <div style="background: rgba(255, 107, 107, 0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; border-left: 3px solid #ff6b6b;">
+                                                警告灯点灯、エンジン不調、<br>事故・故障など即座対応が必要
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div style="text-align: center; margin-bottom: 10px;">
+                                                <div style="font-size: 2.5em; color: #ffa500;">🟠</div>
+                                                <div style="font-size: 1.8em; font-weight: 600; color: #ffa500; margin-top: 5px;">33%</div>
+                                                <div style="color: #aaa; margin-top: 5px;">緊急度：中</div>
+                                            </div>
+                                            <div style="background: rgba(255, 165, 0, 0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; border-left: 3px solid #ffa500;">
+                                                機能が使えない、設定方法不明、<br>トラブルシューティング
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div style="text-align: center; margin-bottom: 10px;">
+                                                <div style="font-size: 2.5em; color: #4facfe;">🔵</div>
+                                                <div style="font-size: 1.8em; font-weight: 600; color: #4facfe; margin-top: 5px;">55%</div>
+                                                <div style="color: #aaa; margin-top: 5px;">緊急度：低</div>
+                                            </div>
+                                            <div style="background: rgba(79, 172, 254, 0.1); padding: 10px; border-radius: 8px; font-size: 0.85em; border-left: 3px solid #4facfe;">
+                                                基本操作、機能説明、<br>使い方の質問
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card" style="margin-bottom: 20px;">
+                                <div class="card-title">📊 機能別問合せ件数・解決チャネル分析</div>
+                                <div class="card-content" style="overflow-x: auto;">
+                                    <table style="width: 100%; border-collapse: collapse; color: #e0e0e0;">
+                                        <thead>
+                                            <tr style="background: rgba(79, 172, 254, 0.1); border-bottom: 2px solid rgba(79, 172, 254, 0.3);">
+                                                <th style="padding: 12px; text-align: left; color: #4facfe;">機能・事柄</th>
+                                                <th style="padding: 12px; text-align: center; color: #4facfe;">総問合せ数</th>
+                                                <th style="padding: 12px; text-align: center; color: #4facfe;">チャット解決</th>
+                                                <th style="padding: 12px; text-align: center; color: #4facfe;">電話対応</th>
+                                                <th style="padding: 12px; text-align: center; color: #4facfe;">解決率</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="border-bottom: 1px solid rgba(79, 172, 254, 0.1);">
+                                                <td style="padding: 12px;"><strong>Bluetooth接続</strong><br><span style="font-size: 0.85em; color: #888;">接続・設定</span></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #ff6b6b; font-size: 1.2em;">1,240件</strong></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #00d084;">890件</strong> (72%)</td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #ff6b6b;">350件</strong> (28%)</td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #00d084;">95%</strong></td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid rgba(79, 172, 254, 0.1);">
+                                                <td style="padding: 12px;"><strong>エンジン警告灯</strong><br><span style="font-size: 0.85em; color: #888;">緊急対応</span></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #ff6b6b; font-size: 1.2em;">980件</strong></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #4facfe;">420件</strong> (43%)</td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #ff6b6b;">560件</strong> (57%)</td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #00d084;">98%</strong></td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid rgba(79, 172, 254, 0.1);">
+                                                <td style="padding: 12px;"><strong>エアコン操作</strong><br><span style="font-size: 0.85em; color: #888;">基本操作</span></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #ffa500; font-size: 1.2em;">760件</strong></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #00d084;">680件</strong> (89%)</td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #4facfe;">80件</strong> (11%)</td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #00d084;">97%</strong></td>
+                                            </tr>
+                                            <tr style="border-bottom: 1px solid rgba(79, 172, 254, 0.1);">
+                                                <td style="padding: 12px;"><strong>パノラミックビュー</strong><br><span style="font-size: 0.85em; color: #888;">駐車支援</span></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #ffa500; font-size: 1.2em;">620件</strong></td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #00d084;">480件</strong> (77%)</td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #ffa500;">140件</strong> (23%)</td>
+                                                <td style="padding: 12px; text-align: center;"><strong style="color: #00d084;">94%</strong></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="grid-2" style="margin-bottom: 20px;">
+                                <div class="card">
+                                    <div class="card-title">📱 チャット内解決の内訳</div>
+                                    <div class="card-content" style="color: #e0e0e0;">
+                                        <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(79, 172, 254, 0.1);">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span><strong>即座に解決</strong></span><span style="color: #00d084; font-weight: 600;">62%</span></div>
+                                            <div style="font-size: 0.85em; color: #aaa;">1回の質問で解決（平均1.5分）</div>
+                                        </div>
+                                        <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(79, 172, 254, 0.1);">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span><strong>複数回のやり取り</strong></span><span style="color: #4facfe; font-weight: 600;">28%</span></div>
+                                            <div style="font-size: 0.85em; color: #aaa;">2-3回のやり取りで解決（平均4.2分）</div>
+                                        </div>
+                                        <div style="margin-bottom: 15px;">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span><strong>段階的ガイド利用</strong></span><span style="color: #667eea; font-weight: 600;">10%</span></div>
+                                            <div style="font-size: 0.85em; color: #aaa;">ステップバイステップで解決（平均6.8分）</div>
+                                        </div>
+                                        <div style="background: rgba(0, 208, 132, 0.1); padding: 12px; border-radius: 8px; margin-top: 15px; border-left: 3px solid #00d084;">
+                                            <strong style="color: #00d084;">✅ チャット解決率: 78%</strong><br><span style="font-size: 0.85em; color: #aaa;">前月比 +3.5%向上</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-title">📞 電話対応の内訳</div>
+                                    <div class="card-content" style="color: #e0e0e0;">
+                                        <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(79, 172, 254, 0.1);">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span><strong>緊急対応</strong></span><span style="color: #ff6b6b; font-weight: 600;">45%</span></div>
+                                            <div style="font-size: 0.85em; color: #aaa;">警告灯、故障など即座対応が必要</div>
+                                        </div>
+                                        <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(79, 172, 254, 0.1);">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span><strong>複雑な問題</strong></span><span style="color: #ffa500; font-weight: 600;">35%</span></div>
+                                            <div style="font-size: 0.85em; color: #aaa;">チャットで解決できない複合的な問題</div>
+                                        </div>
+                                        <div style="margin-bottom: 15px;">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span><strong>ユーザー希望</strong></span><span style="color: #4facfe; font-weight: 600;">20%</span></div>
+                                            <div style="font-size: 0.85em; color: #aaa;">直接話したい、詳しく聞きたい</div>
+                                        </div>
+                                        <div style="background: rgba(255, 165, 0, 0.1); padding: 12px; border-radius: 8px; margin-top: 15px; border-left: 3px solid #ffa500;">
+                                            <strong style="color: #ffa500;">📞 電話対応率: 22%</strong><br><span style="font-size: 0.85em; color: #aaa;">前月比 -2.1%削減</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">💡 問合せ削減のための推奨アクション</div>
+                                <div class="card-content" style="color: #e0e0e0;">
+                                    <div class="grid-2">
+                                        <div>
+                                            <h4 style="color: #ff6b6b; margin-bottom: 12px;">🔥 緊急対応が必要</h4>
+                                            <div style="background: rgba(255, 107, 107, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #ff6b6b;">
+                                                <strong>Bluetooth接続（1,240件）</strong><br>
+                                                <span style="font-size: 0.85em; color: #aaa;">→ ステップバイステップガイドの強化<br>→ トラブルシューティング動画追加<br>→ 予想削減: 350件/月</span>
+                                            </div>
+                                            <div style="background: rgba(255, 107, 107, 0.1); padding: 12px; border-radius: 8px; border-left: 3px solid #ff6b6b;">
+                                                <strong>パノラミックビュー（620件）</strong><br>
+                                                <span style="font-size: 0.85em; color: #aaa;">→ 実車イラスト・動画の追加<br>→ よくある質問の充実<br>→ 予想削減: 180件/月</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h4 style="color: #00d084; margin-bottom: 12px;">✅ 効果的に機能している</h4>
+                                            <div style="background: rgba(0, 208, 132, 0.1); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #00d084;">
+                                                <strong>エアコン操作（89%チャット解決）</strong><br><span style="font-size: 0.85em; color: #aaa;">現状の説明が効果的に機能 → 他機能への展開を推奨</span>
+                                            </div>
+                                            <div style="background: rgba(0, 208, 132, 0.1); padding: 12px; border-radius: 8px; border-left: 3px solid #00d084;">
+                                                <strong>クルーズコントロール（85%チャット解決）</strong><br><span style="font-size: 0.85em; color: #aaa;">段階的ガイドが効果的 → 同様の説明方式を他機能にも適用</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="background: linear-gradient(135deg, rgba(79, 172, 254, 0.2) 0%, rgba(102, 126, 234, 0.15) 100%); padding: 15px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #4facfe;">
+                                        <strong style="color: #4facfe; font-size: 1.05em;">📊 予想効果</strong><br>
+                                        <div style="margin-top: 12px; font-size: 0.95em;">
+                                            上記の改善を実施することで、<strong style="color: #fff;">月間約530件（13%）の問合せ削減</strong>が期待できます。<br>
+                                            推定コスト削減額: <strong style="color: #00d084; font-size: 1.2em;">¥795,000/月</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; margin-top: 30px;">
+                                <button class="button" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460; padding: 12px 30px; font-size: 1.1em; margin-right: 10px;">📥 詳細レポートをダウンロード</button>
+                                <button class="button" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px 30px; font-size: 1.1em;">📧 カスタマーサポートに共有</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5-4. Web管理画面 - コンテンツ管理 -->
+        <div class="screen-section" id="web-content-management">
+            <div class="screen-title">5-4. Web管理画面 - コンテンツ管理</div>
+            <div class="screen-description">
+                <strong>目的:</strong> 車種・年式別の取扱説明書・マニュアルをXML/HTML/PDFで登録・管理<br>
+                <strong>主要機能:</strong> XML/HTML/PDF取り込み、格納データの一覧表示・削除
+            </div>
+            <div class="mockup">
+                <div class="web-frame">
+                    <div class="web-header">
+                        <div><h2 style="margin: 0;">📚 コンテンツ管理</h2></div>
+                        <div>
+                            <span style="margin-right: 20px;">🏢 トヨタ自動車株式会社</span>
+                            <button class="button" style="padding: 8px 15px;">ログアウト</button>
+                        </div>
+                    </div>
+                    <div class="web-sidebar">
+                        <div class="web-sidebar-left">
+                            <h3 style="margin-bottom: 20px;">メニュー</h3>
+                            <div class="menu-item" onclick="navigateToScreen('web-dashboard')" style="cursor: pointer;">📊 ダッシュボード</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-stats-detail')" style="cursor: pointer;">📈 利用統計</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-inquiry-analysis')" style="cursor: pointer;">💬 問合せ分析</div>
+                            <div class="menu-item active">📚 コンテンツ管理</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-user-management')" style="cursor: pointer;">👥 ユーザー管理</div>
+                            <div class="menu-item">⚙️ 設定</div>
+                        </div>
+                        <div class="web-main">
+                            <h2 style="margin-bottom: 20px; color: #e0e0e0;">格納データ一覧</h2>
+
+                            <div class="content-toolbar">
+                                <div class="content-search-wrap">
+                                    <span class="search-icon">🔍</span>
+                                    <input type="text" id="contentSearchInput" placeholder="ファイル名・モデル名・年式で検索" oninput="filterContentSearch()">
+                                </div>
+                                <button type="button" class="btn-add-model" id="btnNewModel" onclick="showNewModelForm()">➕ 新規格納（モデル追加）</button>
+                                <div class="new-model-form" id="newModelForm">
+                                    <label style="color: #e0e0e0;">モデル名:</label>
+                                    <input type="text" id="newModelNameInput" placeholder="例: Model C" maxlength="50" onkeypress="if(event.key==='Enter'){ event.preventDefault(); submitNewModel(); }">
+                                    <button type="button" class="btn-submit-add" onclick="submitNewModel()">追加</button>
+                                    <button type="button" class="btn-cancel-add" onclick="cancelNewModelForm()">キャンセル</button>
+                                </div>
+                            </div>
+
+                            <div id="content-model-list" class="content-model-list">
+                            <!-- Model G -->
+                            <div class="model-block" data-model-key="G" data-model-label="Model G">
+                                <h3>🚗 Model G</h3>
+                                <div class="year-section" data-model="G" data-year="2024">
+                                    <h4>2024年式</h4>
+                                    <table class="content-table">
+                                        <thead>
+                                            <tr><th>ファイル名</th><th>種別</th><th>取込日時</th><th style="width: 100px;">操作</th></tr>
+                                        </thead>
+                                        <tbody id="content-list-G-2024">
+                                            <tr data-id="G-2024-1">
+                                                <td>取扱説明書_ModelG_2024.xml</td>
+                                                <td><span class="content-type-badge content-type-xml">XML</span></td>
+                                                <td>2026/01/15 10:30</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('G-2024-1')">削除</button></td>
+                                            </tr>
+                                            <tr data-id="G-2024-2">
+                                                <td>クイックガイド_ModelG_2024.html</td>
+                                                <td><span class="content-type-badge content-type-html">HTML</span></td>
+                                                <td>2026/01/14 14:20</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('G-2024-2')">削除</button></td>
+                                            </tr>
+                                            <tr data-id="G-2024-3">
+                                                <td>マニュアル_ModelG_2024.pdf</td>
+                                                <td><span class="content-type-badge content-type-pdf">PDF</span></td>
+                                                <td>2026/01/10 09:15</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('G-2024-3')">削除</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="import-buttons">
+                                        <input type="file" id="file-G-2024-xml" class="file-input-hidden" accept=".xml" onchange="handleFileImport('G','2024','xml',this)">
+                                        <input type="file" id="file-G-2024-html" class="file-input-hidden" accept=".html,.htm" onchange="handleFileImport('G','2024','html',this)">
+                                        <input type="file" id="file-G-2024-pdf" class="file-input-hidden" accept=".pdf" onchange="handleFileImport('G','2024','pdf',this)">
+                                        <button type="button" class="btn-import btn-import-xml" onclick="document.getElementById('file-G-2024-xml').click()">📄 XMLを取り込み</button>
+                                        <button type="button" class="btn-import btn-import-html" onclick="document.getElementById('file-G-2024-html').click()">🌐 HTMLを取り込み</button>
+                                        <button type="button" class="btn-import btn-import-pdf" onclick="document.getElementById('file-G-2024-pdf').click()">📕 PDFを取り込み</button>
+                                    </div>
+                                </div>
+                                <div class="year-section" data-model="G" data-year="2025">
+                                    <h4>2025年式</h4>
+                                    <table class="content-table">
+                                        <thead>
+                                            <tr><th>ファイル名</th><th>種別</th><th>取込日時</th><th style="width: 100px;">操作</th></tr>
+                                        </thead>
+                                        <tbody id="content-list-G-2025">
+                                            <tr data-id="G-2025-1">
+                                                <td>取扱説明書_ModelG_2025.xml</td>
+                                                <td><span class="content-type-badge content-type-xml">XML</span></td>
+                                                <td>2026/01/18 11:00</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('G-2025-1')">削除</button></td>
+                                            </tr>
+                                            <tr data-id="G-2025-2">
+                                                <td>操作ガイド_ModelG_2025.html</td>
+                                                <td><span class="content-type-badge content-type-html">HTML</span></td>
+                                                <td>2026/01/17 16:45</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('G-2025-2')">削除</button></td>
+                                            </tr>
+                                            <tr data-id="G-2025-3">
+                                                <td>取説_ModelG_2025.pdf</td>
+                                                <td><span class="content-type-badge content-type-pdf">PDF</span></td>
+                                                <td>2026/01/12 08:30</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('G-2025-3')">削除</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="import-buttons">
+                                        <input type="file" id="file-G-2025-xml" class="file-input-hidden" accept=".xml" onchange="handleFileImport('G','2025','xml',this)">
+                                        <input type="file" id="file-G-2025-html" class="file-input-hidden" accept=".html,.htm" onchange="handleFileImport('G','2025','html',this)">
+                                        <input type="file" id="file-G-2025-pdf" class="file-input-hidden" accept=".pdf" onchange="handleFileImport('G','2025','pdf',this)">
+                                        <button type="button" class="btn-import btn-import-xml" onclick="document.getElementById('file-G-2025-xml').click()">📄 XMLを取り込み</button>
+                                        <button type="button" class="btn-import btn-import-html" onclick="document.getElementById('file-G-2025-html').click()">🌐 HTMLを取り込み</button>
+                                        <button type="button" class="btn-import btn-import-pdf" onclick="document.getElementById('file-G-2025-pdf').click()">📕 PDFを取り込み</button>
+                                    </div>
+                                </div>
+                                <div class="year-section" data-model="G" data-year="2026">
+                                    <h4>2026年式</h4>
+                                    <table class="content-table">
+                                        <thead>
+                                            <tr><th>ファイル名</th><th>種別</th><th>取込日時</th><th style="width: 100px;">操作</th></tr>
+                                        </thead>
+                                        <tbody id="content-list-G-2026">
+                                            <tr data-id="G-2026-1">
+                                                <td>取扱説明書_ModelG_2026.xml</td>
+                                                <td><span class="content-type-badge content-type-xml">XML</span></td>
+                                                <td>2026/01/20 09:00</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('G-2026-1')">削除</button></td>
+                                            </tr>
+                                            <tr data-id="G-2026-2">
+                                                <td>FAQ_ModelG_2026.html</td>
+                                                <td><span class="content-type-badge content-type-html">HTML</span></td>
+                                                <td>2026/01/19 13:20</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('G-2026-2')">削除</button></td>
+                                            </tr>
+                                            <tr data-id="G-2026-3">
+                                                <td>マニュアル_ModelG_2026.pdf</td>
+                                                <td><span class="content-type-badge content-type-pdf">PDF</span></td>
+                                                <td>2026/01/22 10:15</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('G-2026-3')">削除</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="import-buttons">
+                                        <input type="file" id="file-G-2026-xml" class="file-input-hidden" accept=".xml" onchange="handleFileImport('G','2026','xml',this)">
+                                        <input type="file" id="file-G-2026-html" class="file-input-hidden" accept=".html,.htm" onchange="handleFileImport('G','2026','html',this)">
+                                        <input type="file" id="file-G-2026-pdf" class="file-input-hidden" accept=".pdf" onchange="handleFileImport('G','2026','pdf',this)">
+                                        <button type="button" class="btn-import btn-import-xml" onclick="document.getElementById('file-G-2026-xml').click()">📄 XMLを取り込み</button>
+                                        <button type="button" class="btn-import btn-import-html" onclick="document.getElementById('file-G-2026-html').click()">🌐 HTMLを取り込み</button>
+                                        <button type="button" class="btn-import btn-import-pdf" onclick="document.getElementById('file-G-2026-pdf').click()">📕 PDFを取り込み</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Model B -->
+                            <div class="model-block" data-model-key="B" data-model-label="Model B">
+                                <h3>🚙 Model B</h3>
+                                <div class="year-section" data-model="B" data-year="2024">
+                                    <h4>2024年式</h4>
+                                    <table class="content-table">
+                                        <thead>
+                                            <tr><th>ファイル名</th><th>種別</th><th>取込日時</th><th style="width: 100px;">操作</th></tr>
+                                        </thead>
+                                        <tbody id="content-list-B-2024">
+                                            <tr data-id="B-2024-1">
+                                                <td>取扱説明書_ModelB_2024.xml</td>
+                                                <td><span class="content-type-badge content-type-xml">XML</span></td>
+                                                <td>2026/01/08 14:00</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('B-2024-1')">削除</button></td>
+                                            </tr>
+                                            <tr data-id="B-2024-2">
+                                                <td>クイックガイド_ModelB_2024.html</td>
+                                                <td><span class="content-type-badge content-type-html">HTML</span></td>
+                                                <td>2026/01/07 11:30</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('B-2024-2')">削除</button></td>
+                                            </tr>
+                                            <tr data-id="B-2024-3">
+                                                <td>取説_ModelB_2024.pdf</td>
+                                                <td><span class="content-type-badge content-type-pdf">PDF</span></td>
+                                                <td>2026/01/05 09:45</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('B-2024-3')">削除</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="import-buttons">
+                                        <input type="file" id="file-B-2024-xml" class="file-input-hidden" accept=".xml" onchange="handleFileImport('B','2024','xml',this)">
+                                        <input type="file" id="file-B-2024-html" class="file-input-hidden" accept=".html,.htm" onchange="handleFileImport('B','2024','html',this)">
+                                        <input type="file" id="file-B-2024-pdf" class="file-input-hidden" accept=".pdf" onchange="handleFileImport('B','2024','pdf',this)">
+                                        <button type="button" class="btn-import btn-import-xml" onclick="document.getElementById('file-B-2024-xml').click()">📄 XMLを取り込み</button>
+                                        <button type="button" class="btn-import btn-import-html" onclick="document.getElementById('file-B-2024-html').click()">🌐 HTMLを取り込み</button>
+                                        <button type="button" class="btn-import btn-import-pdf" onclick="document.getElementById('file-B-2024-pdf').click()">📕 PDFを取り込み</button>
+                                    </div>
+                                </div>
+                                <div class="year-section" data-model="B" data-year="2025">
+                                    <h4>2025年式</h4>
+                                    <table class="content-table">
+                                        <thead>
+                                            <tr><th>ファイル名</th><th>種別</th><th>取込日時</th><th style="width: 100px;">操作</th></tr>
+                                        </thead>
+                                        <tbody id="content-list-B-2025">
+                                            <tr data-id="B-2025-1">
+                                                <td>取扱説明書_ModelB_2025.xml</td>
+                                                <td><span class="content-type-badge content-type-xml">XML</span></td>
+                                                <td>2026/01/16 10:20</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('B-2025-1')">削除</button></td>
+                                            </tr>
+                                            <tr data-id="B-2025-2">
+                                                <td>操作ガイド_ModelB_2025.html</td>
+                                                <td><span class="content-type-badge content-type-html">HTML</span></td>
+                                                <td>2026/01/15 15:10</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('B-2025-2')">削除</button></td>
+                                            </tr>
+                                            <tr data-id="B-2025-3">
+                                                <td>マニュアル_ModelB_2025.pdf</td>
+                                                <td><span class="content-type-badge content-type-pdf">PDF</span></td>
+                                                <td>2026/01/13 08:00</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('B-2025-3')">削除</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="import-buttons">
+                                        <input type="file" id="file-B-2025-xml" class="file-input-hidden" accept=".xml" onchange="handleFileImport('B','2025','xml',this)">
+                                        <input type="file" id="file-B-2025-html" class="file-input-hidden" accept=".html,.htm" onchange="handleFileImport('B','2025','html',this)">
+                                        <input type="file" id="file-B-2025-pdf" class="file-input-hidden" accept=".pdf" onchange="handleFileImport('B','2025','pdf',this)">
+                                        <button type="button" class="btn-import btn-import-xml" onclick="document.getElementById('file-B-2025-xml').click()">📄 XMLを取り込み</button>
+                                        <button type="button" class="btn-import btn-import-html" onclick="document.getElementById('file-B-2025-html').click()">🌐 HTMLを取り込み</button>
+                                        <button type="button" class="btn-import btn-import-pdf" onclick="document.getElementById('file-B-2025-pdf').click()">📕 PDFを取り込み</button>
+                                    </div>
+                                </div>
+                                <div class="year-section" data-model="B" data-year="2026">
+                                    <h4>2026年式</h4>
+                                    <table class="content-table">
+                                        <thead>
+                                            <tr><th>ファイル名</th><th>種別</th><th>取込日時</th><th style="width: 100px;">操作</th></tr>
+                                        </thead>
+                                        <tbody id="content-list-B-2026">
+                                            <tr data-id="B-2026-1">
+                                                <td>取扱説明書_ModelB_2026.xml</td>
+                                                <td><span class="content-type-badge content-type-xml">XML</span></td>
+                                                <td>2026/01/21 11:30</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('B-2026-1')">削除</button></td>
+                                            </tr>
+                                            <tr data-id="B-2026-2">
+                                                <td>FAQ_ModelB_2026.html</td>
+                                                <td><span class="content-type-badge content-type-html">HTML</span></td>
+                                                <td>2026/01/20 14:00</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('B-2026-2')">削除</button></td>
+                                            </tr>
+                                            <tr data-id="B-2026-3">
+                                                <td>取説_ModelB_2026.pdf</td>
+                                                <td><span class="content-type-badge content-type-pdf">PDF</span></td>
+                                                <td>2026/01/23 09:45</td>
+                                                <td><button type="button" class="btn-delete" onclick="deleteContentItem('B-2026-3')">削除</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="import-buttons">
+                                        <input type="file" id="file-B-2026-xml" class="file-input-hidden" accept=".xml" onchange="handleFileImport('B','2026','xml',this)">
+                                        <input type="file" id="file-B-2026-html" class="file-input-hidden" accept=".html,.htm" onchange="handleFileImport('B','2026','html',this)">
+                                        <input type="file" id="file-B-2026-pdf" class="file-input-hidden" accept=".pdf" onchange="handleFileImport('B','2026','pdf',this)">
+                                        <button type="button" class="btn-import btn-import-xml" onclick="document.getElementById('file-B-2026-xml').click()">📄 XMLを取り込み</button>
+                                        <button type="button" class="btn-import btn-import-html" onclick="document.getElementById('file-B-2026-html').click()">🌐 HTMLを取り込み</button>
+                                        <button type="button" class="btn-import btn-import-pdf" onclick="document.getElementById('file-B-2026-pdf').click()">📕 PDFを取り込み</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5-5. Web管理画面 - ユーザー管理 -->
+        <div class="screen-section" id="web-user-management">
+            <div class="screen-title">5-5. Web管理画面 - ユーザー管理</div>
+            <div class="screen-description">
+                <strong>目的:</strong> 管理画面にアクセスできるユーザーの一覧・追加・編集・無効化<br>
+                <strong>主要機能:</strong> ユーザー一覧、ロール管理、検索・フィルター、新規追加
+            </div>
+            <div class="mockup">
+                <div class="web-frame">
+                    <div class="web-header">
+                        <div><h2 style="margin: 0;">👥 ユーザー管理</h2></div>
+                        <div>
+                            <span style="margin-right: 20px;">🏢 トヨタ自動車株式会社</span>
+                            <button class="button" style="padding: 8px 15px;">ログアウト</button>
+                        </div>
+                    </div>
+                    <div class="web-sidebar">
+                        <div class="web-sidebar-left">
+                            <h3 style="margin-bottom: 20px;">メニュー</h3>
+                            <div class="menu-item" onclick="navigateToScreen('web-dashboard')" style="cursor: pointer;">📊 ダッシュボード</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-stats-detail')" style="cursor: pointer;">📈 利用統計</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-inquiry-analysis')" style="cursor: pointer;">💬 問合せ分析</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-content-management')" style="cursor: pointer;">📚 コンテンツ管理</div>
+                            <div class="menu-item active">👥 ユーザー管理</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-settings')" style="cursor: pointer;">⚙️ 設定</div>
+                        </div>
+                        <div class="web-main">
+                            <h2 style="margin-bottom: 20px; color: #e0e0e0;">ユーザー一覧</h2>
+
+                            <div class="content-toolbar" style="margin-bottom: 20px;">
+                                <div class="content-search-wrap" style="flex: 1; min-width: 220px;">
+                                    <span class="search-icon">🔍</span>
+                                    <input type="text" id="userSearchInput" placeholder="名前・メールアドレス・ロールで検索" oninput="filterUserList()">
+                                </div>
+                                <button type="button" class="button" style="background: linear-gradient(135deg, #00d084 0%, #00b96d 100%); color: #fff; padding: 10px 20px;" onclick="alert('新規ユーザー追加（モック）')">➕ 新規ユーザー追加</button>
+                            </div>
+
+                            <div class="card" style="margin-bottom: 0;">
+                                <div class="card-content" style="padding: 0;">
+                                    <table class="content-table" style="margin: 0;">
+                                        <thead>
+                                            <tr>
+                                                <th>ユーザー名</th>
+                                                <th>メールアドレス</th>
+                                                <th>ロール</th>
+                                                <th>状態</th>
+                                                <th>最終ログイン</th>
+                                                <th style="width: 140px;">操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="user-list-tbody">
+                                            <tr class="user-row" data-search="山田 太郎 yamada@example.co.jp 管理者 有効">
+                                                <td><strong>山田 太郎</strong></td>
+                                                <td>yamada@example.co.jp</td>
+                                                <td><span class="content-type-badge content-type-xml" style="background: rgba(79, 172, 254, 0.3); color: #4facfe;">管理者</span></td>
+                                                <td><span style="color: #00d084;">有効</span></td>
+                                                <td>2026/01/28 09:15</td>
+                                                <td><button type="button" class="btn-delete" style="margin-right: 4px; padding: 4px 10px;" onclick="alert('編集（モック）')">編集</button><button type="button" class="btn-delete" onclick="alert('無効化（モック）')">無効</button></td>
+                                            </tr>
+                                            <tr class="user-row" data-search="佐藤 花子 sato@example.co.jp アナリスト 有効">
+                                                <td><strong>佐藤 花子</strong></td>
+                                                <td>sato@example.co.jp</td>
+                                                <td><span class="content-type-badge content-type-html" style="background: rgba(0, 208, 132, 0.25); color: #00d084;">アナリスト</span></td>
+                                                <td><span style="color: #00d084;">有効</span></td>
+                                                <td>2026/01/27 14:30</td>
+                                                <td><button type="button" class="btn-delete" style="margin-right: 4px; padding: 4px 10px;" onclick="alert('編集（モック）')">編集</button><button type="button" class="btn-delete" onclick="alert('無効化（モック）')">無効</button></td>
+                                            </tr>
+                                            <tr class="user-row" data-search="鈴木 一郎 suzuki@example.co.jp 閲覧者 有効">
+                                                <td><strong>鈴木 一郎</strong></td>
+                                                <td>suzuki@example.co.jp</td>
+                                                <td><span class="content-type-badge content-type-pdf" style="background: rgba(102, 126, 234, 0.3); color: #667eea;">閲覧者</span></td>
+                                                <td><span style="color: #00d084;">有効</span></td>
+                                                <td>2026/01/26 11:00</td>
+                                                <td><button type="button" class="btn-delete" style="margin-right: 4px; padding: 4px 10px;" onclick="alert('編集（モック）')">編集</button><button type="button" class="btn-delete" onclick="alert('無効化（モック）')">無効</button></td>
+                                            </tr>
+                                            <tr class="user-row" data-search="田村 美咲 tamura@example.co.jp コンテンツ管理者 有効">
+                                                <td><strong>田村 美咲</strong></td>
+                                                <td>tamura@example.co.jp</td>
+                                                <td><span class="content-type-badge content-type-html" style="background: rgba(255, 165, 0, 0.25); color: #ffa500;">コンテンツ管理者</span></td>
+                                                <td><span style="color: #00d084;">有効</span></td>
+                                                <td>2026/01/28 08:45</td>
+                                                <td><button type="button" class="btn-delete" style="margin-right: 4px; padding: 4px 10px;" onclick="alert('編集（モック）')">編集</button><button type="button" class="btn-delete" onclick="alert('無効化（モック）')">無効</button></td>
+                                            </tr>
+                                            <tr class="user-row" data-search="高橋 健 takahashi@example.co.jp 閲覧者 無効">
+                                                <td><strong>高橋 健</strong></td>
+                                                <td>takahashi@example.co.jp</td>
+                                                <td><span class="content-type-badge content-type-pdf" style="background: rgba(102, 126, 234, 0.3); color: #667eea;">閲覧者</span></td>
+                                                <td><span style="color: #888;">無効</span></td>
+                                                <td>2025/12/10 16:20</td>
+                                                <td><button type="button" class="btn-delete" style="margin-right: 4px; padding: 4px 10px;" onclick="alert('編集（モック）')">編集</button><button type="button" class="btn-delete" onclick="alert('有効化（モック）')">有効化</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 20px; color: #aaa; font-size: 0.9em;">
+                                全 5 件（管理者: 1 / アナリスト: 1 / コンテンツ管理者: 1 / 閲覧者: 2）
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5-6. Web管理画面 - 設定 -->
+        <div class="screen-section" id="web-settings">
+            <div class="screen-title">5-6. Web管理画面 - 設定</div>
+            <div class="screen-description">
+                <strong>目的:</strong> 管理画面の表示・通知・アカウントなどの設定を変更<br>
+                <strong>主要機能:</strong> 言語・表示・通知設定、パスワード変更、データエクスポート
+            </div>
+            <div class="mockup">
+                <div class="web-frame">
+                    <div class="web-header">
+                        <div><h2 style="margin: 0;">⚙️ 設定</h2></div>
+                        <div>
+                            <span style="margin-right: 20px;">🏢 トヨタ自動車株式会社</span>
+                            <button class="button" style="padding: 8px 15px;">ログアウト</button>
+                        </div>
+                    </div>
+                    <div class="web-sidebar">
+                        <div class="web-sidebar-left">
+                            <h3 style="margin-bottom: 20px;">メニュー</h3>
+                            <div class="menu-item" onclick="navigateToScreen('web-dashboard')" style="cursor: pointer;">📊 ダッシュボード</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-stats-detail')" style="cursor: pointer;">📈 利用統計</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-inquiry-analysis')" style="cursor: pointer;">💬 問合せ分析</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-content-management')" style="cursor: pointer;">📚 コンテンツ管理</div>
+                            <div class="menu-item" onclick="navigateToScreen('web-user-management')" style="cursor: pointer;">👥 ユーザー管理</div>
+                            <div class="menu-item active">⚙️ 設定</div>
+                        </div>
+                        <div class="web-main">
+                            <h2 style="margin-bottom: 20px; color: #e0e0e0;">設定</h2>
+
+                            <div class="card" style="margin-bottom: 20px;">
+                                <div class="card-title">🌐 言語設定</div>
+                                <div class="card-content" style="color: #e0e0e0;">
+                                    <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                                        <label style="color: #aaa;">表示言語:</label>
+                                        <select style="background: rgba(45, 53, 97, 0.6); color: #e0e0e0; border: 1px solid rgba(79, 172, 254, 0.3); padding: 8px 14px; border-radius: 8px; min-width: 160px;">
+                                            <option selected>日本語</option>
+                                            <option>English</option>
+                                            <option>中文（简体）</option>
+                                            <option>한국어</option>
+                                        </select>
+                                        <button type="button" class="button" style="padding: 8px 16px;" onclick="alert('言語設定を保存しました（モック）')">反映</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card" style="margin-bottom: 20px;">
+                                <div class="card-title">🔔 通知設定</div>
+                                <div class="card-content" style="color: #e0e0e0;">
+                                    <div style="margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                                        <span>レポート作成完了時にメール通知</span>
+                                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                            <input type="checkbox" checked style="width: 18px; height: 18px;">
+                                            <span>有効</span>
+                                        </label>
+                                    </div>
+                                    <div style="margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                                        <span>問合せ急増アラート</span>
+                                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                            <input type="checkbox" checked style="width: 18px; height: 18px;">
+                                            <span>有効</span>
+                                        </label>
+                                    </div>
+                                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                                        <span>週次サマリーメール</span>
+                                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                            <input type="checkbox" style="width: 18px; height: 18px;">
+                                            <span>無効</span>
+                                        </label>
+                                    </div>
+                                    <button type="button" class="button" style="margin-top: 15px; padding: 8px 16px;" onclick="alert('通知設定を保存しました（モック）')">保存</button>
+                                </div>
+                            </div>
+
+                            <div class="card" style="margin-bottom: 20px;">
+                                <div class="card-title">🖥️ 表示設定</div>
+                                <div class="card-content" style="color: #e0e0e0;">
+                                    <div style="margin-bottom: 15px;">
+                                        <label style="color: #aaa; display: block; margin-bottom: 6px;">日付形式</label>
+                                        <select style="background: rgba(45, 53, 97, 0.6); color: #e0e0e0; border: 1px solid rgba(79, 172, 254, 0.3); padding: 8px 14px; border-radius: 8px; min-width: 200px;">
+                                            <option>YYYY/MM/DD（例: 2026/01/28）</option>
+                                            <option>DD/MM/YYYY（例: 28/01/2026）</option>
+                                            <option>MM/DD/YYYY（例: 01/28/2026）</option>
+                                        </select>
+                                    </div>
+                                    <div style="margin-bottom: 15px;">
+                                        <label style="color: #aaa; display: block; margin-bottom: 6px;">タイムゾーン</label>
+                                        <select style="background: rgba(45, 53, 97, 0.6); color: #e0e0e0; border: 1px solid rgba(79, 172, 254, 0.3); padding: 8px 14px; border-radius: 8px; min-width: 220px;">
+                                            <option selected>Asia/Tokyo（日本標準時）</option>
+                                            <option>UTC</option>
+                                            <option>America/New_York</option>
+                                            <option>Europe/London</option>
+                                        </select>
+                                    </div>
+                                    <button type="button" class="button" style="padding: 8px 16px;" onclick="alert('表示設定を保存しました（モック）')">保存</button>
+                                </div>
+                            </div>
+
+                            <div class="card" style="margin-bottom: 20px;">
+                                <div class="card-title">🔐 アカウント・セキュリティ</div>
+                                <div class="card-content" style="color: #e0e0e0;">
+                                    <div style="margin-bottom: 15px;">
+                                        <span style="color: #aaa;">ログイン中:</span> <strong>yamada@example.co.jp</strong>
+                                    </div>
+                                    <button type="button" class="button" style="margin-right: 10px; padding: 8px 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff;" onclick="alert('パスワード変更（モック）')">パスワードを変更</button>
+                                    <button type="button" class="button" style="padding: 8px 16px;" onclick="alert('二要素認証の設定（モック）')">二要素認証の設定</button>
+                                </div>
+                            </div>
+
+                            <div class="card" style="margin-bottom: 20px;">
+                                <div class="card-title">📤 データ・エクスポート</div>
+                                <div class="card-content" style="color: #e0e0e0;">
+                                    <p style="margin-bottom: 15px; color: #aaa;">利用統計・問合せ分析データをCSVで一括ダウンロードできます。</p>
+                                    <button type="button" class="button" style="padding: 8px 16px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #0f3460;" onclick="alert('エクスポートを開始しました（モック）')">📥 データをエクスポート</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // OEMダッシュボード統計（index.html / call-center.html と localStorage で連携）
+        var OEM_STATS_KEY = 'doi_oem_dashboard_stats';
+        function getDefaultOemStats() {
+            return {
+                totalQuestionsEnduser: 25000,
+                totalQuestionsStaff: 3340,
+                answerCorrectEnduser: 23000,
+                answerCorrectStaff: 3080,
+                searchTopics: {
+                    'Bluetooth接続の設定方法': { enduser: 2000, staff: 340 },
+                    'エアコンの使い方': { enduser: 1600, staff: 290 },
+                    'ワイパーの操作方法': { enduser: 1300, staff: 260 },
+                    'クルーズコントロールの設定': { enduser: 1000, staff: 230 },
+                    'タイヤ空気圧の確認方法': { enduser: 800, staff: 180 },
+                    '警告灯が点灯': { enduser: 500, staff: 100 },
+                    'ドアが開かない': { enduser: 400, staff: 80 },
+                    'その他': { enduser: 1100, staff: 200 }
+                },
+                proactiveSent: 8340,
+                proactiveViewed: 3753,
+                featureUtilizationUp: 15,
+                activeUsers: 12450
+            };
+        }
+        function getOemStats() {
+            try {
+                var raw = localStorage.getItem(OEM_STATS_KEY);
+                if (!raw) return getDefaultOemStats();
+                var s = JSON.parse(raw);
+                var def = getDefaultOemStats();
+                if (!s.searchTopics) s.searchTopics = def.searchTopics;
+                return s;
+            } catch (e) { return getDefaultOemStats(); }
+        }
+        function getDashboardFilter() {
+            var el = document.getElementById('dashboardSourceFilter');
+            return (el && el.value) ? el.value : 'all';
+        }
+        function applyDashboardFilter() {
+            var v = getDashboardFilter();
+            var inv = document.getElementById('inquirySourceFilter');
+            if (inv && inv.value !== v) inv.value = v;
+            updateOemDashboard();
+        }
+        function updateOemDashboard() {
+            var s = getOemStats();
+            var filter = getDashboardFilter();
+            var totalQ = 0, correctQ = 0;
+            if (filter === 'all') {
+                totalQ = (s.totalQuestionsEnduser || 0) + (s.totalQuestionsStaff || 0);
+                correctQ = (s.answerCorrectEnduser || 0) + (s.answerCorrectStaff || 0);
+            } else if (filter === 'enduser') {
+                totalQ = s.totalQuestionsEnduser || 0;
+                correctQ = s.answerCorrectEnduser || 0;
+            } else {
+                totalQ = s.totalQuestionsStaff || 0;
+                correctQ = s.answerCorrectStaff || 0;
+            }
+            var accuracy = totalQ > 0 ? Math.round((correctQ / totalQ) * 100) : 92;
+            var topics = [];
+            var st = s.searchTopics || {};
+            for (var k in st) {
+                var e = (st[k].enduser || 0);
+                var t = (st[k].staff || 0);
+                var n = filter === 'all' ? e + t : (filter === 'enduser' ? e : t);
+                if (n > 0) topics.push({ name: k, count: n });
+            }
+            topics.sort(function(a, b) { return b.count - a.count; });
+            var top5 = topics.slice(0, 5);
+            var sent = s.proactiveSent || 8340;
+            var viewed = s.proactiveViewed || 3753;
+            var rate = sent > 0 ? Math.round((viewed / sent) * 100) : 45;
+            var util = s.featureUtilizationUp != null ? s.featureUtilizationUp : 15;
+            var active = s.activeUsers != null ? s.activeUsers : 12450;
+
+            var el;
+            el = document.getElementById('oem-stat-activeUsers'); if (el) el.textContent = active.toLocaleString();
+            el = document.getElementById('oem-stat-totalQuestions'); if (el) el.textContent = totalQ.toLocaleString();
+            el = document.getElementById('oem-stat-accuracy'); if (el) el.textContent = accuracy + '%';
+            el = document.getElementById('oem-proactive-sent'); if (el) el.textContent = sent.toLocaleString() + '件';
+            el = document.getElementById('oem-proactive-rate'); if (el) el.textContent = rate + '%';
+            el = document.getElementById('oem-proactive-util'); if (el) el.textContent = '+' + util + '%';
+
+            el = document.getElementById('oem-top5-list');
+            if (el) {
+                var html = '';
+                for (var i = 0; i < top5.length; i++) {
+                    html += '<li style="padding: 8px 0;">' + top5[i].name + '（' + top5[i].count.toLocaleString() + '件）</li>';
+                }
+                if (top5.length === 0) html = '<li style="padding: 8px 0;">（データなし）</li>';
+                el.innerHTML = html;
+            }
+
+            var invFilter = document.getElementById('inquirySourceFilter');
+            if (invFilter && invFilter.value !== getDashboardFilter()) invFilter.value = getDashboardFilter();
+        }
+        var OEM_STATS_CHANNEL = 'doi_oem_stats_broadcast';
+        document.addEventListener('DOMContentLoaded', function() {
+            updateOemDashboard();
+            try {
+                var isFile = window.location.protocol === 'file:';
+                var notice = document.getElementById('oem-sync-notice');
+                var ok = document.getElementById('oem-sync-ok');
+                if (notice) notice.style.display = isFile ? 'block' : 'none';
+                if (ok) ok.style.display = isFile ? 'none' : 'block';
+            } catch (e) {}
+            window.addEventListener('storage', function(e) {
+                if (e.key === OEM_STATS_KEY && e.newValue) updateOemDashboard();
+            });
+            try {
+                var bc = new BroadcastChannel(OEM_STATS_CHANNEL);
+                bc.onmessage = function() { updateOemDashboard(); };
+            } catch (e) {}
+            setInterval(updateOemDashboard, 3000);
+        });
+
+        function filterUserList() {
+            var q = (document.getElementById('userSearchInput') || {}).value.trim().toLowerCase();
+            var rows = document.querySelectorAll('#web-user-management .user-row');
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var searchText = (row.getAttribute('data-search') || row.textContent || '').toLowerCase();
+                row.style.display = !q || searchText.indexOf(q) >= 0 ? '' : 'none';
+            }
+        }
+        function navigateToScreen(screenId) {
+            var sections = document.querySelectorAll('.screen-section');
+            for (var i = 0; i < sections.length; i++) {
+                sections[i].classList.remove('active');
+            }
+            var targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+                if (screenId === 'web-dashboard' && typeof updateOemDashboard === 'function') updateOemDashboard();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function deleteContentItem(id) {
+            if (!confirm('このデータを削除してもよろしいですか？')) return;
+            var row = document.querySelector('tr[data-id="' + id + '"]');
+            if (row) row.remove();
+            filterContentSearch();
+        }
+
+        function filterContentSearch() {
+            var q = (document.getElementById('contentSearchInput') || {}).value.trim().toLowerCase();
+            var list = document.getElementById('content-model-list');
+            if (!list) return;
+            var showAll = !q;
+            var blocks = list.querySelectorAll('.model-block');
+            for (var b = 0; b < blocks.length; b++) {
+                var block = blocks[b];
+                var yearSections = block.querySelectorAll('.year-section');
+                var blockHasVisible = false;
+                for (var y = 0; y < yearSections.length; y++) {
+                    var section = yearSections[y];
+                    var rows = section.querySelectorAll('tbody tr');
+                    var sectionHasVisible = false;
+                    for (var r = 0; r < rows.length; r++) {
+                        var row = rows[r];
+                        var match = showAll || row.textContent.toLowerCase().indexOf(q) >= 0;
+                        row.style.display = match ? '' : 'none';
+                        if (match) sectionHasVisible = true;
+                    }
+                    section.style.display = (showAll || sectionHasVisible) ? '' : 'none';
+                    if (showAll || sectionHasVisible) blockHasVisible = true;
+                }
+                block.style.display = (showAll || blockHasVisible) ? '' : 'none';
+            }
+        }
+
+        var newModelCounter = 0;
+        var contentIdCounter = { G: { 2024: 3, 2025: 3, 2026: 3 }, B: { 2024: 3, 2025: 3, 2026: 3 } };
+
+        function showNewModelForm() {
+            document.getElementById('newModelForm').classList.add('visible');
+            document.getElementById('btnNewModel').style.display = 'none';
+            document.getElementById('newModelNameInput').value = '';
+            document.getElementById('newModelNameInput').focus();
+        }
+        function cancelNewModelForm() {
+            document.getElementById('newModelForm').classList.remove('visible');
+            document.getElementById('btnNewModel').style.display = '';
+        }
+        function submitNewModel() {
+            var name = (document.getElementById('newModelNameInput').value || '').trim();
+            if (!name) {
+                alert('モデル名を入力してください。');
+                return;
+            }
+            addNewModel(name);
+            cancelNewModelForm();
+        }
+
+        function addNewModel(label) {
+            newModelCounter++;
+            var key = 'new' + newModelCounter;
+            contentIdCounter[key] = { 2024: 0, 2025: 0, 2026: 0 };
+            var years = [2024, 2025, 2026];
+            var html = '<div class="model-block" data-model-key="' + key + '" data-model-label="' + escapeHtml(label) + '"><h3>🚗 ' + escapeHtml(label) + '</h3>';
+            for (var i = 0; i < years.length; i++) {
+                var year = years[i];
+                html += '<div class="year-section" data-model="' + key + '" data-year="' + year + '"><h4>' + year + '年式</h4>';
+                html += '<table class="content-table"><thead><tr><th>ファイル名</th><th>種別</th><th>取込日時</th><th style="width: 100px;">操作</th></tr></thead>';
+                html += '<tbody id="content-list-' + key + '-' + year + '"></tbody></table>';
+                html += '<div class="import-buttons">';
+                html += '<input type="file" id="file-' + key + '-' + year + '-xml" class="file-input-hidden" accept=".xml" onchange="handleFileImport(\'' + key + '\',\'' + year + '\',\'xml\',this)">';
+                html += '<input type="file" id="file-' + key + '-' + year + '-html" class="file-input-hidden" accept=".html,.htm" onchange="handleFileImport(\'' + key + '\',\'' + year + '\',\'html\',this)">';
+                html += '<input type="file" id="file-' + key + '-' + year + '-pdf" class="file-input-hidden" accept=".pdf" onchange="handleFileImport(\'' + key + '\',\'' + year + '\',\'pdf\',this)">';
+                html += '<button type="button" class="btn-import btn-import-xml" onclick="document.getElementById(\'file-' + key + '-' + year + '-xml\').click()">📄 XMLを取り込み</button>';
+                html += '<button type="button" class="btn-import btn-import-html" onclick="document.getElementById(\'file-' + key + '-' + year + '-html\').click()">🌐 HTMLを取り込み</button>';
+                html += '<button type="button" class="btn-import btn-import-pdf" onclick="document.getElementById(\'file-' + key + '-' + year + '-pdf\').click()">📕 PDFを取り込み</button>';
+                html += '</div></div>';
+            }
+            html += '</div>';
+            document.getElementById('content-model-list').insertAdjacentHTML('beforeend', html);
+        }
+        function escapeHtml(s) {
+            var div = document.createElement('div');
+            div.textContent = s;
+            return div.innerHTML;
+        }
+
+        function handleFileImport(model, year, type, inputEl) {
+            var file = inputEl && inputEl.files && inputEl.files[0];
+            if (!file) return;
+            if (!contentIdCounter[model]) contentIdCounter[model] = { 2024: 0, 2025: 0, 2026: 0 };
+            if (contentIdCounter[model][year] == null) contentIdCounter[model][year] = 0;
+            var name = file.name;
+            contentIdCounter[model][year] = contentIdCounter[model][year] + 1;
+            var id = model + '-' + year + '-' + contentIdCounter[model][year];
+            var typeLabel = type.toUpperCase();
+            var typeClass = 'content-type-' + type;
+            var now = new Date();
+            var dateStr = now.getFullYear() + '/' + String(now.getMonth() + 1).padStart(2, '0') + '/' + String(now.getDate()).padStart(2, '0') + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+            var tbody = document.getElementById('content-list-' + model + '-' + year);
+            if (!tbody) return;
+            var tr = document.createElement('tr');
+            tr.setAttribute('data-id', id);
+            tr.innerHTML = '<td>' + escapeHtml(name) + '</td><td><span class="content-type-badge ' + typeClass + '">' + typeLabel + '</span></td><td>' + dateStr + '</td><td><button type="button" class="btn-delete" onclick="deleteContentItem(\'' + id + '\')">削除</button></td>';
+            tbody.appendChild(tr);
+            inputEl.value = '';
+        }
+
+        // 多言語対応システム
+        var currentLang = 'ja';
+        var translations = {
+            ja: {
+                'page-title': 'Web管理画面 - OEM向けダッシュボード',
+                'page-subtitle': '取扱説明書DXシステム Phase1 モック（5. Web管理画面）',
+                'menu-dashboard': 'ダッシュボード',
+                'menu-stats': '利用統計',
+                'menu-inquiry': '問合せ分析',
+                'menu-content': 'コンテンツ管理',
+                'menu-user': 'ユーザー管理',
+                'menu-settings': '設定',
+                'btn-logout': 'ログアウト',
+                'company-name': 'トヨタ自動車株式会社'
+            },
+            en: {
+                'page-title': 'Web Admin - OEM Dashboard',
+                'page-subtitle': 'Digital Owner\'s Manual System Phase1 Mock (5. Web Admin)',
+                'menu-dashboard': 'Dashboard',
+                'menu-stats': 'Usage Statistics',
+                'menu-inquiry': 'Inquiry Analysis',
+                'menu-content': 'Content Management',
+                'menu-user': 'User Management',
+                'menu-settings': 'Settings',
+                'btn-logout': 'Logout',
+                'company-name': 'Toyota Motor Corporation'
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ja' ? 'en' : 'ja';
+            document.getElementById('langLabel').textContent = currentLang === 'ja' ? 'EN' : '日本語';
+            document.documentElement.lang = currentLang;
+            applyTranslations();
+            localStorage.setItem('preferred_language_oem', currentLang);
+        }
+
+        function applyTranslations() {
+            var t = translations[currentLang] || translations.ja;
+            
+            document.querySelectorAll('[data-i18n]').forEach(function(el) {
+                var key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+            
+            document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+                var key = el.getAttribute('data-i18n-html');
+                if (t[key]) el.innerHTML = t[key];
+            });
+            
+            document.title = t['page-title'] || 'OEM Dashboard';
+        }
+
+        // ページ読み込み時に言語設定を復元
+        window.addEventListener('DOMContentLoaded', function() {
+            var savedLang = localStorage.getItem('preferred_language_oem');
+            if (savedLang && savedLang !== 'ja') {
+                currentLang = savedLang;
+                document.getElementById('langLabel').textContent = 'ja';
+                document.documentElement.lang = savedLang;
+                applyTranslations();
+            }
+        });
+    </script>
+</body>
+</html>

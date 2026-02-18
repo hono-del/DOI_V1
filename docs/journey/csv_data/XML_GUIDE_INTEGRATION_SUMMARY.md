@@ -78,6 +78,22 @@ THEME-001「スマートキーでドアが開かない」の13個のガイドと
 
 ---
 
+## 🔗 T5 action_cards との紐づけ（THEME-001 ドアが開かない）
+
+T5（行動選択）の action_cards に **guide_id** を付与し、取扱説明書由来のガイドを参照する。
+
+| action_id | 行動タイトル | guide_id | ガイドタイトル |
+|:----------|:-------------|:---------|:---------------|
+| A_DOOR_001 | 今すぐ開ける：機械キーで解錠 | **GUIDE-001** | 機械キーの取り出し方 |
+| A_DOOR_002 | 恒久対応：電池交換 | **GUIDE-005** | 電池交換手順 |
+| A_DOOR_003 | 不安なら：販売店・ロードサービス | **GUIDE-006** | 販売店予約・連絡先 |
+| A_DOOR_004 | キーをドアハンドルに近づけて再試行 | **GUIDE-008** | 電波干渉時の対応 |
+
+- モックアップ（`docs/mockups/home-screen-standalone.html`）の T16 知識ベースおよび、`THEME_DOOR_NOT_OPEN_Process_Detail.md`・`T5_Action_Selection_Definition.md` の action_cards 出力例に guide_id を記載済み。
+- UX では guide_id をキーに `guide_content/GUIDE-xxx_content.json` や XML 由来の手順・イラストを表示する想定。
+
+---
+
 ## 🔧 技術的課題
 
 ### XML解析の問題

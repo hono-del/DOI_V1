@@ -1,0 +1,98 @@
+﻿No,企業・サービス名,対象,分類,概要,概要・提供内容,情報ソース,優先度,備考・更新
+D1,Hansem Global,直接,Digital Manual,,IVI向けWebマニュアル。コネクテッド車向け動的Webマニュアル、PDF/Web同時出版。Hyundai Mobisとの実績。多言語・検索・マルチデバイス対応。,hansem.com / 事例（Hyundai Mobis）,高,
+D2,Quark Publishing Platform (QPP),直接,CCMS,,自動車メーカー向けオーナー・ワークショップマニュアルの制作・一元管理。XML/CCMS、Word連携、コンポーネント再利用。,Quark case study (automotive),高,
+D3,MSX International - pubFoundry,直接,CCMS,,自動車向け技術コンテンツ管理。執筆・管理・マルチチャネル配信、レビュー、分析。,msxi.com pubFoundry,高,
+D4,Documoto,直接,CCMS,,インタラクティブな部品マニュアル・デジタル部品カタログ。OEM・アフターマーケット向け。ポータル・ERP/EAM連携。,documoto.com,中,部品・整備寄り。取説全体は間接的
+D5,RWS - Contenta Publishing Suite,直接,CCMS,,技術文書管理（S1000D等）。航空・防衛中心だが複雑な技術文書のクラウド管理。自動車事例は要確認。,rws.com/contenta,中,
+D6,Veryon,直接,CCMS,,OEM向け技術出版物管理。航空等が中心。自動車展開は要確認。,veryon.com,低,
+D7,Kore.ai,直接,AI UX,,"エンタープライズ向けConversational AIプラットフォーム
+音声・チャットボット・Agentic AI構築基盤
+ナレッジ検索、ワークフロー連携、LLM統合
+CX（顧客対応）・EX（従業員支援）用途が中心
+
+文脈理解型対話UIを構築可能
+ただし車両データ・VIN連動などドメイン特化は弱い",,,社内ヒアリング・展示会で追加
+D8,ServiceNow,直接,AI UX,,"ワークフロー管理プラットフォーム
+Knowledge Management、Virtual Agent、Now Assist（生成AI）
+ITSMだけでなく顧客体験管理へ拡張中
+Automotive向けソリューションあり
+
+ユーザー問い合わせを起点に体験を構築する思想
+車両コンテキストには未対応",,,
+D9,Coveo,直接,AI UX,,"AI検索・レコメンドエンジン
+ナレッジベース統合・行動ログ分析
+パーソナライズ検索とNext Best Action生成
+Salesforce・ServiceNow等と連携
+
+検索UXとしては非常に近い思想
+ただし車両データ連動が無い",,,
+D10,Salesforce,直接,AI UX,,"CRM基盤＋AI（Einstein / Data Cloud）
+Automotive Cloudで車両・顧客データ統合
+サービス履歴・顧客接点・マーケ連携
+
+顧客中心の体験最適化は強力
+取扱説明・操作ガイドのドメイン知識は弱い",,,
+D11,Siemens Xcelerator,潜在,設計・製造・現場,工作機械 / 建機 / 農機,"デジタルツイン＋操作ガイド
+UIヘルプが作業フローに統合
+ナレッジ＋IoT＋AI",,,
+D12,PTC Vuforia Expert Capture,潜在,設計・製造・現場,工作機械 / 農機 / 建機,"AR手順ガイド
+ステップバイステップ作業支援
+ServiceMaxなどと連携",,,
+I1,トヨタ - T-Connect オーナーズマニュアル / manual.toyota.jp,間接,Digital Manual,,デジタル取説（HTML等）。My TOYOTA+アプリ連携。車種別取扱説明書サイト。,toyota.jp / manual.toyota.jp,高,OEM内製。ベンチマーク対象
+I2,トヨタ - エージェント（音声対話）,間接,AI UX,,車載AI音声「ヘイ、トヨタ」。ナビ・情報・操作。取説QAは拡張余地あり。,toyota.jp T-Connect,高,
+I3,日産 - 電子取扱説明書,間接,Digital Manual,,HTML/PDF/動画。モデル・年式で検索。,nissan.co.jp,高,OEM内製
+I4,三菱自動車 - 取扱説明書,間接,Digital Manual,,PDF/HTML、車種別。スマホ連携ナビ説明・動画あり。,mitsubishi-motors.co.jp,中,OEM内製
+I5,Ford - Digital Owner's Manual,間接,Digital Manual,,車載センターコンソール標準。検索・動画ストリーミング（F-150等）。,Ford Media,高,OEM内製
+I6,Volvo - Digital Owner's Manual,間接,Digital Manual,,車載ディスプレイ内。検索・カテゴリ・ホットスポット。,volvocars.com support,中,OEM内製
+I7,GM - In-Vehicle Technology Library,間接,Platform,,インフォテインメント・OnStar・安全等の公式コンテンツ。ディーラー・社内向け。,gmglobalinfotainmentlibrary.com,中,OEM内製
+I8,Hyundai - Owner's Manual (Web),間接,Digital Manual,,Web版オーナーズマニュアル。Bluelink等と連携。HansemとMobisでIVIマニュアル実績。,ownersmanual.hyundai.com / hansem case,高,
+I9,Toyota (北米) - Interactive Manual,間接,Digital Manual,,BZ4X等。症状ベース検索等のインタラクティブ取説。,toyota.com owners,高,
+I10,BMW Intelligent Owner’s Manual,間接,Digital Manual,,"BMW車両向けのインテリジェント電子取扱説明書
+車載ディスプレイ・アプリからアクセス可能
+車両状態・装備情報に応じて表示内容が変化
+画像認識やカテゴリナビゲーションを採用
+VINベースの内容最適化
+
+静的マニュアルから一歩進んだUX
+ただしAI対話・プロアクティブ提案は限定的",,,他OEM・Tier1
+I11,Tesla In-Car Help,間接,Digital Manual,,"車載UIに統合されたヘルプ・説明機能
+OTAアップデートに合わせた動的説明
+リリースノート・機能説明・操作ガイドが統合
+UI設計として「取説を読ませない」思想
+
+従来型取説の概念を崩すUX
+FAQではなく「体験に溶け込む説明」",,,
+I12,Dyson,参考,家電,家電,"MyDysonアプリ
+製品登録→使い方ガイド→メンテナンス通知
+動画中心UX",,,
+I13,Canon PRINT / Canon Online Manual,参考,映像機器,プリンタ,"アプリ連動
+トラブルシュート導線がUI化
+操作ガイドが動的",,,
+I14,Shimano,参考,自転車,釣り具,"公式アプリ・製品情報連携
+電動リールの設定ガイドなど
+まだ初期段階だが将来性あり",,,
+I15,TOTO / LIXIL Smart Product,参考,住宅・設備,風呂・トイレ,"スマホアプリ連携
+メンテナンス・設定ガイド
+IoT化が進んでいる",,,
+P1,AWS - 自動車業界向け,潜在,Platform,,車両開発・パーソナライゼーションでの生成AI。クラウド+データ+AI。トヨタ・日産・BMW・VW等導入。取説特化は未明確。,aws.amazon.com/automotive,高,
+P2,Microsoft - 自動車ソリューション,潜在,Platform,,SDV開発、AVOps、GitHub/Azure連携。生成AIによる開発支援。取説・車載コンテンツは拡張余地。,microsoft.com/ai/mobility/automotive,高,
+P3,Google - Android Automotive / 車載,潜在,Platform,,Android Automotive OS。インフォテインメント基盤。取説アプリ・AI連携の可能性。,要追記,中,
+P4,PTC - Arbortext,潜在,CCMS,,技術文書作成・管理。自動車マニュアルの制作基盤。UDトラックス等事例。OEMや受託側が利用し取説DXを実現するケース。,ptc.com / support.ptc.com (Arbortext),中,ツール提供。競合というよりエコシステム
+P5,DENSO / デンソーテン,潜在,Platform,,車載機器・インフォテインメント。DST-クラウド等整備向け。取説・車載UIの内製・外販の可能性。,要追記,中,
+P6,Apple CarPlay Next,潜在,Platform,,"iOS連携を車両全画面へ拡張する次世代CarPlay
+メーター・空調・UI全体への統合
+Siriベースの操作ガイド・音声UX
+Appleエコシステムとの強力な連携
+
+将来的に「使い方はSiriに聞く」世界観
+OEM独自取説UXを奪う可能性あり",,,GCP、その他Tier1
+P7,HERE Technologies,潜在,Platform,,"HDマップ・ナビ・位置データ・交通情報
+車両コンテキストデータ（速度、環境、道路）
+SDK/APIでIVIやADASに統合
+
+「状況理解」の重要データソース
+将来的に運転ガイドUXへ進化する可能性",,,
+P8,Paligo,潜在,CCMS,家電・産業機械,,,,
+P9,ThingWorx（PTC）,潜在,IoT・設計,工作機械 / 農機 / 建機,"IoTプラットフォーム
+製品データ連携
+AR・サービスと統合",,,

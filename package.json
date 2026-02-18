@@ -4,7 +4,8 @@
   "description": "取扱説明書DXシステム - ホーム画面モックアップ",
   "scripts": {
     "dev": "vercel dev",
-    "deploy": "vercel --prod"
+    "deploy": "vercel --prod",
+    "serve": "npx serve . -p 3000"
   },
   "keywords": [
     "mockup",
@@ -12,5 +13,8 @@
     "car-manual"
   ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "iconv-lite": "^0.7.2"
+  }
 }

@@ -34,6 +34,7 @@
 
         .mobile-frame {
             max-width: 375px;
+            width: 100%;
             margin: 0 auto;
             border: 8px solid #2A2A2A;
             border-radius: 30px;
@@ -41,9 +42,13 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(191, 0, 255, 0.3);
             position: relative;
             background: #1A1A1A;
+            display: flex;
+            flex-direction: column;
+            height: 700px;
         }
 
         .mobile-header {
+            flex-shrink: 0;
             background: #1A1A1A;
             color: #BF00FF;
             padding: 15px;
@@ -60,10 +65,11 @@
         }
 
         .mobile-content {
+            flex: 1;
+            min-height: 0;
             padding: 20px;
-            padding-bottom: 90px;
+            padding-bottom: 20px;
             background: #1A1A1A;
-            height: 600px;
             overflow-y: auto;
             overflow-x: hidden;
         }
@@ -387,6 +393,8 @@
             justify-content: space-around;
             padding: 10px 0;
             box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 500;
+            pointer-events: auto;
         }
 
         .tab-item {
@@ -400,6 +408,7 @@
             padding: 8px 0;
             color: #888;
             font-size: 0.85em;
+            pointer-events: auto;
         }
 
         .tab-item:hover {
@@ -479,7 +488,7 @@
                         <div id="defaultContent">
                             <!-- 1. 今すぐ確認（最上部）- ランダム表示 -->
                             <div class="card alert-card" id="alertCard">
-                                <div class="card-title">
+                                <div class="card-title" id="alertCardTitle">
                                     <span>⚠️</span> 今すぐ確認
                                 </div>
                                 <div class="card-content" id="alertContent">
@@ -547,21 +556,21 @@
                         </div>
                     </div>
                     
-                    <!-- 固定タブバー -->
-                    <div class="mobile-tab-bar">
-                        <div class="tab-item active" onclick="switchTab('home')">
+                    <!-- 固定タブバー（必ず表示・クリック可能にする） -->
+                    <div class="mobile-tab-bar" style="position:relative;z-index:9999;flex-shrink:0;">
+                        <div class="tab-item active" data-tab="home" onclick="typeof switchTab==='function'&&switchTab('home',event)">
                             <div class="tab-icon">🏠</div>
                             <div>ホーム</div>
                         </div>
-                        <div class="tab-item" onclick="switchTab('chat')">
+                        <div class="tab-item" data-tab="chat" onclick="typeof switchTab==='function'&&switchTab('chat',event)">
                             <div class="tab-icon">💬</div>
                             <div>チャット</div>
                         </div>
-                        <div class="tab-item" onclick="switchTab('notification')">
+                        <div class="tab-item" data-tab="notification" onclick="typeof switchTab==='function'&&switchTab('notification',event)">
                             <div class="tab-icon notification-badge">🔔</div>
                             <div>通知</div>
                         </div>
-                        <div class="tab-item" onclick="switchTab('status')">
+                        <div class="tab-item" data-tab="status" onclick="typeof switchTab==='function'&&switchTab('status',event)">
                             <div class="tab-icon">📊</div>
                             <div>ステータス</div>
                         </div>
@@ -569,6 +578,9 @@
                 </div>
     </div>
 
+    <script>
+(function(){ var t=document.getElementById('alertCardTitle'); if(t)t.innerHTML='<span>⚠️</span> 今すぐ確認'; var d=document.getElementById('defaultContent'); if(d)d.classList.remove('hidden'); var s=document.getElementById('searchResult'); if(s&&!s.querySelector('.chat-message'))s.classList.add('hidden'); })();
+    </script>
     <script>
         // 「今すぐ確認」のランダムメッセージ
         const alertMessages = [
@@ -777,11 +789,13 @@
 
         // ランダムなアラートメッセージを表示
         function displayRandomAlert() {
+            var alertTitle = document.getElementById('alertCardTitle');
+            if (!alertTitle) alertTitle = document.getElementById('alertCard') && document.getElementById('alertCard').querySelector('.card-title');
+            if (alertTitle) alertTitle.innerHTML = '<span>⚠️</span> 今すぐ確認';
             const randomIndex = Math.floor(Math.random() * alertMessages.length);
             const message = alertMessages[randomIndex];
             currentAlertId = message.id;
             const alertContent = document.getElementById('alertContent');
-            
             if (alertContent) {
                 alertContent.innerHTML = `
                     ${message.text}
@@ -1027,19 +1041,20 @@
         }
 
         // タブ切り替え
-        function switchTab(tabName) {
+        function switchTab(tabName, evt) {
             const allTabs = document.querySelectorAll('.tab-item');
             allTabs.forEach(tab => tab.classList.remove('active'));
-            
-            event.currentTarget.classList.add('active');
-            
+            const target = (evt && evt.currentTarget) || document.querySelector(`.tab-item[data-tab="${tabName}"]`);
+            if (target) target.classList.add('active');
+
             const resultDiv = document.getElementById('searchResult');
             const defaultContent = document.getElementById('defaultContent');
-            
+
             console.log(`${tabName} タブに切り替えました`);
-            
+
             if (tabName === 'home') {
                 resetSearch();
+                displayRandomAlert();
             } else if (tabName === 'chat') {
                 showChatScreen();
             } else if (tabName === 'notification') {
@@ -1136,6 +1151,169 @@
             }
         };
 
+        // ========== T1-T6 フェーズ1: モック知識ベース・状態・エンジン ==========
+        const T16_KB_DOOR_NOT_OPEN = {
+            event_id: 'DOOR_NOT_OPEN',
+            cause_candidates: [
+                { cause_id: 'KEY_BATTERY_EMPTY', description: 'キー電池切れ', required_observations: ['key_indicator_light'], risk_level: 'low', action_group: 'battery_replace' },
+                { cause_id: 'KEY_FAULT', description: 'キー故障', required_observations: ['key_indicator_light'], risk_level: 'low', action_group: 'dealer' },
+                { cause_id: 'RADIO_INTERFERENCE', description: '電波干渉', required_observations: ['key_indicator_light', 'location'], risk_level: 'low', action_group: 'retry_or_relocate' },
+                { cause_id: 'VEHICLE_12V_LOW', description: '車両12V低下', required_observations: ['key_indicator_light', 'vehicle_12v'], risk_level: 'low', action_group: 'jump_start' },
+                { cause_id: 'LOCK_ACTUATOR_FAULT', description: 'ドアロック故障', required_observations: ['other_key_result'], risk_level: 'medium', action_group: 'dealer' },
+                { cause_id: 'USER_OPERATION', description: '操作条件不一致', required_observations: ['key_indicator_light', 'operation_condition'], risk_level: 'low', action_group: 'guide' }
+            ],
+            t3_question: {
+                question_id: 'Q_DOOR_001',
+                question_text: 'スマートキーのボタンを押すとランプは点きますか？',
+                answer_type: 'yes_no',
+                expected_split: { yes: ['RADIO_INTERFERENCE', 'VEHICLE_12V_LOW', 'USER_OPERATION', 'LOCK_ACTUATOR_FAULT'], no: ['KEY_BATTERY_EMPTY', 'KEY_FAULT'] },
+                priority: 1
+            },
+            action_cards_by_cause: {
+                KEY_BATTERY_EMPTY: [
+                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], duration: '約30秒', required_items: [], risk_notice: null, alternative: '開かない場合はロードサービスへ', is_immediate: true },
+                    { action_id: 'A_DOOR_002', guide_id: 'GUIDE-005', title: '恒久対応：電池交換', steps: ['CR2032（またはCR2450）を用意', 'キーを開けて電池を交換', '動作確認'], duration: '約3分', required_items: ['CR2032 または CR2450（ボタン電池）'], risk_notice: '部品破損の恐れがあるため、販売店での交換を推奨します。', alternative: '電池購入先の案内へ', is_immediate: false },
+                    { action_id: 'A_DOOR_003', guide_id: 'GUIDE-006', title: '不安なら：販売店・ロードサービス', steps: ['位置共有・症状要約付きで連絡'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ],
+                RADIO_INTERFERENCE: [
+                    { action_id: 'A_DOOR_004', guide_id: 'GUIDE-008', title: 'キーをドアハンドルに近づけて再試行', steps: ['スマートキーをドアハンドルにできるだけ近づけて操作', '数メートル移動して再試行'], duration: '約1分', required_items: [], risk_notice: null, alternative: '機械キーで開ける', is_immediate: true },
+                    { action_id: 'A_DOOR_005', guide_id: null, title: '予備のスマートキーで試す', steps: ['予備のスマートキーがあれば、同じようにドアの解錠を試す'], duration: '約1分', required_items: [], risk_notice: null, alternative: '予備キーがない場合は機械キーで開ける', is_immediate: true },
+                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], duration: '約30秒', required_items: [], risk_notice: null, alternative: 'ロードサービスへ', is_immediate: true }
+                ],
+                LOCK_ACTUATOR_FAULT: [
+                    { action_id: 'A_DOOR_005', guide_id: null, title: '予備のスマートキーで試す', steps: ['予備のスマートキーがあれば、同じようにドアの解錠を試す'], duration: '約1分', required_items: [], risk_notice: null, alternative: '予備キーがない場合は機械キーで開ける', is_immediate: true },
+                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], duration: '約30秒', required_items: [], risk_notice: null, alternative: '開かない場合はロードサービスへ', is_immediate: true },
+                    { action_id: 'A_DOOR_003', guide_id: 'GUIDE-006', title: '販売店・ロードサービスに連絡', steps: ['位置共有・症状要約付きで連絡'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ],
+                _default: [
+                    { action_id: 'A_DOOR_005', guide_id: null, title: '予備のスマートキーで試す', steps: ['予備のスマートキーがあれば、同じようにドアの解錠を試す'], duration: '約1分', required_items: [], risk_notice: null, alternative: '予備キーがない場合は機械キーで開ける', is_immediate: true },
+                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], duration: '約30秒', required_items: [], risk_notice: null, alternative: '開かない場合はロードサービスへ', is_immediate: true },
+                    { action_id: 'A_DOOR_003', guide_id: 'GUIDE-006', title: '販売店・ロードサービス', steps: ['位置共有・症状要約付きで連絡'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                ]
+            },
+            escalation_option: { dealer: '販売店予約', road_service: 'ロードサービス' }
+        };
+
+        let T16State = {
+            t1Output: null,
+            t2Output: null,
+            t3Output: null,
+            observationResult: null,
+            t4Output: null,
+            t5Output: null,
+            lastActionId: null,
+            step: null
+        };
+
+        var T3_SKIP_CONFIDENCE_THRESHOLD = 0.8;
+
+        function runT1(userInput) {
+            const s = (userInput || '').trim();
+            const isDoor = /ドアが開かない|スマートキー.*開かない|キー電池切れ|電池切れの表示/i.test(s);
+            if (!isDoor) return null;
+            var subtype = null;
+            var confidence = 0.85;
+            if (/キー電池切れの表示|電池切れの表示|電池が切れ|電池切れ/i.test(s)) {
+                subtype = 'battery_indicator';
+                confidence = 0.95;
+            }
+            return {
+                event_id: 'DOOR_NOT_OPEN',
+                subtype: subtype,
+                confidence: confidence,
+                urgency: 0.7,
+                psychological_risk: 'high',
+                context_labels: { time_band: 'day', location_type: 'outside', vehicle_state: 'stopped' },
+                evidence: ['user_selected_symptom']
+            };
+        }
+
+        function runT2(t1Output) {
+            if (!t1Output || t1Output.event_id !== 'DOOR_NOT_OPEN') return null;
+            var candidates = T16_KB_DOOR_NOT_OPEN.cause_candidates;
+            if (t1Output.subtype === 'battery_indicator') {
+                candidates = candidates.filter(function(c) { return c.cause_id === 'KEY_BATTERY_EMPTY'; });
+            }
+            return { cause_candidates: candidates };
+        }
+
+        function runT3(t2Output) {
+            if (!t2Output || !t2Output.cause_candidates) return null;
+            return T16_KB_DOOR_NOT_OPEN.t3_question;
+        }
+
+        function runT4(observationAnswer, t2Output, t3Output, evidenceFromFailure) {
+            if (!t2Output) return null;
+            if (observationAnswer == null && !t3Output) {
+                var causes = t2Output.cause_candidates || [];
+                var n = causes.length;
+                var ranked = causes.map(function(c) {
+                    return { cause_id: c.cause_id, confidence: n === 1 ? 1.0 : 1 / n, evidence: [] };
+                });
+                return { ranked_causes: ranked, status: 'READY_FOR_ACTION' };
+            }
+            if (!t3Output) return null;
+            const split = t3Output.expected_split;
+            const isYes = observationAnswer === true || observationAnswer === 'yes' || observationAnswer === 'はい';
+            const favored = isYes ? (split.yes || []) : (split.no || []);
+            const other = isYes ? (split.no || []) : (split.yes || []);
+            const evidenceKey = 'key_indicator_light=' + (isYes ? 'yes' : 'no');
+            const ranked = [];
+            favored.forEach(cid => {
+                ranked.push({ cause_id: cid, confidence: favored.length === 1 ? 0.72 : 0.5, evidence: [evidenceKey] });
+            });
+            if (ranked.length === 0) ranked.push({ cause_id: 'OTHER', confidence: 0.3, evidence: [] });
+            other.forEach(cid => {
+                ranked.push({ cause_id: cid, confidence: 0.15, evidence: [] });
+            });
+            ranked.sort((a, b) => b.confidence - a.confidence);
+
+            if (evidenceFromFailure && (evidenceFromFailure.action_id === 'A_DOOR_004' || evidenceFromFailure.action_id === 'A_DOOR_005')) {
+                ranked.forEach(function(r) {
+                    if (r.cause_id === 'RADIO_INTERFERENCE') r.confidence *= 0.3;
+                    else if (r.cause_id === 'LOCK_ACTUATOR_FAULT' || r.cause_id === 'VEHICLE_12V_LOW') r.confidence = Math.min(1, (r.confidence || 0.15) + 0.3);
+                });
+                ranked.sort((a, b) => b.confidence - a.confidence);
+            }
+
+            const top = ranked[0] && ranked[0].confidence || 0;
+            const status = top >= 0.5 ? 'READY_FOR_ACTION' : 'MORE_OBSERVATION';
+            return { ranked_causes: ranked, status };
+        }
+
+        function runT5(t4Output, t1Output) {
+            if (!t4Output || t4Output.status === 'ESCALATE') {
+                return { action_cards: T16_KB_DOOR_NOT_OPEN.action_cards_by_cause._default.slice(0, 3), escalation_option: T16_KB_DOOR_NOT_OPEN.escalation_option };
+            }
+            const topCause = t4Output.ranked_causes && t4Output.ranked_causes[0] && t4Output.ranked_causes[0].cause_id;
+            const cards = T16_KB_DOOR_NOT_OPEN.action_cards_by_cause[topCause] || T16_KB_DOOR_NOT_OPEN.action_cards_by_cause._default;
+            const list = (Array.isArray(cards) ? cards : [cards]).slice(0, 3);
+            return { action_cards: list, escalation_option: T16_KB_DOOR_NOT_OPEN.escalation_option };
+        }
+
+        function runT6(resolved, actionId, t5Output) {
+            if (resolved === true) {
+                if (actionId === 'A_DOOR_005') {
+                    return { resolved: true, next_step: 'done_with_next_steps', next_steps_guidance: [{ id: 'battery_replace_guide', label: 'そのキーの電池交換のガイド', type: 'guide' }, { id: 'dealer_inspection', label: '販売店での点検', type: 'guide' }], spare_key_worked: true };
+                }
+                const isImmediateOnly = actionId === 'A_DOOR_001' || actionId === 'A_DOOR_004';
+                if (isImmediateOnly) {
+                    return { resolved: true, next_step: 'done_with_next_steps', next_steps_guidance: [{ id: 'engine_start_guide', label: 'エンジンのかけ方', type: 'guide' }, { id: 'battery_replace_guide', label: '電池交換のガイド', type: 'guide' }] };
+                }
+                return { resolved: true, next_step: 'done' };
+            }
+            if (actionId === 'A_DOOR_001') {
+                return { resolved: false, next_step: 'retry_with_t4', evidence_from_failure: { action_id: 'A_DOOR_001', action_result: 'failed', summary: '機械キーで解錠を試したが開かなかった' } };
+            }
+            if (actionId === 'A_DOOR_004') {
+                return { resolved: false, next_step: 'retry_with_t4', evidence_from_failure: { action_id: 'A_DOOR_004', action_result: 'failed', summary: 'キーをドアハンドルに近づけて再試行したが開かなかった' } };
+            }
+            if (actionId === 'A_DOOR_005') {
+                return { resolved: false, next_step: 'retry_with_t4', evidence_from_failure: { action_id: 'A_DOOR_005', action_result: 'failed', summary: '予備キーでも開かなかった' } };
+            }
+            return { resolved: false, next_step: 'escalate', handoff_payload: { event_id: 'DOOR_NOT_OPEN', actions_tried: [actionId || '不明'], result_summary: '試したが開かなかった。' } };
+        }
+
         function setQuestion(question) {
             document.getElementById('searchInput').value = question;
             performSearch();
@@ -1148,6 +1326,13 @@
 
             if (!query) {
                 alert('質問を入力してください');
+                return;
+            }
+
+            // 「ドアが開かない」は T1-T6 フローでチャットに接続
+            if (query === 'ドアが開かない' || query.indexOf('ドアが開かない') !== -1) {
+                switchToChatTabProgrammatic(true);
+                setTimeout(function() { startT16DoorNotOpenFlow(query); }, 50);
                 return;
             }
 
@@ -1452,13 +1637,13 @@
             document.getElementById('homeContent').scrollTop = 0;
         }
 
-        // チャット画面を表示
-        function showChatScreen() {
+        // チャット画面を表示（option.skipInit === true のときは initTheme001Chat を呼ばない）
+        function showChatScreen(option) {
             const resultDiv = document.getElementById('searchResult');
             const defaultContent = document.getElementById('defaultContent');
-            
+
             defaultContent.classList.add('hidden');
-            
+
             resultDiv.innerHTML = `
                 <!-- チャットメッセージ領域 -->
                 <div id="chatMessages"></div>
@@ -1505,8 +1690,205 @@
             resultDiv.classList.remove('hidden');
             document.getElementById('homeContent').scrollTop = 0;
 
-            // THEME-001 用チャット初期化
-            initTheme001Chat();
+            if (!(option && option.skipInit)) {
+                initTheme001Chat();
+            }
+        }
+
+        // チャットタブをプログラムで有効にしてチャット画面を表示
+        function switchToChatTabProgrammatic(skipInit) {
+            document.querySelectorAll('.tab-item').forEach(function(t) {
+                if ((t.getAttribute('onclick') || '').indexOf("'chat'") !== -1) t.classList.add('active');
+                else t.classList.remove('active');
+            });
+            showChatScreen(skipInit ? { skipInit: true } : undefined);
+        }
+
+        // ----- T1-T6 フロー UI: 入口・T3回答・行動選択・結果 -----
+        function startT16DoorNotOpenFlow(userMessage) {
+            const msg = (userMessage || 'ドアが開かない').trim();
+            addTheme001Message('user', msg);
+
+            const t1 = runT1(msg);
+            if (!t1) return;
+            T16State.t1Output = t1;
+            T16State.t2Output = runT2(t1);
+            var t2 = T16State.t2Output;
+            var skipT3 = t2 && t2.cause_candidates && t2.cause_candidates.length === 1 && t1.confidence >= T3_SKIP_CONFIDENCE_THRESHOLD;
+
+            if (skipT3) {
+                T16State.t3Output = null;
+                T16State.observationResult = null;
+                T16State.t4Output = runT4(null, t2, null);
+                T16State.t5Output = runT5(T16State.t4Output, t1);
+                T16State.step = 't5_actions';
+                var introHtml = '<strong>原因が特定できました。</strong><br><br>次の対処をご案内します。<br><br>';
+                var cards = T16State.t5Output.action_cards || [];
+                cards.forEach(function(c) {
+                    introHtml += '<div class="card" style="margin-bottom: 10px; cursor: pointer;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' +
+                        '<div class="card-title">' + (c.title || '') + '</div>' +
+                        (c.duration ? '<div class="card-content" style="font-size: 0.85em;">⏱ ' + c.duration + '</div>' : '') +
+                        '</div>';
+                });
+                if (T16State.t5Output.escalation_option) {
+                    introHtml += '<div style="margin-top: 10px; font-size: 0.9em; color: #aaa;">販売店・ロードサービスも選択できます</div>';
+                }
+                addTheme001Message('ai', introHtml);
+                return;
+            }
+
+            T16State.t3Output = runT3(t2);
+            T16State.step = 't3_question';
+            const q = T16State.t3Output;
+            const questionHtml = '<strong>スマートキーでドアが開かないときの確認</strong><br><br>' +
+                (q.question_text || 'スマートキーのボタンを押すとランプは点きますか？') + '<br><br>' +
+                '<div class="quick-reply-container">' +
+                '<div class="quick-reply" onclick="handleT16T3Answer(\'yes\')">💡 <span>はい、点きます</span></div>' +
+                '<div class="quick-reply" onclick="handleT16T3Answer(\'no\')">🔴 <span>いいえ、点きません</span></div>' +
+                '</div>';
+            addTheme001Message('ai', questionHtml);
+        }
+
+        function handleT16T3Answer(answerYesNo) {
+            const label = answerYesNo === 'yes' ? 'はい、点きます' : 'いいえ、点きません';
+            addTheme001Message('user', label);
+
+            T16State.observationResult = answerYesNo;
+            T16State.t4Output = runT4(answerYesNo, T16State.t2Output, T16State.t3Output);
+            T16State.t5Output = runT5(T16State.t4Output, T16State.t1Output);
+            T16State.step = 't5_actions';
+
+            const cards = T16State.t5Output.action_cards || [];
+            let cardsHtml = '<strong>おすすめの対処</strong><br><br>';
+            cards.forEach(function(c) {
+                cardsHtml += '<div class="card" style="margin-bottom: 10px; cursor: pointer;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' +
+                    '<div class="card-title">' + (c.title || '') + '</div>' +
+                    (c.duration ? '<div class="card-content" style="font-size: 0.85em;">⏱ ' + c.duration + '</div>' : '') +
+                    '</div>';
+            });
+            if (T16State.t5Output.escalation_option) {
+                cardsHtml += '<div style="margin-top: 10px; font-size: 0.9em; color: #aaa;">販売店・ロードサービスも選択できます</div>';
+            }
+            addTheme001Message('ai', cardsHtml);
+        }
+
+        function handleT16ActionClick(actionId) {
+            T16State.lastActionId = actionId;
+            const cards = (T16State.t5Output && T16State.t5Output.action_cards) || [];
+            const card = cards.find(function(c) { return c.action_id === actionId; });
+            if (!card) return;
+            addTheme001Message('user', card.title || actionId);
+
+            // 電池交換（A_DOOR_002）は risk_notice のため「販売店で交換する／自分で交換する」の選択ステップを挟む
+            if (actionId === 'A_DOOR_002' && card.risk_notice) {
+                T16State.step = 'battery_replace_choice';
+                var choiceHtml = '<strong>' + (card.title || '電池交換') + '</strong><br><br>';
+                choiceHtml += '⚠️ ' + card.risk_notice + '<br><br>';
+                choiceHtml += 'どちらで対応しますか？<br>' +
+                    '<div class="quick-reply-container">' +
+                    '<div class="quick-reply" onclick="handleT16BatteryReplaceChoice(\'dealer\')">🏢 <span>販売店で交換する</span></div>' +
+                    '<div class="quick-reply" onclick="handleT16BatteryReplaceChoice(\'self\')">🔧 <span>自分で交換する</span></div>' +
+                    '</div>';
+                addTheme001Message('ai', choiceHtml);
+                return;
+            }
+
+            T16State.step = 't6_wait_result';
+            var stepsHtml = '<strong>' + (card.title || '') + '</strong><br><br>';
+            if (card.steps && card.steps.length) {
+                stepsHtml += '<strong>手順：</strong><br>';
+                card.steps.forEach(function(s, i) { stepsHtml += (i + 1) + '. ' + s + '<br>'; });
+            }
+            if (card.required_items && card.required_items.length) stepsHtml += '<br>必要物: ' + card.required_items.join(', ') + '<br>';
+            if (card.risk_notice) stepsHtml += '<br>⚠️ ' + card.risk_notice + '<br>';
+            if (card.alternative) stepsHtml += '<br>うまくいかない場合: ' + card.alternative + '<br>';
+            var resultPrompt = actionId === 'A_DOOR_005' ? '予備キーで試した結果を教えてください：' : '試した結果を教えてください：';
+            stepsHtml += '<br>' + resultPrompt + '<br>' +
+                '<div class="quick-reply-container">' +
+                '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>うまくいった</span></div>' +
+                '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>うまくいかなかった</span></div>' +
+                '</div>';
+            addTheme001Message('ai', stepsHtml);
+        }
+
+        // 電池交換アクション：販売店で交換する／自分で交換する の選択に応じた案内
+        function handleT16BatteryReplaceChoice(choice) {
+            if (choice === 'dealer') {
+                addTheme001Message('user', '販売店で交換する');
+                addTheme001Message('ai', '<strong>販売店での電池交換</strong><br><br>' +
+                    'トヨタ販売店で電池交換を依頼できます。<br><br>' +
+                    '<strong>連絡方法：</strong><br>' +
+                    '・電話で予約: 0120-XXX-XXX<br>' +
+                    '・オンライン予約: 販売店検索ページから予約<br><br>' +
+                    '<strong>予約時の準備：</strong><br>' +
+                    '・車種・年式<br>・スマートキーの種類<br>・希望日時<br><br>' +
+                    '※ 実際の画面では、位置情報に基づいた最寄りの販売店を表示し、オンライン予約ができるようになります。<br><br>' +
+                    '他にご質問はありますか？');
+                T16State.step = null;
+                return;
+            }
+            addTheme001Message('user', '自分で交換する');
+            T16State.step = 't6_wait_result';
+            var card = (T16State.t5Output && T16State.t5Output.action_cards || []).find(function(c) { return c.action_id === 'A_DOOR_002'; });
+            if (!card) card = { title: '恒久対応：電池交換', steps: ['CR2032（またはCR2450）を用意', 'キーを開けて電池を交換', '動作確認'], required_items: ['CR2032 または CR2450（ボタン電池）'], risk_notice: '部品破損の恐れがあるため、慎重に作業してください。', alternative: '電池購入先の案内へ' };
+            var stepsHtml = '<strong>自分で電池交換をする場合</strong><br><br>';
+            stepsHtml += '<strong>手順：</strong><br>';
+            (card.steps || []).forEach(function(s, i) { stepsHtml += (i + 1) + '. ' + s + '<br>'; });
+            if (card.required_items && card.required_items.length) stepsHtml += '<br>必要物: ' + card.required_items.join(', ') + '<br>';
+            if (card.risk_notice) stepsHtml += '<br>⚠️ ' + card.risk_notice + '<br>';
+            if (card.alternative) stepsHtml += '<br>うまくいかない場合: ' + card.alternative + '<br>';
+            stepsHtml += '<br>電池交換後、スマートキーが正常に動作するようになりましたか？<br>' +
+                '<div class="quick-reply-container">' +
+                '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>うまくいった</span></div>' +
+                '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>うまくいかなかった</span></div>' +
+                '</div>';
+            addTheme001Message('ai', stepsHtml);
+        }
+
+        function handleT16T6Result(resolved) {
+            const label = resolved ? 'うまくいった' : 'うまくいかなかった';
+            addTheme001Message('user', label);
+            const t6 = runT6(resolved, T16State.lastActionId, T16State.t5Output);
+
+            if (t6.next_step === 'retry_with_t4') {
+                T16State.t4Output = runT4(T16State.observationResult, T16State.t2Output, T16State.t3Output, t6.evidence_from_failure);
+                T16State.t5Output = runT5(T16State.t4Output, T16State.t1Output);
+                T16State.step = 't5_actions';
+                var aiHtml = '<strong>他の原因の可能性があります</strong><br><br>試していただいた結果を踏まえて、別の対処をご案内します。<br><br>';
+                var cards = T16State.t5Output.action_cards || [];
+                cards.forEach(function(c) {
+                    aiHtml += '<div class="card" style="margin-bottom: 10px; cursor: pointer;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' +
+                        '<div class="card-title">' + (c.title || '') + '</div>' +
+                        (c.duration ? '<div class="card-content" style="font-size: 0.85em;">⏱ ' + c.duration + '</div>' : '') +
+                        '</div>';
+                });
+                if (T16State.t5Output.escalation_option) {
+                    aiHtml += '<div style="margin-top: 10px; font-size: 0.9em; color: #aaa;">販売店・ロードサービスも選択できます</div>';
+                }
+                addTheme001Message('ai', aiHtml);
+                return;
+            }
+
+            var aiHtml = '';
+            if (t6.next_step === 'done') {
+                aiHtml = '<strong>よかったです。解決しました。</strong><br><br>また困ったことがあればお知らせください。';
+            } else if (t6.next_step === 'done_with_next_steps') {
+                if (T16State.lastActionId === 'A_DOOR_005' || t6.spare_key_worked) {
+                    aiHtml = '<strong>予備キーで開けられてよかったです。</strong><br><br>今お使いのキー側の不調の可能性があります。そのキーの電池交換や販売店での点検をご案内します。<br><br>';
+                } else {
+                    aiHtml = '<strong>ドアを開けられてよかったです。</strong><br><br>次に、電池交換をしておくとスマートキーで開けられるようになります。<br><br>';
+                }
+                if (t6.next_steps_guidance && t6.next_steps_guidance.length) {
+                    t6.next_steps_guidance.forEach(function(g) { aiHtml += '・' + (g.label || g.id) + '<br>'; });
+                }
+            } else if (t6.next_step === 'escalate') {
+                aiHtml = '<strong>専門家へご案内</strong><br><br>試していただいた内容をまとめて、販売店・ロードサービスが引き継ぎやすくしています。<br><br>' +
+                    '📞 ロードサービス: 0120-XXX-XXX（24時間）<br>📞 販売店: 0120-XXX-XXX';
+            } else {
+                aiHtml = '次の対応をご案内します。';
+            }
+            addTheme001Message('ai', aiHtml);
+            T16State.step = null;
         }
 
         // THEME-001 用チャット: メッセージ追加ヘルパー
@@ -1540,35 +1922,16 @@
             addTheme001Message('ai', `輝明さん、今知りたいことを入力してください。<br><br>
 すぐに試せるメニューもご用意しています：
 <div class="quick-reply-container">
-  <div class="quick-reply" onclick="startTheme001SmartKeyFlow()">
+  <div class="quick-reply" onclick="startT16DoorNotOpenFlow('スマートキーでドアが開かない')">
     🔑 <span>スマートキーでドアが開かない</span>
   </div>
-</div>`);
-        }
-
-        // THEME-001: スマートキーでドアが開かないフロー（簡易版）
-        function startTheme001SmartKeyFlow() {
-            addTheme001Message('user', 'スマートキーでドアが開かない');
-
-            addTheme001Message('ai', `<strong>スマートキーでドアが開かないときの確認ポイント</strong><br><br>
-まず、次の2つを確認しましょう。<br><br>
-<strong>1. スマートキーのインジケーターは光りますか？</strong><br>
-・ボタンを押したときに赤いランプが一瞬点灯するか確認してください。<br><br>
-<strong>2. 予備のスマートキーでも同じ症状ですか？</strong><br>
-・予備キーがあれば、同じように試してみてください。<br><br>
-おおよその状況に近いものを教えてください：
-<div class="quick-reply-container">
-  <div class="quick-reply" onclick="handleTheme001Situation('battery')">
-    🔋 <span>インジケーターが光らない / 反応が弱い</span>
-  </div>
-  <div class="quick-reply" onclick="handleTheme001Situation('interference')">
-    📡 <span>インジケーターは光るが、クルマが反応しない</span>
-  </div>
-  <div class="quick-reply" onclick="handleTheme001Situation('unknown')">
-    ❓ <span>よく分からない / 確認が難しい</span>
+  <div class="quick-reply" onclick="startT16DoorNotOpenFlow('キー電池切れの表示が出ている')">
+    🔋 <span>キー電池切れの表示が出ている</span>
   </div>
 </div>`);
         }
+
+        // T1-T6 駆動フロー（旧 Theme001 固定スクリプトは startT16DoorNotOpenFlow に統合済み）
 
         // THEME-001: 状況別の簡易ガイド
         function handleTheme001Situation(type) {
@@ -2449,15 +2812,14 @@
 
         // Enterキーで検索
         document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchInput');
+            var searchInput = document.getElementById('searchInput');
             if (searchInput) {
                 searchInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        performSearch();
-                    }
+                    if (e.key === 'Enter') performSearch();
                 });
             }
-            displayRandomAlert();
+            try { displayRandomAlert(); } catch (e) { console.warn('displayRandomAlert:', e); }
+            setTimeout(function() { try { displayRandomAlert(); } catch (e) {} }, 100);
         });
     </script>
 </body>

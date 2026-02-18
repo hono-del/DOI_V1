@@ -1,0 +1,4 @@
+event_id,theme_id,label_ja,default_urgency,default_psychological_risk,subtype_candidates,notes
+DOOR_NOT_OPEN,THEME-001,�h�A���J���Ȃ�,0.7,medium,,�X�}�[�g�L�[�Ńh�A���J���Ȃ�
+WARNING_LAMP_ON,THEME-002,�x�������_������,0.8,high,"BRAKE|ENGINE|TPMS|CHARGE",�����v/�G���W��/�^�C��/�[�d��
+BT_NOT_CONNECTED,THEME-BT,Bluetooth���ڑ��ł��Ȃ�,0.4,low,"PHONE_SIDE|VEHICLE_SIDE|PAIRING|ENVIRONMENT",�����E���y�E�ԗ��E��
