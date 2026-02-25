@@ -589,11 +589,11 @@
                         <div id="vehicleModelStep">
                             <div class="vehicle-model-grid">
                                 <div class="vehicle-model-card" data-model="G" onclick="selectModel('G')">
-                                    <img src="../docs/mockups/グレーSUV_背景黒.png" alt="Model G">
+                                    <img src="./images/グレーSUV_背景黒.png" alt="Model G">
                                     <div class="label">Model G</div>
                                 </div>
                                 <div class="vehicle-model-card" data-model="B" onclick="selectModel('B')">
-                                    <img src="../docs/mockups/ブルーセダン.png" alt="Model B">
+                                    <img src="./images/ブルーセダン.png" alt="Model B">
                                     <div class="label">Model B</div>
                                 </div>
                             </div>
@@ -652,7 +652,7 @@
 
                             <!-- 2. 車両画像（車種選択で設定） -->
                             <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 20px;">
-                                <img id="homeVehicleImage" src="../docs/mockups/グレーSUV_背景黒.png"
+                                <img id="homeVehicleImage" src="./images/グレーSUV_背景黒.png"
                                      alt="あなたの車両"
                                      style="width: 100%; height: auto; display: block;"
                                      onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 800 500%27%3E%3Crect fill=%27%23e0e0e0%27 width=%27800%27 height=%27500%27/%3E%3Ctext x=%27400%27 y=%27250%27 text-anchor=%27middle%27 font-size=%2724%27 fill=%27%23666%27 font-family=%27Arial%27%3E🚗 あなたの車両%3C/text%3E%3C/svg%3E'">
@@ -1105,7 +1105,7 @@
 
         // ログイン・車種選択フロー（モック）
         var selectedVehicle = null;
-        var VEHICLE_IMAGES = { G: '../docs/mockups/グレーSUV_背景黒.png', B: '../docs/mockups/ブルーセダン.png' };
+        var VEHICLE_IMAGES = { G: './images/グレーSUV_背景黒.png', B: './images/ブルーセダン.png' };
         function showScreen(name) {
             var login = document.getElementById('loginScreen');
             var vehicle = document.getElementById('vehicleSelectScreen');
