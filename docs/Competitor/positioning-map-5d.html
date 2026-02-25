@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>競合ポジショニングマップ（5次元対応）</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        .controls {
+            padding: 20px 40px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .filter-group h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #495057;
+            margin: 0;
+        }
+
+        .checkbox-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .checkbox-item:hover {
+            background: #f8f9fa;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-item label {
+            font-size: 13px;
+            color: #495057;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .main-content {
+            display: flex;
+            padding: 40px;
+            gap: 40px;
+        }
+
+        #chart {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .legend-container {
+            width: 280px;
+            flex-shrink: 0;
+        }
+
+        .legend {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .legend h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #212529;
+            font-weight: 700;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #495057;
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 10px;
+            border: 1px solid #dee2e6;
+        }
+
+        .legend-shape {
+            margin-right: 10px;
+        }
+
+        .legend-size {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            max-width: 350px;
+            z-index: 1000;
+            border: 2px solid #667eea;
+        }
+
+        .tooltip h4 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .tooltip p {
+            margin: 5px 0;
+            font-size: 13px;
+            color: #495057;
+            line-height: 1.5;
+        }
+
+        .tooltip strong {
+            color: #212529;
+        }
+
+        svg text {
+            user-select: none;
+        }
+
+        .axis-label {
+            font-size: 14px;
+            font-weight: 600;
+            fill: #495057;
+        }
+
+        .axis line, .axis path {
+            stroke: #dee2e6;
+            stroke-width: 2;
+        }
+
+        .axis text {
+            fill: #6c757d;
+            font-size: 12px;
+        }
+
+        .grid line {
+            stroke: #e9ecef;
+            stroke-dasharray: 2,2;
+        }
+
+        rect.competitor {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        rect.competitor:hover {
+            filter: brightness(1.1);
+            stroke-width: 3;
+        }
+
+        .company-label {
+            font-size: 11px;
+            fill: #212529;
+            font-weight: 600;
+            pointer-events: none;
+            text-anchor: middle;
+        }
+
+        .reset-btn {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            align-self: flex-start;
+            margin-top: 28px;
+        }
+
+        .reset-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .stats {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 13px;
+            color: #495057;
+        }
+
+        .stats h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #212529;
+            font-weight: 700;
+        }
+
+        .stats p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .legend-container {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 競合ポジショニングマップ（5次元分析）</h1>
+            <p>機能レイヤー × Lifecycle × 市場成熟度 × AI活用度 × 企業規模</p>
+        </div>
+
+        <div class="controls">
+            <div class="filter-group">
+                <h4>📊 市場成熟度</h4>
+                <div class="checkbox-container">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="mat-legacy" value="レガシー" class="maturity-filter" checked>
+                        <label for="mat-legacy">レガシー（5年以上）</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="mat-growth" value="成長期" class="maturity-filter" checked>
+                        <label for="mat-growth">成長期（2-5年）</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="mat-emerging" value="新興" class="maturity-filter" checked>
+                        <label for="mat-emerging">新興（1-2年）</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="mat-nextgen" value="次世代" class="maturity-filter" checked>
+                        <label for="mat-nextgen">次世代（未来志向）</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h4>🤖 AI活用度</h4>
+                <div class="checkbox-container">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ai-none" value="非AI" class="ai-filter" checked>
+                        <label for="ai-none">非AI（従来型）</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ai-assist" value="AI補助" class="ai-filter" checked>
+                        <label for="ai-assist">AI補助（一部搭載）</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ai-center" value="AI中心" class="ai-filter" checked>
+                        <label for="ai-center">AI中心（主要機能）</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ai-native" value="AI Native" class="ai-filter" checked>
+                        <label for="ai-native">AI Native（AI前提設計）</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h4>🏢 企業規模</h4>
+                <div class="checkbox-container">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="size-mid" value="中" class="size-filter" checked>
+                        <label for="size-mid">中規模（中堅企業）</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="size-large" value="大" class="size-filter" checked>
+                        <label for="size-large">大企業（Enterprise）</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="size-global" value="特大" class="size-filter" checked>
+                        <label for="size-global">グローバル（Global）</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h4>🏭 業界</h4>
+                <div class="checkbox-container">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ind-auto" value="自動車" class="industry-filter" checked>
+                        <label for="ind-auto">自動車</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ind-mfg" value="製造業" class="industry-filter" checked>
+                        <label for="ind-mfg">製造業</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ind-cs" value="カスタマーサポート" class="industry-filter" checked>
+                        <label for="ind-cs">カスタマーサポート</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ind-fin" value="金融" class="industry-filter" checked>
+                        <label for="ind-fin">金融</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ind-all" value="全業界" class="industry-filter" checked>
+                        <label for="ind-all">全業界</label>
+                    </div>
+                </div>
+            </div>
+
+            <button class="reset-btn" onclick="resetFilters()">すべて選択</button>
+        </div>
+
+        <div class="main-content">
+            <div id="chart"></div>
+            
+            <div class="legend-container">
+                <div class="legend">
+                    <h3>📊 市場成熟度（色）</h3>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #4a90e2;"></div>
+                        <span>レガシー（5年以上）</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #7ed321;"></div>
+                        <span>成長期（2-5年）</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f5a623;"></div>
+                        <span>新興（1-2年）</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #e74c3c;"></div>
+                        <span>次世代（未来志向）</span>
+                    </div>
+                </div>
+
+                <div class="legend">
+                    <h3>🤖 AI活用度（パターン）</h3>
+                    <div class="legend-item">
+                        <span class="legend-shape">■</span>
+                        <span>非AI（従来型）</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-shape">◐</span>
+                        <span>AI補助（一部AI搭載）</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-shape">◆</span>
+                        <span>AI中心（主要機能）</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-shape">★</span>
+                        <span>AI Native（AI前提設計）</span>
+                    </div>
+                </div>
+
+                <div class="legend">
+                    <h3>🏢 企業規模（サイズ）</h3>
+                    <div class="legend-item">
+                        <span class="legend-size" style="font-size: 11px;">■</span>
+                        <span>中規模（中堅企業向け）</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-size" style="font-size: 15px;">■</span>
+                        <span>大企業（Enterprise）</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-size" style="font-size: 19px;">■</span>
+                        <span>グローバル（Global）</span>
+                    </div>
+                </div>
+
+                <div class="stats">
+                    <h3>📈 統計情報</h3>
+                    <p><strong>総競合数:</strong> <span id="totalCount">19</span>社</p>
+                    <p><strong>表示中:</strong> <span id="visibleCount">19</span>社</p>
+                    <p><strong>自社（体験OS）:</strong> 唯一の次世代・全レイヤー横断プレイヤー</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // データ定義
+        const data = [
+            {name: "Paligo", xStart: 10, xEnd: 25, yStart: 85, yEnd: 95, maturity: "レガシー", ai: "非AI", size: "中", industry: "製造業", reason: "制作〜構造化管理のみ"},
+            {name: "QPP", xStart: 10, xEnd: 25, yStart: 88, yEnd: 95, maturity: "レガシー", ai: "非AI", size: "中", industry: "製造業", reason: "制作領域"},
+            {name: "MSX pubFoundry", xStart: 25, xEnd: 70, yStart: 55, yEnd: 85, maturity: "成長期", ai: "AI中心", size: "大", industry: "自動車", reason: "Dealer Experience OS（業務最適化）"},
+            {name: "Documoto", xStart: 30, xEnd: 40, yStart: 55, yEnd: 65, maturity: "成長期", ai: "AI補助", size: "中", industry: "製造業", reason: "部品情報UX"},
+            {name: "Hansem Global", xStart: 35, xEnd: 45, yStart: 15, yEnd: 30, maturity: "レガシー", ai: "非AI", size: "大", industry: "全業界", reason: "Digital Manual中心"},
+            {name: "Volvo Digital Owner's Manual", xStart: 35, xEnd: 45, yStart: 15, yEnd: 25, maturity: "成長期", ai: "AI補助", size: "大", industry: "自動車", reason: "電子取説"},
+            {name: "BMW Intelligent Owner's Manual", xStart: 35, xEnd: 50, yStart: 15, yEnd: 25, maturity: "成長期", ai: "AI中心", size: "大", industry: "自動車", reason: "Digital Manual＋部分ガイド"},
+            {name: "Toyota T-Connect Manual", xStart: 35, xEnd: 45, yStart: 15, yEnd: 30, maturity: "成長期", ai: "AI補助", size: "大", industry: "自動車", reason: "Digital Manual"},
+            {name: "Tesla In-Car Help", xStart: 50, xEnd: 75, yStart: 15, yEnd: 35, maturity: "新興", ai: "AI中心", size: "大", industry: "自動車", reason: "状況ガイド＋行動ナビ"},
+            {name: "トヨタ エージェント", xStart: 60, xEnd: 75, yStart: 15, yEnd: 35, maturity: "新興", ai: "AI Native", size: "大", industry: "自動車", reason: "AI音声ナビ"},
+            {name: "ServiceNow", xStart: 60, xEnd: 85, yStart: 30, yEnd: 85, maturity: "レガシー", ai: "AI中心", size: "特大", industry: "全業界", reason: "AIエージェント・オーケストレーションで体験統合"},
+            {name: "Coveo", xStart: 65, xEnd: 80, yStart: 40, yEnd: 80, maturity: "成長期", ai: "AI中心", size: "大", industry: "全業界", reason: "Experience Platformでジャーニー統合"},
+            {name: "Kore.ai", xStart: 65, xEnd: 80, yStart: 55, yEnd: 80, maturity: "成長期", ai: "AI Native", size: "大", industry: "全業界", reason: "Conversational AI"},
+            {name: "Siemens Xcelerator", xStart: 55, xEnd: 85, yStart: 50, yEnd: 95, maturity: "成長期", ai: "AI中心", size: "特大", industry: "製造業", reason: "デジタルツイン統合体験プラットフォーム"},
+            {name: "PTC Vuforia Expert Capture", xStart: 50, xEnd: 65, yStart: 55, yEnd: 75, maturity: "成長期", ai: "AI中心", size: "大", industry: "製造業", reason: "作業ガイド"},
+            {name: "exaBase 生成AI", xStart: 55, xEnd: 75, yStart: 40, yEnd: 80, maturity: "新興", ai: "AI Native", size: "大", industry: "全業界", reason: "企業向け生成AI・RAG特化"},
+            {name: "Adora", xStart: 65, xEnd: 85, yStart: 45, yEnd: 75, maturity: "新興", ai: "AI Native", size: "大", industry: "全業界", reason: "AIネイティブパフォーマンスマーケティング"},
+            {name: "Lazarus AI", xStart: 10, xEnd: 70, yStart: 70, yEnd: 95, maturity: "新興", ai: "AI Native", size: "大", industry: "金融", reason: "文書処理特化型AI・セキュアRAG"},
+            {name: "Helpfeel", xStart: 40, xEnd: 70, yStart: 20, yEnd: 60, maturity: "成長期", ai: "AI中心", size: "中", industry: "カスタマーサポート", reason: "意図予測検索・FAQ最適化"},
+            {name: "体験OS（自社）", xStart: 40, xEnd: 90, yStart: 20, yEnd: 90, maturity: "次世代", ai: "AI Native", size: "特大", industry: "全業界", reason: "Digital Manual〜体験OSを横断", highlight: true}
+        ];
+
+        // 色のマッピング
+        const maturityColors = {
+            "レガシー": "#4a90e2",
+            "成長期": "#7ed321",
+            "新興": "#f5a623",
+            "次世代": "#e74c3c"
+        };
+
+        // AIパターン
+        const aiPatterns = {
+            "非AI": "none",
+            "AI補助": "url(#pattern-ai-assist)",
+            "AI中心": "url(#pattern-ai-center)",
+            "AI Native": "url(#pattern-ai-native)"
+        };
+
+        // サイズマッピング
+        const sizeOpacity = {
+            "中": 0.7,
+            "大": 0.85,
+            "特大": 1.0
+        };
+
+        // チャートの設定
+        const margin = {top: 60, right: 60, bottom: 80, left: 80};
+        const width = 1000 - margin.left - margin.right;
+        const height = 700 - margin.top - margin.bottom;
+
+        // スケール
+        const xScale = d3.scaleLinear()
+            .domain([0, 100])
+            .range([0, width]);
+
+        const yScale = d3.scaleLinear()
+            .domain([0, 100])
+            .range([height, 0]);
+
+        // SVG作成
+        const svg = d3.select("#chart")
+            .append("svg")
+            .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+            .attr("preserveAspectRatio", "xMidYMid meet")
+            .style("max-width", "100%")
+            .style("height", "auto");
+
+        const g = svg.append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // パターン定義
+        const defs = svg.append("defs");
+
+        // AI補助パターン（ドット）
+        const patternAssist = defs.append("pattern")
+            .attr("id", "pattern-ai-assist")
+            .attr("patternUnits", "userSpaceOnUse")
+            .attr("width", 4)
+            .attr("height", 4);
+        patternAssist.append("circle")
+            .attr("cx", 2)
+            .attr("cy", 2)
+            .attr("r", 1)
+            .attr("fill", "white")
+            .attr("opacity", 0.5);
+
+        // AI中心パターン（ストライプ）
+        const patternCenter = defs.append("pattern")
+            .attr("id", "pattern-ai-center")
+            .attr("patternUnits", "userSpaceOnUse")
+            .attr("width", 4)
+            .attr("height", 4)
+            .attr("patternTransform", "rotate(45)");
+        patternCenter.append("rect")
+            .attr("width", 2)
+            .attr("height", 4)
+            .attr("fill", "white")
+            .attr("opacity", 0.3);
+
+        // AI Nativeパターン（グリッド）
+        const patternNative = defs.append("pattern")
+            .attr("id", "pattern-ai-native")
+            .attr("patternUnits", "userSpaceOnUse")
+            .attr("width", 6)
+            .attr("height", 6);
+        patternNative.append("path")
+            .attr("d", "M 0 0 L 6 6 M 6 0 L 0 6")
+            .attr("stroke", "white")
+            .attr("stroke-width", 1)
+            .attr("opacity", 0.4);
+
+        // グリッド線
+        const xGrid = g.append("g")
+            .attr("class", "grid")
+            .selectAll("line")
+            .data(d3.range(0, 101, 10))
+            .enter()
+            .append("line")
+            .attr("x1", d => xScale(d))
+            .attr("x2", d => xScale(d))
+            .attr("y1", 0)
+            .attr("y2", height);
+
+        const yGrid = g.append("g")
+            .attr("class", "grid")
+            .selectAll("line")
+            .data(d3.range(0, 101, 10))
+            .enter()
+            .append("line")
+            .attr("x1", 0)
+            .attr("x2", width)
+            .attr("y1", d => yScale(d))
+            .attr("y2", d => yScale(d));
+
+        // X軸
+        const xAxis = d3.axisBottom(xScale)
+            .tickValues([10, 25, 40, 55, 70, 90])
+            .tickFormat(d => {
+                const labels = {10: "コンテンツ\n制作", 25: "構造化\n管理", 40: "Digital\nManual", 
+                              55: "状況別\nガイド", 70: "行動\nナビ", 90: "体験OS"};
+                return labels[d] || d;
+            });
+
+        g.append("g")
+            .attr("class", "axis")
+            .attr("transform", `translate(0,${height})`)
+            .call(xAxis)
+            .selectAll("text")
+            .style("text-anchor", "middle")
+            .attr("dy", "1em");
+
+        // X軸ラベル
+        g.append("text")
+            .attr("class", "axis-label")
+            .attr("x", width / 2)
+            .attr("y", height + 60)
+            .attr("text-anchor", "middle")
+            .text("機能レイヤー →");
+
+        // Y軸
+        const yAxis = d3.axisLeft(yScale)
+            .tickValues([20, 60, 90])
+            .tickFormat(d => {
+                const labels = {20: "User", 60: "Dealer", 90: "OEM"};
+                return labels[d] || d;
+            });
+
+        g.append("g")
+            .attr("class", "axis")
+            .call(yAxis);
+
+        // Y軸ラベル
+        g.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -height / 2)
+            .attr("y", -60)
+            .attr("text-anchor", "middle")
+            .text("← Lifecycle");
+
+        // ツールチップ
+        const tooltip = d3.select("#tooltip");
+
+        // 矩形描画
+        const rects = g.selectAll(".competitor")
+            .data(data)
+            .enter()
+            .append("rect")
+            .attr("class", "competitor")
+            .attr("x", d => xScale(d.xStart))
+            .attr("y", d => yScale(d.yEnd))
+            .attr("width", d => xScale(d.xEnd) - xScale(d.xStart))
+            .attr("height", d => yScale(d.yStart) - yScale(d.yEnd))
+            .attr("fill", d => d.highlight ? maturityColors[d.maturity] : maturityColors[d.maturity])
+            .style("fill", d => aiPatterns[d.ai] === "none" ? maturityColors[d.maturity] : aiPatterns[d.ai])
+            .style("stroke", d => d.highlight ? "#e74c3c" : maturityColors[d.maturity])
+            .style("stroke-width", d => d.highlight ? 4 : 2)
+            .style("opacity", d => d.highlight ? 1 : sizeOpacity[d.size])
+            .on("mouseover", function(event, d) {
+                d3.select(this)
+                    .style("stroke-width", 4)
+                    .style("filter", "brightness(1.2)");
+
+                    tooltip
+                    .style("opacity", 1)
+                    .html(`
+                        <h4>${d.name}</h4>
+                        <p><strong>機能範囲:</strong> X: ${d.xStart}-${d.xEnd}</p>
+                        <p><strong>対象層:</strong> Y: ${d.yStart}-${d.yEnd}</p>
+                        <p><strong>業界:</strong> ${d.industry}</p>
+                        <p><strong>市場成熟度:</strong> ${d.maturity}</p>
+                        <p><strong>AI活用度:</strong> ${d.ai}</p>
+                        <p><strong>企業規模:</strong> ${d.size}</p>
+                        <p><strong>特徴:</strong> ${d.reason}</p>
+                    `)
+                    .style("left", (event.pageX + 15) + "px")
+                    .style("top", (event.pageY - 15) + "px");
+            })
+            .on("mouseout", function(event, d) {
+                d3.select(this)
+                    .style("stroke-width", d.highlight ? 4 : 2)
+                    .style("filter", "none");
+
+                tooltip.style("opacity", 0);
+            });
+
+        // ラベル追加
+        g.selectAll(".company-label")
+            .data(data)
+            .enter()
+            .append("text")
+            .attr("class", "company-label")
+            .attr("x", d => xScale((d.xStart + d.xEnd) / 2))
+            .attr("y", d => yScale((d.yStart + d.yEnd) / 2))
+            .attr("dy", "0.35em")
+            .text(d => {
+                const width = d.xEnd - d.xStart;
+                const height = d.yEnd - d.yStart;
+                if (width < 15 || height < 15) return "";
+                return d.name.length > 15 ? d.name.substring(0, 13) + "..." : d.name;
+            })
+            .style("font-size", d => {
+                const area = (d.xEnd - d.xStart) * (d.yEnd - d.yStart);
+                if (area > 800) return "11px";
+                if (area > 400) return "9px";
+                return "8px";
+            })
+            .style("fill", d => d.highlight ? "white" : "#212529")
+            .style("font-weight", d => d.highlight ? "bold" : "600");
+
+        // フィルタ機能
+        function updateChart() {
+            // チェックされた値を取得
+            const maturityFilters = Array.from(document.querySelectorAll('.maturity-filter:checked'))
+                .map(cb => cb.value);
+            const aiFilters = Array.from(document.querySelectorAll('.ai-filter:checked'))
+                .map(cb => cb.value);
+            const sizeFilters = Array.from(document.querySelectorAll('.size-filter:checked'))
+                .map(cb => cb.value);
+            const industryFilters = Array.from(document.querySelectorAll('.industry-filter:checked'))
+                .map(cb => cb.value);
+
+            let visibleCount = 0;
+
+            rects.style("display", function(d) {
+                const matchMaturity = maturityFilters.length === 0 || maturityFilters.includes(d.maturity);
+                const matchAI = aiFilters.length === 0 || aiFilters.includes(d.ai);
+                const matchSize = sizeFilters.length === 0 || sizeFilters.includes(d.size);
+                const matchIndustry = industryFilters.length === 0 || industryFilters.includes(d.industry);
+                
+                const visible = matchMaturity && matchAI && matchSize && matchIndustry;
+                if (visible) visibleCount++;
+                
+                return visible ? "block" : "none";
+            });
+
+            g.selectAll(".company-label").style("display", function(d) {
+                const matchMaturity = maturityFilters.length === 0 || maturityFilters.includes(d.maturity);
+                const matchAI = aiFilters.length === 0 || aiFilters.includes(d.ai);
+                const matchSize = sizeFilters.length === 0 || sizeFilters.includes(d.size);
+                const matchIndustry = industryFilters.length === 0 || industryFilters.includes(d.industry);
+                
+                return (matchMaturity && matchAI && matchSize && matchIndustry) ? "block" : "none";
+            });
+
+            document.getElementById("visibleCount").textContent = visibleCount;
+        }
+
+        function resetFilters() {
+            // すべてのチェックボックスをチェック
+            document.querySelectorAll('.maturity-filter, .ai-filter, .size-filter, .industry-filter').forEach(cb => {
+                cb.checked = true;
+            });
+            updateChart();
+        }
+
+        // イベントリスナー
+        document.querySelectorAll('.maturity-filter, .ai-filter, .size-filter, .industry-filter').forEach(checkbox => {
+            checkbox.addEventListener('change', updateChart);
+        });
+
+        // 初期表示
+        updateChart();
+    </script>
+</body>
+</html>
