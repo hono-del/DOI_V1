@@ -867,7 +867,38 @@
                 'alert-rest': '長時間運転が続いています。<br>近くで休憩を取ることをおすすめします。',
                 'alert-btn-rest': '2km先のABC PAへ目的地を設定する',
                 'alert-paddle': 'ブレーキ操作が増えています。パドルシフトで減速時の操作をサポートできます。',
-                'alert-btn-paddle': '使用方法を見る'
+                'alert-btn-paddle': '使用方法を見る',
+                // フィードバック
+                'feedback-question': 'この情報は役に立ちましたか？',
+                'feedback-very-helpful': '😊 とても役立った',
+                'feedback-helpful': '🙂 役立った',
+                'feedback-not-helpful': '😕 あまり役立たなかった',
+                'feedback-thanks': 'フィードバックをありがとうございます！',
+                'feedback-thanks-detail': 'お客様の声をもとに、より良いサービスを提供してまいります。',
+                'btn-back-home': 'ホームに戻る',
+                // 燃費データ
+                'fuel-title': '📊 あなたの燃費データ',
+                'fuel-ecomode-effect': '💡 エコモードの効果予測',
+                'fuel-current': '現在の燃費:',
+                'fuel-with-eco': 'エコモード使用時:',
+                'fuel-improvement': 'の燃費改善が期待できます！',
+                'fuel-tips-title': '📈 燃費改善のヒント',
+                'fuel-bad-factors': '⚠️ 燃費が悪化している要因：',
+                'fuel-factor-1': '• 市街地走行が増加（ストップ&ゴーが多い）',
+                'fuel-factor-2': '• 冬季のため暖機運転が必要',
+                'fuel-factor-3': '• エアコン使用頻度の増加',
+                'fuel-actions': '✅ おすすめの改善アクション：',
+                'fuel-action-1-title': '1. エコモードを活用',
+                'fuel-action-1-detail': '• 市街地走行時にON → 燃費+15%向上',
+                'fuel-action-2-title': '2. 急発進・急ブレーキを避ける',
+                'fuel-action-2-detail': '• なめらかな加減速 → 燃費+10%向上',
+                'fuel-action-3-title': '3. タイヤ空気圧をチェック',
+                'fuel-action-3-detail': '• 適正空気圧の維持 → 燃費+3%向上',
+                'fuel-action-4-title': '4. 不要な荷物を降ろす',
+                'fuel-action-4-detail': '• 車重100kg削減 → 燃費+3%向上',
+                'fuel-goal': '🎯 目標燃費',
+                'fuel-goal-detail': '上記の改善で達成可能です！',
+                'btn-view-fuel-data': '📊 あなたの燃費データを見る'
             },
             en: {
                 'app-title': 'DIGITAL OM',
@@ -978,7 +1009,38 @@
                 'alert-rest': 'You\'ve been driving for a long time.<br>We recommend taking a break nearby.',
                 'alert-btn-rest': 'Set destination to ABC PA 2km ahead',
                 'alert-paddle': 'Frequent braking detected. Paddle shift can assist with deceleration.',
-                'alert-btn-paddle': 'How to Use'
+                'alert-btn-paddle': 'How to Use',
+                // Feedback
+                'feedback-question': 'Was this information helpful?',
+                'feedback-very-helpful': '😊 Very Helpful',
+                'feedback-helpful': '🙂 Helpful',
+                'feedback-not-helpful': '😕 Not Very Helpful',
+                'feedback-thanks': 'Thank you for your feedback!',
+                'feedback-thanks-detail': 'We will continue to provide better services based on your feedback.',
+                'btn-back-home': 'Back to Home',
+                // Fuel Efficiency Data
+                'fuel-title': '📊 Your Fuel Efficiency Data',
+                'fuel-ecomode-effect': '💡 Eco Mode Effect Prediction',
+                'fuel-current': 'Current fuel economy:',
+                'fuel-with-eco': 'With Eco Mode:',
+                'fuel-improvement': 'fuel efficiency improvement expected!',
+                'fuel-tips-title': '📈 Tips to Improve Fuel Efficiency',
+                'fuel-bad-factors': '⚠️ Factors causing lower fuel economy:',
+                'fuel-factor-1': '• Increased city driving (frequent stop & go)',
+                'fuel-factor-2': '• Winter warm-up required',
+                'fuel-factor-3': '• Increased air conditioner usage',
+                'fuel-actions': '✅ Recommended Improvement Actions:',
+                'fuel-action-1-title': '1. Use Eco Mode',
+                'fuel-action-1-detail': '• Turn ON during city driving → +15% fuel economy',
+                'fuel-action-2-title': '2. Avoid Sudden Acceleration/Braking',
+                'fuel-action-2-detail': '• Smooth acceleration/deceleration → +10% fuel economy',
+                'fuel-action-3-title': '3. Check Tire Pressure',
+                'fuel-action-3-detail': '• Maintain proper pressure → +3% fuel economy',
+                'fuel-action-4-title': '4. Remove Unnecessary Cargo',
+                'fuel-action-4-detail': '• Reduce 100kg weight → +3% fuel economy',
+                'fuel-goal': '🎯 Target Fuel Economy',
+                'fuel-goal-detail': 'Achievable with the improvements above!',
+                'btn-view-fuel-data': '📊 View Your Fuel Efficiency Data'
             }
         };
 
@@ -1198,6 +1260,25 @@
                         • 市街地では手動でロービームにすることをお勧めします<br>
                         • 悪天候時は正常に作動しない場合があります
                     `
+                },
+                detailEn: {
+                    title: 'How to Set Auto High Beam',
+                    content: `
+                        <strong>What is Auto High Beam?</strong><br>
+                        A function that automatically switches between high beam and low beam by detecting vehicles and street lights ahead.<br><br>
+                        <strong>Setting Steps:</strong><br><br>
+                        <strong>Step 1: Check Light Switch</strong><br>
+                        • Set the light switch to "AUTO" position<br><br>
+                        <strong>Step 2: Operate Lever</strong><br>
+                        • Push the light lever forward<br>
+                        • "AUTO" indicator will light up on the meter<br><br>
+                        <strong>Step 3: Confirm Operation</strong><br>
+                        • In dark areas with no vehicles ahead, high beam will turn on automatically<br>
+                        • When detecting oncoming or leading vehicles, it will automatically switch to low beam<br><br>
+                        <strong>💡 Notes:</strong><br>
+                        • We recommend manually switching to low beam in urban areas<br>
+                        • May not operate properly in bad weather
+                    `
                 }
             },
             {
@@ -1222,6 +1303,26 @@
                         • 集中力の低下<br><br>
                         <strong>推奨休憩時間：</strong><br>
                         15-20分程度の休憩で、運転パフォーマンスが回復します。
+                    `
+                },
+                detailEn: {
+                    title: 'Rest Stop Guidance',
+                    content: `
+                        <strong>📍 ABC Parking Area</strong><br>
+                        Distance: 2km ahead (approx. 3 min)<br>
+                        Hours: 24 hours<br><br>
+                        <strong>Facilities:</strong><br>
+                        • Restaurant & Shop<br>
+                        • Restrooms & Smoking Area<br>
+                        • Vending Machines<br>
+                        • Free Wi-Fi<br>
+                        • EV Charging Station<br><br>
+                        <strong>💡 Signs of Driver Fatigue:</strong><br>
+                        • Driving continuously for more than 2 hours<br>
+                        • Frequent yawning<br>
+                        • Decreased concentration<br><br>
+                        <strong>Recommended Rest Duration:</strong><br>
+                        A 15-20 minute break will restore driving performance.
                     `
                 }
             },
@@ -1258,6 +1359,36 @@
                         <strong>⚠️ 注意：</strong><br>
                         カメラの映像は補助機能です。必ず目視でも周囲を確認してください。
                     `
+                },
+                detailEn: {
+                    title: 'How to Use Panoramic View Monitor',
+                    content: `
+                        <strong>What is Panoramic View Monitor?</strong><br>
+                        A function that displays a bird's-eye view of your vehicle's surroundings to assist with parking.<br><br>
+                        
+                        <div style="text-align: center; margin: 20px 0;">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 700 400'%3E%3C!-- 背景（ディスプレイ風） --%3E%3Crect fill='%23000000' width='700' height='400' rx='10'/%3E%3Crect fill='%231a1a2e' width='680' height='380' x='10' y='10' rx='5'/%3E%3C!-- 左側：トップビュー --%3E%3Crect fill='%232d4a6e' width='320' height='340' x='20' y='30' rx='8'/%3E%3Ctext x='180' y='55' text-anchor='middle' font-size='14' fill='%234facfe' font-weight='bold'%3E真上からの視点%3C/text%3E%3C!-- 道路 --%3E%3Crect fill='%23556b7a' width='280' height='300' x='40' y='70'/%3E%3C!-- 車両（真上から） --%3E%3Crect fill='%23ffffff' width='80' height='140' x='140' y='150' rx='8'/%3E%3Crect fill='%23e0e0e0' width='60' height='100' x='150' y='170' rx='4'/%3E%3C!-- タイヤ --%3E%3Crect fill='%23333' width='15' height='30' x='135' y='160'/%3E%3Crect fill='%23333' width='15' height='30' x='210' y='160'/%3E%3Crect fill='%23333' width='15' height='30' x='135' y='270'/%3E%3Crect fill='%23333' width='15' height='30' x='210' y='270'/%3E%3C!-- ガイドライン（黄色） --%3E%3Cpath d='M 140 150 L 90 100 M 220 150 L 270 100' stroke='%23ffeb3b' stroke-width='2' stroke-dasharray='5,5' fill='none'/%3E%3Cpath d='M 140 290 L 90 340 M 220 290 L 270 340' stroke='%23ffeb3b' stroke-width='2' stroke-dasharray='5,5' fill='none'/%3E%3C!-- ガイドライン（赤） --%3E%3Cpath d='M 140 290 L 90 350 M 220 290 L 270 350' stroke='%23ff5252' stroke-width='3' fill='none'/%3E%3C!-- 右側：リアビュー --%3E%3Crect fill='%232d4a6e' width='320' height='340' x='360' y='30' rx='8'/%3E%3Ctext x='520' y='55' text-anchor='middle' font-size='14' fill='%234facfe' font-weight='bold'%3E後方カメラ視点%3C/text%3E%3C!-- 駐車場の地面 --%3E%3Crect fill='%23556b7a' width='280' height='300' x='380' y='70'/%3E%3C!-- 駐車ライン --%3E%3Cline x1='380' y1='100' x2='660' y2='100' stroke='%23ffffff' stroke-width='2'/%3E%3Cline x1='380' y1='340' x2='660' y2='340' stroke='%23ffffff' stroke-width='2'/%3E%3C!-- ガイドライン（黄色・台形） --%3E%3Cpath d='M 450 370 L 400 280 L 640 280 L 590 370 Z' stroke='%23ffeb3b' stroke-width='2' fill='%23ffeb3b' opacity='0.2'/%3E%3Ctext x='520' y='315' text-anchor='middle' font-size='16' fill='%23ffeb3b' font-weight='bold'%3E車幅%3C/text%3E%3C!-- ガイドライン（赤） --%3E%3Cline x1='480' y1='370' x2='430' y2='300' stroke='%23ff5252' stroke-width='3'/%3E%3Cline x1='560' y1='370' x2='610' y2='300' stroke='%23ff5252' stroke-width='3'/%3E%3Ctext x='520' y='360' text-anchor='middle' font-size='14' fill='%23ff5252' font-weight='bold'%3E注意%3C/text%3E%3C!-- 下部：コントロールボタン --%3E%3Crect fill='%230f3460' width='660' height='50' x='20' y='340' rx='5'/%3E%3C!-- ボタン1：トップビュー --%3E%3Crect fill='%234facfe' width='80' height='35' x='40' y='350' rx='5'/%3E%3Ctext x='80' y='372' text-anchor='middle' font-size='12' fill='%23000' font-weight='bold'%3E真上%3C/text%3E%3C!-- ボタン2：フロント --%3E%3Crect fill='%232d3561' width='80' height='35' x='140' y='350' rx='5' stroke='%234facfe' stroke-width='1'/%3E%3Ctext x='180' y='372' text-anchor='middle' font-size='12' fill='%234facfe'%3E前方%3C/text%3E%3C!-- ボタン3：サイド --%3E%3Crect fill='%232d3561' width='80' height='35' x='240' y='350' rx='5' stroke='%234facfe' stroke-width='1'/%3E%3Ctext x='280' y='372' text-anchor='middle' font-size='12' fill='%234facfe'%3E側面%3C/text%3E%3C!-- 設定アイコン --%3E%3Ccircle cx='630' cy='367' r='15' fill='%232d3561' stroke='%234facfe' stroke-width='1'/%3E%3Ctext x='630' y='373' text-anchor='middle' font-size='16' fill='%234facfe'%3E⚙%3C/text%3E%3C/svg%3E" 
+                                alt="Panoramic View Monitor Screen" 
+                                style="width: 100%; max-width: 500px; border-radius: 12px; margin: 10px 0;">
+                        </div>
+                        
+                        <strong>How to Activate:</strong><br><br>
+                        <strong>Step 1: Shift to R</strong><br>
+                        • System activates automatically when you shift to reverse<br><br>
+                        <strong>Step 2: Switch View</strong><br>
+                        • Tap "View Switch" button on display<br>
+                        • Select <span style="color: #BF00FF; font-weight: 600;">Top</span>, <span style="color: #BF00FF;">Front</span>, or <span style="color: #BF00FF;">Side</span> view<br><br>
+                        <strong>Step 3: Check Guidelines</strong><br>
+                        • <span style="color: #ffeb3b; font-weight: 600;">Yellow lines</span>: Show vehicle width<br>
+                        • <span style="color: #ff5252; font-weight: 600;">Red lines</span>: Indicate dangerous distance to obstacles<br><br>
+                        <strong>💡 Use Cases:</strong><br>
+                        • Parking in narrow spaces<br>
+                        • Parallel parking<br>
+                        • Turning around on narrow roads<br>
+                        • Checking for obstacles when backing<br><br>
+                        <strong>⚠️ Note:</strong><br>
+                        Camera images are auxiliary. Always visually check surroundings.
+                    `
                 }
             },
             {
@@ -1289,6 +1420,35 @@
                             <button class="button" onclick="showFuelEfficiencyData()" 
                                     style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); padding: 12px 24px; border-radius: 8px; color: white; font-weight: 600; border: none; cursor: pointer;">
                                 📊 あなたの燃費データを見る
+                            </button>
+                        </div>
+                    `
+                },
+                detailEn: {
+                    title: 'How to Set Eco Mode',
+                    content: `
+                        <strong>What is Eco Mode?</strong><br>
+                        A mode that improves fuel efficiency by making engine and transmission response to accelerator operation gentler.<br><br>
+                        <strong>Setting Steps:</strong><br><br>
+                        <strong>Step 1: Press Drive Mode Button</strong><br>
+                        • Press "MODE" button on center console<br><br>
+                        <strong>Step 2: Select Eco Mode</strong><br>
+                        • Select "ECO" displayed on screen<br>
+                        • "ECO" indicator will light up on meter<br><br>
+                        <strong>💡 Eco Mode Effects:</strong><br>
+                        • Fuel efficiency improves by approx. 10-15%<br>
+                        • Gentler accelerator operation<br>
+                        • Air conditioning effect is reduced<br><br>
+                        <strong>Recommended Use Cases:</strong><br>
+                        • City driving<br>
+                        • Traffic jams<br>
+                        • Long-distance driving<br><br>
+                        <strong>⚠️ Note:</strong><br>
+                        Switch to normal mode when rapid acceleration is needed.<br><br>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <button class="button" onclick="showFuelEfficiencyData()" 
+                                    style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); padding: 12px 24px; border-radius: 8px; color: white; font-weight: 600; border: none; cursor: pointer;">
+                                📊 View Your Fuel Efficiency Data
                             </button>
                         </div>
                     `
@@ -1332,6 +1492,41 @@
                         <strong>⚠️ 注意：</strong><br>
                         急なシフトダウンは車両に負担をかけます。段階的に操作してください。
                     `
+                },
+                detailEn: {
+                    title: 'How to Use Paddle Shift',
+                    content: `
+                        <strong>What is Paddle Shift?</strong><br>
+                        Levers behind the steering wheel that allow manual gear changes.<br><br>
+                        
+                        <div style="text-align: center; margin: 20px 0;">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 350'%3E%3C!-- 背景 --%3E%3Crect fill='%23ffffff' width='500' height='350' rx='15'/%3E%3Crect fill='none' stroke='%23333' stroke-width='3' width='480' height='330' x='10' y='10' rx='10'/%3E%3C!-- ハンドル（手書き風） --%3E%3Cpath d='M 150 175 Q 150 100 250 100 Q 350 100 350 175' fill='none' stroke='%23333' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M 150 175 Q 150 250 250 250 Q 350 250 350 175' fill='none' stroke='%23333' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='150' y1='175' x2='150' y2='175' stroke='%23333' stroke-width='4'/%3E%3Cline x1='350' y1='175' x2='350' y2='175' stroke='%23333' stroke-width='4'/%3E%3C!-- ハンドルの太さ --%3E%3Cpath d='M 160 175 Q 160 110 250 110 Q 340 110 340 175' fill='none' stroke='%23ddd' stroke-width='15' stroke-linecap='round'/%3E%3Cpath d='M 160 175 Q 160 240 250 240 Q 340 240 340 175' fill='none' stroke='%23ddd' stroke-width='15' stroke-linecap='round'/%3E%3C!-- 中心部 --%3E%3Ccircle cx='250' cy='175' r='35' fill='%23f0f0f0' stroke='%23333' stroke-width='3'/%3E%3C!-- 左側パドル（手書き風、ピンク） --%3E%3Cpath d='M 120 150 L 90 140 L 85 145 L 85 205 L 90 210 L 120 200 Z' fill='%23ffb3d9' stroke='%23333' stroke-width='2.5' stroke-linejoin='round'/%3E%3C!-- パドルの詳細線（左） --%3E%3Cline x1='95' y1='150' x2='95' y2='195' stroke='%23333' stroke-width='1.5'/%3E%3Cline x1='105' y1='155' x2='105' y2='195' stroke='%23333' stroke-width='1.5'/%3E%3C!-- 右側パドル（手書き風、ピンク） --%3E%3Cpath d='M 380 150 L 410 140 L 415 145 L 415 205 L 410 210 L 380 200 Z' fill='%23ffb3d9' stroke='%23333' stroke-width='2.5' stroke-linejoin='round'/%3E%3C!-- パドルの詳細線（右） --%3E%3Cline x1='405' y1='150' x2='405' y2='195' stroke='%23333' stroke-width='1.5'/%3E%3Cline x1='395' y1='155' x2='395' y2='195' stroke='%23333' stroke-width='1.5'/%3E%3C!-- 矢印（左側） --%3E%3Cpath d='M 100 115 L 95 95 L 90 115' fill='none' stroke='%23ff6b9d' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='95' y1='95' x2='95' y2='130' stroke='%23ff6b9d' stroke-width='2.5' stroke-linecap='round'/%3E%3C!-- 矢印（右側） --%3E%3Cpath d='M 400 115 L 405 95 L 410 115' fill='none' stroke='%23ff6b9d' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='405' y1='95' x2='405' y2='130' stroke='%23ff6b9d' stroke-width='2.5' stroke-linecap='round'/%3E%3C!-- ラベル（左） --%3E%3Ctext x='50' y='178' text-anchor='middle' font-size='20' fill='%23333' font-weight='bold'%3E-%3C/text%3E%3Ctext x='100' y='245' text-anchor='middle' font-size='14' fill='%23666'%3E左パドル%3C/text%3E%3Ctext x='100' y='265' text-anchor='middle' font-size='12' fill='%23999'%3E（シフトダウン）%3C/text%3E%3C!-- ラベル（右） --%3E%3Ctext x='450' y='178' text-anchor='middle' font-size='20' fill='%23333' font-weight='bold'%3E%2B%3C/text%3E%3Ctext x='400' y='245' text-anchor='middle' font-size='14' fill='%23666'%3E右パドル%3C/text%3E%3Ctext x='400' y='265' text-anchor='middle' font-size='12' fill='%23999'%3E（シフトアップ）%3C/text%3E%3C!-- 説明テキスト --%3E%3Ctext x='250' y='310' text-anchor='middle' font-size='13' fill='%23666'%3Eハンドルの裏側に配置されています%3C/text%3E%3Ctext x='250' y='330' text-anchor='middle' font-size='12' fill='%23999'%3E運転中に親指で簡単に操作できます%3C/text%3E%3C/svg%3E" 
+                                alt="Paddle Shift Position" 
+                                style="width: 100%; max-width: 400px; border-radius: 12px; margin: 10px 0; background: white; padding: 10px;">
+                        </div>
+                        
+                        <strong>How to Use:</strong><br><br>
+                        <strong>Basic Operation:</strong><br>
+                        • <span style="color: #D200FF; font-weight: 600;">Right Paddle (+)</span>: Shift up (to higher gear)<br>
+                        • <span style="color: #ff6b6b; font-weight: 600;">Left Paddle (-)</span>: Shift down (to lower gear)<br><br>
+                        <strong>Use During Deceleration:</strong><br><br>
+                        <strong>Step 1: Use on Downhill</strong><br>
+                        • Pull left paddle (-) to shift down<br>
+                        • Engine braking will activate<br><br>
+                        <strong>Step 2: Use Before Curves</strong><br>
+                        • Shift down before curves<br>
+                        • Enables stable deceleration<br><br>
+                        <strong>💡 Benefits:</strong><br>
+                        • Reduces brake load<br>
+                        • Improves fuel efficiency<br>
+                        • Smooth deceleration<br><br>
+                        <strong>Recommended Use Cases:</strong><br>
+                        • Long downhills<br>
+                        • Mountain roads<br>
+                        • Consecutive curves<br><br>
+                        <strong>⚠️ Note:</strong><br>
+                        Sudden downshifting puts strain on the vehicle. Operate gradually.
+                    `
                 }
             },
             {
@@ -1373,6 +1568,42 @@
                             </a>
                         </div>
                     `
+                },
+                detailEn: {
+                    title: 'How to Clean Air Conditioning Filter',
+                    content: `
+                        <strong>What is Air Conditioning Filter?</strong><br>
+                        A filter that purifies air entering the cabin, removing pollen and dust.<br><br>
+                        <strong>Cleaning/Replacement Schedule:</strong><br>
+                        • Recommended: Once a year or every 10,000km<br>
+                        • Replace earlier if air conditioning effectiveness decreases<br><br>
+                        <strong>Cleaning Steps:</strong><br><br>
+                        <strong>Step 1: Remove Filter</strong><br>
+                        • Open glove box<br>
+                        • Remove filter cover inside<br>
+                        • Pull out filter<br><br>
+                        <strong>Step 2: Clean</strong><br>
+                        • Vacuum dust<br>
+                        • Avoid washing with water<br>
+                        • Replace with new one if heavily soiled<br><br>
+                        <strong>Step 3: Install</strong><br>
+                        • Check filter direction (arrow pointing down)<br>
+                        • Replace cover<br><br>
+                        <strong>💡 Signs Filter Needs Replacement:</strong><br>
+                        • Weak air conditioning airflow<br>
+                        • Odors in cabin<br>
+                        • Windows fog easily<br><br>
+                        <strong>📦 Replacement Filter:</strong><br>
+                        Available at dealerships or online stores (Part No: 8713932010)<br><br>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <a href="https://shop.toyota.co.za/products/8713932010" 
+                               target="_blank" 
+                               class="button" 
+                               style="display: inline-block; text-decoration: none; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px 24px; border-radius: 8px; color: white; font-weight: 600;">
+                                🛒 Purchase Filter
+                            </a>
+                        </div>
+                    `
                 }
             }
         ];
@@ -1407,33 +1638,36 @@
             const searchResult = document.getElementById('searchResult');
 
             defaultContent.classList.add('hidden');
+            
+            // 現在の言語に応じて詳細を取得
+            const detail = currentLang === 'en' && message.detailEn ? message.detailEn : message.detail;
 
             searchResult.innerHTML = `
                 <div class="card" style="margin-bottom: 15px;">
                     <div class="card-title" style="font-size: 1.1em;">
-                        ${message.detail.title}
+                        ${detail.title}
                     </div>
                     <div class="card-content">
-                        ${message.detail.content}
+                        ${detail.content}
                     </div>
                 </div>
                 
                 <div id="feedbackSection" style="margin: 20px 0;">
                     <div class="card" style="background: rgba(26, 26, 46, 0.6); border: 1px solid rgba(191, 0, 255, 0.2);">
                         <div class="card-content" style="text-align: center;">
-                            <strong style="font-size: 1.05em; color: #fff;">この情報は役に立ちましたか？</strong>
+                            <strong style="font-size: 1.05em; color: #fff;">${t('feedback-question')}</strong>
                             <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-                                <button onclick="submitFeedback('very_helpful', '${message.detail.title}')" 
+                                <button onclick="submitFeedback('very_helpful', '${detail.title}')" 
                                         style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
-                                    😊 とても役立った
+                                    ${t('feedback-very-helpful')}
                                 </button>
-                                <button onclick="submitFeedback('helpful', '${message.detail.title}')" 
+                                <button onclick="submitFeedback('helpful', '${detail.title}')" 
                                         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
-                                    🙂 役立った
+                                    ${t('feedback-helpful')}
                                 </button>
-                                <button onclick="submitFeedback('not_helpful', '${message.detail.title}')" 
+                                <button onclick="submitFeedback('not_helpful', '${detail.title}')" 
                                         style="background: linear-gradient(135deg, #888 0%, #666 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
-                                    😕 あまり役立たなかった
+                                    ${t('feedback-not-helpful')}
                                 </button>
                             </div>
                         </div>
@@ -1441,7 +1675,7 @@
                 </div>
                 
                 <div style="text-align: center; margin-top: 20px;">
-                    <button class="button" onclick="resetToHome()">ホームに戻る</button>
+                    <button class="button" onclick="resetToHome()">${t('btn-back-home')}</button>
                 </div>
             `;
             searchResult.classList.remove('hidden');
@@ -1465,41 +1699,41 @@
             searchResult.innerHTML = `
                 <div class="card" style="margin-bottom: 15px;">
                     <div class="card-title" style="font-size: 1.1em;">
-                        📊 あなたの燃費データ
+                        ${t('fuel-title')}
                     </div>
                     <div class="card-content">
                         <div style="background: linear-gradient(135deg, rgba(191, 0, 255, 0.15) 0%, rgba(210, 0, 255, 0.1) 100%); padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #BF00FF;">
-                            <strong style="color: #BF00FF; font-size: 1.1em;">💡 エコモードの効果予測</strong><br><br>
-                            現在の燃費: <strong style="color: #ff6b6b;">8.9 km/L</strong><br>
-                            エコモード使用時: <strong style="color: #BF00FF;">10.3 km/L</strong><br>
-                            <strong style="color: #D200FF;">+15.7% の燃費改善が期待できます！</strong>
+                            <strong style="color: #BF00FF; font-size: 1.1em;">${t('fuel-ecomode-effect')}</strong><br><br>
+                            ${t('fuel-current')} <strong style="color: #ff6b6b;">8.9 km/L</strong><br>
+                            ${t('fuel-with-eco')} <strong style="color: #BF00FF;">10.3 km/L</strong><br>
+                            <strong style="color: #D200FF;">+15.7% ${t('fuel-improvement')}</strong>
                         </div>
                         
-                        <strong>📈 燃費改善のヒント</strong><br><br>
+                        <strong>${t('fuel-tips-title')}</strong><br><br>
                         
                         <div style="background: rgba(255, 107, 107, 0.1); padding: 12px; border-radius: 8px; margin: 10px 0;">
-                            <strong style="color: #ff6b6b;">⚠️ 燃費が悪化している要因：</strong><br>
-                            • 市街地走行が増加（ストップ&ゴーが多い）<br>
-                            • 冬季のため暖機運転が必要<br>
-                            • エアコン使用頻度の増加
+                            <strong style="color: #ff6b6b;">${t('fuel-bad-factors')}</strong><br>
+                            ${t('fuel-factor-1')}<br>
+                            ${t('fuel-factor-2')}<br>
+                            ${t('fuel-factor-3')}
                         </div>
                         
                         <div style="background: rgba(191, 0, 255, 0.1); padding: 12px; border-radius: 8px; margin: 10px 0;">
-                            <strong style="color: #BF00FF;">✅ おすすめの改善アクション：</strong><br><br>
-                            <strong>1. エコモードを活用</strong><br>
-                            • 市街地走行時にON → 燃費+15%向上<br><br>
-                            <strong>2. 急発進・急ブレーキを避ける</strong><br>
-                            • なめらかな加減速 → 燃費+10%向上<br><br>
-                            <strong>3. タイヤ空気圧をチェック</strong><br>
-                            • 適正空気圧の維持 → 燃費+3%向上<br><br>
-                            <strong>4. 不要な荷物を降ろす</strong><br>
-                            • 車重100kg削減 → 燃費+3%向上
+                            <strong style="color: #BF00FF;">${t('fuel-actions')}</strong><br><br>
+                            <strong>${t('fuel-action-1-title')}</strong><br>
+                            ${t('fuel-action-1-detail')}<br><br>
+                            <strong>${t('fuel-action-2-title')}</strong><br>
+                            ${t('fuel-action-2-detail')}<br><br>
+                            <strong>${t('fuel-action-3-title')}</strong><br>
+                            ${t('fuel-action-3-detail')}<br><br>
+                            <strong>${t('fuel-action-4-title')}</strong><br>
+                            ${t('fuel-action-4-detail')}
                         </div>
                         
                         <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.1) 100%); padding: 15px; border-radius: 10px; margin: 15px 0; text-align: center;">
-                            <strong style="font-size: 1.1em;">🎯 目標燃費</strong><br>
+                            <strong style="font-size: 1.1em;">${t('fuel-goal')}</strong><br>
                             <div style="font-size: 2em; font-weight: bold; color: #667eea; margin: 10px 0;">11.0 km/L</div>
-                            <div style="color: #aaa;">上記の改善で達成可能です！</div>
+                            <div style="color: #aaa;">${t('fuel-goal-detail')}</div>
                         </div>
                     </div>
                 </div>
@@ -1507,19 +1741,19 @@
                 <div id="feedbackSection" style="margin: 20px 0;">
                     <div class="card" style="background: rgba(26, 26, 46, 0.6); border: 1px solid rgba(191, 0, 255, 0.2);">
                         <div class="card-content" style="text-align: center;">
-                            <strong style="font-size: 1.05em; color: #fff;">この情報は役に立ちましたか？</strong>
+                            <strong style="font-size: 1.05em; color: #fff;">${t('feedback-question')}</strong>
                             <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-                                <button onclick="submitFeedback('very_helpful', '燃費データ')" 
+                                <button onclick="submitFeedback('very_helpful', '${currentLang === 'en' ? 'Fuel Efficiency Data' : '燃費データ'}')" 
                                         style="background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
-                                    😊 とても役立った
+                                    ${t('feedback-very-helpful')}
                                 </button>
-                                <button onclick="submitFeedback('helpful', '燃費データ')" 
+                                <button onclick="submitFeedback('helpful', '${currentLang === 'en' ? 'Fuel Efficiency Data' : '燃費データ'}')" 
                                         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
-                                    🙂 役立った
+                                    ${t('feedback-helpful')}
                                 </button>
-                                <button onclick="submitFeedback('not_helpful', '燃費データ')" 
+                                <button onclick="submitFeedback('not_helpful', '${currentLang === 'en' ? 'Fuel Efficiency Data' : '燃費データ'}')" 
                                         style="background: linear-gradient(135deg, #888 0%, #666 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: transform 0.2s;">
-                                    😕 あまり役立たなかった
+                                    ${t('feedback-not-helpful')}
                                 </button>
                             </div>
                         </div>
@@ -1527,7 +1761,7 @@
                 </div>
                 
                 <div style="text-align: center; margin-top: 20px;">
-                    <button class="button" onclick="resetToHome()">ホームに戻る</button>
+                    <button class="button" onclick="resetToHome()">${t('btn-back-home')}</button>
                 </div>
             `;
             searchResult.classList.remove('hidden');
@@ -1541,9 +1775,9 @@
                 feedbackSection.innerHTML = `
                     <div style="background: linear-gradient(135deg, rgba(191, 0, 255, 0.2) 0%, rgba(210, 0, 255, 0.15) 100%); padding: 20px; border-radius: 12px; text-align: center; margin: 20px 0; border: 2px solid rgba(191, 0, 255, 0.3);">
                         <div style="font-size: 2em; margin-bottom: 10px;">✅</div>
-                        <strong style="color: #BF00FF; font-size: 1.1em;">フィードバックをありがとうございます！</strong><br>
+                        <strong style="color: #BF00FF; font-size: 1.1em;">${t('feedback-thanks')}</strong><br>
                         <div style="color: #aaa; margin-top: 10px; font-size: 0.9em;">
-                            お客様の声をもとに、より良いサービスを提供してまいります。
+                            ${t('feedback-thanks-detail')}
                         </div>
                     </div>
                 `;
