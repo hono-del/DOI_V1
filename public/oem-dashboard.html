@@ -97,6 +97,12 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(79, 172, 254, 0.5);
         }
+        .button:disabled {
+            opacity: 0.65;
+            cursor: wait;
+            transform: none;
+            box-shadow: 0 4px 8px rgba(79, 172, 254, 0.2);
+        }
         .web-frame {
             background: white;
             border-radius: 10px;
@@ -329,6 +335,38 @@
         }
         .lang-toggle-oem:hover {
             background: rgba(79, 172, 254, 0.35);
+        }
+        .ai-analysis-panel {
+            display: none;
+        }
+        .ai-analysis-panel.visible {
+            display: block;
+            animation: fadeInAiAnalysis 0.35s ease;
+        }
+        .ai-analysis-status {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            color: #bfe7ff;
+        }
+        .ai-analysis-status.visible {
+            display: flex;
+        }
+        .ai-analysis-spinner {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid rgba(79, 172, 254, 0.25);
+            border-top-color: #4facfe;
+            animation: spinAiAnalysis 0.9s linear infinite;
+        }
+        @keyframes spinAiAnalysis {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes fadeInAiAnalysis {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -833,8 +871,40 @@
                                 </div>
                             </div>
                             <div class="card">
+                                <div class="card-title">🤖 AI分析</div>
+                                <div class="card-content" style="color: #e0e0e0;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
+                                        <div>AIが問合せログと解決チャネル実績をもとに、削減余地の高いテーマを抽出します。</div>
+                                        <button id="runInquiryAiAnalysisButton" type="button" class="button" style="margin-top: 0; padding: 10px 22px;" onclick="runInquiryAiAnalysis()">🤖 AI分析</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="inquiryAiAnalysisStatus" class="card ai-analysis-panel">
+                                <div class="card-content ai-analysis-status" id="inquiryAiAnalysisStatusInner">
+                                    <div class="ai-analysis-spinner"></div>
+                                    <div>分析中... 問合せ傾向と改善余地を集計しています。</div>
+                                </div>
+                            </div>
+                            <div class="card ai-analysis-panel" id="inquiryAiAnalysisPanel">
                                 <div class="card-title">💡 問合せ削減のための推奨アクション</div>
                                 <div class="card-content" style="color: #e0e0e0;">
+                                    <div style="margin-bottom: 20px;">
+                                        <h4 style="color: #ffd166; margin-bottom: 12px;">🔍 AIが検出した主な課題点</h4>
+                                        <div class="grid-3">
+                                            <div style="background: rgba(255, 165, 0, 0.12); padding: 14px; border-radius: 10px; border-left: 3px solid #ffa500;">
+                                                <strong style="color: #fff;">Bluetooth関連の問合せが集中</strong><br>
+                                                <span style="font-size: 0.85em; color: #aaa;">接続設定や再接続に関する問合せが多く、電話誘導率も高い状態です。</span>
+                                            </div>
+                                            <div style="background: rgba(255, 107, 107, 0.12); padding: 14px; border-radius: 10px; border-left: 3px solid #ff6b6b;">
+                                                <strong style="color: #fff;">パノラミックビューで説明不足が発生</strong><br>
+                                                <span style="font-size: 0.85em; color: #aaa;">画面イメージと実車操作が結びつかず、チャットだけで完結しないケースがあります。</span>
+                                            </div>
+                                            <div style="background: rgba(79, 172, 254, 0.12); padding: 14px; border-radius: 10px; border-left: 3px solid #4facfe;">
+                                                <strong style="color: #fff;">効果の高い説明パターンが横展開されていない</strong><br>
+                                                <span style="font-size: 0.85em; color: #aaa;">エアコンやクルーズコントロールで有効な説明方式が他機能に十分展開されていません。</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="grid-2">
                                         <div>
                                             <h4 style="color: #ff6b6b; margin-bottom: 12px;">🔥 緊急対応が必要</h4>
@@ -1424,6 +1494,375 @@
             if (inv && inv.value !== v) inv.value = v;
             updateOemDashboard();
         }
+        var fixedEnglishView = false;
+        var englishTopicMap = {
+            'Bluetooth接続の設定方法': 'How to Set Up Bluetooth Connection',
+            'エアコンの使い方': 'How to Use the Air Conditioner',
+            'ワイパーの操作方法': 'How to Use the Wipers',
+            'クルーズコントロールの設定': 'Cruise Control Setup',
+            'タイヤ空気圧の確認方法': 'How to Check Tire Pressure',
+            '警告灯が点灯': 'Warning Light On',
+            'ドアが開かない': "Door Won't Open",
+            'その他': 'Other'
+        };
+        var englishStaticReplacements = [
+            ['Web管理画面 - OEM向けダッシュボード（モック）', 'Web Admin - OEM Dashboard (Mock)'],
+            ['Web管理画面 - OEM向けダッシュボード', 'Web Admin - OEM Dashboard'],
+            ['取扱説明書DXシステム Phase1 モック（5. Web管理画面）', "Digital Owner's Manual System Phase 1 Mock (5. Web Admin)"],
+            ['5-2. Web管理画面 - 利用統計詳細（機能分析）', '5-2. Web Admin - Usage Statistics Detail (Feature Analysis)'],
+            ['5-3. Web管理画面 - 問合せ分析（問合せ削減）', '5-3. Web Admin - Inquiry Analysis (Inquiry Reduction)'],
+            ['5-4. Web管理画面 - コンテンツ管理', '5-4. Web Admin - Content Management'],
+            ['5-5. Web管理画面 - ユーザー管理', '5-5. Web Admin - User Management'],
+            ['5-6. Web管理画面 - 設定', '5-6. Web Admin - Settings'],
+            ['5. Web管理画面 - OEM向けダッシュボード', '5. Web Admin - OEM Dashboard'],
+            ['⚠️ 連動するには', '⚠️ To enable sync'],
+            ['同じオリジンで開いてください。', 'open both pages from the same origin.'],
+            ['同じブラウザで', 'in the same browser'],
+            ['開くと、検索・チャット・「今すぐ確認」がダッシュボードに反映されます（3秒ごとに自動更新）。', 'to reflect search, chat, and "Check Now" activity in the dashboard (auto-refresh every 3 seconds).'],
+            ['✓ 統計連動中（index / call-center の操作を3秒ごとに反映）', '✓ Stats sync active (reflecting index / call-center actions every 3 seconds)'],
+            ['トヨタ自動車株式会社', 'Toyota Motor Corporation'],
+            ['管理ダッシュボード', 'Admin Dashboard'],
+            ['ログアウト', 'Logout'],
+            ['メニュー', 'Menu'],
+            ['ダッシュボード', 'Dashboard'],
+            ['利用統計 - 機能分析', 'Usage Statistics - Feature Analysis'],
+            ['利用統計', 'Usage Statistics'],
+            ['問合せ分析 - 削減効果測定', 'Inquiry Analysis - Reduction Impact'],
+            ['問合せ分析', 'Inquiry Analysis'],
+            ['コンテンツ管理', 'Content Management'],
+            ['ユーザー管理', 'User Management'],
+            ['設定', 'Settings'],
+            ['目的:', 'Purpose:'],
+            ['主要機能:', 'Key Features:'],
+            ['OEMがシステムの利用状況を確認・分析', 'Allow the OEM to monitor and analyze system usage'],
+            ['利用統計、問合せ分析、データエクスポート', 'Usage statistics, inquiry analysis, and data export'],
+            ['システム利用状況（2026年1月）', 'System Usage Overview (Jan 2026)'],
+            ['表示:', 'View:'],
+            ['全て（エンドユーザー＋サポートスタッフ）', 'All (End Users + Support Staff)'],
+            ['エンドユーザー', 'End Users'],
+            ['サポートスタッフ', 'Support Staff'],
+            ['月間アクティブユーザー', 'Monthly Active Users'],
+            ['総質問数', 'Total Questions'],
+            ['回答精度', 'Answer Accuracy'],
+            ['よく検索される機能 TOP 5', 'Top 5 Most Searched Features'],
+            ['Bluetooth接続の設定方法（2,340件）', 'How to Set Up Bluetooth Connection (2,340)'],
+            ['エアコンの使い方（1,890件）', 'How to Use the Air Conditioner (1,890)'],
+            ['ワイパーの操作方法（1,560件）', 'How to Use the Wipers (1,560)'],
+            ['クルーズコントロールの設定（1,230件）', 'Cruise Control Setup (1,230)'],
+            ['タイヤ空気圧の確認方法（980件）', 'How to Check Tire Pressure (980)'],
+            ['問合せ削減効果', 'Inquiry Reduction Impact'],
+            ['コールセンター問合せ件数', 'Call Center Inquiry Volume'],
+            ['導入前:', 'Before deployment:'],
+            ['導入後:', 'After deployment:'],
+            ['▼ 30% 削減', '▼ 30% Reduction'],
+            ['推定コスト削減額', 'Estimated Cost Savings'],
+            ['プロアクティブ案内の効果', 'Impact of Proactive Guidance'],
+            ['案内配信数', 'Guidance Sent'],
+            ['案内閲覧率', 'Open Rate'],
+            ['機能利用率向上', 'Feature Usage Lift'],
+            ['レポートをダウンロード', 'Download Report'],
+            ['機能別の利用状況とフィードバックを詳細に分析し、開発・セールス戦略に活用', 'Analyze feature usage and feedback in detail to support product and sales strategy'],
+            ['機能別利用率、フィードバック分析、ユーザー属性別分析、改善推奨', 'Feature adoption, feedback analysis, segment analysis, and improvement recommendations'],
+            ['機能別利用状況（2026年1月）', 'Feature Usage Overview (Jan 2026)'],
+            ['期間:', 'Period:'],
+            ['今月', 'This Month'],
+            ['先月', 'Last Month'],
+            ['過去3ヶ月', 'Last 3 Months'],
+            ['過去6ヶ月', 'Last 6 Months'],
+            ['車種:', 'Vehicle Model:'],
+            ['全車種', 'All Models'],
+            ['プリウス', 'Prius'],
+            ['カローラ', 'Corolla'],
+            ['CSVエクスポート', 'Export CSV'],
+            ['機能別利用状況・満足度分析', 'Feature Usage & Satisfaction Analysis'],
+            ['機能名', 'Feature'],
+            ['利用回数', 'Usage Count'],
+            ['利用率', 'Usage Rate'],
+            ['満足度', 'Satisfaction'],
+            ['優先度', 'Priority'],
+            ['シートヒーター', 'Seat Heater'],
+            ['おすすめ機能', 'Recommended Feature'],
+            ['高効果', 'High Impact'],
+            ['パノラミックビューモニター', 'Panoramic View Monitor'],
+            ['駐車支援', 'Parking Support'],
+            ['要改善', 'Needs Improvement'],
+            ['エコモード', 'Eco Mode'],
+            ['燃費向上', 'Fuel Economy'],
+            ['標準', 'Standard'],
+            ['オートハイビーム', 'Auto High Beam'],
+            ['パドルシフト', 'Paddle Shift'],
+            ['安全機能', 'Safety Feature'],
+            ['年代別利用状況', 'Usage by Age Group'],
+            ['機能活用率:', 'Feature Adoption:'],
+            ['20代', '20s'],
+            ['30代', '30s'],
+            ['40代', '40s'],
+            ['50代以上', '50+'],
+            ['人気:', 'Popular:'],
+            ['エアコン設定', 'Air Conditioner Settings'],
+            ['車種別利用状況', 'Usage by Vehicle Model'],
+            ['高評価:', 'Highly Rated:'],
+            ['改善要望:', 'Improvement Request:'],
+            ['燃費データ表示', 'fuel economy data display'],
+            ['パドルシフトの説明不足', 'insufficient paddle shift explanation'],
+            ['4WD設定の説明追加希望', 'request for additional 4WD setting guidance'],
+            ['シンプルな操作説明', 'simple operation guidance'],
+            ['先進機能の説明強化', 'stronger explanation of advanced features'],
+            ['データに基づく推奨アクション', 'Recommended Actions Based on Data'],
+            ['開発優先度：高', 'High Development Priority'],
+            ['改善優先度：高', 'High Improvement Priority'],
+            ['利用率78%、満足度85% → 他車種への展開推奨', 'Usage Rate 78%, Satisfaction 85% -> Recommend expanding to other vehicle models'],
+            ['利用率70%、満足度88% → 標準装備化を検討', 'Usage Rate 70%, Satisfaction 88% -> Consider making it a standard feature'],
+            ['「使い方不明」15% → 説明動画・イラスト追加', '"How to use it is unclear" 15% -> Add explanatory videos and illustrations'],
+            ['「使い方不明」35%、「嬉しくない」22% → UI改善・価値訴求強化', '"How to use it is unclear" 35%, "Not valuable" 22% -> Improve UI and strengthen value messaging'],
+            ['他車種への展開推奨', 'recommend expanding to other vehicle models'],
+            ['標準装備化を検討', 'consider making it a standard feature'],
+            ['説明動画・イラスト追加', 'add explanatory videos and illustrations'],
+            ['UI改善・価値訴求強化', 'improve UI and strengthen value messaging'],
+            ['「使い方不明」', '"How to use it is unclear"'],
+            ['「嬉しくない」', '"Not valuable"'],
+            ['詳細レポートをダウンロード', 'Download Detailed Report'],
+            ['開発チームに共有', 'Share with Development Team'],
+            ['問合せ数の削減とチャネル最適化', 'Reduce inquiry volume and optimize support channels'],
+            ['機能別問合せ件数、緊急度分析、解決チャネル分析、削減効果測定', 'Inquiry volume by feature, urgency analysis, resolution channel analysis, and reduction impact measurement'],
+            ['問合せ分析（2026年1月）', 'Inquiry Analysis (Jan 2026)'],
+            ['緊急度:', 'Urgency:'],
+            ['全て', 'All'],
+            ['高', 'High'],
+            ['中', 'Medium'],
+            ['低', 'Low'],
+            ['問合せ削減率（前年比）', 'Inquiry Reduction Rate (YoY)'],
+            ['チャット内解決率', 'In-Chat Resolution Rate'],
+            ['平均解決時間', 'Average Resolution Time'],
+            ['3.2分', '3.2 min'],
+            ['緊急度別問合せ割合', 'Inquiry Share by Urgency'],
+            ['緊急度：高', 'Urgency: High'],
+            ['緊急度：中', 'Urgency: Medium'],
+            ['緊急度：低', 'Urgency: Low'],
+            ['警告灯点灯、エンジン不調、事故・故障など即座対応が必要', 'Warning lights, engine issues, or accidents/breakdowns that require immediate response'],
+            ['警告灯点灯、エンジン不調、', 'Warning lights, engine issues,'],
+            ['事故・故障など即座対応が必要', 'accidents or breakdowns requiring immediate response'],
+            ['機能が使えない、設定方法不明、トラブルシューティング', 'Feature not working, setup unclear, or troubleshooting support needed'],
+            ['機能が使えない、設定方法不明、', 'Feature not working, setup unclear,'],
+            ['トラブルシューティング', 'troubleshooting'],
+            ['基本操作、機能説明、使い方の質問', 'Basic operations, feature explanation, and how-to questions'],
+            ['基本操作、機能説明、', 'Basic operations, feature explanation,'],
+            ['使い方の質問', 'how-to questions'],
+            ['機能別問合せ件数・解決チャネル分析', 'Inquiry Volume by Feature & Resolution Channel Analysis'],
+            ['機能・事柄', 'Feature / Topic'],
+            ['総問合せ数', 'Total Inquiries'],
+            ['チャット解決', 'Resolved by Chat'],
+            ['電話対応', 'Handled by Phone'],
+            ['解決率', 'Resolution Rate'],
+            ['Bluetooth接続', 'Bluetooth Connection'],
+            ['接続・設定', 'Connection / Setup'],
+            ['エンジン警告灯', 'Engine Warning Light'],
+            ['緊急対応', 'Urgent Response'],
+            ['エアコン操作', 'Air Conditioner Operation'],
+            ['基本操作', 'Basic Operation'],
+            ['パノラミックビュー', 'Panoramic View'],
+            ['チャット内解決の内訳', 'Breakdown of In-Chat Resolution'],
+            ['即座に解決', 'Resolved Immediately'],
+            ['1回の質問で解決（平均1.5分）', 'Resolved with a single question (avg. 1.5 min)'],
+            ['複数回のやり取り', 'Multiple Exchanges'],
+            ['2-3回のやり取りで解決（平均4.2分）', 'Resolved after 2-3 exchanges (avg. 4.2 min)'],
+            ['段階的ガイド利用', 'Step-by-Step Guide Used'],
+            ['ステップバイステップで解決（平均6.8分）', 'Resolved with step-by-step guidance (avg. 6.8 min)'],
+            ['✅ チャット解決率: 78%', '✅ In-chat Resolution Rate: 78%'],
+            ['前月比 +3.5%向上', '+3.5% vs previous month'],
+            ['電話対応の内訳', 'Breakdown of Phone Support'],
+            ['警告灯、故障など即座対応が必要', 'Warning lights or breakdowns requiring immediate response'],
+            ['複雑な問題', 'Complex Issues'],
+            ['チャットで解決できない複合的な問題', 'Compound issues that cannot be resolved in chat'],
+            ['ユーザー希望', 'User Preference'],
+            ['直接話したい、詳しく聞きたい', 'Users want to speak directly or need more detail'],
+            ['📞 電話対応率: 22%', '📞 Phone Support Rate: 22%'],
+            ['前月比 -2.1%削減', '-2.1% vs previous month'],
+            ['AI分析', 'AI Analysis'],
+            ['AIが問合せログと解決チャネル実績をもとに、削減余地の高いテーマを抽出します。', 'AI extracts high-potential reduction themes from inquiry logs and resolution-channel performance.'],
+            ['分析中... 問合せ傾向と改善余地を集計しています。', 'Analyzing... Aggregating inquiry trends and improvement opportunities.'],
+            ['AIが検出した主な課題点', 'Key Issues Detected by AI'],
+            ['Bluetooth関連の問合せが集中', 'Bluetooth-related inquiries are concentrated'],
+            ['接続設定や再接続に関する問合せが多く、電話誘導率も高い状態です。', 'There are many inquiries about connection setup and reconnection, and the phone escalation rate is also high.'],
+            ['パノラミックビューで説明不足が発生', 'Panoramic view guidance is insufficient'],
+            ['画面イメージと実車操作が結びつかず、チャットだけで完結しないケースがあります。', 'Users cannot always connect the screen image with actual vehicle operation, so chat alone does not always resolve the issue.'],
+            ['効果の高い説明パターンが横展開されていない', 'Effective explanation patterns are not being reused widely'],
+            ['エアコンやクルーズコントロールで有効な説明方式が他機能に十分展開されていません。', 'Explanation methods that work well for air conditioning and cruise control have not yet been sufficiently applied to other features.'],
+            ['問合せ削減のための推奨アクション', 'Recommended Actions to Reduce Inquiries'],
+            ['緊急対応が必要', 'Needs Urgent Action'],
+            ['→ ステップバイステップガイドの強化', '-> Strengthen step-by-step guides'],
+            ['→ トラブルシューティング動画追加', '-> Add troubleshooting videos'],
+            ['→ 予想削減: 350件/月', '-> Expected reduction: 350 / month'],
+            ['→ 実車イラスト・動画の追加', '-> Add real-vehicle illustrations and videos'],
+            ['→ よくある質問の充実', '-> Expand FAQ coverage'],
+            ['→ 予想削減: 180件/月', '-> Expected reduction: 180 / month'],
+            ['効果的に機能している', 'Working Effectively'],
+            ['エアコン操作（89%チャット解決）', 'Air Conditioner Operation (89% resolved by chat)'],
+            ['現状の説明が効果的に機能 → 他機能への展開を推奨', 'Current guidance works effectively -> Recommend applying it to other features'],
+            ['クルーズコントロール（85%チャット解決）', 'Cruise Control (85% resolved by chat)'],
+            ['段階的ガイドが効果的 → 同様の説明方式を他機能にも適用', 'Step-by-step guidance is effective -> Apply the same format to other features'],
+            ['予想効果', 'Expected Impact'],
+            ['上記の改善を実施することで、月間約530件（13%）の問合せ削減が期待できます。', 'By implementing the improvements above, an estimated 530 monthly inquiries (13%) can be reduced.'],
+            ['カスタマーサポートに共有', 'Share with Customer Support'],
+            ['車種・年式別の取扱説明書・マニュアルをXML/HTML/PDFで登録・管理', 'Register and manage owners manuals by vehicle model and model year in XML / HTML / PDF'],
+            ['XML/HTML/PDF取り込み、格納データの一覧表示・削除', 'Import XML / HTML / PDF and list or delete stored content'],
+            ['格納データ一覧', 'Stored Content List'],
+            ['ファイル名・モデル名・年式で検索', 'Search by file name, model, or model year'],
+            ['新規格納（モデル追加）', 'New Storage (Add Model)'],
+            ['モデル名:', 'Model Name:'],
+            ['追加', 'Add'],
+            ['キャンセル', 'Cancel'],
+            ['ファイル名', 'File Name'],
+            ['種別', 'Type'],
+            ['取込日時', 'Imported At'],
+            ['操作', 'Action'],
+            ['削除', 'Delete'],
+            ['取扱説明書_', 'OwnersManual_'],
+            ['クイックガイド_', 'QuickGuide_'],
+            ['操作ガイド_', 'OperationGuide_'],
+            ['取説_', 'Manual_'],
+            ['マニュアル_', 'Manual_'],
+            ['FAQ_', 'FAQ_'],
+            ['2024年式', 'Model Year 2024'],
+            ['2025年式', 'Model Year 2025'],
+            ['2026年式', 'Model Year 2026'],
+            ['XMLを取り込み', 'Import XML'],
+            ['HTMLを取り込み', 'Import HTML'],
+            ['PDFを取り込み', 'Import PDF'],
+            ['管理画面にアクセスできるユーザーの一覧・追加・編集・無効化', 'List, add, edit, and deactivate users who can access the admin console'],
+            ['ユーザー一覧、ロール管理、検索・フィルター、新規追加', 'User list, role management, search & filter, and new user creation'],
+            ['ユーザー一覧', 'User List'],
+            ['名前・メールアドレス・ロールで検索', 'Search by name, email address, or role'],
+            ['新規ユーザー追加', 'Add New User'],
+            ['ユーザー名', 'User Name'],
+            ['メールアドレス', 'Email Address'],
+            ['ロール', 'Role'],
+            ['状態', 'Status'],
+            ['最終ログイン', 'Last Login'],
+            ['管理者', 'Administrator'],
+            ['アナリスト', 'Analyst'],
+            ['閲覧者', 'Viewer'],
+            ['コンテンツ管理者', 'Content Manager'],
+            ['有効化', 'Activate'],
+            ['有効', 'Active'],
+            ['無効化', 'Deactivate'],
+            ['無効', 'Inactive'],
+            ['編集', 'Edit'],
+            ['全 5 件（管理者: 1 / アナリスト: 1 / コンテンツ管理者: 1 / 閲覧者: 2）', 'Total 5 users (Administrator: 1 / Analyst: 1 / Content Manager: 1 / Viewer: 2)'],
+            ['管理画面の表示・通知・アカウントなどの設定を変更', 'Change display, notification, and account settings for the admin console'],
+            ['言語・表示・通知設定、パスワード変更、データエクスポート', 'Language, display, and notification settings, password changes, and data export'],
+            ['言語設定', 'Language Settings'],
+            ['表示言語:', 'Display Language:'],
+            ['日本語', 'Japanese'],
+            ['反映', 'Apply'],
+            ['通知設定', 'Notification Settings'],
+            ['レポート作成完了時にメール通知', 'Email notification when report generation completes'],
+            ['問合せ急増アラート', 'Inquiry spike alert'],
+            ['週次サマリーメール', 'Weekly summary email'],
+            ['保存', 'Save'],
+            ['表示設定', 'Display Settings'],
+            ['日付形式', 'Date Format'],
+            ['YYYY/MM/DD（例: 2026/01/28）', 'YYYY/MM/DD (e.g. 2026/01/28)'],
+            ['DD/MM/YYYY（例: 28/01/2026）', 'DD/MM/YYYY (e.g. 28/01/2026)'],
+            ['MM/DD/YYYY（例: 01/28/2026）', 'MM/DD/YYYY (e.g. 01/28/2026)'],
+            ['タイムゾーン', 'Time Zone'],
+            ['Asia/Tokyo（日本標準時）', 'Asia/Tokyo (JST)'],
+            ['アカウント・セキュリティ', 'Account & Security'],
+            ['ログイン中:', 'Logged in as:'],
+            ['パスワードを変更', 'Change Password'],
+            ['二要素認証の設定', 'Configure Two-Factor Authentication'],
+            ['データ・エクスポート', 'Data Export'],
+            ['利用統計・問合せ分析データをCSVで一括ダウンロードできます。', 'You can download usage statistics and inquiry analysis data in CSV format.'],
+            ['データをエクスポート', 'Export Data'],
+            ['言語設定を保存しました（モック）', 'Language settings saved (mock)'],
+            ['通知設定を保存しました（モック）', 'Notification settings saved (mock)'],
+            ['表示設定を保存しました（モック）', 'Display settings saved (mock)'],
+            ['パスワード変更（モック）', 'Change password (mock)'],
+            ['二要素認証の設定（モック）', 'Two-factor authentication setup (mock)'],
+            ['エクスポートを開始しました（モック）', 'Export started (mock)'],
+            ['新規ユーザー追加（モック）', 'Add new user (mock)'],
+            ['編集（モック）', 'Edit (mock)'],
+            ['無効化（モック）', 'Deactivate (mock)'],
+            ['有効化（モック）', 'Activate (mock)'],
+            ['中文（简体）', 'Chinese (Simplified)'],
+            ['한국어', 'Korean']
+        ];
+        englishStaticReplacements.sort(function(a, b) {
+            return b[0].length - a[0].length;
+        });
+        function replaceJapaneseWithEnglish(text) {
+            var out = text;
+            for (var i = 0; i < englishStaticReplacements.length; i++) {
+                var pair = englishStaticReplacements[i];
+                if (out.indexOf(pair[0]) !== -1) out = out.split(pair[0]).join(pair[1]);
+            }
+            return out;
+        }
+        function applyEnglishOverrides() {
+            document.documentElement.lang = 'en';
+            document.title = 'Web Admin - OEM Dashboard';
+            var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+            var node;
+            while ((node = walker.nextNode())) {
+                if (!node.nodeValue || !node.nodeValue.trim()) continue;
+                var parentTag = node.parentElement ? node.parentElement.tagName : '';
+                if (parentTag === 'SCRIPT' || parentTag === 'STYLE') continue;
+                if (node.__jaText == null) node.__jaText = node.nodeValue;
+                node.nodeValue = replaceJapaneseWithEnglish(node.__jaText);
+            }
+            var all = document.querySelectorAll('*');
+            for (var j = 0; j < all.length; j++) {
+                var el = all[j];
+                var attrs = ['placeholder', 'title', 'aria-label', 'value', 'data-search', 'onclick'];
+                for (var k = 0; k < attrs.length; k++) {
+                    var attr = attrs[k];
+                    if (el.hasAttribute && el.hasAttribute(attr)) {
+                        if (!el.__jaAttrs) el.__jaAttrs = {};
+                        if (el.__jaAttrs[attr] == null) el.__jaAttrs[attr] = el.getAttribute(attr);
+                        el.setAttribute(attr, replaceJapaneseWithEnglish(el.__jaAttrs[attr]));
+                    }
+                }
+            }
+            var notice = document.getElementById('oem-sync-notice');
+            if (notice) {
+                if (!notice.__jaHtml) notice.__jaHtml = notice.innerHTML;
+                notice.innerHTML = '⚠️ <strong>To enable sync</strong> open both pages from the same origin. Run <code style="background: rgba(0,0,0,0.3); padding: 2px 6px;">npm run serve</code>, then open <br><a href="http://localhost:3000/public/index.html" style="color: #4facfe;">http://localhost:3000/public/index.html</a> and <a href="http://localhost:3000/public/oem-dashboard.html" style="color: #4facfe;">http://localhost:3000/public/oem-dashboard.html</a> in the same browser to reflect search, chat, and "Check Now" actions in the dashboard (auto-refresh every 3 seconds).';
+            }
+        }
+        function applyJapaneseOverrides() {
+            document.documentElement.lang = 'ja';
+            document.title = 'Web管理画面 - OEM向けダッシュボード';
+            var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+            var node;
+            while ((node = walker.nextNode())) {
+                if (node.__jaText != null) node.nodeValue = node.__jaText;
+            }
+            var all = document.querySelectorAll('*');
+            for (var j = 0; j < all.length; j++) {
+                var el = all[j];
+                if (!el.__jaAttrs) continue;
+                for (var attr in el.__jaAttrs) {
+                    if (Object.prototype.hasOwnProperty.call(el.__jaAttrs, attr)) {
+                        el.setAttribute(attr, el.__jaAttrs[attr]);
+                    }
+                }
+            }
+            var notice = document.getElementById('oem-sync-notice');
+            if (notice && notice.__jaHtml != null) {
+                notice.innerHTML = notice.__jaHtml;
+            }
+        }
+        function applyLanguageOverrides() {
+            if (currentLang === 'en') applyEnglishOverrides();
+            else applyJapaneseOverrides();
+            var button = document.getElementById('runInquiryAiAnalysisButton');
+            var panel = document.getElementById('inquiryAiAnalysisPanel');
+            if (button && !button.disabled) {
+                button.textContent = panel && panel.classList.contains('visible')
+                    ? (currentLang === 'en' ? 'Run AI Analysis Again' : 'AI分析を再実行')
+                    : (currentLang === 'en' ? 'AI Analysis' : '🤖 AI分析');
+            }
+        }
         function updateOemDashboard() {
             var s = getOemStats();
             var filter = getDashboardFilter();
@@ -1459,7 +1898,7 @@
             el = document.getElementById('oem-stat-activeUsers'); if (el) el.textContent = active.toLocaleString();
             el = document.getElementById('oem-stat-totalQuestions'); if (el) el.textContent = totalQ.toLocaleString();
             el = document.getElementById('oem-stat-accuracy'); if (el) el.textContent = accuracy + '%';
-            el = document.getElementById('oem-proactive-sent'); if (el) el.textContent = sent.toLocaleString() + '件';
+            el = document.getElementById('oem-proactive-sent'); if (el) el.textContent = sent.toLocaleString() + (currentLang === 'en' ? '' : '件');
             el = document.getElementById('oem-proactive-rate'); if (el) el.textContent = rate + '%';
             el = document.getElementById('oem-proactive-util'); if (el) el.textContent = '+' + util + '%';
 
@@ -1467,14 +1906,17 @@
             if (el) {
                 var html = '';
                 for (var i = 0; i < top5.length; i++) {
-                    html += '<li style="padding: 8px 0;">' + top5[i].name + '（' + top5[i].count.toLocaleString() + '件）</li>';
+                    var topicName = currentLang === 'en' ? (englishTopicMap[top5[i].name] || top5[i].name) : top5[i].name;
+                    var countLabel = currentLang === 'en' ? ('(' + top5[i].count.toLocaleString() + ')') : ('（' + top5[i].count.toLocaleString() + '件）');
+                    html += '<li style="padding: 8px 0;">' + topicName + ' ' + countLabel + '</li>';
                 }
-                if (top5.length === 0) html = '<li style="padding: 8px 0;">（データなし）</li>';
+                if (top5.length === 0) html = currentLang === 'en' ? '<li style="padding: 8px 0;">No data</li>' : '<li style="padding: 8px 0;">（データなし）</li>';
                 el.innerHTML = html;
             }
 
             var invFilter = document.getElementById('inquirySourceFilter');
             if (invFilter && invFilter.value !== getDashboardFilter()) invFilter.value = getDashboardFilter();
+            applyLanguageOverrides();
         }
         var OEM_STATS_CHANNEL = 'doi_oem_stats_broadcast';
         document.addEventListener('DOMContentLoaded', function() {
@@ -1519,10 +1961,14 @@
         }
 
         function deleteContentItem(id) {
-            if (!confirm('このデータを削除してもよろしいですか？')) return;
+            var msg = currentLang === 'en'
+                ? 'Are you sure you want to delete this data?'
+                : 'このデータを削除してもよろしいですか？';
+            if (!confirm(msg)) return;
             var row = document.querySelector('tr[data-id="' + id + '"]');
             if (row) row.remove();
             filterContentSearch();
+            applyLanguageOverrides();
         }
 
         function filterContentSearch() {
@@ -1568,7 +2014,7 @@
         function submitNewModel() {
             var name = (document.getElementById('newModelNameInput').value || '').trim();
             if (!name) {
-                alert('モデル名を入力してください。');
+                alert(currentLang === 'en' ? 'Please enter a model name.' : 'モデル名を入力してください。');
                 return;
             }
             addNewModel(name);
@@ -1597,11 +2043,38 @@
             }
             html += '</div>';
             document.getElementById('content-model-list').insertAdjacentHTML('beforeend', html);
+            applyLanguageOverrides();
         }
         function escapeHtml(s) {
             var div = document.createElement('div');
             div.textContent = s;
             return div.innerHTML;
+        }
+        var inquiryAiAnalysisTimer = null;
+        function runInquiryAiAnalysis() {
+            var button = document.getElementById('runInquiryAiAnalysisButton');
+            var statusCard = document.getElementById('inquiryAiAnalysisStatus');
+            var statusInner = document.getElementById('inquiryAiAnalysisStatusInner');
+            var resultPanel = document.getElementById('inquiryAiAnalysisPanel');
+            if (!button || !statusCard || !statusInner || !resultPanel) return;
+            if (inquiryAiAnalysisTimer) clearTimeout(inquiryAiAnalysisTimer);
+            button.disabled = true;
+            button.textContent = currentLang === 'en' ? 'Analyzing...' : 'AI分析中...';
+            statusInner.lastElementChild.textContent = currentLang === 'en'
+                ? 'Analyzing... Aggregating inquiry trends and improvement opportunities.'
+                : '分析中... 問合せ傾向と改善余地を集計しています。';
+            statusCard.classList.add('visible');
+            statusInner.classList.add('visible');
+            resultPanel.classList.remove('visible');
+            inquiryAiAnalysisTimer = setTimeout(function() {
+                statusInner.classList.remove('visible');
+                statusCard.classList.remove('visible');
+                resultPanel.classList.add('visible');
+                button.disabled = false;
+                button.textContent = currentLang === 'en' ? 'Run AI Analysis Again' : 'AI分析を再実行';
+                applyLanguageOverrides();
+                resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 900);
         }
 
         function handleFileImport(model, year, type, inputEl) {
@@ -1623,6 +2096,7 @@
             tr.innerHTML = '<td>' + escapeHtml(name) + '</td><td><span class="content-type-badge ' + typeClass + '">' + typeLabel + '</span></td><td>' + dateStr + '</td><td><button type="button" class="btn-delete" onclick="deleteContentItem(\'' + id + '\')">削除</button></td>';
             tbody.appendChild(tr);
             inputEl.value = '';
+            applyLanguageOverrides();
         }
 
         // 多言語対応システム
@@ -1659,6 +2133,8 @@
             document.getElementById('langLabel').textContent = currentLang === 'ja' ? 'EN' : '日本語';
             document.documentElement.lang = currentLang;
             applyTranslations();
+            updateOemDashboard();
+            applyLanguageOverrides();
             localStorage.setItem('preferred_language_oem', currentLang);
         }
 
@@ -1678,15 +2154,33 @@
             document.title = t['page-title'] || 'OEM Dashboard';
         }
 
+        function getRequestedOemLang() {
+            try {
+                return new URLSearchParams(window.location.search).get('lang') || '';
+            } catch (e) {
+                return '';
+            }
+        }
+        function isFixedEnglishMode() {
+            try {
+                return new URLSearchParams(window.location.search).get('view') === 'fixed-en';
+            } catch (e) {
+                return false;
+            }
+        }
         // ページ読み込み時に言語設定を復元
         window.addEventListener('DOMContentLoaded', function() {
+            fixedEnglishView = isFixedEnglishMode();
+            var requestedLang = getRequestedOemLang();
             var savedLang = localStorage.getItem('preferred_language_oem');
-            if (savedLang && savedLang !== 'ja') {
-                currentLang = savedLang;
-                document.getElementById('langLabel').textContent = 'ja';
-                document.documentElement.lang = savedLang;
+            if (requestedLang === 'en' || fixedEnglishView || (savedLang && savedLang !== 'ja')) {
+                currentLang = 'en';
+                document.getElementById('langLabel').textContent = '日本語';
+                document.documentElement.lang = 'en';
                 applyTranslations();
             }
+            updateOemDashboard();
+            applyLanguageOverrides();
         });
     </script>
 </body>
