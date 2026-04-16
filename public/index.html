@@ -2640,9 +2640,11 @@
                 '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>' + didntWorkLabel + '</span></div>' +
                 '</div>';
             if (T16State.t1Output && T16State.t1Output.event_id === 'BLUETOOTH') {
+                var stepGuideLabel = currentLang === 'en' ? '📋 View Step-by-Step Guide' : '📋 ステップバイステップガイドを見る';
+                var videoLabel = currentLang === 'en' ? '🎥 Watch Video' : '🎥 動画で見る';
                 stepsHtml += '<div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px;">' +
-                    '<div class="button" style="cursor: pointer; padding: 10px 14px; font-size: 0.9em;" onclick="showBluetoothStepGuide()">📋 ステップバイステップガイドを見る</div>' +
-                    '<div class="button" style="cursor: pointer; padding: 10px 14px; font-size: 0.9em; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="showBluetoothVideo()">🎥 動画で見る</div>' +
+                    '<div class="button" style="cursor: pointer; padding: 10px 14px; font-size: 0.9em;" onclick="showBluetoothStepGuide()">' + stepGuideLabel + '</div>' +
+                    '<div class="button" style="cursor: pointer; padding: 10px 14px; font-size: 0.9em; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="showBluetoothVideo()">' + videoLabel + '</div>' +
                     '</div>';
             }
             addTheme001Message('ai', stepsHtml);
@@ -2789,11 +2791,36 @@
         var currentBluetoothStep = 1;
         var totalBluetoothSteps = 5;
         var bluetoothStepsData = [
-            { title: '設定画面を開く', content: 'ディスプレイのホーム画面から「⚙️ 設定」アイコンをタップします。<br><br>または、ステアリングホイールの「MENU」ボタンを長押ししても設定画面が開きます。' },
-            { title: 'Bluetoothメニューを選択', content: '• 設定メニューから「📡 Bluetooth」を選択<br>• Bluetoothがオフの場合は「オンにする」をタップ<br>• 画面に「検索中...」と表示されます' },
-            { title: 'スマートフォンを検出可能にする', content: '<strong>📱 iPhoneの場合：</strong><br>• 「設定」→「Bluetooth」を開く<br>• Bluetoothをオンにすると自動的に検出可能になります<br><br><strong>📱 Androidの場合：</strong><br>• 「設定」→「接続済みのデバイス」→「Bluetooth」を開く<br>• 「新しいデバイスとペア設定する」をタップ' },
-            { title: 'デバイスを選択してペアリング', content: '• 車のディスプレイに表示された「利用可能なデバイス」リストから、あなたのスマートフォン名を探してタップ<br><br>• 車とスマートフォンの両方に同じPINコードが表示されます<br><br>• <strong style="color: #BF00FF;">PINコードが一致していることを確認</strong>してください' },
-            { title: 'ペアリングを承認', content: '• 車のディスプレイで「ペアリング」または「接続」をタップ<br><br>• スマートフォンに表示される「ペアリング」確認ダイアログで「ペアリング」をタップ<br><br>• 「✅ 接続しました」というメッセージが表示されたら完了！' }
+            { 
+                title: '設定画面を開く', 
+                title_en: 'Open Settings Screen',
+                content: 'ディスプレイのホーム画面から「⚙️ 設定」アイコンをタップします。<br><br>または、ステアリングホイールの「MENU」ボタンを長押ししても設定画面が開きます。',
+                content_en: 'Tap the "⚙️ Settings" icon from the home screen of the display.<br><br>Alternatively, you can open the settings screen by long-pressing the "MENU" button on the steering wheel.'
+            },
+            { 
+                title: 'Bluetoothメニューを選択', 
+                title_en: 'Select Bluetooth Menu',
+                content: '• 設定メニューから「📡 Bluetooth」を選択<br>• Bluetoothがオフの場合は「オンにする」をタップ<br>• 画面に「検索中...」と表示されます',
+                content_en: '• Select "📡 Bluetooth" from the settings menu<br>• If Bluetooth is off, tap "Turn On"<br>• The screen will show "Searching..."'
+            },
+            { 
+                title: 'スマートフォンを検出可能にする', 
+                title_en: 'Make Your Smartphone Discoverable',
+                content: '<strong>📱 iPhoneの場合：</strong><br>• 「設定」→「Bluetooth」を開く<br>• Bluetoothをオンにすると自動的に検出可能になります<br><br><strong>📱 Androidの場合：</strong><br>• 「設定」→「接続済みのデバイス」→「Bluetooth」を開く<br>• 「新しいデバイスとペア設定する」をタップ',
+                content_en: '<strong>📱 For iPhone:</strong><br>• Go to "Settings" → "Bluetooth"<br>• Turn on Bluetooth to make it automatically discoverable<br><br><strong>📱 For Android:</strong><br>• Go to "Settings" → "Connected devices" → "Bluetooth"<br>• Tap "Pair new device"'
+            },
+            { 
+                title: 'デバイスを選択してペアリング', 
+                title_en: 'Select Device and Pair',
+                content: '• 車のディスプレイに表示された「利用可能なデバイス」リストから、あなたのスマートフォン名を探してタップ<br><br>• 車とスマートフォンの両方に同じPINコードが表示されます<br><br>• <strong style="color: #BF00FF;">PINコードが一致していることを確認</strong>してください',
+                content_en: '• Find and tap your smartphone name from the "Available Devices" list on the car display<br><br>• The same PIN code will be displayed on both the car and smartphone<br><br>• <strong style="color: #BF00FF;">Verify that the PIN codes match</strong>'
+            },
+            { 
+                title: 'ペアリングを承認', 
+                title_en: 'Approve Pairing',
+                content: '• 車のディスプレイで「ペアリング」または「接続」をタップ<br><br>• スマートフォンに表示される「ペアリング」確認ダイアログで「ペアリング」をタップ<br><br>• 「✅ 接続しました」というメッセージが表示されたら完了！',
+                content_en: '• Tap "Pair" or "Connect" on the car display<br><br>• Tap "Pair" in the pairing confirmation dialog on your smartphone<br><br>• When you see "✅ Connected" message, you\'re done!'
+            }
         ];
 
         function showBluetoothStepGuide() {
@@ -2811,14 +2838,22 @@
             var container = document.getElementById('bluetoothStepGuideContent');
             if (!container) return;
             var step = bluetoothStepsData[currentBluetoothStep - 1];
+            var stepTitle = getLocalizedText(step, 'title');
+            var stepContent = getLocalizedText(step, 'content');
+            var nextLabel = currentLang === 'en' ? 'Next →' : '次へ →';
+            var completeLabel = currentLang === 'en' ? '✓ Complete' : '✓ 完了';
+            var prevLabel = currentLang === 'en' ? '← Previous' : '← 前へ';
+            var closeLabel = currentLang === 'en' ? 'Close' : '閉じる';
+            var stepLabel = currentLang === 'en' ? 'Step' : 'ステップ';
+            
             var nextBtn = currentBluetoothStep < totalBluetoothSteps
-                ? '<button class="button" onclick="nextBluetoothStep()" style="flex: 2; background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%);">次へ →</button>'
-                : '<button class="button" onclick="completeBluetoothGuide()" style="flex: 2; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%);">✓ 完了</button>';
-            var prevBtn = currentBluetoothStep > 1 ? '<button class="button" onclick="previousBluetoothStep()" style="flex: 1; background: #444;">← 前へ</button>' : '';
-            container.innerHTML = '<div style="color: #BF00FF; font-weight: 600; margin-bottom: 10px;">ステップ ' + currentBluetoothStep + '/' + totalBluetoothSteps + '</div>' +
-                '<div class="card" style="margin-bottom: 15px;"><div class="card-title">' + (step.title || '') + '</div><div class="card-content" style="line-height: 1.7;">' + (step.content || '') + '</div></div>' +
+                ? '<button class="button" onclick="nextBluetoothStep()" style="flex: 2; background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%);">' + nextLabel + '</button>'
+                : '<button class="button" onclick="completeBluetoothGuide()" style="flex: 2; background: linear-gradient(135deg, #00d084 0%, #00b96d 100%);">' + completeLabel + '</button>';
+            var prevBtn = currentBluetoothStep > 1 ? '<button class="button" onclick="previousBluetoothStep()" style="flex: 1; background: #444;">' + prevLabel + '</button>' : '';
+            container.innerHTML = '<div style="color: #BF00FF; font-weight: 600; margin-bottom: 10px;">' + stepLabel + ' ' + currentBluetoothStep + '/' + totalBluetoothSteps + '</div>' +
+                '<div class="card" style="margin-bottom: 15px;"><div class="card-title">' + stepTitle + '</div><div class="card-content" style="line-height: 1.7;">' + stepContent + '</div></div>' +
                 '<div style="display: flex; gap: 10px; margin-bottom: 15px;">' + prevBtn + nextBtn + '</div>' +
-                '<button class="button" onclick="closeBluetoothStepGuide()" style="background: #555; width: 100%;">閉じる</button>';
+                '<button class="button" onclick="closeBluetoothStepGuide()" style="background: #555; width: 100%;">' + closeLabel + '</button>';
         }
 
         function nextBluetoothStep() {
@@ -2840,8 +2875,12 @@
         }
 
         function showBluetoothVideo() {
-            addTheme001Message('user', '動画で見る');
-            addTheme001Message('ai', '<strong>🎥 動画で見る</strong><br><br>Bluetooth接続の手順動画は準備中です。<br>しばらくお待ちください。または「ステップバイステップガイドを見る」で手順を確認できます。');
+            var videoLabel = currentLang === 'en' ? 'Watch Video' : '動画で見る';
+            var videoMessage = currentLang === 'en'
+                ? '<strong>🎥 Watch Video</strong><br><br>The Bluetooth connection procedure video is coming soon.<br>Please wait for a while, or check the procedure in "View Step-by-Step Guide".'
+                : '<strong>🎥 動画で見る</strong><br><br>Bluetooth接続の手順動画は準備中です。<br>しばらくお待ちください。または「ステップバイステップガイドを見る」で手順を確認できます。';
+            addTheme001Message('user', videoLabel);
+            addTheme001Message('ai', videoMessage);
         }
 
         function setQuestion(question) {
