@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ja" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>取扱説明書（デモ）</title>
+  <style>
+    :root {
+      --bg: #1A1A1A;
+      --panel: #202020;
+      --border: rgba(191, 0, 255, 0.3);
+      --accent: #BF00FF;
+      --text: #e0e0e0;
+      --muted: #888;
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      overflow: hidden;
+    }
+    .om-app {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      margin: 0 auto;
+      background: var(--bg);
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    .om-header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .om-brand {
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+    .om-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .om-body {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+    .om-sidebar {
+      width: 260px;
+      flex-shrink: 0;
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .om-search {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      background: #1e1e1e;
+    }
+    .om-search input {
+      width: 100%;
+      padding: 8px 10px 8px 32px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      background: var(--panel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23BF00FF' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E") 10px center no-repeat;
+      color: var(--text);
+    }
+    .om-search input::placeholder { color: #666; }
+    .om-nav {
+      overflow-y: auto;
+      padding: 6px 0 14px;
+      font-size: 13px;
+    }
+    .om-nav details {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .om-nav summary {
+      list-style: none;
+      padding: 10px 12px 10px 28px;
+      cursor: pointer;
+      position: relative;
+      user-select: none;
+      color: var(--text);
+    }
+    .om-nav summary::-webkit-details-marker { display: none; }
+    .om-nav summary::before {
+      content: "+";
+      position: absolute;
+      left: 10px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .om-nav details[open] > summary::before { content: "−"; }
+    .om-nav summary:hover { background: rgba(191, 0, 255, 0.12); }
+    .om-nav ul {
+      list-style: none;
+      background: rgba(0, 0, 0, 0.2);
+    }
+    .om-nav li a {
+      display: block;
+      padding: 8px 12px 8px 36px;
+      color: #ccc;
+      text-decoration: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .om-nav li a:hover {
+      background: rgba(191, 0, 255, 0.1);
+      color: var(--text);
+    }
+    .om-nav li a.active {
+      background: rgba(191, 0, 255, 0.18);
+      font-weight: 600;
+      color: #fff;
+      border-left: 3px solid var(--accent);
+      padding-left: 33px;
+    }
+    .om-nav .om-subhead {
+      padding: 12px 12px 6px;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+    .om-main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 20px 32px;
+      background: var(--bg);
+      min-width: 0;
+    }
+    .om-main h1 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      line-height: 1.35;
+      color: var(--accent);
+    }
+    .om-main .lead {
+      font-size: 13px;
+      line-height: 1.75;
+      margin-bottom: 18px;
+      color: #c8c8c8;
+    }
+    .om-main h2 {
+      font-size: 14px;
+      font-weight: 700;
+      margin: 20px 0 12px;
+      color: var(--text);
+    }
+    .diagram-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    @media (max-width: 640px) {
+      .diagram-row { grid-template-columns: 1fr; }
+    }
+    .diagram-card {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 10px;
+      padding: 10px;
+    }
+    .diagram-card .cap {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #ddd;
+    }
+    .fake-panel {
+      position: relative;
+      height: 130px;
+      background: #161616;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin: 0 auto;
+      max-width: 260px;
+    }
+    .fake-knob {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      background: #1a1a1a;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .om-footer-note {
+      margin-top: 28px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    @media (max-width: 520px) {
+      .om-body { flex-direction: column; }
+      .om-sidebar {
+        width: 100%;
+        max-height: 40vh;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="om-app">
+    <header class="om-header">
+      <span class="om-brand">DIGITAL OM</span>
+      <span class="om-title" id="omVehicleTitle" data-i18n-key="title">Model G 取扱説明書</span>
+    </header>
+    <div class="om-body">
+      <aside class="om-sidebar">
+        <div class="om-search">
+          <input type="search" placeholder="検索" aria-label="検索" data-i18n-placeholder="search">
+        </div>
+        <nav class="om-nav" aria-label="目次">
+          <details>
+            <summary data-i18n-key="nav-getting-started">乗りはじめガイド</summary>
+            <ul>
+              <li><a href="#" data-i18n-key="nav-safety">安全に関する重要なお知らせ</a></li>
+              <li><a href="#" data-i18n-key="nav-keys-doors">キーとドア</a></li>
+            </ul>
+          </details>
+          <details open>
+            <summary data-i18n-key="nav-vehicle-manual">車両取扱説明書</summary>
+            <ul>
+              <li><a href="#" data-i18n-key="nav-audio">Audio</a></li>
+              <li><a href="#" data-i18n-key="nav-driving">走り方</a></li>
+              <li><a href="#" data-i18n-key="nav-interior">室内装備</a></li>
+              <li><a href="#" class="active" data-i18n-key="nav-auto-ac">オートエアコン（独立温度調整機能（運転席、助手席））</a></li>
+              <li><a href="#" data-i18n-key="nav-vents">吹き出し口</a></li>
+              <li><a href="#" data-i18n-key="nav-ac-caution">エアコンを使うときに注意すること</a></li>
+              <li><a href="#" data-i18n-key="nav-diagnosis">故障診断</a></li>
+              <li><a href="#" data-i18n-key="nav-maintenance">メンテナンス</a></li>
+            </ul>
+          </details>
+          <div class="om-subhead" data-i18n-key="nav-connected">CONNECTED</div>
+          <details>
+            <summary data-i18n-key="nav-infotainment">インフォテインメントシステム取扱説明書</summary>
+            <ul>
+              <li><a href="#" data-i18n-key="nav-settings">設定</a></li>
+              <li><a href="#" data-i18n-key="nav-handsfree">ハンズフリー</a></li>
+              <li><a href="#" data-i18n-key="nav-apps">アプリ</a></li>
+            </ul>
+          </details>
+          <details>
+            <summary data-i18n-key="nav-quick-guide">簡単早わかりガイド</summary>
+            <ul><li><a href="#" data-i18n-key="nav-quick-start">クイックスタート</a></li></ul>
+          </details>
+        </nav>
+      </aside>
+      <main class="om-main">
+        <h1 data-i18n-key="main-title">オートエアコン（独立温度調整機能（運転席、助手席））</h1>
+        <p class="lead" data-i18n-key="main-description">
+          オートエアコンは、設定温度に合わせて吹き出し温度・吹き出し口・ファン速度などを自動的にコントロールします。運転席と助手席で目標温度を個別に設定できます（デモ用の説明文です）。
+        </p>
+        <h2 data-i18n-key="section-controls">各スイッチの名称と機能</h2>
+        <p class="lead" style="margin-bottom: 8px;" data-i18n-key="section-controls-desc">ダッシュボードのエアコン操作部の一例です（図はイメージ）。</p>
+        <div class="diagram-row">
+          <div class="diagram-card">
+            <div class="cap" data-i18n-key="diagram-with-heating">ステアリングヒーター付き</div>
+            <div class="fake-panel" aria-hidden="true">
+              <span class="fake-knob" style="left:12%;top:18%;">1</span>
+              <span class="fake-knob" style="left:38%;top:22%;">2</span>
+              <span class="fake-knob" style="left:62%;top:20%;">3</span>
+              <span class="fake-knob" style="left:82%;top:28%;">4</span>
+              <span class="fake-knob" style="left:18%;top:55%;">5</span>
+              <span class="fake-knob" style="left:42%;top:58%;">6</span>
+              <span class="fake-knob" style="left:68%;top:52%;">7</span>
+            </div>
+          </div>
+          <div class="diagram-card">
+            <div class="cap" data-i18n-key="diagram-without-heating">ステアリングヒーターなし</div>
+            <div class="fake-panel" aria-hidden="true">
+              <span class="fake-knob" style="left:14%;top:24%;">1</span>
+              <span class="fake-knob" style="left:40%;top:20%;">2</span>
+              <span class="fake-knob" style="left:66%;top:22%;">3</span>
+              <span class="fake-knob" style="left:84%;top:30%;">4</span>
+              <span class="fake-knob" style="left:22%;top:58%;">8</span>
+              <span class="fake-knob" style="left:48%;top:54%;">9</span>
+              <span class="fake-knob" style="left:72%;top:56%;">10</span>
+            </div>
+          </div>
+        </div>
+        <p class="lead" style="margin-top:14px;font-size:12px;color:#777;" data-i18n-key="diagram-note">
+          番号とスイッチ名称の対応は製品版マニュアルをご確認ください（デモでは省略）。
+        </p>
+        <div class="om-footer-note" data-i18n-key="footer-note">
+          車種はアプリの「車両選択」で選んだ Model G / Model B に合わせて表示されます。
+        </div>
+      </main>
+    </div>
+  </div>
+  <script>
+    (function () {
+      // 翻訳データ
+      var translations = {
+        ja: {
+          title: ' 取扱説明書',
+          search: '検索',
+          'nav-getting-started': '乗りはじめガイド',
+          'nav-safety': '安全に関する重要なお知らせ',
+          'nav-keys-doors': 'キーとドア',
+          'nav-vehicle-manual': '車両取扱説明書',
+          'nav-audio': 'Audio',
+          'nav-driving': '走り方',
+          'nav-interior': '室内装備',
+          'nav-auto-ac': 'オートエアコン（独立温度調整機能（運転席、助手席））',
+          'nav-vents': '吹き出し口',
+          'nav-ac-caution': 'エアコンを使うときに注意すること',
+          'nav-diagnosis': '故障診断',
+          'nav-maintenance': 'メンテナンス',
+          'nav-connected': 'CONNECTED',
+          'nav-infotainment': 'インフォテインメントシステム取扱説明書',
+          'nav-settings': '設定',
+          'nav-handsfree': 'ハンズフリー',
+          'nav-apps': 'アプリ',
+          'nav-quick-guide': '簡単早わかりガイド',
+          'nav-quick-start': 'クイックスタート',
+          'main-title': 'オートエアコン（独立温度調整機能（運転席、助手席））',
+          'main-description': 'オートエアコンは、設定温度に合わせて吹き出し温度・吹き出し口・ファン速度などを自動的にコントロールします。運転席と助手席で目標温度を個別に設定できます（デモ用の説明文です）。',
+          'section-controls': '各スイッチの名称と機能',
+          'section-controls-desc': 'ダッシュボードのエアコン操作部の一例です（図はイメージ）。',
+          'diagram-with-heating': 'ステアリングヒーター付き',
+          'diagram-without-heating': 'ステアリングヒーターなし',
+          'diagram-note': '番号とスイッチ名称の対応は製品版マニュアルをご確認ください（デモでは省略）。',
+          'footer-note': '車種はアプリの「車両選択」で選んだ Model G / Model B に合わせて表示されます。'
+        },
+        en: {
+          title: ' Owner\'s Manual',
+          search: 'Search',
+          'nav-getting-started': 'Getting Started Guide',
+          'nav-safety': 'Important Safety Information',
+          'nav-keys-doors': 'Keys and Doors',
+          'nav-vehicle-manual': 'Vehicle Owner\'s Manual',
+          'nav-audio': 'Audio',
+          'nav-driving': 'Driving',
+          'nav-interior': 'Interior Equipment',
+          'nav-auto-ac': 'Automatic Air Conditioning (Independent Temperature Control)',
+          'nav-vents': 'Air Vents',
+          'nav-ac-caution': 'Air Conditioning Precautions',
+          'nav-diagnosis': 'Troubleshooting',
+          'nav-maintenance': 'Maintenance',
+          'nav-connected': 'CONNECTED',
+          'nav-infotainment': 'Infotainment System Manual',
+          'nav-settings': 'Settings',
+          'nav-handsfree': 'Hands-free',
+          'nav-apps': 'Apps',
+          'nav-quick-guide': 'Quick Reference Guide',
+          'nav-quick-start': 'Quick Start',
+          'main-title': 'Automatic Air Conditioning (Independent Temperature Control)',
+          'main-description': 'The automatic air conditioning system automatically controls air temperature, vents, and fan speed according to the set temperature. You can set target temperatures independently for driver and passenger seats (demo text).',
+          'section-controls': 'Control Names and Functions',
+          'section-controls-desc': 'Example of air conditioning controls on the dashboard (image for illustration).',
+          'diagram-with-heating': 'With Steering Wheel Heater',
+          'diagram-without-heating': 'Without Steering Wheel Heater',
+          'diagram-note': 'Refer to the production manual for the correspondence between numbers and switch names (omitted in demo).',
+          'footer-note': 'The vehicle model is displayed according to Model G / Model B selected in the app\'s "Vehicle Selection".'
+        }
+      };
+
+      // パラメータ取得
+      var p = new URLSearchParams(window.location.search);
+      var raw = (p.get('model') || 'G').toString().toUpperCase();
+      var code = raw === 'B' ? 'B' : 'G';
+      var lang = (p.get('lang') || 'ja').toString().toLowerCase();
+      if (!translations[lang]) lang = 'ja';
+
+      var modelLabel = 'Model ' + code;
+      var t = translations[lang];
+
+      // HTML lang属性を設定
+      var htmlRoot = document.getElementById('htmlRoot');
+      if (htmlRoot) htmlRoot.setAttribute('lang', lang);
+
+      // タイトル更新
+      var titleEl = document.getElementById('omVehicleTitle');
+      if (titleEl) titleEl.textContent = modelLabel + t.title;
+      document.title = modelLabel + t.title.replace(' ', ' ') + ' (Demo)';
+
+      // 翻訳適用
+      document.querySelectorAll('[data-i18n-key]').forEach(function(el) {
+        var key = el.getAttribute('data-i18n-key');
+        if (t[key]) {
+          el.textContent = t[key];
+        }
+      });
+
+      // プレースホルダー翻訳
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+        var key = el.getAttribute('data-i18n-placeholder');
+        if (t[key]) {
+          el.setAttribute('placeholder', t[key]);
+          el.setAttribute('aria-label', t[key]);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

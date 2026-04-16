@@ -562,6 +562,28 @@
                 transform: translateX(-50%) translateY(-20px);
             }
         }
+
+        /* HTMLマニュアル閲覧（iframeのみ） */
+        #manualScreen.view-screen.active {
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            overflow: hidden;
+        }
+        #manualScreen .manual-iframe-wrap {
+            flex: 1;
+            min-height: 0;
+            position: relative;
+            background: #1A1A1A;
+        }
+        #manualScreen .manual-iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            background: #1A1A1A;
+        }
     </style>
 </head>
 <body>
@@ -602,9 +624,9 @@
                             <button type="button" class="button" style="background:#333; margin-bottom:14px; font-size:0.9em;" onclick="document.getElementById('vehicleYearStep').style.display='none'; document.getElementById('vehicleModelStep').style.display='block';" data-i18n="btn-back-to-model">← 車種を選び直す</button>
                             <div style="margin-bottom: 10px; color: #aaa;" data-i18n="screen-vehicle-year">年式を選択</div>
                             <div class="vehicle-year-list">
-                                <div class="vehicle-year-item" onclick="selectYear('2025-06')">2025年6月発売</div>
-                                <div class="vehicle-year-item" onclick="selectYear('2024-11')">2024年11月発売</div>
-                                <div class="vehicle-year-item" onclick="selectYear('2023-04')">2023年4月発売</div>
+                                <div class="vehicle-year-item" onclick="selectYear('2025-06')" data-i18n="year-2025-06">2025年6月発売</div>
+                                <div class="vehicle-year-item" onclick="selectYear('2024-11')" data-i18n="year-2024-11">2024年11月発売</div>
+                                <div class="vehicle-year-item" onclick="selectYear('2023-04')" data-i18n="year-2023-04">2023年4月発売</div>
                             </div>
                         </div>
                     </div>
@@ -618,9 +640,6 @@
                             <button type="button" class="settings-menu-btn" onclick="goToVehicleSelect()">
                                 <span>🚗</span> <span data-i18n="menu-vehicle">車両選択</span>
                             </button>
-                            <a href="oem-dashboard.html" target="_blank" rel="noopener" class="settings-menu-btn" style="display: block; text-align: left; text-decoration: none; color: inherit;">
-                                <span>📊</span> <span data-i18n="menu-dashboard">管理者向けダッシュボード</span>
-                            </a>
                         </div>
                         <!-- 言語選択サブ画面 -->
                         <div id="languageSelectPanel" style="display: none; margin-top: 20px;">
@@ -632,6 +651,12 @@
                                 <div class="language-option" data-lang="fr" onclick="selectLanguage('fr')">Français</div>
                                 <div class="language-option" data-lang="es" onclick="selectLanguage('es')">Español</div>
                             </div>
+                        </div>
+                    </div>
+                    <!-- HTMLマニュアル閲覧（車種連動・iframe） -->
+                    <div id="manualScreen" class="view-screen">
+                        <div class="manual-iframe-wrap">
+                            <iframe id="manualHtmlFrame" class="manual-iframe" title="HTMLマニュアル" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
                         </div>
                     </div>
                     <div class="mobile-content" id="homeContent" style="display: none;">
@@ -692,6 +717,18 @@
                                         <button onclick="showRecommendationFeedback()" class="button" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 10px 18px; flex: 0;">
                                             😒
                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 4b. 取扱説明書・マニュアル -->
+                            <div class="card" id="manualQuickCard">
+                                <div class="card-title">📖 <span data-i18n="card-manual">取扱説明書・マニュアル</span></div>
+                                <div class="card-content">
+                                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                                        <button type="button" class="button" onclick="showScreen('manual')" data-i18n="btn-html-manual">HTMLマニュアルを見る</button>
+                                        <a href="../docs/tsdv/運転支援アップデートVer.2.00～Ver.3.00.pdf" download="運転支援アップデートVer.2.00～Ver.3.00.pdf" class="button" style="text-decoration: none; text-align: center; display: block; background: linear-gradient(135deg, #444 0%, #333 100%);" data-i18n="btn-pdf-update">PDF（運転支援アップデート）を保存</a>
+                                        <a href="../docs/tsdv/CROWN-HEV_OM_JP_M30K22V_1_2504.pdf" download="CROWN-HEV_OM_JP_M30K22V_1_2504.pdf" class="button" style="text-decoration: none; text-align: center; display: block; background: linear-gradient(135deg, #555 0%, #383838 100%);" data-i18n="btn-pdf-om">PDF（取扱説明書・参考）を保存</a>
                                     </div>
                                 </div>
                             </div>
@@ -771,10 +808,17 @@
                 'screen-vehicle-select': '車種を選択',
                 'screen-vehicle-year': '年式を選択',
                 'btn-back-to-model': '← 車種を選び直す',
+                'year-2025-06': '2025年6月発売',
+                'year-2024-11': '2024年11月発売',
+                'year-2023-04': '2023年4月発売',
                 'screen-settings': '設定',
                 'menu-language': '言語設定',
                 'menu-vehicle': '車両選択',
-                'menu-dashboard': '管理者向けダッシュボード',
+                'screen-manual': '取扱説明書',
+                'card-manual': '取扱説明書・マニュアル',
+                'btn-html-manual': 'HTMLマニュアルを見る',
+                'btn-pdf-update': 'PDF（運転支援アップデート）を保存',
+                'btn-pdf-om': 'PDF（取扱説明書・参考）を保存',
                 'language-select-title': '表示言語を選択',
                 'btn-back-to-settings': '← 設定に戻る',
                 'alert-title': '今すぐ確認',
@@ -913,10 +957,17 @@
                 'screen-vehicle-select': 'Select Vehicle Model',
                 'screen-vehicle-year': 'Select Year',
                 'btn-back-to-model': '← Change Model',
+                'year-2025-06': 'Released June 2025',
+                'year-2024-11': 'Released November 2024',
+                'year-2023-04': 'Released April 2023',
                 'screen-settings': 'Settings',
                 'menu-language': 'Language Settings',
                 'menu-vehicle': 'Vehicle Selection',
-                'menu-dashboard': 'Admin Dashboard',
+                'screen-manual': 'Owner\'s Manual',
+                'card-manual': 'Manuals',
+                'btn-html-manual': 'View HTML manual',
+                'btn-pdf-update': 'Save PDF (driving assist update)',
+                'btn-pdf-om': 'Save PDF (owner\'s manual — sample)',
                 'language-select-title': 'Select Display Language',
                 'btn-back-to-settings': '← Back to Settings',
                 'alert-title': 'Check Now',
@@ -1168,10 +1219,24 @@
         // ログイン・車種選択フロー（モック）
         var selectedVehicle = null;
         var VEHICLE_IMAGES = { G: './images/グレーSUV_背景黒.png', B: './images/ブルーセダン.png' };
+        function getSelectedVehicleModelCode() {
+            if (selectedVehicle && selectedVehicle.model && (selectedVehicle.model === 'G' || selectedVehicle.model === 'B')) {
+                return selectedVehicle.model;
+            }
+            return 'G';
+        }
+        function syncManualFrame() {
+            var frame = document.getElementById('manualHtmlFrame');
+            if (!frame) return;
+            var m = getSelectedVehicleModelCode();
+            frame.src = 'vehicle-manual-mock.html?model=' + encodeURIComponent(m) + '&lang=' + encodeURIComponent(currentLang);
+        }
+
         function showScreen(name) {
             var login = document.getElementById('loginScreen');
             var vehicle = document.getElementById('vehicleSelectScreen');
             var settings = document.getElementById('settingsScreen');
+            var manual = document.getElementById('manualScreen');
             var home = document.getElementById('homeContent');
             var tabBar = document.getElementById('mainTabBar');
             var headerTitle = document.getElementById('headerTitle');
@@ -1180,12 +1245,18 @@
             if (login) login.classList.toggle('active', name === 'login');
             if (vehicle) vehicle.classList.toggle('active', name === 'vehicle');
             if (settings) settings.classList.toggle('active', name === 'settings');
+            if (manual) manual.classList.toggle('active', name === 'manual');
             if (home) home.style.display = name === 'home' ? 'block' : 'none';
             if (tabBar) tabBar.style.display = name === 'home' ? 'flex' : 'none';
-            if (headerTitle) headerTitle.textContent = (name === 'settings' ? '設定' : 'DIGITAL OM');
-            if (headerBack) headerBack.style.display = (name === 'settings' ? 'inline' : 'none');
+            if (headerTitle) {
+                if (name === 'settings') headerTitle.textContent = t('screen-settings');
+                else if (name === 'manual') headerTitle.textContent = t('screen-manual');
+                else headerTitle.textContent = t('app-title');
+            }
+            if (headerBack) headerBack.style.display = (name === 'settings' || name === 'manual' ? 'inline' : 'none');
             if (headerSettings) headerSettings.style.display = (name === 'home' ? 'inline' : 'none');
-            if (name === 'settings') closeLanguageSettings();
+            if (name === 'settings' || name === 'manual') closeLanguageSettings();
+            if (name === 'manual') syncManualFrame();
         }
         function handleLogin(e) {
             if (e && e.preventDefault) e.preventDefault();
@@ -1228,6 +1299,8 @@
             document.documentElement.lang = lang;
             applyTranslations();
             localStorage.setItem('preferred_language', lang);
+            // マニュアル画面も言語に合わせて再読み込み
+            syncManualFrame();
         }
         function goToVehicleSelect() {
             document.getElementById('vehicleModelStep').style.display = 'block';
@@ -1996,30 +2069,31 @@
             t3_question: {
                 question_id: 'Q_DOOR_001',
                 question_text: 'スマートキーのボタンを押すとランプは点きますか？',
+                question_text_en: 'Does the lamp light up when you press the smart key button?',
                 answer_type: 'yes_no',
                 expected_split: { yes: ['RADIO_INTERFERENCE', 'VEHICLE_12V_LOW', 'USER_OPERATION', 'LOCK_ACTUATOR_FAULT'], no: ['KEY_BATTERY_EMPTY', 'KEY_FAULT'] },
                 priority: 1
             },
             action_cards_by_cause: {
                 KEY_BATTERY_EMPTY: [
-                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], duration: '約30秒', required_items: [], risk_notice: null, alternative: '開かない場合はロードサービスへ', is_immediate: true },
-                    { action_id: 'A_DOOR_002', guide_id: 'GUIDE-005', title: '恒久対応：電池交換', steps: ['CR2032（またはCR2450）を用意', 'キーを開けて電池を交換', '動作確認'], duration: '約3分', required_items: ['CR2032 または CR2450（ボタン電池）'], risk_notice: '部品破損の恐れがあるため、販売店での交換を推奨します。', alternative: '電池購入先の案内へ', is_immediate: false },
-                    { action_id: 'A_DOOR_003', guide_id: 'GUIDE-006', title: '不安なら：販売店・ロードサービス', steps: ['位置共有・症状要約付きで連絡'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', title_en: 'Open Now: Unlock with Mechanical Key', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], steps_en: ['Press the button on the side of the smart key to remove the mechanical key', 'Insert it into the driver\'s door keyhole and turn'], duration: '約30秒', duration_en: 'About 30 seconds', required_items: [], risk_notice: null, alternative: '開かない場合はロードサービスへ', alternative_en: 'Contact road service if it doesn\'t open', is_immediate: true },
+                    { action_id: 'A_DOOR_002', guide_id: 'GUIDE-005', title: '恒久対応：電池交換', title_en: 'Permanent Solution: Replace Battery', steps: ['CR2032（またはCR2450）を用意', 'キーを開けて電池を交換', '動作確認'], steps_en: ['Prepare CR2032 (or CR2450)', 'Open the key and replace the battery', 'Verify operation'], duration: '約3分', duration_en: 'About 3 minutes', required_items: ['CR2032 または CR2450（ボタン電池）'], risk_notice: '部品破損の恐れがあるため、販売店での交換を推奨します。', risk_notice_en: 'Dealer replacement recommended to avoid part damage.', alternative: '電池購入先の案内へ', alternative_en: 'Go to battery purchase guide', is_immediate: false },
+                    { action_id: 'A_DOOR_003', guide_id: 'GUIDE-006', title: '不安なら：販売店・ロードサービス', title_en: 'If Unsure: Dealer/Road Service', steps: ['位置共有・症状要約付きで連絡'], steps_en: ['Contact with location sharing and symptom summary'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
                 ],
                 RADIO_INTERFERENCE: [
-                    { action_id: 'A_DOOR_004', guide_id: 'GUIDE-008', title: 'キーをドアハンドルに近づけて再試行', steps: ['スマートキーをドアハンドルにできるだけ近づけて操作', '数メートル移動して再試行'], duration: '約1分', required_items: [], risk_notice: null, alternative: '機械キーで開ける', is_immediate: true },
-                    { action_id: 'A_DOOR_005', guide_id: null, title: '予備のスマートキーで試す', steps: ['予備のスマートキーがあれば、同じようにドアの解錠を試す'], duration: '約1分', required_items: [], risk_notice: null, alternative: '予備キーがない場合は機械キーで開ける', is_immediate: true },
-                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], duration: '約30秒', required_items: [], risk_notice: null, alternative: 'ロードサービスへ', is_immediate: true }
+                    { action_id: 'A_DOOR_004', guide_id: 'GUIDE-008', title: 'キーをドアハンドルに近づけて再試行', title_en: 'Bring Key Closer to Door Handle and Retry', steps: ['スマートキーをドアハンドルにできるだけ近づけて操作', '数メートル移動して再試行'], steps_en: ['Operate the smart key as close to the door handle as possible', 'Move a few meters away and try again'], duration: '約1分', duration_en: 'About 1 minute', required_items: [], risk_notice: null, alternative: '機械キーで開ける', alternative_en: 'Use mechanical key', is_immediate: true },
+                    { action_id: 'A_DOOR_005', guide_id: null, title: '予備のスマートキーで試す', title_en: 'Try with Spare Smart Key', steps: ['予備のスマートキーがあれば、同じようにドアの解錠を試す'], steps_en: ['If you have a spare smart key, try unlocking the door the same way'], duration: '約1分', duration_en: 'About 1 minute', required_items: [], risk_notice: null, alternative: '予備キーがない場合は機械キーで開ける', alternative_en: 'Use mechanical key if no spare', is_immediate: true },
+                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', title_en: 'Open Now: Unlock with Mechanical Key', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], steps_en: ['Press the button on the side of the smart key to remove the mechanical key', 'Insert it into the driver\'s door keyhole and turn'], duration: '約30秒', duration_en: 'About 30 seconds', required_items: [], risk_notice: null, alternative: 'ロードサービスへ', alternative_en: 'Contact road service', is_immediate: true }
                 ],
                 LOCK_ACTUATOR_FAULT: [
-                    { action_id: 'A_DOOR_005', guide_id: null, title: '予備のスマートキーで試す', steps: ['予備のスマートキーがあれば、同じようにドアの解錠を試す'], duration: '約1分', required_items: [], risk_notice: null, alternative: '予備キーがない場合は機械キーで開ける', is_immediate: true },
-                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], duration: '約30秒', required_items: [], risk_notice: null, alternative: '開かない場合はロードサービスへ', is_immediate: true },
-                    { action_id: 'A_DOOR_003', guide_id: 'GUIDE-006', title: '販売店・ロードサービスに連絡', steps: ['位置共有・症状要約付きで連絡'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                    { action_id: 'A_DOOR_005', guide_id: null, title: '予備のスマートキーで試す', title_en: 'Try with Spare Smart Key', steps: ['予備のスマートキーがあれば、同じようにドアの解錠を試す'], steps_en: ['If you have a spare smart key, try unlocking the door the same way'], duration: '約1分', duration_en: 'About 1 minute', required_items: [], risk_notice: null, alternative: '予備キーがない場合は機械キーで開ける', alternative_en: 'Use mechanical key if no spare', is_immediate: true },
+                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', title_en: 'Open Now: Unlock with Mechanical Key', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], steps_en: ['Press the button on the side of the smart key to remove the mechanical key', 'Insert it into the driver\'s door keyhole and turn'], duration: '約30秒', duration_en: 'About 30 seconds', required_items: [], risk_notice: null, alternative: '開かない場合はロードサービスへ', alternative_en: 'Contact road service if it doesn\'t open', is_immediate: true },
+                    { action_id: 'A_DOOR_003', guide_id: 'GUIDE-006', title: '販売店・ロードサービスに連絡', title_en: 'Contact Dealer/Road Service', steps: ['位置共有・症状要約付きで連絡'], steps_en: ['Contact with location sharing and symptom summary'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
                 ],
                 _default: [
-                    { action_id: 'A_DOOR_005', guide_id: null, title: '予備のスマートキーで試す', steps: ['予備のスマートキーがあれば、同じようにドアの解錠を試す'], duration: '約1分', required_items: [], risk_notice: null, alternative: '予備キーがない場合は機械キーで開ける', is_immediate: true },
-                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], duration: '約30秒', required_items: [], risk_notice: null, alternative: '開かない場合はロードサービスへ', is_immediate: true },
-                    { action_id: 'A_DOOR_003', guide_id: 'GUIDE-006', title: '販売店・ロードサービス', steps: ['位置共有・症状要約付きで連絡'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                    { action_id: 'A_DOOR_005', guide_id: null, title: '予備のスマートキーで試す', title_en: 'Try with Spare Smart Key', steps: ['予備のスマートキーがあれば、同じようにドアの解錠を試す'], steps_en: ['If you have a spare smart key, try unlocking the door the same way'], duration: '約1分', duration_en: 'About 1 minute', required_items: [], risk_notice: null, alternative: '予備キーがない場合は機械キーで開ける', alternative_en: 'Use mechanical key if no spare', is_immediate: true },
+                    { action_id: 'A_DOOR_001', guide_id: 'GUIDE-001', title: '今すぐ開ける：機械キーで解錠', title_en: 'Open Now: Unlock with Mechanical Key', steps: ['スマートキー側面のボタンを押して機械キーを取り出す', '運転席ドアの鍵穴に差し込んで回す'], steps_en: ['Press the button on the side of the smart key to remove the mechanical key', 'Insert it into the driver\'s door keyhole and turn'], duration: '約30秒', duration_en: 'About 30 seconds', required_items: [], risk_notice: null, alternative: '開かない場合はロードサービスへ', alternative_en: 'Contact road service if it doesn\'t open', is_immediate: true },
+                    { action_id: 'A_DOOR_003', guide_id: 'GUIDE-006', title: '販売店・ロードサービス', title_en: 'Dealer/Road Service', steps: ['位置共有・症状要約付きで連絡'], steps_en: ['Contact with location sharing and symptom summary'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
                 ]
             },
             escalation_option: { dealer: '販売店予約', road_service: 'ロードサービス' }
@@ -2050,51 +2124,52 @@
                 { cause_id: 'OTHER_WARNING', description: 'その他警告', required_observations: ['lamp_color'], risk_level: 'medium', action_group: 'dealer' }
             ],
             warning_light_options: [
-                { option_id: 'BRAKE_RED', label: 'ブレーキ警告灯（赤）', cause_id: 'BRAKE_SYSTEM', icon: 'brake_red' },
-                { option_id: 'BRAKE_YELLOW', label: 'ブレーキ警告灯（黄）', cause_id: 'BRAKE_SYSTEM', icon: 'brake_yellow' },
-                { option_id: 'COOLANT', label: '高水温警告灯', cause_id: 'ENGINE_COOLANT', icon: 'coolant' },
-                { option_id: 'HYBRID_OVERHEAT', label: 'ハイブリッドシステム過熱警告灯', cause_id: 'ENGINE_COOLANT', icon: 'coolant' },
-                { option_id: 'CHARGE', label: '充電警告灯', cause_id: 'BATTERY_CHARGE', icon: 'charge' },
-                { option_id: 'OIL', label: '油圧警告灯', cause_id: 'ENGINE_OIL', icon: 'oil' },
-                { option_id: 'ENGINE', label: 'エンジン警告灯', cause_id: 'ENGINE_WARNING', icon: 'engine' },
-                { option_id: 'ABS', label: 'ABS＆ブレーキアシスト警告灯', cause_id: 'BRAKE_SYSTEM', icon: 'abs' },
-                { option_id: 'TYRE', label: 'タイヤ空気圧警告灯', cause_id: 'TYRE_PRESSURE', icon: 'tyre' },
-                { option_id: 'OTHER', label: 'その他・わからない', cause_id: 'OTHER_WARNING', icon: 'other' }
+                { option_id: 'BRAKE_RED', label: 'ブレーキ警告灯（赤）', label_en: 'Brake Warning Light (Red)', cause_id: 'BRAKE_SYSTEM', icon: 'brake_red' },
+                { option_id: 'BRAKE_YELLOW', label: 'ブレーキ警告灯（黄）', label_en: 'Brake Warning Light (Yellow)', cause_id: 'BRAKE_SYSTEM', icon: 'brake_yellow' },
+                { option_id: 'COOLANT', label: '高水温警告灯', label_en: 'High Coolant Temperature Warning', cause_id: 'ENGINE_COOLANT', icon: 'coolant' },
+                { option_id: 'HYBRID_OVERHEAT', label: 'ハイブリッドシステム過熱警告灯', label_en: 'Hybrid System Overheat Warning', cause_id: 'ENGINE_COOLANT', icon: 'coolant' },
+                { option_id: 'CHARGE', label: '充電警告灯', label_en: 'Charging System Warning', cause_id: 'BATTERY_CHARGE', icon: 'charge' },
+                { option_id: 'OIL', label: '油圧警告灯', label_en: 'Oil Pressure Warning', cause_id: 'ENGINE_OIL', icon: 'oil' },
+                { option_id: 'ENGINE', label: 'エンジン警告灯', label_en: 'Engine Warning Light', cause_id: 'ENGINE_WARNING', icon: 'engine' },
+                { option_id: 'ABS', label: 'ABS＆ブレーキアシスト警告灯', label_en: 'ABS & Brake Assist Warning', cause_id: 'BRAKE_SYSTEM', icon: 'abs' },
+                { option_id: 'TYRE', label: 'タイヤ空気圧警告灯', label_en: 'Tire Pressure Warning', cause_id: 'TYRE_PRESSURE', icon: 'tyre' },
+                { option_id: 'OTHER', label: 'その他・わからない', label_en: 'Other / Not Sure', cause_id: 'OTHER_WARNING', icon: 'other' }
             ],
             t3_question: {
                 question_id: 'Q_WARN_001',
                 question_text: '点灯している警告灯を選んでください。<br><a href="https://manual.toyota.jp/aqua/2509/hev/ja_JP/contents/vhch07se020402.php" target="_blank" rel="noopener" style="color:#BF00FF; font-size:0.9em;">※ 取説「警告灯がついたときは」で詳細を確認できます</a>',
+                question_text_en: 'Please select the warning light that is ON.<br><a href="https://manual.toyota.jp/aqua/2509/hev/ja_JP/contents/vhch07se020402.php" target="_blank" rel="noopener" style="color:#BF00FF; font-size:0.9em;">※ See owner\'s manual "When Warning Lights Come On" for details</a>',
                 answer_type: 'single_choice',
                 options_ref: 'warning_light_options',
                 priority: 1
             },
             action_cards_by_cause: {
                 ENGINE_WARNING: [
-                    { action_id: 'A_WARN_ENG', guide_id: null, title: 'エンジン警告灯が点灯したとき（取説ch07準拠）', steps: ['マルチインフォメーションディスプレイに表示される警告メッセージを確認する', '表示内容に従って対処する', '点灯したままのときはシステム異常のおそれがあるため、トヨタ販売店で点検を受けてください'], duration: null, required_items: [], risk_notice: '作動確認のためパワースイッチをONにすると点灯し、数秒後またはハイブリッドシステム始動で消灯するのが正常です。点灯しない場合も点検を。', alternative: '販売店へ', is_immediate: true },
-                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店で点検', steps: ['エンジン警告灯の点灯として点検を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                    { action_id: 'A_WARN_ENG', guide_id: null, title: 'エンジン警告灯が点灯したとき（取説ch07準拠）', title_en: 'When Engine Warning Light is ON (Manual ch07)', steps: ['マルチインフォメーションディスプレイに表示される警告メッセージを確認する', '表示内容に従って対処する', '点灯したままのときはシステム異常のおそれがあるため、トヨタ販売店で点検を受けてください'], steps_en: ['Check warning message on multi-information display', 'Take action according to displayed content', 'If it stays on, have the vehicle inspected at a Toyota dealer as there may be a system malfunction'], duration: null, required_items: [], risk_notice: '作動確認のためパワースイッチをONにすると点灯し、数秒後またはハイブリッドシステム始動で消灯するのが正常です。点灯しない場合も点検を。', risk_notice_en: 'It\'s normal for it to light up when power switch is ON and turn off after a few seconds or when hybrid system starts. Have it checked if it doesn\'t light up.', alternative: '販売店へ', alternative_en: 'Contact dealer', is_immediate: true },
+                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店で点検', title_en: 'Get Inspected at Dealer', steps: ['エンジン警告灯の点灯として点検を依頼'], steps_en: ['Request inspection for engine warning light'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
                 ],
                 BRAKE_SYSTEM: [
-                    { action_id: 'A_WARN_001', guide_id: null, title: '安全な場所に停車し、すぐに点検を', steps: ['速やかに安全な場所へ停車', 'エンジンを止める', '販売店・ロードサービスに連絡'], duration: null, required_items: [], risk_notice: 'ブレーキ系統の警告のため、走行は避けてください。', alternative: null, is_immediate: true },
-                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ロードサービスに連絡', steps: ['位置・症状を伝えて引き取り・点検を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                    { action_id: 'A_WARN_001', guide_id: null, title: '安全な場所に停車し、すぐに点検を', title_en: 'Pull Over Safely & Get Immediate Inspection', steps: ['速やかに安全な場所へ停車', 'エンジンを止める', '販売店・ロードサービスに連絡'], steps_en: ['Pull over to a safe location immediately', 'Turn off engine', 'Contact dealer or road service'], duration: null, required_items: [], risk_notice: 'ブレーキ系統の警告のため、走行は避けてください。', risk_notice_en: 'Do not continue driving as this is a brake system warning.', alternative: null, is_immediate: true },
+                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ロードサービスに連絡', title_en: 'Contact Dealer/Road Service', steps: ['位置・症状を伝えて引き取り・点検を依頼'], steps_en: ['Inform location and symptoms, request pickup and inspection'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
                 ],
                 ENGINE_COOLANT: [
-                    { action_id: 'A_WARN_002', guide_id: null, title: 'エンジンを止めて冷却を確認', steps: ['安全な場所に停車', 'エンジンを止めて冷ます', '冷却水の量を確認（取説参照）'], duration: '約10分以上', required_items: [], risk_notice: '無理に走行するとエンジン損傷の恐れがあります。', alternative: 'ロードサービスへ', is_immediate: true },
-                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ロードサービスに連絡', steps: ['位置・症状を伝えて点検を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                    { action_id: 'A_WARN_002', guide_id: null, title: 'エンジンを止めて冷却を確認', title_en: 'Stop Engine & Check Cooling', steps: ['安全な場所に停車', 'エンジンを止めて冷ます', '冷却水の量を確認（取説参照）'], steps_en: ['Pull over to a safe location', 'Stop engine and let it cool', 'Check coolant level (refer to manual)'], duration: '約10分以上', duration_en: 'At least 10 minutes', required_items: [], risk_notice: '無理に走行するとエンジン損傷の恐れがあります。', risk_notice_en: 'Continuing to drive may cause engine damage.', alternative: 'ロードサービスへ', alternative_en: 'Contact road service', is_immediate: true },
+                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ロードサービスに連絡', title_en: 'Contact Dealer/Road Service', steps: ['位置・症状を伝えて点検を依頼'], steps_en: ['Inform location and symptoms, request inspection'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
                 ],
                 ENGINE_OIL: [
-                    { action_id: 'A_WARN_004', guide_id: null, title: 'オイル量を確認', steps: ['水平な場所に停車する', 'エンジンを暖機した後、ハイブリッドシステムを停止する', '5分以上経過してから、レベルゲージ（オイル量計測棒）でオイル量を確認する'], duration: '約5分', required_items: [], risk_notice: 'オイル不足の場合は走行を控え、補充または点検を。', alternative: '販売店へ', is_immediate: true },
-                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店で点検', steps: ['オイル交換・点検を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                    { action_id: 'A_WARN_004', guide_id: null, title: 'オイル量を確認', title_en: 'Check Oil Level', steps: ['水平な場所に停車する', 'エンジンを暖機した後、ハイブリッドシステムを停止する', '5分以上経過してから、レベルゲージ（オイル量計測棒）でオイル量を確認する'], steps_en: ['Park on level ground', 'Warm up engine, then stop hybrid system', 'After at least 5 minutes, check oil level with dipstick'], duration: '約5分', duration_en: 'About 5 minutes', required_items: [], risk_notice: 'オイル不足の場合は走行を控え、補充または点検を。', risk_notice_en: 'If oil is low, avoid driving and add oil or have it inspected.', alternative: '販売店へ', alternative_en: 'Contact dealer', is_immediate: true },
+                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店で点検', title_en: 'Get Inspected at Dealer', steps: ['オイル交換・点検を依頼'], steps_en: ['Request oil change and inspection'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
                 ],
                 TYRE_PRESSURE: [
-                    { action_id: 'A_WARN_005', guide_id: null, title: 'タイヤ空気圧を確認・補充', steps: ['安全な場所に停車', 'タイヤ空気圧を計測し、規定値に合わせる'], duration: '約15分', required_items: ['空気圧計'], risk_notice: null, alternative: 'ガソリンスタンドや販売店で補充', is_immediate: true },
-                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ガソリンスタンドで確認', steps: ['空気圧チェック・補充を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                    { action_id: 'A_WARN_005', guide_id: null, title: 'タイヤ空気圧を確認・補充', title_en: 'Check & Inflate Tire Pressure', steps: ['安全な場所に停車', 'タイヤ空気圧を計測し、規定値に合わせる'], steps_en: ['Pull over to a safe location', 'Measure tire pressure and adjust to specified value'], duration: '約15分', duration_en: 'About 15 minutes', required_items: ['空気圧計'], required_items_en: ['Tire pressure gauge'], risk_notice: null, alternative: 'ガソリンスタンドや販売店で補充', alternative_en: 'Get it done at gas station or dealer', is_immediate: true },
+                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ガソリンスタンドで確認', title_en: 'Check at Dealer/Gas Station', steps: ['空気圧チェック・補充を依頼'], steps_en: ['Request pressure check and inflation'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
                 ],
                 BATTERY_CHARGE: [
-                    { action_id: 'A_WARN_006', guide_id: null, title: 'バッテリー充電状態を確認', steps: ['エンジンがかかる場合はしばらく走行して充電', 'かからない場合はロードサービスへ'], duration: null, required_items: [], risk_notice: null, alternative: 'ロードサービス', is_immediate: true },
-                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ロードサービスに連絡', steps: ['バッテリー点検・交換を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                    { action_id: 'A_WARN_006', guide_id: null, title: 'バッテリー充電状態を確認', title_en: 'Check Battery Charge Status', steps: ['エンジンがかかる場合はしばらく走行して充電', 'かからない場合はロードサービスへ'], steps_en: ['If engine starts, drive for a while to charge', 'If it doesn\'t start, contact road service'], duration: null, required_items: [], risk_notice: null, alternative: 'ロードサービス', alternative_en: 'Road service', is_immediate: true },
+                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ロードサービスに連絡', title_en: 'Contact Dealer/Road Service', steps: ['バッテリー点検・交換を依頼'], steps_en: ['Request battery inspection and replacement'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
                 ],
                 _default: [
-                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ロードサービスに連絡', steps: ['警告灯の種類・症状を伝えて点検を依頼'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                    { action_id: 'A_WARN_003', guide_id: null, title: '販売店・ロードサービスに連絡', title_en: 'Contact Dealer/Road Service', steps: ['警告灯の種類・症状を伝えて点検を依頼'], steps_en: ['Inform warning light type and symptoms, request inspection'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
                 ]
             },
             escalation_option: { dealer: '販売店予約', road_service: 'ロードサービス' }
@@ -2112,28 +2187,31 @@
             t3_question: {
                 question_id: 'Q_BT_001',
                 question_text: '以前はこの機種で接続できていましたか？',
+                question_text_en: 'Were you able to connect with this device before?',
                 answer_type: 'yes_no',
                 expected_split: { yes: ['PAIRING_LOST', 'DEVICE_BUSY', 'AUDIO_SETTING', 'HARDWARE_FAULT'], no: ['NOT_PAIRED'] },
                 label_yes: 'はい、以前は接続できた',
+                label_yes_en: 'Yes, it was connected before',
                 label_no: 'いいえ、初めて接続する',
+                label_no_en: 'No, first time connecting',
                 priority: 1
             },
             action_cards_by_cause: {
                 NOT_PAIRED: [
-                    { action_id: 'A_BT_001', guide_id: null, title: 'ペアリング手順を実行', steps: ['車載オーディオでBluetooth設定を開く', 'スマホのBluetoothをONにし、車の名前を選択', '画面の指示に従ってペアリング'], duration: '約2分', required_items: [], risk_notice: null, alternative: '取説のBluetooth項目を参照', is_immediate: true },
-                    { action_id: 'A_BT_002', guide_id: null, title: '取説でペアリング手順を確認', steps: ['車種別取説の「Bluetooth」「オーディオ」の項目を開く'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                    { action_id: 'A_BT_001', guide_id: null, title: 'ペアリング手順を実行', title_en: 'Perform Pairing Procedure', steps: ['車載オーディオでBluetooth設定を開く', 'スマホのBluetoothをONにし、車の名前を選択', '画面の指示に従ってペアリング'], steps_en: ['Open Bluetooth settings in car audio', 'Turn on Bluetooth on your phone and select the car name', 'Follow on-screen instructions to pair'], duration: '約2分', duration_en: 'About 2 minutes', required_items: [], risk_notice: null, alternative: '取説のBluetooth項目を参照', alternative_en: 'Refer to Bluetooth section in manual', is_immediate: true },
+                    { action_id: 'A_BT_002', guide_id: null, title: '取説でペアリング手順を確認', title_en: 'Check Pairing Procedure in Manual', steps: ['車種別取説の「Bluetooth」「オーディオ」の項目を開く'], steps_en: ['Open "Bluetooth" and "Audio" sections in your vehicle manual'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
                 ],
                 PAIRING_LOST: [
-                    { action_id: 'A_BT_003', guide_id: null, title: 'ペアリングをやり直す', steps: ['車載側で登録機種から当機を削除', 'スマホ側でも車を削除', '再度ペアリング手順を実行'], duration: '約3分', required_items: [], risk_notice: null, alternative: '販売店で設定確認', is_immediate: true },
-                    { action_id: 'A_BT_001', guide_id: null, title: 'ペアリング手順を実行', steps: ['車載オーディオでBluetooth設定を開く', 'スマホのBluetoothをONにし、車の名前を選択'], duration: '約2分', required_items: [], risk_notice: null, alternative: null, is_immediate: true }
+                    { action_id: 'A_BT_003', guide_id: null, title: 'ペアリングをやり直す', title_en: 'Re-pair Devices', steps: ['車載側で登録機種から当機を削除', 'スマホ側でも車を削除', '再度ペアリング手順を実行'], steps_en: ['Delete this device from car\'s registered devices', 'Delete car from phone as well', 'Perform pairing procedure again'], duration: '約3分', duration_en: 'About 3 minutes', required_items: [], risk_notice: null, alternative: '販売店で設定確認', alternative_en: 'Check settings at dealer', is_immediate: true },
+                    { action_id: 'A_BT_001', guide_id: null, title: 'ペアリング手順を実行', title_en: 'Perform Pairing Procedure', steps: ['車載オーディオでBluetooth設定を開く', 'スマホのBluetoothをONにし、車の名前を選択'], steps_en: ['Open Bluetooth settings in car audio', 'Turn on Bluetooth on your phone and select the car name'], duration: '約2分', duration_en: 'About 2 minutes', required_items: [], risk_notice: null, alternative: null, is_immediate: true }
                 ],
                 DEVICE_BUSY: [
-                    { action_id: 'A_BT_004', guide_id: null, title: '他機器の接続を解除', steps: ['車載オーディオで接続中の機種を切断', 'スマホのBluetoothで他機器をオフ', '再度この機種で接続'], duration: '約1分', required_items: [], risk_notice: null, alternative: null, is_immediate: true },
-                    { action_id: 'A_BT_003', guide_id: null, title: 'ペアリングをやり直す', steps: ['登録削除後に再ペアリング'], duration: '約3分', required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                    { action_id: 'A_BT_004', guide_id: null, title: '他機器の接続を解除', title_en: 'Disconnect Other Devices', steps: ['車載オーディオで接続中の機種を切断', 'スマホのBluetoothで他機器をオフ', '再度この機種で接続'], steps_en: ['Disconnect currently connected device in car audio', 'Turn off other devices in phone\'s Bluetooth', 'Connect this device again'], duration: '約1分', duration_en: 'About 1 minute', required_items: [], risk_notice: null, alternative: null, is_immediate: true },
+                    { action_id: 'A_BT_003', guide_id: null, title: 'ペアリングをやり直す', title_en: 'Re-pair Devices', steps: ['登録削除後に再ペアリング'], steps_en: ['Re-pair after deleting registration'], duration: '約3分', duration_en: 'About 3 minutes', required_items: [], risk_notice: null, alternative: null, is_immediate: false }
                 ],
                 AUDIO_SETTING: [
-                    { action_id: 'A_BT_005', guide_id: null, title: 'オーディオソースをBluetoothに切り替え', steps: ['オーディオ画面でソースを「Bluetooth」に選択', 'スマホで音楽再生や通話を試す'], duration: '約1分', required_items: [], risk_notice: null, alternative: null, is_immediate: true },
-                    { action_id: 'A_BT_002', guide_id: null, title: '取説で設定を確認', steps: ['オーディオ・Bluetoothの項目を参照'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
+                    { action_id: 'A_BT_005', guide_id: null, title: 'オーディオソースをBluetoothに切り替え', title_en: 'Switch Audio Source to Bluetooth', steps: ['オーディオ画面でソースを「Bluetooth」に選択', 'スマホで音楽再生や通話を試す'], steps_en: ['Select "Bluetooth" as source in audio screen', 'Try playing music or making a call from your phone'], duration: '約1分', duration_en: 'About 1 minute', required_items: [], risk_notice: null, alternative: null, is_immediate: true },
+                    { action_id: 'A_BT_002', guide_id: null, title: '取説で設定を確認', title_en: 'Check Settings in Manual', steps: ['オーディオ・Bluetoothの項目を参照'], steps_en: ['Refer to Audio/Bluetooth section'], duration: null, required_items: [], risk_notice: null, alternative: null, is_immediate: false }
                 ],
                 HARDWARE_FAULT: [
                     { action_id: 'A_BT_003', guide_id: null, title: 'ペアリングをやり直して試す', steps: ['削除後に再ペアリング'], duration: '約3分', required_items: [], risk_notice: null, alternative: '改善しない場合は販売店へ', is_immediate: true },
@@ -2171,15 +2249,15 @@
             var event_id = null;
             var subtype = null;
             var confidence = 0.85;
-            if (/ドアが開かない|スマートキー.*開かない|キー電池切れ|電池切れの表示/i.test(s)) {
+            if (/ドアが開かない|スマートキー.*開かない|キー電池切れ|電池切れの表示|door.*won't.*open|smart.*key.*door|key.*battery.*low|battery.*low.*warning/i.test(s)) {
                 event_id = 'DOOR_NOT_OPEN';
-                if (/キー電池切れの表示|電池切れの表示|電池が切れ|電池切れ/i.test(s)) {
+                if (/キー電池切れの表示|電池切れの表示|電池が切れ|電池切れ|key.*battery.*low|battery.*low.*warning/i.test(s)) {
                     subtype = 'battery_indicator';
                     confidence = 0.95;
                 }
-            } else if (/警告灯が点灯|警告灯.*点灯|ランプが点灯|エンジン警告/i.test(s)) {
+            } else if (/警告灯が点灯|警告灯.*点灯|ランプが点灯|エンジン警告|warning.*light.*on|warning.*light|engine.*warning/i.test(s)) {
                 event_id = 'WARNING_LIGHT';
-            } else if (/Bluetooth接続ができない|Bluetooth.*接続|ブルートゥース.*つながらない|ペアリング/i.test(s)) {
+            } else if (/Bluetooth接続ができない|Bluetooth.*接続|ブルートゥース.*つながらない|ペアリング|bluetooth.*connection.*failed|bluetooth.*not.*connecting|bluetooth.*pairing/i.test(s)) {
                 event_id = 'BLUETOOTH';
             }
             if (!event_id) return null;
@@ -2192,6 +2270,16 @@
                 context_labels: { time_band: 'day', location_type: 'outside', vehicle_state: 'stopped' },
                 evidence: ['user_selected_symptom']
             };
+        }
+
+        // ========== 多言語対応ヘルパー関数 ==========
+        function getLocalizedText(obj, key) {
+            if (!obj) return '';
+            var enKey = key + '_en';
+            if (currentLang === 'en' && obj[enKey]) {
+                return obj[enKey];
+            }
+            return obj[key] || '';
         }
 
         function runT2(t1Output) {
@@ -2321,29 +2409,43 @@
                 var cards = T16State.t5Output.action_cards || [];
                 var card0 = cards[0];
                 if (card0) {
-                    var stepsHtml = '<strong>' + (card0.title || '') + '</strong><br><br>';
-                    if (card0.steps && card0.steps.length) {
-                        stepsHtml += '<strong>手順：</strong><br>';
-                        card0.steps.forEach(function(s, i) { stepsHtml += (i + 1) + '. ' + s + '<br>'; });
+                    var stepsLabel = currentLang === 'en' ? '<strong>Steps:</strong>' : '<strong>手順：</strong>';
+                    var requiredLabel = currentLang === 'en' ? 'Required items: ' : '必要物: ';
+                    var alternativeLabel = currentLang === 'en' ? 'If it doesn\'t work: ' : 'うまくいかない場合: ';
+                    var resultLabel = currentLang === 'en' ? 'Please tell us the result:' : '試した結果を教えてください：';
+                    var successLabel = currentLang === 'en' ? 'It worked' : 'うまくいった';
+                    var failLabel = currentLang === 'en' ? 'It didn\'t work' : 'うまくいかなかった';
+                    var otherOptionsLabel = currentLang === 'en' ? 'Other Options' : 'その他の選択肢';
+                    var escalationLabel = currentLang === 'en' ? 'Dealer and road service are also available' : '販売店・ロードサービスも選択できます';
+                    
+                    var stepsHtml = '<strong>' + getLocalizedText(card0, 'title') + '</strong><br><br>';
+                    var cardSteps = currentLang === 'en' && card0.steps_en ? card0.steps_en : card0.steps;
+                    if (cardSteps && cardSteps.length) {
+                        stepsHtml += stepsLabel + '<br>';
+                        cardSteps.forEach(function(s, i) { stepsHtml += (i + 1) + '. ' + s + '<br>'; });
                     }
-                    if (card0.duration) stepsHtml += '<br>⏱ ' + card0.duration + '<br>';
-                    if (card0.required_items && card0.required_items.length) stepsHtml += '必要物: ' + card0.required_items.join(', ') + '<br>';
-                    if (card0.risk_notice) stepsHtml += '<br>⚠️ ' + card0.risk_notice + '<br>';
-                    if (card0.alternative) stepsHtml += '<br>うまくいかない場合: ' + card0.alternative + '<br>';
-                    stepsHtml += '<br>試した結果を教えてください：<br>' +
+                    var duration = getLocalizedText(card0, 'duration');
+                    if (duration) stepsHtml += '<br>⏱ ' + duration + '<br>';
+                    var requiredItems = currentLang === 'en' && card0.required_items_en ? card0.required_items_en : card0.required_items;
+                    if (requiredItems && requiredItems.length) stepsHtml += requiredLabel + requiredItems.join(', ') + '<br>';
+                    var riskNotice = getLocalizedText(card0, 'risk_notice');
+                    if (riskNotice) stepsHtml += '<br>⚠️ ' + riskNotice + '<br>';
+                    var alternative = getLocalizedText(card0, 'alternative');
+                    if (alternative) stepsHtml += '<br>' + alternativeLabel + alternative + '<br>';
+                    stepsHtml += '<br>' + resultLabel + '<br>' +
                         '<div class="quick-reply-container">' +
-                        '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>うまくいった</span></div>' +
-                        '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>うまくいかなかった</span></div>' +
+                        '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>' + successLabel + '</span></div>' +
+                        '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>' + failLabel + '</span></div>' +
                         '</div>';
                     if (cards.length > 1) {
-                        stepsHtml += '<br><details style="margin-top:10px;"><summary style="cursor:pointer; font-size:0.9em; color:#aaa;">その他の選択肢</summary>';
+                        stepsHtml += '<br><details style="margin-top:10px;"><summary style="cursor:pointer; font-size:0.9em; color:#aaa;">' + otherOptionsLabel + '</summary>';
                         cards.slice(1).forEach(function(c) {
-                            stepsHtml += '<div class="card" style="margin:6px 0; cursor:pointer; padding:8px;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' + (c.title || '') + '</div>';
+                            stepsHtml += '<div class="card" style="margin:6px 0; cursor:pointer; padding:8px;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' + getLocalizedText(c, 'title') + '</div>';
                         });
                         stepsHtml += '</details>';
                     }
                     if (T16State.t5Output.escalation_option) {
-                        stepsHtml += '<div style="margin-top: 10px; font-size: 0.9em; color: #aaa;">販売店・ロードサービスも選択できます</div>';
+                        stepsHtml += '<div style="margin-top: 10px; font-size: 0.9em; color: #aaa;">' + escalationLabel + '</div>';
                     }
                     addTheme001Message('ai', stepsHtml);
                 } else {
@@ -2363,22 +2465,25 @@
             if (t1.event_id === 'WARNING_LIGHT' && q.answer_type === 'single_choice' && q.options_ref) {
                 var kb = T16_KB_BY_EVENT.WARNING_LIGHT;
                 var opts = kb[q.options_ref] || [];
-                var gridHtml = '<strong>確認</strong><br><br>' + (q.question_text || '') + '<br><br>' +
+                var confirmText = currentLang === 'en' ? '<strong>Confirmation</strong>' : '<strong>確認</strong>';
+                var gridHtml = confirmText + '<br><br>' + getLocalizedText(q, 'question_text') + '<br><br>' +
                     '<div style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">';
                 opts.forEach(function(o) {
                     var iconUrl = (typeof WARNING_LIGHT_ICONS !== 'undefined' && WARNING_LIGHT_ICONS[o.icon]) ? WARNING_LIGHT_ICONS[o.icon] : '';
-                    gridHtml += '<div class="card" style="cursor:pointer; margin-bottom:0; padding:10px; text-align:center;" onclick="handleT16T3Answer(\'' + (o.option_id || '') + '\')">' +
+                    var optLabel = currentLang === 'en' && o.label_en ? o.label_en : (o.label || o.option_id);
+                    gridHtml += '<div class="card" style="cursor:pointer; margin-bottom:0; padding:10px; text-align:center;" onclick="handleT16T3Answer(\'' + (o.option_id || '') + '\', \'' + optLabel.replace(/'/g, "\\'") + '\')">' +
                         (iconUrl ? '<img src="' + iconUrl + '" alt="" style="width:48px; height:48px; margin:0 auto 6px; display:block;">' : '') +
-                        '<span style="font-size:0.85em; color:#e0e0e0;">' + (o.label || o.option_id) + '</span></div>';
+                        '<span style="font-size:0.85em; color:#e0e0e0;">' + optLabel + '</span></div>';
                 });
                 gridHtml += '</div>';
                 addTheme001Message('ai', gridHtml);
                 return;
             }
-            var labelYes = (q && q.label_yes) ? q.label_yes : 'はい';
-            var labelNo = (q && q.label_no) ? q.label_no : 'いいえ';
-            const questionHtml = '<strong>確認</strong><br><br>' +
-                (q.question_text || '') + '<br><br>' +
+            var labelYes = currentLang === 'en' && q.label_yes_en ? q.label_yes_en : (q && q.label_yes) ? q.label_yes : (currentLang === 'en' ? 'Yes' : 'はい');
+            var labelNo = currentLang === 'en' && q.label_no_en ? q.label_no_en : (q && q.label_no) ? q.label_no : (currentLang === 'en' ? 'No' : 'いいえ');
+            var confirmText = currentLang === 'en' ? '<strong>Confirmation</strong>' : '<strong>確認</strong>';
+            const questionHtml = confirmText + '<br><br>' +
+                getLocalizedText(q, 'question_text') + '<br><br>' +
                 '<div class="quick-reply-container">' +
                 '<div class="quick-reply" onclick="handleT16T3Answer(\'yes\')">💡 <span>' + labelYes + '</span></div>' +
                 '<div class="quick-reply" onclick="handleT16T3Answer(\'no\')">🔴 <span>' + labelNo + '</span></div>' +
@@ -2394,7 +2499,13 @@
                 var opts = kb.warning_light_options || [];
                 var sel = opts.find(function(o) { return o.option_id === answerYesNo; });
                 label = sel ? sel.label : answerYesNo;
-            } else label = answerYesNo === 'yes' ? 'はい、点きます' : 'いいえ、点きません';
+            } else {
+                if (answerYesNo === 'yes') {
+                    label = currentLang === 'en' ? 'Yes, it lights up' : 'はい、点きます';
+                } else {
+                    label = currentLang === 'en' ? 'No, it doesn\'t light up' : 'いいえ、点きません';
+                }
+            }
             addTheme001Message('user', label);
 
             T16State.observationResult = answerYesNo;
@@ -2404,14 +2515,21 @@
 
             if (T16State.t1Output && T16State.t1Output.event_id === 'WARNING_LIGHT' && topCause === 'BRAKE_SYSTEM') {
                 T16State.step = 'brake_urgent_done';
-                var brakeHtml = '<strong style="color:#ff6b6b;">⚠️ ブレーキ警告灯が点灯しています</strong><br><br>' +
-                    'ただちに安全な場所に停車してください。<br>ブレーキ系統の警告のため、走行を続けると危険です。<br><br>' +
-                    '<strong>停車後、次のいずれかに連絡してください。</strong><br><br>' +
+                var brakeTitle = currentLang === 'en' ? '<strong style="color:#ff6b6b;">⚠️ Brake Warning Light is ON</strong>' : '<strong style="color:#ff6b6b;">⚠️ ブレーキ警告灯が点灯しています</strong>';
+                var brakeMsg1 = currentLang === 'en' ? 'Pull over to a safe location immediately.<br>Continuing to drive with a brake system warning is dangerous.' : 'ただちに安全な場所に停車してください。<br>ブレーキ系統の警告のため、走行を続けると危険です。';
+                var brakeMsg2 = currentLang === 'en' ? '<strong>After stopping, contact one of the following:</strong>' : '<strong>停車後、次のいずれかに連絡してください。</strong>';
+                var roadServiceLabel = currentLang === 'en' ? '📞 Call Road Service' : '📞 ロードサービスに電話';
+                var dealerLabel = currentLang === 'en' ? '📞 Contact Dealer' : '📞 販売店に連絡';
+                var noteLabel = currentLang === 'en' ? '※ In the actual screen, contact information for your vehicle model and region will be displayed.' : '※ 実際の画面ではお持ちの車種・地域に応じた連絡先を表示します。';
+                
+                var brakeHtml = brakeTitle + '<br><br>' +
+                    brakeMsg1 + '<br><br>' +
+                    brakeMsg2 + '<br><br>' +
                     '<div style="display:flex; flex-wrap:wrap; gap:10px;">' +
-                    '<a href="tel:0120-XXX-XXX" class="button" style="text-decoration:none; display:inline-block; background:linear-gradient(135deg,#e53935 0%,#c62828 100%);">📞 ロードサービスに電話</a>' +
-                    '<a href="tel:0120-XXX-XXX" class="button" style="text-decoration:none; display:inline-block; background:linear-gradient(135deg,#BF00FF 0%,#D200FF 100%);">📞 販売店に連絡</a>' +
+                    '<a href="tel:0120-XXX-XXX" class="button" style="text-decoration:none; display:inline-block; background:linear-gradient(135deg,#e53935 0%,#c62828 100%);">' + roadServiceLabel + '</a>' +
+                    '<a href="tel:0120-XXX-XXX" class="button" style="text-decoration:none; display:inline-block; background:linear-gradient(135deg,#BF00FF 0%,#D200FF 100%);">' + dealerLabel + '</a>' +
                     '</div>' +
-                    '<div style="margin-top:12px; font-size:0.9em; color:#aaa;">※ 実際の画面ではお持ちの車種・地域に応じた連絡先を表示します。</div>';
+                    '<div style="margin-top:12px; font-size:0.9em; color:#aaa;">' + noteLabel + '</div>';
                 addTheme001Message('ai', brakeHtml);
                 return;
             }
@@ -2420,35 +2538,50 @@
             const cards = T16State.t5Output.action_cards || [];
             var card0 = cards[0];
             if (card0) {
-                var stepsHtml = '<strong>' + (card0.title || '') + '</strong><br><br>';
-                if (card0.steps && card0.steps.length) {
-                    stepsHtml += '<strong>手順：</strong><br>';
-                    card0.steps.forEach(function(s, i) { stepsHtml += (i + 1) + '. ' + s + '<br>'; });
+                var stepsLabel = currentLang === 'en' ? '<strong>Steps:</strong>' : '<strong>手順：</strong>';
+                var requiredLabel = currentLang === 'en' ? 'Required items: ' : '必要物: ';
+                var alternativeLabel = currentLang === 'en' ? 'If it doesn\'t work: ' : 'うまくいかない場合: ';
+                var resultLabel = currentLang === 'en' ? 'Please tell us the result:' : '試した結果を教えてください：';
+                var successLabel = currentLang === 'en' ? 'It worked' : 'うまくいった';
+                var failLabel = currentLang === 'en' ? 'It didn\'t work' : 'うまくいかなかった';
+                var otherOptionsLabel = currentLang === 'en' ? 'Other Options' : 'その他の選択肢';
+                var stepGuideLabel = currentLang === 'en' ? '📋 View Step-by-Step Guide' : '📋 ステップバイステップガイドを見る';
+                var videoLabel = currentLang === 'en' ? '📋 Watch Video' : '📋 動画で見る';
+                var escalationLabel = currentLang === 'en' ? 'Dealer and road service are also available' : '販売店・ロードサービスも選択できます';
+                
+                var stepsHtml = '<strong>' + getLocalizedText(card0, 'title') + '</strong><br><br>';
+                var cardSteps = currentLang === 'en' && card0.steps_en ? card0.steps_en : card0.steps;
+                if (cardSteps && cardSteps.length) {
+                    stepsHtml += stepsLabel + '<br>';
+                    cardSteps.forEach(function(s, i) { stepsHtml += (i + 1) + '. ' + s + '<br>'; });
                 }
-                if (card0.duration) stepsHtml += '<br>⏱ ' + card0.duration + '<br>';
-                if (card0.required_items && card0.required_items.length) stepsHtml += '必要物: ' + card0.required_items.join(', ') + '<br>';
-                if (card0.risk_notice) stepsHtml += '<br>⚠️ ' + card0.risk_notice + '<br>';
-                if (card0.alternative) stepsHtml += '<br>うまくいかない場合: ' + card0.alternative + '<br>';
-                stepsHtml += '<br>試した結果を教えてください：<br>' +
+                var duration = getLocalizedText(card0, 'duration');
+                if (duration) stepsHtml += '<br>⏱ ' + duration + '<br>';
+                if (card0.required_items && card0.required_items.length) stepsHtml += requiredLabel + card0.required_items.join(', ') + '<br>';
+                var riskNotice = getLocalizedText(card0, 'risk_notice');
+                if (riskNotice) stepsHtml += '<br>⚠️ ' + riskNotice + '<br>';
+                var alternative = getLocalizedText(card0, 'alternative');
+                if (alternative) stepsHtml += '<br>' + alternativeLabel + alternative + '<br>';
+                stepsHtml += '<br>' + resultLabel + '<br>' +
                     '<div class="quick-reply-container">' +
-                    '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>うまくいった</span></div>' +
-                    '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>うまくいかなかった</span></div>' +
+                    '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>' + successLabel + '</span></div>' +
+                    '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>' + failLabel + '</span></div>' +
                     '</div>';
                 if (cards.length > 1) {
-                    stepsHtml += '<br><details style="margin-top:10px;"><summary style="cursor:pointer; font-size:0.9em; color:#aaa;">その他の選択肢</summary>';
+                    stepsHtml += '<br><details style="margin-top:10px;"><summary style="cursor:pointer; font-size:0.9em; color:#aaa;">' + otherOptionsLabel + '</summary>';
                     cards.slice(1).forEach(function(c) {
-                        stepsHtml += '<div class="card" style="margin:6px 0; cursor:pointer; padding:8px;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' + (c.title || '') + '</div>';
+                        stepsHtml += '<div class="card" style="margin:6px 0; cursor:pointer; padding:8px;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' + getLocalizedText(c, 'title') + '</div>';
                     });
                     stepsHtml += '</details>';
                 }
                 if (T16State.t1Output && T16State.t1Output.event_id === 'BLUETOOTH') {
                     stepsHtml += '<div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px;">' +
-                        '<div class="button" style="cursor: pointer; padding: 10px 14px; font-size: 0.9em;" onclick="showBluetoothStepGuide()">📋 ステップバイステップガイドを見る</div>' +
-                        '<div class="button" style="cursor: pointer; padding: 10px 14px; font-size: 0.9em; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="showBluetoothVideo()">📋 動画で見る</div>' +
+                        '<div class="button" style="cursor: pointer; padding: 10px 14px; font-size: 0.9em;" onclick="showBluetoothStepGuide()">' + stepGuideLabel + '</div>' +
+                        '<div class="button" style="cursor: pointer; padding: 10px 14px; font-size: 0.9em; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="showBluetoothVideo()">' + videoLabel + '</div>' +
                         '</div>';
                 }
                 if (T16State.t5Output.escalation_option) {
-                    stepsHtml += '<div style="margin-top: 10px; font-size: 0.9em; color: #aaa;">販売店・ロードサービスも選択できます</div>';
+                    stepsHtml += '<div style="margin-top: 10px; font-size: 0.9em; color: #aaa;">' + escalationLabel + '</div>';
                 }
                 addTheme001Message('ai', stepsHtml);
             } else {
@@ -2539,7 +2672,7 @@
         }
 
         function handleT16T6Result(resolved) {
-            const label = resolved ? 'うまくいった' : 'うまくいかなかった';
+            const label = resolved ? (currentLang === 'en' ? 'It worked' : 'うまくいった') : (currentLang === 'en' ? 'It didn\'t work' : 'うまくいかなかった');
             addTheme001Message('user', label);
             const t6 = runT6(resolved, T16State.lastActionId, T16State.t5Output, T16State.t1Output);
 
@@ -2550,36 +2683,51 @@
                 var cards = T16State.t5Output.action_cards || [];
                 var card0 = cards[0];
                 if (card0) {
-                    var stepsHtml = '<strong>' + (card0.title || '') + '</strong><br><br>';
-                    if (card0.steps && card0.steps.length) {
-                        stepsHtml += '<strong>手順：</strong><br>';
-                        card0.steps.forEach(function(s, i) { stepsHtml += (i + 1) + '. ' + s + '<br>'; });
+                    var stepsLabel = currentLang === 'en' ? '<strong>Steps:</strong>' : '<strong>手順：</strong>';
+                    var requiredLabel = currentLang === 'en' ? 'Required items: ' : '必要物: ';
+                    var alternativeLabel = currentLang === 'en' ? 'If it doesn\'t work: ' : 'うまくいかない場合: ';
+                    var resultLabel = currentLang === 'en' ? 'Please tell us the result:' : '試した結果を教えてください：';
+                    var successLabel = currentLang === 'en' ? 'It worked' : 'うまくいった';
+                    var failLabel = currentLang === 'en' ? 'It didn\'t work' : 'うまくいかなかった';
+                    var otherOptionsLabel = currentLang === 'en' ? 'Other Options' : 'その他の選択肢';
+                    var escalationLabel = currentLang === 'en' ? 'Dealer and road service are also available' : '販売店・ロードサービスも選択できます';
+                    
+                    var stepsHtml = '<strong>' + getLocalizedText(card0, 'title') + '</strong><br><br>';
+                    var cardSteps = currentLang === 'en' && card0.steps_en ? card0.steps_en : card0.steps;
+                    if (cardSteps && cardSteps.length) {
+                        stepsHtml += stepsLabel + '<br>';
+                        cardSteps.forEach(function(s, i) { stepsHtml += (i + 1) + '. ' + s + '<br>'; });
                     }
-                    if (card0.duration) stepsHtml += '<br>⏱ ' + card0.duration + '<br>';
-                    if (card0.required_items && card0.required_items.length) stepsHtml += '必要物: ' + card0.required_items.join(', ') + '<br>';
-                    if (card0.risk_notice) stepsHtml += '<br>⚠️ ' + card0.risk_notice + '<br>';
-                    if (card0.alternative) stepsHtml += '<br>うまくいかない場合: ' + card0.alternative + '<br>';
-                    stepsHtml += '<br>試した結果を教えてください：<br>' +
+                    var duration = getLocalizedText(card0, 'duration');
+                    if (duration) stepsHtml += '<br>⏱ ' + duration + '<br>';
+                    var requiredItems = currentLang === 'en' && card0.required_items_en ? card0.required_items_en : card0.required_items;
+                    if (requiredItems && requiredItems.length) stepsHtml += requiredLabel + requiredItems.join(', ') + '<br>';
+                    var riskNotice = getLocalizedText(card0, 'risk_notice');
+                    if (riskNotice) stepsHtml += '<br>⚠️ ' + riskNotice + '<br>';
+                    var alternative = getLocalizedText(card0, 'alternative');
+                    if (alternative) stepsHtml += '<br>' + alternativeLabel + alternative + '<br>';
+                    stepsHtml += '<br>' + resultLabel + '<br>' +
                         '<div class="quick-reply-container">' +
-                        '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>うまくいった</span></div>' +
-                        '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>うまくいかなかった</span></div>' +
+                        '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>' + successLabel + '</span></div>' +
+                        '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>' + failLabel + '</span></div>' +
                         '</div>';
                     if (cards.length > 1) {
-                        stepsHtml += '<br><details style="margin-top:10px;"><summary style="cursor:pointer; font-size:0.9em; color:#aaa;">その他の選択肢</summary>';
+                        stepsHtml += '<br><details style="margin-top:10px;"><summary style="cursor:pointer; font-size:0.9em; color:#aaa;">' + otherOptionsLabel + '</summary>';
                         cards.slice(1).forEach(function(c) {
-                            stepsHtml += '<div class="card" style="margin:6px 0; cursor:pointer; padding:8px;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' + (c.title || '') + '</div>';
+                            stepsHtml += '<div class="card" style="margin:6px 0; cursor:pointer; padding:8px;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' + getLocalizedText(c, 'title') + '</div>';
                         });
                         stepsHtml += '</details>';
                     }
                     if (T16State.t5Output.escalation_option) {
-                        stepsHtml += '<div style="margin-top: 10px; font-size: 0.9em; color: #aaa;">販売店・ロードサービスも選択できます</div>';
+                        stepsHtml += '<div style="margin-top: 10px; font-size: 0.9em; color: #aaa;">' + escalationLabel + '</div>';
                     }
                     addTheme001Message('ai', stepsHtml);
                 } else {
-                    var aiHtml = '別の対処をご案内します。<br><br>';
+                    var altLabel = currentLang === 'en' ? 'Here are other solutions.' : '別の対処をご案内します。';
+                    var aiHtml = altLabel + '<br><br>';
                     cards.forEach(function(c) {
                         aiHtml += '<div class="card" style="margin-bottom: 10px; cursor: pointer;" onclick="handleT16ActionClick(\'' + (c.action_id || '') + '\')">' +
-                            '<div class="card-title">' + (c.title || '') + '</div></div>';
+                            '<div class="card-title">' + getLocalizedText(c, 'title') + '</div></div>';
                     });
                     addTheme001Message('ai', aiHtml);
                 }
@@ -2588,7 +2736,7 @@
 
             var aiHtml = '';
             if (t6.next_step === 'done') {
-                aiHtml = '<strong>よかったです。解決しました。</strong><br><br>また困ったことがあればお知らせください。';
+                aiHtml = currentLang === 'en' ? '<strong>Great! Problem resolved.</strong><br><br>Please let us know if you have any other issues.' : '<strong>よかったです。解決しました。</strong><br><br>また困ったことがあればお知らせください。';
             } else if (t6.next_step === 'done_with_next_steps') {
                 if (T16State.t1Output && T16State.t1Output.event_id === 'DOOR_NOT_OPEN' && (T16State.lastActionId === 'A_DOOR_005' || t6.spare_key_worked)) {
                     aiHtml = '<strong>予備キーで開けられてよかったです。</strong><br><br>今お使いのキー側の不調の可能性があります。そのキーの電池交換や販売店での点検をご案内します。<br><br>';
@@ -2885,20 +3033,25 @@
             if (!chatMessages) return;
             chatMessages.innerHTML = '';
 
-            var userName = '輝明';
+            var userName = 'Lucas';
+            var quickDoorText = currentLang === 'en' ? 'Smart key door won\'t open' : 'スマートキーでドアが開かない';
+            var quickBatteryText = currentLang === 'en' ? 'Key battery low warning displayed' : 'キー電池切れの表示が出ている';
+            var quickWarningText = currentLang === 'en' ? 'Warning light is on' : '警告灯が点灯';
+            var quickBluetoothText = currentLang === 'en' ? 'Bluetooth connection failed' : 'Bluetooth接続ができない';
+            
             addTheme001Message('ai', `${userName}${t('chat-intro-name')}<br><br>
 ${t('chat-intro-quick')}
 <div class="quick-reply-container">
-  <div class="quick-reply" onclick="startT16Flow('スマートキーでドアが開かない')">
+  <div class="quick-reply" onclick="startT16Flow('${quickDoorText.replace(/'/g, "\\'")}')">
     🔑 <span>${t('chat-quick-door')}</span>
   </div>
-  <div class="quick-reply" onclick="startT16Flow('キー電池切れの表示が出ている')">
+  <div class="quick-reply" onclick="startT16Flow('${quickBatteryText.replace(/'/g, "\\'")}')">
     🔋 <span>${t('chat-quick-battery')}</span>
   </div>
-  <div class="quick-reply" onclick="startT16Flow('警告灯が点灯')">
+  <div class="quick-reply" onclick="startT16Flow('${quickWarningText.replace(/'/g, "\\'")}')">
     ⚠️ <span>${t('chat-quick-warning')}</span>
   </div>
-  <div class="quick-reply" onclick="startT16Flow('Bluetooth接続ができない')">
+  <div class="quick-reply" onclick="startT16Flow('${quickBluetoothText.replace(/'/g, "\\'")}')">
     📱 <span>Bluetooth${t('quick-bluetooth')}</span>
   </div>
 </div>`);
@@ -3451,17 +3604,20 @@ ${t('chat-intro-quick')}
                     
                     const notificationList = document.getElementById('notificationList');
                     if (notificationList && notificationList.children.length === 0) {
+                        var allCheckedTitle = currentLang === 'en' ? 'All notifications checked' : 'すべての通知を確認しました';
+                        var thanksMsg = currentLang === 'en' ? 'Thank you for your feedback!' : 'フィードバックありがとうございます！';
+                        var checkStatusBtn = currentLang === 'en' ? '📊 Check Status' : '📊 ステータスを確認する';
                         notificationList.innerHTML = `
                             <div class="card" style="text-align: center; padding: 40px 20px;">
                                 <div style="font-size: 3em; margin-bottom: 15px;">✅</div>
                                 <div style="color: #BF00FF; font-size: 1.1em; font-weight: 600;">
-                                    すべての通知を確認しました
+                                    ${allCheckedTitle}
                                 </div>
                                 <div style="color: #aaa; margin-top: 10px; font-size: 0.9em;">
-                                    フィードバックありがとうございます！
+                                    ${thanksMsg}
                                 </div>
                                 <button class="button" onclick="switchTab('status')" style="margin-top: 20px; background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%); color: #1A1A1A;">
-                                    📊 ステータスを確認する
+                                    ${checkStatusBtn}
                                 </button>
                             </div>
                         `;
@@ -3575,6 +3731,12 @@ ${t('chat-intro-quick')}
                 4: '相棒'
             };
             
+            const levelNamesEn = {
+                2: 'Familiar Face',
+                3: 'Reliable Partner',
+                4: 'Best Friend'
+            };
+            
             const existingToast = document.getElementById('levelUpToast');
             if (existingToast) {
                 existingToast.remove();
@@ -3597,10 +3759,12 @@ ${t('chat-intro-quick')}
                 animation: slideDown 0.3s ease;
                 text-align: center;
             `;
+            var levelUpText = currentLang === 'en' ? 'Level Up!' : 'レベルアップ！';
+            var levelName = currentLang === 'en' ? levelNamesEn[newLevel] : levelNames[newLevel];
             toast.innerHTML = `
                 <div style="font-size: 2em; margin-bottom: 5px;">🎉</div>
-                レベルアップ！<br>
-                <span style="font-size: 1.2em;">Lv ${newLevel} | ${levelNames[newLevel]}</span>
+                ${levelUpText}<br>
+                <span style="font-size: 1.2em;">Lv ${newLevel} | ${levelName}</span>
             `;
             
             document.body.appendChild(toast);
@@ -3635,9 +3799,11 @@ ${t('chat-intro-quick')}
                 animation: slideDown 0.3s ease;
                 text-align: center;
             `;
+            var pointsText = currentLang === 'en' ? '✨ +500pt Earned!' : '✨ +500pt 獲得！';
+            var learnedText = currentLang === 'en' ? 'You learned one feature' : '機能を1つ習得しました';
             toast.innerHTML = `
-                ✨ +500pt 獲得！<br>
-                <span style="font-size: 0.85em; font-weight: 400;">機能を1つ習得しました</span>
+                ${pointsText}<br>
+                <span style="font-size: 0.85em; font-weight: 400;">${learnedText}</span>
             `;
             
             document.body.appendChild(toast);
