@@ -2867,11 +2867,16 @@
         function completeBluetoothGuide() {
             var container = document.getElementById('bluetoothStepGuideContent');
             if (!container) return;
+            var completeTitle = currentLang === 'en' ? 'Bluetooth Connection Complete!' : 'Bluetooth接続完了！';
+            var completeMessage = currentLang === 'en' 
+                ? 'From next time, it will connect automatically when you start the engine.'
+                : '次回からは、エンジンをかけると自動的に接続されます。';
+            var closeLabel = currentLang === 'en' ? 'Close' : '閉じる';
             container.innerHTML = '<div class="card" style="text-align: center; border: 2px solid #00d084;"><div class="card-content" style="padding: 30px 20px;">' +
                 '<div style="font-size: 3em; margin-bottom: 15px;">🎉</div>' +
-                '<div style="font-size: 1.3em; font-weight: bold; color: #00d084; margin-bottom: 10px;">Bluetooth接続完了！</div>' +
-                '<div style="color: #aaa; font-size: 0.95em; line-height: 1.7;">次回からは、エンジンをかけると自動的に接続されます。</div>' +
-                '<button class="button" onclick="closeBluetoothStepGuide()" style="margin-top: 20px; background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%);">閉じる</button></div></div>';
+                '<div style="font-size: 1.3em; font-weight: bold; color: #00d084; margin-bottom: 10px;">' + completeTitle + '</div>' +
+                '<div style="color: #aaa; font-size: 0.95em; line-height: 1.7;">' + completeMessage + '</div>' +
+                '<button class="button" onclick="closeBluetoothStepGuide()" style="margin-top: 20px; background: linear-gradient(135deg, #BF00FF 0%, #D200FF 100%);">' + closeLabel + '</button></div></div>';
         }
 
         function showBluetoothVideo() {
