@@ -1229,7 +1229,7 @@
             var frame = document.getElementById('manualHtmlFrame');
             if (!frame) return;
             var m = getSelectedVehicleModelCode();
-            frame.src = 'vehicle-manual-mock.html?model=' + encodeURIComponent(m) + '&lang=' + encodeURIComponent(currentLang);
+            frame.src = './vehicle-manual-mock.html?model=' + encodeURIComponent(m) + '&lang=' + encodeURIComponent(currentLang);
         }
 
         function showScreen(name) {
