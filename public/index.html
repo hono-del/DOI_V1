@@ -2629,11 +2629,15 @@
             if (card.required_items && card.required_items.length) stepsHtml += '<br>必要物: ' + card.required_items.join(', ') + '<br>';
             if (card.risk_notice) stepsHtml += '<br>⚠️ ' + card.risk_notice + '<br>';
             if (card.alternative) stepsHtml += '<br>うまくいかない場合: ' + card.alternative + '<br>';
-            var resultPrompt = actionId === 'A_DOOR_005' ? '予備キーで試した結果を教えてください：' : '試した結果を教えてください：';
+            var resultPrompt = actionId === 'A_DOOR_005' 
+                ? (currentLang === 'en' ? 'Please let us know the result with the spare key:' : '予備キーで試した結果を教えてください：')
+                : (currentLang === 'en' ? 'Please let us know the result:' : '試した結果を教えてください：');
+            var workedLabel = currentLang === 'en' ? 'It worked' : 'うまくいった';
+            var didntWorkLabel = currentLang === 'en' ? 'It didn\'t work' : 'うまくいかなかった';
             stepsHtml += '<br>' + resultPrompt + '<br>' +
                 '<div class="quick-reply-container">' +
-                '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>うまくいった</span></div>' +
-                '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>うまくいかなかった</span></div>' +
+                '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>' + workedLabel + '</span></div>' +
+                '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>' + didntWorkLabel + '</span></div>' +
                 '</div>';
             if (T16State.t1Output && T16State.t1Output.event_id === 'BLUETOOTH') {
                 stepsHtml += '<div style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px;">' +
@@ -2668,11 +2672,19 @@
             (card.steps || []).forEach(function(s, i) { stepsHtml += (i + 1) + '. ' + s + '<br>'; });
             if (card.required_items && card.required_items.length) stepsHtml += '<br>必要物: ' + card.required_items.join(', ') + '<br>';
             if (card.risk_notice) stepsHtml += '<br>⚠️ ' + card.risk_notice + '<br>';
-            if (card.alternative) stepsHtml += '<br>うまくいかない場合: ' + card.alternative + '<br>';
-            stepsHtml += '<br>電池交換後、スマートキーが正常に動作するようになりましたか？<br>' +
+            if (card.alternative) {
+                var altLabel = currentLang === 'en' ? 'If it doesn\'t work: ' : 'うまくいかない場合: ';
+                stepsHtml += '<br>' + altLabel + card.alternative + '<br>';
+            }
+            var batteryPrompt = currentLang === 'en' 
+                ? 'Did the smart key work properly after battery replacement?'
+                : '電池交換後、スマートキーが正常に動作するようになりましたか？';
+            var workedLabel = currentLang === 'en' ? 'It worked' : 'うまくいった';
+            var didntWorkLabel = currentLang === 'en' ? 'It didn\'t work' : 'うまくいかなかった';
+            stepsHtml += '<br>' + batteryPrompt + '<br>' +
                 '<div class="quick-reply-container">' +
-                '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>うまくいった</span></div>' +
-                '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>うまくいかなかった</span></div>' +
+                '<div class="quick-reply" onclick="handleT16T6Result(true)">✅ <span>' + workedLabel + '</span></div>' +
+                '<div class="quick-reply" onclick="handleT16T6Result(false)">❌ <span>' + didntWorkLabel + '</span></div>' +
                 '</div>';
             addTheme001Message('ai', stepsHtml);
         }
@@ -2745,20 +2757,29 @@
                 aiHtml = currentLang === 'en' ? '<strong>Great! Problem resolved.</strong><br><br>Please let us know if you have any other issues.' : '<strong>よかったです。解決しました。</strong><br><br>また困ったことがあればお知らせください。';
             } else if (t6.next_step === 'done_with_next_steps') {
                 if (T16State.t1Output && T16State.t1Output.event_id === 'DOOR_NOT_OPEN' && (T16State.lastActionId === 'A_DOOR_005' || t6.spare_key_worked)) {
-                    aiHtml = '<strong>予備キーで開けられてよかったです。</strong><br><br>今お使いのキー側の不調の可能性があります。そのキーの電池交換や販売店での点検をご案内します。<br><br>';
+                    aiHtml = currentLang === 'en' 
+                        ? '<strong>Glad you could open the door with the spare key.</strong><br><br>The key you were using may have an issue. We recommend battery replacement for that key or inspection at a dealer.<br><br>'
+                        : '<strong>予備キーで開けられてよかったです。</strong><br><br>今お使いのキー側の不調の可能性があります。そのキーの電池交換や販売店での点検をご案内します。<br><br>';
                 } else if (T16State.t1Output && T16State.t1Output.event_id === 'DOOR_NOT_OPEN') {
-                    aiHtml = '<strong>ドアを開けられてよかったです。</strong><br><br>次に、電池交換をしておくとスマートキーで開けられるようになります。<br><br>';
+                    aiHtml = currentLang === 'en'
+                        ? '<strong>Glad you could open the door.</strong><br><br>Replacing the battery will allow you to use the smart key again.<br><br>'
+                        : '<strong>ドアを開けられてよかったです。</strong><br><br>次に、電池交換をしておくとスマートキーで開けられるようになります。<br><br>';
                 } else {
-                    aiHtml = '<strong>よかったです。解決しました。</strong><br><br>';
+                    aiHtml = currentLang === 'en'
+                        ? '<strong>Great! Problem resolved.</strong><br><br>'
+                        : '<strong>よかったです。解決しました。</strong><br><br>';
                 }
                 if (t6.next_steps_guidance && t6.next_steps_guidance.length) {
                     t6.next_steps_guidance.forEach(function(g) { aiHtml += '・' + (g.label || g.id) + '<br>'; });
                 }
             } else if (t6.next_step === 'escalate') {
-                aiHtml = '<strong>専門家へご案内</strong><br><br>試していただいた内容をまとめて、販売店・ロードサービスが引き継ぎやすくしています。<br><br>' +
-                    '📞 ロードサービス: 0120-XXX-XXX（24時間）<br>📞 販売店: 0120-XXX-XXX';
+                aiHtml = currentLang === 'en'
+                    ? '<strong>Connect with Expert</strong><br><br>We have summarized what you tried to make it easier for dealers and roadside assistance to help you.<br><br>' +
+                      '📞 Roadside Service: 0120-XXX-XXX (24 hours)<br>📞 Dealer: 0120-XXX-XXX'
+                    : '<strong>専門家へご案内</strong><br><br>試していただいた内容をまとめて、販売店・ロードサービスが引き継ぎやすくしています。<br><br>' +
+                      '📞 ロードサービス: 0120-XXX-XXX（24時間）<br>📞 販売店: 0120-XXX-XXX';
             } else {
-                aiHtml = '次の対応をご案内します。';
+                aiHtml = currentLang === 'en' ? 'Here are the next steps.' : '次の対応をご案内します。';
             }
             addTheme001Message('ai', aiHtml);
             T16State.step = null;
